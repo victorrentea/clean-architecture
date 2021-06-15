@@ -12,6 +12,7 @@ import victor.training.clean.infra.EmailSender;
 import victor.training.clean.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.repo.SiteRepo;
+import victor.training.clean.service.QuotationService;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -24,6 +25,7 @@ public class CustomerFacade {
 	private final EmailSender emailSender;
 	private final SiteRepo siteRepo;
 	private final CustomerSearchRepo customerSearchRepo;
+	private final QuotationService quotationService;
 
 	public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
 		return customerSearchRepo.search(searchCriteria);
@@ -43,7 +45,7 @@ public class CustomerFacade {
 		Customer customer = new Customer();
 		customer.setEmail(dto.email);
 		customer.setName(dto.name);
-		customer.setSite(siteRepo.getOne(dto.countryId));
+		customer.setSite(siteRepo.getOne(dto.siteId));
 
 		if (customer.getName().trim().length() < 5) {
 			throw new IllegalArgumentException("Name too short");
@@ -65,6 +67,8 @@ public class CustomerFacade {
 		// Heavy business logic
 		customerRepo.save(customer);
 		// Heavy business logic
+
+		quotationService.requoteCustomer(customer);
 
 		sendRegistrationEmail(customer.getEmail());
 	}

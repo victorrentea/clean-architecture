@@ -4,7 +4,7 @@ public class CustomerDto {
    public Long id;
    public String name;
    public String email;
-   public Long countryId;
+   public Long siteId;
    public String creationDateStr;
 
    public CustomerDto() {

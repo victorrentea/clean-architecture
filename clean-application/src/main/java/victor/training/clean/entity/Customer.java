@@ -4,17 +4,23 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Data
+@Entity
 public class Customer {
 	@Setter(AccessLevel.NONE)
+	@Id
 	private Long id;
 	private String name;
 	private String email;
-	private Site site;
 	private LocalDate creationDate;
 	private boolean goldMember;
+	@ManyToOne
+	private Site site;
 
 	public boolean isGoldMember() {
 		return goldMember;
