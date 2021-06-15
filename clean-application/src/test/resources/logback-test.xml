@@ -1,0 +1,16 @@
+<configuration>
+    <property name="LOG_PATTERN" value="%d{H:mm:ss.SSS} %-28.28thread %-16.16logger{0} %message%n" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="victor" level="TRACE"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
