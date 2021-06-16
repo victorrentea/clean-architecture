@@ -16,7 +16,7 @@ import java.util.Map;
 @Repository
 @RequiredArgsConstructor
 public class CustomerSearchRepo {
-   private final EntityManager em;
+   private final EntityManager entityManager;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       String jpql = "SELECT new victor.training.clean.facade.dto.CustomerSearchResult(c.id, c.name)" +
@@ -34,7 +34,7 @@ public class CustomerSearchRepo {
 
       // or CriteriaBuilder, or QueryDSL
 
-      TypedQuery<CustomerSearchResult> query = em.createQuery(jpql, CustomerSearchResult.class);
+      TypedQuery<CustomerSearchResult> query = entityManager.createQuery(jpql, CustomerSearchResult.class);
       for (String paramName : paramMap.keySet()) {
          query.setParameter(paramName, paramMap.get(paramName));
       }

@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class QuotationService {
    private final InsurancePolicyRepo insurancePolicyRepo;
+
    public void requoteCustomer(Customer customer) {
       log.debug("Requoting customer (~230 total lines of code): " + customer.getName());
       InsurancePolicy policy = new InsurancePolicy();
