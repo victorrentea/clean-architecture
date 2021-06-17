@@ -20,6 +20,7 @@ public class CustomerService {
       System.out.println("Biz Logic with discount " + discountPercentage);
       // Heavy business logic
       // Heavy business logic
+
       customerRepo.save(customer);
       // Heavy business logic
 

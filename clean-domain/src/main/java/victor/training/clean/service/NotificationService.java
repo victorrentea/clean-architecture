@@ -3,7 +3,6 @@ package victor.training.clean.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import victor.training.clean.entity.Email;
-import victor.training.clean.infra.EmailSender;
 
 @Service
 @RequiredArgsConstructor
