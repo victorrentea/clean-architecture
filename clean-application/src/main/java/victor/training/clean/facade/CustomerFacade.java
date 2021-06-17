@@ -3,6 +3,7 @@ package victor.training.clean.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import victor.training.clean.entity.Customer;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
@@ -37,7 +38,7 @@ public class CustomerFacade {
 		return new CustomerDto(entity);
 	}
 
-	public void register(CustomerDto dto) {
+	public void register(@Validated CustomerDto dto) {
 		Customer customer = customerMapper.toEntity(dto);
 //		Customer customer = dto.toEntity(); // valid
 

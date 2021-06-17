@@ -1,11 +1,15 @@
 package victor.training.clean.facade.dto;
 
+import org.hibernate.validator.constraints.Length;
 import victor.training.clean.entity.Customer;
 
+import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
 
 public class CustomerDto {
    public Long id;
+   @NotNull
+   @Length(min=3)
    public String name;
    public String email;
    public Long siteId;
