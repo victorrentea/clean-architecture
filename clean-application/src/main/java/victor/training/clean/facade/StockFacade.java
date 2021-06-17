@@ -2,7 +2,7 @@ package victor.training.clean.facade;
 
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Facade;
-import victor.training.clean.service.NotificationService;
+import victor.training.clean.customer.service.NotificationService;
 
 @Facade
 @RequiredArgsConstructor

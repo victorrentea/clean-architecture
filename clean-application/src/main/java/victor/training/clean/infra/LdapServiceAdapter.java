@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.MyException;
 import victor.training.clean.MyException.ErrorCode;
-import victor.training.clean.entity.User;
-import victor.training.clean.service.ExternalUserProvider;
+import victor.training.clean.customer.entity.User;
+import victor.training.clean.customer.service.ExternalUserProvider;
 
 import java.util.Collections;
 import java.util.List;

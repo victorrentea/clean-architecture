@@ -1,12 +1,10 @@
-package victor.training.clean.entity;
+package victor.training.clean.customer.entity;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -14,6 +12,10 @@ import java.util.Objects;
 @Data
 @Entity
 public class Customer {
+
+	enum Status {
+		DRAFT, ACTIVE, DELETED
+	}
 	@Setter(AccessLevel.NONE)
 	@Id
 	private Long id;
@@ -23,11 +25,25 @@ public class Customer {
 //	@UniqueEmail
 	@Email
 	private String email;
+	@Enumerated(EnumType.STRING)
+	private Status status = Status.DRAFT;
 
 	private String createdBy;
 	private LocalDate creationDate;
 
 //	private UserAudit creation; {String, LocalDate}
+
+
+//	public Customer setStatus(Status status) {
+//		this.status = status;
+//		return this;
+//	}
+public void activate() {
+	if (status != Status.DRAFT) {
+		throw new IllegalArgumentException();
+	}
+	status = Status.ACTIVE;
+}
 
 	private boolean goldMember;
 	@ManyToOne

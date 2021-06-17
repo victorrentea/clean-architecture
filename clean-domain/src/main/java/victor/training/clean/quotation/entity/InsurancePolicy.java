@@ -1,10 +1,9 @@
-package victor.training.clean.entity;
+package victor.training.clean.quotation.entity;
 
 import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Entity
@@ -13,8 +12,9 @@ public class InsurancePolicy {
    @Id
    private Long id;
 
-   @ManyToOne
-   private Customer customer;
+   private String customerName; // possible inconsistencies. replication.
+//   @ManyToOne
+   private Long customerId;
 
    private BigDecimal value;
 }

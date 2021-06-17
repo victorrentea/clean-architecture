@@ -1,7 +1,7 @@
 package victor.training.clean.facade.dto;
 
 import org.hibernate.validator.constraints.Length;
-import victor.training.clean.entity.Customer;
+import victor.training.clean.customer.entity.Customer;
 
 import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
