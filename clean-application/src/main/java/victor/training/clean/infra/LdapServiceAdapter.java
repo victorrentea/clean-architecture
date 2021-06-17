@@ -2,6 +2,8 @@ package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import victor.training.clean.MyException;
+import victor.training.clean.MyException.ErrorCode;
 import victor.training.clean.entity.User;
 import victor.training.clean.service.ExternalUserProvider;
 
@@ -16,8 +18,12 @@ public class LdapServiceAdapter implements ExternalUserProvider {
 
    @Override
    public List<User> searchByUsername(String username) {
-      return wsClient.search(username.toUpperCase(), null, null)
-          .stream().map(this::convert).collect(Collectors.toList());
+      try {
+         return wsClient.search(username.toUpperCase(), null, null)
+             .stream().map(this::convert).collect(Collectors.toList());
+      } catch (Exception e) {
+         throw new MyException(ErrorCode.CUSTOMER_NAME_TOO_SHORT);
+      }
    }
    public List<LdapUser> other(String username) {
       return Collections.emptyList();

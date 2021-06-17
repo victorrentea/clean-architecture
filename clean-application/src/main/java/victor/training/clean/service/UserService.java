@@ -35,10 +35,5 @@ public class UserService {
 		log.debug("Insert user in my database");
 	}
 
-	// your precious garden PEACE HARMONY
-	// ------------------- a line ---------------------------------------
-	// garbage
-
-
-}
+ 	}
 
