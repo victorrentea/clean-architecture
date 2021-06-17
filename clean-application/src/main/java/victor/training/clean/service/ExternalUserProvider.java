@@ -4,6 +4,6 @@ import victor.training.clean.entity.User;
 
 import java.util.List;
 
-public interface ILdapServiceAdapter {
+public interface ExternalUserProvider {
    List<User> searchByUsername(String username);
 }

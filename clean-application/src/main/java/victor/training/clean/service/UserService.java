@@ -20,7 +20,7 @@ import java.util.List;
 // DOMAIN LOGIC
 @RequiredArgsConstructor
 public class UserService {
-	private final ILdapServiceAdapter adapter;
+	private final ExternalUserProvider adapter;
 
 	public void importUserFromLdap(String username) {
 		List<User> list = adapter.searchByUsername(username);
