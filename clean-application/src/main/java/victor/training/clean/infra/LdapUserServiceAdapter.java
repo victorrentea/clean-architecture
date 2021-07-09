@@ -2,15 +2,15 @@ package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import victor.training.clean.entity.User;
-import victor.training.clean.service.ExternaUserProvider;
+import victor.training.clean.customer.entity.User;
+import victor.training.clean.customer.service.ExternalUserProvider;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class LdapUserServiceAdapter implements ExternaUserProvider {
+public class LdapUserServiceAdapter implements ExternalUserProvider {
    private final LdapUserWebserviceClient wsClient;
 
    @Override
@@ -26,6 +26,9 @@ public class LdapUserServiceAdapter implements ExternaUserProvider {
    }
 
    private String extractFullName(LdapUser ldapUser) {
+      if (ldapUser.getfName() == null && ldapUser.getlName() == null) {
+         return "anonymous";
+      }
       return ldapUser.getfName() + " " + ldapUser.getlName().toUpperCase();
    }
 

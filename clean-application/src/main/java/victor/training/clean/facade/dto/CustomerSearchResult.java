@@ -1,6 +1,7 @@
 package victor.training.clean.facade.dto;
 
 
+// stinks of JSON
 public class CustomerSearchResult {
    private final long id;
    private final String name;
