@@ -18,9 +18,11 @@ public class LdapUser {
 	public final void setuId(String uId) {
 		this.uId = uId;
 	}
-	public final String getfName() {
+
+	public String getfName() {
 		return fName;
 	}
+
 	public final void setfName(String fName) {
 		this.fName = fName;
 	}

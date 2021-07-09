@@ -1,6 +1,7 @@
 package victor.training.clean.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class User {
 	@Id
 	@Setter(NONE)
+	@EqualsAndHashCode.Exclude
 	private Long id;
 	private String username;
 	private String fullName;
