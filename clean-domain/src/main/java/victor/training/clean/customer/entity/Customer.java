@@ -1,4 +1,4 @@
-package victor.training.clean.entity;
+package victor.training.clean.customer.entity;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -61,9 +61,7 @@ class BEntity {
 @Entity
 //1) mapping.xml  - hibernate BAD
 //2) create separate CustomerEntity outside of domain
-public class Customer {
-
-
+public class Customer { // Aggregate Root
 	enum State {
 		DRAFT, VALID, DELETED;
 	}

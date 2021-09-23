@@ -3,7 +3,7 @@ package victor.training.clean.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.entity.User;
+import victor.training.clean.customer.entity.User;
 
 import java.util.List;
 

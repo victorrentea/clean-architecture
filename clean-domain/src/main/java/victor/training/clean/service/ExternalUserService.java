@@ -1,6 +1,6 @@
 package victor.training.clean.service;
 
-import victor.training.clean.entity.User;
+import victor.training.clean.customer.entity.User;
 
 import java.util.List;
 
