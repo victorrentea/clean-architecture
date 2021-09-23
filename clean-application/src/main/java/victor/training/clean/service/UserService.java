@@ -39,11 +39,11 @@ public class UserService {
 
 	private List<User> searchByUsername(String username) {
 		return wsClient.search(username.toUpperCase(), null, null)
-			.stream().map(this::toDto)
+			.stream().map(this::fromDto)
 			.collect(Collectors.toList());
 	}
 
-	private User toDto(LdapUserDto dto) {
+	private User fromDto(LdapUserDto dto) {
 		String fullName = dto.getfName() + " " + dto.getlName().toUpperCase();
 		return new User(dto.getuId(), fullName, dto.getWorkEmail());
 	}
