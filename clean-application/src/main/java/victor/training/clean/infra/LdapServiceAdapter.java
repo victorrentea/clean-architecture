@@ -3,14 +3,14 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.entity.User;
-import victor.training.clean.service.ILdapServiceAdapter;
+import victor.training.clean.service.ExternalUserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class LdapServiceAdapter implements ILdapServiceAdapter {
+public class LdapServiceAdapter implements ExternalUserService {
    private final LdapUserWebserviceClient wsClient;
 
    @Override
