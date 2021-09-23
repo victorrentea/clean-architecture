@@ -10,6 +10,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 public class AdapterArchUnitTest {
    @Test
    public void dependencyInversionTest() {
+      // My dear developer if this ever fails, please email ...  for details
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
 
       ClassesShouldConjunction domainDoesnDependOnInfra =
