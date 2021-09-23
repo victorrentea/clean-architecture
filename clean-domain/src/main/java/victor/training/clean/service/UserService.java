@@ -21,7 +21,8 @@ public class UserService {
 		}
 		User user = list.get(0);
 
-		if (user.getWorkEmail() != null) {
+
+		if (user.getWorkEmail().isPresent()) {
 			log.debug("Send welcome email to " + user.getWorkEmail());
 		}
 		log.debug("Insert user in my database");
