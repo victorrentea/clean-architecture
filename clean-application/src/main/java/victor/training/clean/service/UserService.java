@@ -8,6 +8,7 @@ import victor.training.clean.infra.LdapUserDto;
 import victor.training.clean.infra.LdapUserWebserviceClient;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -17,11 +18,11 @@ public class UserService {
 	private LdapUserWebserviceClient wsClient; // feign client / REST tempalte.exchange
 
 	public void importUserFromLdap(String username) {
-		List<LdapUserDto> list = searchByUsername(username);
+		List<User> list = searchByUsername(username);
 		if (list.size() != 1) {
 			throw new IllegalArgumentException("There is no single user matching username " + username);
 		}
-		User user = toDto(list.get(0));
+		User user = list.get(0);
 
 		if (user.getWorkEmail() != null) {
 			log.debug("Send welcome email to " + user.getWorkEmail());
@@ -29,8 +30,17 @@ public class UserService {
 		log.debug("Insert user in my database");
 	}
 
-	private List<LdapUserDto> searchByUsername(String username) {
-		return wsClient.search(username.toUpperCase(), null, null);
+	// ZEN GARDEN
+	// ZEN GARDEN
+	// ZEN GARDEN
+	// ZEN GARDEN
+	// ----------------------------------------------------------------------------
+	// GARAGE
+
+	private List<User> searchByUsername(String username) {
+		return wsClient.search(username.toUpperCase(), null, null)
+			.stream().map(this::toDto)
+			.collect(Collectors.toList());
 	}
 
 	private User toDto(LdapUserDto dto) {
