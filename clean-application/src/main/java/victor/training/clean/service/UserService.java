@@ -1,7 +1,8 @@
 package victor.training.clean.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import victor.training.clean.entity.User;
 import victor.training.clean.infra.LdapUserDto;
@@ -12,13 +13,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 // Domain Service
 public class UserService {
-	@Autowired
-	private LdapUserWebserviceClient wsClient; // feign client / REST tempalte.exchange
+	private final LdapServiceAdapter adapter;
 
 	public void importUserFromLdap(String username) {
-		List<User> list = searchByUsername(username);
+		List<User> list = adapter.searchByUsername(username);
 		if (list.size() != 1) {
 			throw new IllegalArgumentException("There is no single user matching username " + username);
 		}
@@ -29,24 +30,5 @@ public class UserService {
 		}
 		log.debug("Insert user in my database");
 	}
-
-	// ZEN GARDEN
-	// ZEN GARDEN
-	// ZEN GARDEN
-	// ZEN GARDEN
-	// ----------------------------------------------------------------------------
-	// GARAGE
-
-	private List<User> searchByUsername(String username) {
-		return wsClient.search(username.toUpperCase(), null, null)
-			.stream().map(this::fromDto)
-			.collect(Collectors.toList());
-	}
-
-	private User fromDto(LdapUserDto dto) {
-		String fullName = dto.getfName() + " " + dto.getlName().toUpperCase();
-		return new User(dto.getuId(), fullName, dto.getWorkEmail());
-	}
-
 
 }
