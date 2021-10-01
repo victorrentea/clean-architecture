@@ -2,20 +2,16 @@ package victor.training.clean.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import victor.training.clean.entity.User;
-import victor.training.clean.infra.LdapUserDto;
-import victor.training.clean.infra.LdapUserWebserviceClient;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
-	private final LdapUserServiceAdapter adapter;
+	private final LdapUserServiceAdapterInterface adapter;
 
 	public void importUserFromLdap(String username) {
 		List<User> list = adapter.searchByUsername(username);

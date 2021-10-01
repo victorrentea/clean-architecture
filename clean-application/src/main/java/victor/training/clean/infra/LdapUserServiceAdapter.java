@@ -1,19 +1,19 @@
-package victor.training.clean.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.entity.User;
-import victor.training.clean.infra.LdapUserDto;
-import victor.training.clean.infra.LdapUserWebserviceClient;
+import victor.training.clean.service.LdapUserServiceAdapterInterface;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class LdapUserServiceAdapter {
+public class LdapUserServiceAdapter implements LdapUserServiceAdapterInterface {
    private final LdapUserWebserviceClient client;
 
+   @Override
    public List<User> searchByUsername(String username) {
       return client.search(username.toUpperCase(), null, null)
           .stream()
