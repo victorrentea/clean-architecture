@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class DummyData {
-	public static final LdapUser ldapUser1 = new LdapUser();
+	public static final LdapUserDto ldapUser1 = new LdapUserDto();
 	static {
 		ldapUser1.setfName("John");
 		ldapUser1.setlName("DOE");
@@ -13,7 +13,7 @@ public class DummyData {
 		ldapUser1.setWorkEmail("0123456789");
 		ldapUser1.setEmailAddresses(Arrays.asList(new LdapUserPhone("WORK", "jdoe@bigcorp.com")));
 	}
-	public static final LdapUser ldapUser2 = new LdapUser();
+	public static final LdapUserDto ldapUser2 = new LdapUserDto();
 	static {
 		ldapUser2.setfName("Jane");
 		ldapUser2.setlName("DOE");

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class LdapUser {
+public class LdapUserDto {
 	private String uId;
 	private String fName;
 	private String lName;
