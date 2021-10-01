@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.entity.User;
-import victor.training.clean.infra.LdapUserServiceAdapterInterface;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-	private final LdapUserServiceAdapterInterface adapter;
+	private final ExternalUserService adapter;
 
 	public void importUserFromLdap(String username) {
 		List<User> list = adapter.searchByUsername(username);
