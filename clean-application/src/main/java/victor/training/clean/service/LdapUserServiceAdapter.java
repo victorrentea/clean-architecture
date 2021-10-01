@@ -1,9 +1,11 @@
-package victor.training.clean.infra;
+package victor.training.clean.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.entity.User;
-import victor.training.clean.service.LdapUserServiceAdapterInterface;
+import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.infra.LdapUserServiceAdapterInterface;
+import victor.training.clean.infra.LdapUserWebserviceClient;
 
 import java.util.List;
 import java.util.stream.Collectors;
