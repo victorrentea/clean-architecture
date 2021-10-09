@@ -34,7 +34,10 @@ public class IndependentSubdomainsArchUnitTest {
       int violations = evaluationResult.getFailureReport().getDetails().size();
       System.out.println("Number of violations: " + violations);
 
-      assertThat(violations).isLessThan(110);
+      assertThat(violations)
+          .as("In case this test fails and you don't understand why, " +
+              "please contact victorrentea@gmail.com for clarifications")
+          .isLessThan(110);
 
       sliceRule.check(classes);
 
