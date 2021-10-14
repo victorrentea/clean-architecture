@@ -7,6 +7,7 @@ import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,7 @@ public class CustomerController {
 
    @PostMapping
    //   @PreAuthorized("hasRole('CRM')")
-   public void register(@RequestBody CustomerDto customerDto) {
+   public void register(@Valid  @RequestBody CustomerDto customerDto) {
       customerFacade.register(customerDto);
    }
 }

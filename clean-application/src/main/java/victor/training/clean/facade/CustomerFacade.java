@@ -3,6 +3,7 @@ package victor.training.clean.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import victor.training.clean.CustomerService;
 import victor.training.clean.entity.Customer;
 import victor.training.clean.entity.Email;
 import victor.training.clean.facade.dto.CustomerDto;
@@ -27,6 +28,8 @@ public class CustomerFacade {
 	private final CustomerSearchRepo customerSearchRepo;
 	private final QuotationService quotationService;
 	private final CustomerMapper customerMapper;
+	private final CustomerService customerService;
+
 
 	public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
 		return customerSearchRepo.search(searchCriteria);
@@ -39,33 +42,14 @@ public class CustomerFacade {
 	}
 
 	public void register(CustomerDto dto) {
-		Customer customer = new Customer();
-		customer.setEmail(dto.email);
-		customer.setName(dto.name);
-		customer.setSite(siteRepo.getOne(dto.siteId));
-
-		if (customer.getName().trim().length() < 5) {
-			throw new IllegalArgumentException("Name too short");
-		}
+		Customer customer = dto.toEntity();
 
 		if (customerRepo.existsByEmail(customer.getEmail())) {
 			throw new IllegalArgumentException("Email already registered");
 		}
 
-		// Heavy business logic
-		// Heavy business logic
-		// Heavy business logic
-		int discountPercentage = 3;
-		if (customer.isGoldMember()) {
-			discountPercentage += 1;
-		}
-		System.out.println("Biz Logic with discount " + discountPercentage);
-		// Heavy business logic
-		// Heavy business logic
-		customerRepo.save(customer);
-		// Heavy business logic
 
-		quotationService.requoteCustomer(customer);
+		customerService.register(customer);
 
 		sendRegistrationEmail(customer.getEmail());
 	}
