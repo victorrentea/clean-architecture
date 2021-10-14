@@ -3,6 +3,7 @@ package victor.training.clean.entity;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 public class Customer {
 	@Setter(AccessLevel.NONE) // KNOW this
 	@Id
+	@GeneratedValue
 	private Long id;
 	private String name;
 	private String email;

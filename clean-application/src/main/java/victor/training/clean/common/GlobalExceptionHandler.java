@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
 
    private String translateError(Throwable throwable, ErrorCode errorCode, String[] parameters, HttpServletRequest request) {
       String messageKey = "error." + errorCode;
-      String userMessage = messageSource.getMessage(messageKey, parameters, getCurrentUserLocale(request));
+      String userMessage = messageSource.getMessage(messageKey, parameters, "Internal Error", getCurrentUserLocale(request));
       log.error(String.format("Error occurred [%s]: %s", errorCode, userMessage), throwable);
       return userMessage;
    }

@@ -46,6 +46,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
         <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.0.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit4</artifactId>
         </dependency>

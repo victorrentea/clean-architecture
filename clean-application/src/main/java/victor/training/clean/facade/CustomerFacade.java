@@ -78,7 +78,7 @@ public class CustomerFacade {
 		Email email = new Email();
 		email.setFrom("noreply");
 		email.setTo(emailAddress);
-		email.setSubject("Welcome!");
+		email.setSubject("Welcome");
 		email.setBody("You'll like it! Sincerely, Team");
 		emailSender.sendEmail(email);
 	}

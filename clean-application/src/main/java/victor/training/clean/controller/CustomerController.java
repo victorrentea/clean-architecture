@@ -1,6 +1,6 @@
 package victor.training.clean.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.facade.CustomerFacade;
 import victor.training.clean.facade.dto.CustomerDto;
@@ -10,9 +10,10 @@ import victor.training.clean.facade.dto.CustomerSearchResult;
 import java.util.List;
 
 @RestController
+@RequestMapping("customer")
+@RequiredArgsConstructor
 public class CustomerController {
-   @Autowired
-   private CustomerFacade customerFacade;
+   private final CustomerFacade customerFacade;
 
    @GetMapping("{id}")
    public CustomerDto findById(@PathVariable long id) {
