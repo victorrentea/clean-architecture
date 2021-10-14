@@ -35,8 +35,7 @@ public class CustomerFacade {
 	public CustomerDto findById(long customerId) {
 		Customer entity = customerRepo.findById(customerId).get();
 
-		CustomerDto dto = customerMapper.toDto(entity);
-		return dto;
+		return new CustomerDto(entity);
 	}
 
 	public void register(CustomerDto dto) {
