@@ -1,4 +1,4 @@
-package victor.training.clean.repo;
+package victor.training.clean.customer.repo;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;

@@ -1,4 +1,4 @@
-package victor.training.clean.order.adapter;
+package victor.training.clean.customer.order.adapter;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;

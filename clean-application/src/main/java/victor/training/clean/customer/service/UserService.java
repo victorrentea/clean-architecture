@@ -1,9 +1,9 @@
-package victor.training.clean.service;
+package victor.training.clean.customer.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import victor.training.clean.entity.User;
+import victor.training.clean.customer.entity.User;
 import victor.training.clean.infra.LdapUser;
 import victor.training.clean.infra.LdapUserWebserviceClient;
 

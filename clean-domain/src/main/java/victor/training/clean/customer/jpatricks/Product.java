@@ -1,4 +1,4 @@
-package victor.training.clean.jpatricks;
+package victor.training.clean.customer.jpatricks;
 
 import lombok.Data;
 

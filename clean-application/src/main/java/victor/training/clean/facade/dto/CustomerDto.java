@@ -1,6 +1,6 @@
 package victor.training.clean.facade.dto;
 
-import victor.training.clean.entity.Customer;
+import victor.training.clean.customer.entity.Customer;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
