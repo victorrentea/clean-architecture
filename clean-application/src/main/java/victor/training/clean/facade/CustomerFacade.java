@@ -32,9 +32,9 @@ public class CustomerFacade {
 		return customerSearchRepo.search(searchCriteria);
 	}
 
+
 	public CustomerDto findById(long customerId) {
 		Customer entity = customerRepo.findById(customerId).get();
-
 		return new CustomerDto(entity);
 	}
 

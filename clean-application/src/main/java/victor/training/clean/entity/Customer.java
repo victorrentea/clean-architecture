@@ -1,8 +1,6 @@
 package victor.training.clean.entity;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 public class Customer {
-	@Setter(AccessLevel.NONE)
+//	@Setter(AccessLevel.NONE)
 	@Id
 	private Long id;
 	private String name;

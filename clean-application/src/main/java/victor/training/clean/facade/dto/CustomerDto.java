@@ -19,6 +19,14 @@ public class CustomerDto {
       id = entity.getId();
    }
 
+   public Customer toEntity() {
+      Customer entity = new Customer();
+      entity.setId(id);
+      entity.setName(name);
+      //
+      return entity;
+   }
+
    public CustomerDto(String name, String email) {
       this.name = name;
       this.email = email;
