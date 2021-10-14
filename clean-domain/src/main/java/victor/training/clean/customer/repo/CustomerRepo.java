@@ -1,11 +1,15 @@
 package victor.training.clean.customer.repo;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import victor.training.clean.customer.entity.Customer;
 
-public interface CustomerRepo extends JpaRepository<Customer, Long> {
-	Customer getCustomerByEmail(String email);
+import java.util.Optional;
 
+public interface CustomerRepo extends Repository /*extends JpaRepository<Customer, Long> */{
+	Customer getCustomerByEmail(String email);
+	Optional<Customer> findById(Long id);
 	boolean existsByEmail(String email);
+
+	void save(Customer customer);
 
 }

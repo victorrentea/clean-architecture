@@ -3,18 +3,19 @@ package victor.training.clean.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.customer.service.CustomerService;
+import victor.training.clean.audit.service.AuditService;
 import victor.training.clean.customer.entity.Customer;
 import victor.training.clean.customer.entity.Email;
+import victor.training.clean.customer.repo.CustomerRepo;
+import victor.training.clean.customer.repo.CustomerSearchRepo;
+import victor.training.clean.customer.repo.SiteRepo;
+import victor.training.clean.customer.service.CustomerService;
+import victor.training.clean.customer.service.QuotationService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
 import victor.training.clean.facade.mapper.CustomerMapper;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.customer.repo.CustomerRepo;
-import victor.training.clean.customer.repo.CustomerSearchRepo;
-import victor.training.clean.customer.repo.SiteRepo;
-import victor.training.clean.customer.service.QuotationService;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class CustomerFacade {
 	private final QuotationService quotationService;
 	private final CustomerMapper customerMapper;
 	private final CustomerService customerService;
+	private final AuditService auditService;
 
 
 	public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
@@ -48,8 +50,8 @@ public class CustomerFacade {
 			throw new IllegalArgumentException("Email already registered");
 		}
 
-
 		customerService.register(customer);
+//		auditService.auditCustomerRegistered(customer.getId());
 
 		sendRegistrationEmail(customer.getEmail());
 	}

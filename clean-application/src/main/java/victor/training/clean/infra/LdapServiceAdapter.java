@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.customer.entity.User;
 import victor.training.clean.customer.service.ILdapServiceAdapter;
-import victor.training.clean.infra.LdapUserDto;
-import victor.training.clean.infra.LdapUserWebserviceClient;
 
 import java.util.List;
 
