@@ -1,18 +1,23 @@
 package victor.training.clean.entity;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
-@Data
+// An anemic Domain Entity (fullly opened with getters and setters, no encapsulation)
 @Entity
+
+// *** LOMBOK BEST PRACTICES ***
+// @Data - avoid. Instead:
+@Getter @Setter
+@ToString // @Exclude the child collections fields to avoid accidental lazy loading (Hibernate)
+// @NoArgsConstructor(access = AccessLevel.PRIVATE) // PRO: keep the default constructor only for the persistence (Hibernate/nosql)
+// @EqualsAndHashCode - usually a bad practice on Hibernate @Entity!
 public class Customer {
-	@Setter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE) // KNOW this
 	@Id
 	private Long id;
 	private String name;
