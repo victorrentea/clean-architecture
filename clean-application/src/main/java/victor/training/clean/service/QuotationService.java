@@ -16,7 +16,7 @@ public class QuotationService {
    private final InsurancePolicyRepo insurancePolicyRepo;
 
    public void requoteCustomer(Customer customer) {
-      log.debug("Requoting customer (~230 total lines of code): " + customer.getName());
+      log.debug("Requoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customer.getName());
       InsurancePolicy policy = new InsurancePolicy();
       policy.setCustomer(customer);
       policy.setValue(BigDecimal.ONE);

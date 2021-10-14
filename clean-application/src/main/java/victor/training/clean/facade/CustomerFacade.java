@@ -47,7 +47,7 @@ public class CustomerFacade {
 		customer.setName(dto.name);
 		customer.setSite(siteRepo.getOne(dto.siteId));
 
-		if (customer.getName().trim().length() < 5) {
+		if (customer.getName().length() < 5) {
 			throw new IllegalArgumentException("Name too short");
 		}
 
