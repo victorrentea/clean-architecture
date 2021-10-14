@@ -8,13 +8,13 @@ import victor.training.clean.entity.Email;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
+import victor.training.clean.facade.mapper.CustomerMapper;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.repo.SiteRepo;
 import victor.training.clean.service.QuotationService;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -26,18 +26,16 @@ public class CustomerFacade {
 	private final SiteRepo siteRepo;
 	private final CustomerSearchRepo customerSearchRepo;
 	private final QuotationService quotationService;
+	private final CustomerMapper customerMapper;
 
 	public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
 		return customerSearchRepo.search(searchCriteria);
 	}
 
 	public CustomerDto findById(long customerId) {
-		Customer customer = customerRepo.findById(customerId).get();
-		CustomerDto dto = new CustomerDto();
-		dto.name = customer.getName();
-		dto.email = customer.getEmail();
-		dto.creationDateStr = new SimpleDateFormat("yyyy-MM-dd").format(customer.getCreationDate());
-		dto.id = customer.getId();
+		Customer entity = customerRepo.findById(customerId).get();
+
+		CustomerDto dto = customerMapper.toDto(entity);
 		return dto;
 	}
 
