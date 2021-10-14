@@ -19,7 +19,7 @@ public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
-      String jpql = "SELECT new victor.training.clean.facade.dto.CustomerSearchResult(c.id, c.name)" +
+      String jpql = "SELECT new victor.training.clean.facade.dto.CustomerSearchResult(c.id, c.r)" +
                     " FROM Customer c " +
                     " WHERE 1=1 ";
 

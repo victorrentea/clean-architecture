@@ -51,6 +51,7 @@ public class CustomerFacade {
 		}
 
 		customerService.register(customer);
+
 //		auditService.auditCustomerRegistered(customer.getId());
 
 		sendRegistrationEmail(customer.getEmail());
