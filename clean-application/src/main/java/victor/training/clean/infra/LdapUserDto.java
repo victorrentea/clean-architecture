@@ -1,17 +1,20 @@
 package victor.training.clean.infra;
+//generata din yaml / wsdl xsd la fiecare build
+// parte dintr-un client JAR
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class LdapUser {
+public class LdapUserDto {
 	private String uId;
 	private String fName;
 	private String lName;
 	private Date creationDate;
 	private String workEmail;
 	private List<LdapUserPhone> emailAddresses = new ArrayList<>();
-	
+
+
 	public final String getuId() {
 		return uId;
 	}
