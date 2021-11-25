@@ -14,5 +14,6 @@ public class AdapterArchUnitTest {
       noClasses().that().resideInAPackage("..service..")
           .should().dependOnClassesThat().resideInAPackage("..infra..")
           .check(classes);
+      // Daca pica testu, dai mail lu victorrentea@gmail.com
    }
 }

@@ -1,6 +1,8 @@
-package victor.training.clean.infra;
+package victor.training.clean.service;
 
 import org.springframework.stereotype.Service;
+import victor.training.clean.infra.DummyData;
+import victor.training.clean.infra.LdapUserDto;
 
 import java.util.Arrays;
 import java.util.List;
