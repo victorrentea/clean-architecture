@@ -3,7 +3,6 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.entity.User;
 import victor.training.clean.service.ILdapUserService;
-import victor.training.clean.service.LdapUserWebserviceClient;
 
 import java.util.List;
 

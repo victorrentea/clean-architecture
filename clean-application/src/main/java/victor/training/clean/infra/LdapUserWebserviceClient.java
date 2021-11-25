@@ -1,4 +1,4 @@
-package victor.training.clean.service;
+package victor.training.clean.infra;
 
 import org.springframework.stereotype.Service;
 import victor.training.clean.infra.DummyData;
