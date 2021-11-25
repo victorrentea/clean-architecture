@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class LdapUser {
+public class LdapUserDto {
 	private String uId;
 	private String fName;
 	private String lName;
 	private Date creationDate;
+	private Date hireDate;
+	private Date gender;
+	private Date shoeSize;
 	private String workEmail;
 	private List<LdapUserPhone> emailAddresses = new ArrayList<>();
 	
