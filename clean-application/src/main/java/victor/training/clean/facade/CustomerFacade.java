@@ -40,8 +40,10 @@ public class CustomerFacade {
       //      CustomerDto dto = customer.toDto(); // la asta te sun. reject la PR si te sun. Vin la tine sa-ti explic
    public CustomerDto findById(long customerId) {
       Customer customer = customerRepo.findById(customerId).get();
-      customer.setGoldMember(true);
       return new CustomerDto(customer);
+   }
+   public Customer findByIdBad(long customerId) {
+      return customerRepo.findById(customerId).get();
    }
 
    public void register(CustomerDto dto) {

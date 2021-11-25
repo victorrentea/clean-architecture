@@ -2,6 +2,7 @@ package victor.training.clean.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import victor.training.clean.entity.Customer;
 import victor.training.clean.facade.CustomerFacade;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
@@ -18,6 +19,10 @@ public class CustomerController {
    @GetMapping("{id}")
    public CustomerDto findById(@PathVariable long id) {
       return customerFacade.findById(id);
+   }
+   @GetMapping("{id}/bad")
+   public Customer findByIdBad(@PathVariable long id) {
+      return customerFacade.findByIdBad(id);
    }
 //@PreAtho
    @PostMapping("search")
