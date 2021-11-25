@@ -1,11 +1,14 @@
 package victor.training.clean.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 // An anemic Domain Entity (fullly opened with getters and setters, no encapsulation)
@@ -22,12 +25,12 @@ public class Customer {
 	@Id
 	@GeneratedValue
 	private Long id;
+	@Length(min = 5)
 	private String name;
 	private String email;
 	private LocalDate creationDate;
 	private boolean goldMember;
-	@ManyToOne
-	private Site site;
+	private Long siteId;
 
 	public boolean isGoldMember() {
 		return goldMember;
@@ -35,5 +38,13 @@ public class Customer {
 
 	public void setGoldMember(boolean goldMember) {
 		this.goldMember = goldMember;
+	}
+
+	public int getDiscountPercentage() {
+		int discountPercentage = 3;
+		if (goldMember) {
+			discountPercentage += 1;
+		}
+		return discountPercentage;
 	}
 }

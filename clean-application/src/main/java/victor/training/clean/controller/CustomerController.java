@@ -19,7 +19,7 @@ public class CustomerController {
    public CustomerDto findById(@PathVariable long id) {
       return customerFacade.findById(id);
    }
-
+//@PreAtho
    @PostMapping("search")
    public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
       return customerFacade.search(searchCriteria);

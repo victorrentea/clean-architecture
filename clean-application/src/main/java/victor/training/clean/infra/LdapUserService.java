@@ -1,12 +1,13 @@
 package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import victor.training.clean.entity.User;
 import victor.training.clean.service.ILdapUserService;
 
 import java.util.List;
 
-//@DDD.Adapter
+@Component
 @RequiredArgsConstructor
 public class LdapUserService implements ILdapUserService {
    private final LdapUserWebserviceClient wsClient;

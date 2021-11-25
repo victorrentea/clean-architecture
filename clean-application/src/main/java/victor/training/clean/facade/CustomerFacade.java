@@ -13,12 +13,15 @@ import victor.training.clean.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.repo.SiteRepo;
 import victor.training.clean.service.QuotationService;
+import victor.training.clean.service.RegisterCustomerService;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional // as scoate-o daca:
+// 1) lucrez cu @DomainEvents si vreau sa oblig save
+// 2) mi-e frica de autoflush ca am avut belele in viata
+// 3) high tps systems (1000 req/min) > vrei sa limitezi connection starvation mai ales daca chemi alte servicii REST
 @RequiredArgsConstructor
 public class CustomerFacade {
    private final CustomerRepo customerRepo;
@@ -26,47 +29,29 @@ public class CustomerFacade {
    private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
    private final QuotationService quotationService;
+   private final RegisterCustomerService registerCustomerService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       return customerSearchRepo.search(searchCriteria);
    }
 
+//      CustomerDto dto = mapper.toDto(customer);
+//      CustomerDto dto =automapper.map(customer);
+      //      CustomerDto dto = customer.toDto(); // la asta te sun. reject la PR si te sun. Vin la tine sa-ti explic
    public CustomerDto findById(long customerId) {
       Customer customer = customerRepo.findById(customerId).get();
-      CustomerDto dto = new CustomerDto();
-      dto.name = customer.getName();
-      dto.email = customer.getEmail();
-      dto.creationDateStr = new SimpleDateFormat("yyyy-MM-dd").format(customer.getCreationDate());
-      dto.id = customer.getId();
-      return dto;
+      customer.setGoldMember(true);
+      return new CustomerDto(customer);
    }
 
    public void register(CustomerDto dto) {
-      Customer customer = new Customer();
-      customer.setEmail(dto.email);
-      customer.setName(dto.name);
-      customer.setSite(siteRepo.getOne(dto.siteId));
-
-      if (customer.getName().length() < 5) {
-         throw new IllegalArgumentException("Name too short");
-      }
+      Customer customer = dto.toEntity();
 
       if (customerRepo.existsByEmail(customer.getEmail())) {
          throw new IllegalArgumentException("Email already registered");
       }
 
-      // Heavy business logic
-      // Heavy business logic
-      // Heavy business logic
-      int discountPercentage = 3;
-      if (customer.isGoldMember()) {
-         discountPercentage += 1;
-      }
-      System.out.println("Biz Logic with discount " + discountPercentage);
-      // Heavy business logic
-      // Heavy business logic
-      customerRepo.save(customer);
-      // Heavy business logic
+      registerCustomerService.register(customer);
 
       quotationService.requoteCustomer(customer);
 
