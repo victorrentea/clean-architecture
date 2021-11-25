@@ -27,6 +27,7 @@ public class UserService {
 			log.debug("Send welcome email to " + user.getWorkEmail());
 		}
 
+
 		log.debug("Insert user in my database");
 		log.debug("More business logic with " + user.getFullName());
 	}
