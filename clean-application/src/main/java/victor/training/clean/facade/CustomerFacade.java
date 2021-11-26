@@ -12,7 +12,7 @@ import victor.training.clean.infra.EmailSender;
 import victor.training.clean.customer.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.user.repo.SiteRepo;
-import victor.training.clean.insurance.entity.QuotationService;
+import victor.training.clean.insurance.service.QuotationService;
 import victor.training.clean.customer.service.RegisterCustomerService;
 
 import java.util.List;
@@ -46,6 +46,7 @@ public class CustomerFacade {
       return customerRepo.findById(customerId).get();
    }
 
+   @Transactional
    public void register(CustomerDto dto) {
       Customer customer = dto.toEntity();
 
@@ -55,6 +56,7 @@ public class CustomerFacade {
 
       registerCustomerService.register(customer);
 
+//      quotationService.requoteCustomer(customer.getId());
 
       sendRegistrationEmail(customer.getEmail());
    }
