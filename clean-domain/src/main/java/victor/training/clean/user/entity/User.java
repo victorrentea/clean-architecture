@@ -1,4 +1,4 @@
-package victor.training.clean.entity;
+package victor.training.clean.user.entity;
 
 //@DDD.ValueObject
 public class User { // value object

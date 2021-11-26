@@ -1,14 +1,17 @@
-package victor.training.clean.service;
+package victor.training.clean.customer.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import victor.training.clean.entity.Customer;
-import victor.training.clean.repo.CustomerRepo;
+import victor.training.clean.common.events.RequoteCustomerEvent;
+import victor.training.clean.customer.entity.Customer;
+import victor.training.clean.customer.repo.CustomerRepo;
 
 @Service
 @RequiredArgsConstructor
 public class RegisterCustomerService {
    private final CustomerRepo customerRepo;
+   private final ApplicationEventPublisher eventPublisher;
 
    public void register(Customer customer) {
       // Heavy business logic
@@ -20,6 +23,9 @@ public class RegisterCustomerService {
       // Heavy business logic
       // Heavy business logic
       customerRepo.save(customer);
+      eventPublisher.publishEvent(new RequoteCustomerEvent(customer.getId()));
+
+//      quotationService.requoteCustomer(customer.getId());
       // Heavy business logic
    }
 }

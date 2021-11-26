@@ -1,7 +1,7 @@
 package victor.training.clean.facade.dto;
 
 import lombok.Data;
-import victor.training.clean.entity.Customer;
+import victor.training.clean.customer.entity.Customer;
 
 import java.text.SimpleDateFormat;
 

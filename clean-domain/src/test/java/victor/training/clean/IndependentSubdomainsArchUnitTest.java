@@ -31,7 +31,7 @@ public class IndependentSubdomainsArchUnitTest {
       assertThat(violations)
           .as("In case this test fails and you don't understand why, " +
               "please contact victorrentea@gmail.com for clarifications")
-          .isLessThan(110);
+          .isLessThan(100);
 
       sliceRule.check(classes);
 

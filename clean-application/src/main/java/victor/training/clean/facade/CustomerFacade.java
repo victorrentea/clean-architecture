@@ -3,17 +3,17 @@ package victor.training.clean.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.entity.Customer;
-import victor.training.clean.entity.Email;
+import victor.training.clean.customer.entity.Customer;
+import victor.training.clean.user.entity.Email;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.repo.CustomerRepo;
+import victor.training.clean.customer.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
-import victor.training.clean.repo.SiteRepo;
-import victor.training.clean.service.QuotationService;
-import victor.training.clean.service.RegisterCustomerService;
+import victor.training.clean.user.repo.SiteRepo;
+import victor.training.clean.insurance.entity.QuotationService;
+import victor.training.clean.customer.service.RegisterCustomerService;
 
 import java.util.List;
 
@@ -55,7 +55,6 @@ public class CustomerFacade {
 
       registerCustomerService.register(customer);
 
-      quotationService.requoteCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
    }

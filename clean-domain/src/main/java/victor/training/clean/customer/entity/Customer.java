@@ -1,4 +1,4 @@
-package victor.training.clean.entity;
+package victor.training.clean.customer.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -47,4 +47,5 @@ public class Customer {
 		}
 		return discountPercentage;
 	}
+	//mare
 }

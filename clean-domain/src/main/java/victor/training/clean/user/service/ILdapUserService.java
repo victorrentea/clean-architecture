@@ -1,6 +1,6 @@
-package victor.training.clean.service;
+package victor.training.clean.user.service;
 
-import victor.training.clean.entity.User;
+import victor.training.clean.user.entity.User;
 
 public interface ILdapUserService {
 
