@@ -1,16 +1,17 @@
 package victor.training.clean.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.entity.User;
-import victor.training.clean.infra.LdapUser;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-	private final LdapClientAdapter ldapClientAdapter = new LdapClientAdapter();
+	private final LdapClientAdapter ldapClientAdapter;
 
 	public void importUserFromLdap(String username) {
 		List<User> list = ldapClientAdapter.searchByUsername(username);
@@ -24,14 +25,6 @@ public class UserService {
 		}
 		log.debug("Insert user in my database");
 		log.debug("More business logic with " + user.getFullName());
-	}
-
-	private List<User> searchByUsername(String username) {
-		return ldapClientAdapter.searchByUsername(username);
-	}
-
-	private User fromDto(LdapUser ldapUser) {
-		return ldapClientAdapter.fromDto(ldapUser);
 	}
 
 
