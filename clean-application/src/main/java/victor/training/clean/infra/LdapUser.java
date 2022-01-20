@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class LdapUser {
+public class LdapUser { // WSDL/XSD/json yaml / jar/ dll/
 	private String uId;
 	private String fName;
 	private String lName;
 	private Date creationDate;
 	private String workEmail;
 	private List<LdapUserPhone> emailAddresses = new ArrayList<>();
-	
+//
 	public final String getuId() {
 		return uId;
 	}

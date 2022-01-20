@@ -11,7 +11,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class UserService {
-	private final LdapClientAdapter ldapClientAdapter;
+	private final ILdapClientAdapter ldapClientAdapter;
 
 	public void importUserFromLdap(String username) {
 		List<User> list = ldapClientAdapter.searchByUsername(username);
