@@ -12,7 +12,7 @@ import victor.training.clean.infra.EmailSender;
 import victor.training.clean.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.repo.SiteRepo;
-import victor.training.clean.service.QuotationService;
+import victor.training.clean.service.CustomerService;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -21,11 +21,11 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class CustomerFacade {
-   private final CustomerRepo customerRepo;
    private final EmailSender emailSender;
    private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
-   private final QuotationService quotationService;
+   private final CustomerRepo customerRepo;
+   private final CustomerService customerService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       return customerSearchRepo.search(searchCriteria);
@@ -55,20 +55,7 @@ public class CustomerFacade {
          throw new IllegalArgumentException("Email already registered");
       }
 
-      // Heavy business logic
-      // Heavy business logic
-      // Heavy business logic
-      int discountPercentage = 3;
-      if (customer.isGoldMember()) {
-         discountPercentage += 1;
-      }
-      System.out.println("Biz Logic with discount " + discountPercentage);
-      // Heavy business logic
-      // Heavy business logic
-      customerRepo.save(customer);
-      // Heavy business logic
-
-      quotationService.requoteCustomer(customer);
+      customerService.registerCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
    }
