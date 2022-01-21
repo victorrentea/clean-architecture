@@ -16,6 +16,7 @@ public class CustomerController {
    private final CustomerFacade customerFacade;
 
    @GetMapping("{id}")
+//   @PreAuthorize()
    public CustomerDto findById(@PathVariable long id) {
       return customerFacade.findById(id);
    }
