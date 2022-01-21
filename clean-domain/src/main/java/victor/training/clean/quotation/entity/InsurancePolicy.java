@@ -1,11 +1,11 @@
-package victor.training.clean.entity;
+package victor.training.clean.quotation.entity;
 
 import lombok.Data;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Entity
@@ -15,8 +15,12 @@ public class InsurancePolicy {
    @GeneratedValue
    private Long id;
 
-   @ManyToOne
-   private Customer customer;
+//   @ManyToOne
+//   private Customer customerId;
+//   @Embedded
+//   private CustomerVO customerId;
+
+   private Long customerId;
 
    private BigDecimal value;
 }

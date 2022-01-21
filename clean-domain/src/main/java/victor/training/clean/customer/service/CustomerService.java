@@ -1,9 +1,10 @@
-package victor.training.clean.service;
+package victor.training.clean.customer.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import victor.training.clean.entity.Customer;
+import victor.training.clean.customer.entity.Customer;
 import victor.training.clean.repo.CustomerRepo;
+import victor.training.clean.quotation.service.QuotationService;
 
 @RequiredArgsConstructor
 @Service
