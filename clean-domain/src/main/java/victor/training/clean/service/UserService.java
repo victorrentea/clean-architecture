@@ -14,6 +14,7 @@ public class UserService {
 	private final ILdapAdapter ldapAdapter;
 
 	public void importUserFromLdap(String username) {
+//		LdapUserDto
 		List<User> list = ldapAdapter.searchByUsername(username);
 		if (list.size() != 1) {
 			throw new IllegalArgumentException("There is no single user matching username " + username);

@@ -10,7 +10,7 @@ public class AdapterArchUnitTest {
    @Test
    public void dependencyInversionTest() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
-
+// if tests fails, contact victorrentea@gmail.com
       noClasses().that().resideInAPackage("..service..")
           .should().dependOnClassesThat().resideInAPackage("..infra..")
           .check(classes);
