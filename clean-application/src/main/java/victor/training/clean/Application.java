@@ -1,5 +1,8 @@
 package victor.training.clean;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -22,6 +25,11 @@ public class Application {
    public static void main(String[] args) {
       SpringApplication.run(Application.class, args);
    }
+
+//   @Autowired
+//   public void configure(ObjectMapper objectMapper) {
+//      objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+//   }
 
    @Autowired
    private UserService userService;

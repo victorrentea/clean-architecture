@@ -25,9 +25,9 @@ public class CustomerSearchRepo {
 
       Map<String, Object> paramMap = new HashMap<>();
 
-      if (StringUtils.isNotEmpty(criteria.name)) {
+      if (StringUtils.isNotEmpty(criteria.getName())) {
          jpql += "  AND UPPER(c.name) LIKE UPPER('%' || :name || '%')   ";
-         paramMap.put("name", criteria.name);
+         paramMap.put("name", criteria.getName());
       }
 
       // etc

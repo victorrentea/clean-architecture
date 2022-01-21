@@ -22,6 +22,7 @@ public class CustomerController {
 
    @PostMapping("search")
    public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
+      System.out.println(searchCriteria);
       return customerFacade.search(searchCriteria);
    }
 

@@ -8,15 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
-// An anemic Domain Entity (fullly opened with getters and setters, no encapsulation)
-@Entity
-
-// *** LOMBOK BEST PRACTICES ***
-// @Data - avoid. Instead:
-@Getter @Setter
-@ToString // @Exclude the child collections fields to avoid accidental lazy loading (Hibernate)
-// @NoArgsConstructor(access = AccessLevel.PRIVATE) // PRO: keep the default constructor only for the persistence (Hibernate/nosql)
-// @EqualsAndHashCode - usually a bad practice on Hibernate @Entity!
+@Getter
+@Setter
+@Entity // HOLY DOMAIN ENTITY
 public class Customer {
 	@Setter(AccessLevel.NONE) // KNOW this
 	@Id

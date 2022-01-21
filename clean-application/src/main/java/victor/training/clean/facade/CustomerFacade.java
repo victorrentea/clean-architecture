@@ -17,9 +17,9 @@ import victor.training.clean.service.QuotationService;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class CustomerFacade {
    private final CustomerRepo customerRepo;
    private final EmailSender emailSender;
