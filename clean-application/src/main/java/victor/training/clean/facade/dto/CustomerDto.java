@@ -1,7 +1,7 @@
 package victor.training.clean.facade.dto;
 
 import lombok.Data;
-import victor.training.clean.entity.Customer;
+import victor.training.clean.customer.entity.Customer;
 
 import java.text.SimpleDateFormat;
 
@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 
 public class CustomerDto {
    public Long id;
+
    public String name;
    // @Email
    public String email;
@@ -23,9 +24,8 @@ public class CustomerDto {
    }
 
    public Customer asEntity() {
-      Customer customer = new Customer();
+      Customer customer = new Customer(name.trim());
       customer.setEmail(email);
-      customer.setName(name);
       return customer;
    }
 }

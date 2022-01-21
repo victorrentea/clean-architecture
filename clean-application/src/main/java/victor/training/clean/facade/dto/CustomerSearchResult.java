@@ -1,6 +1,9 @@
 package victor.training.clean.facade.dto;
 
+import lombok.Value;
+
 // sent as JSON to the grid in Frontend
+@Value
 public class CustomerSearchResult {
    private final long id;
    private final String name;
