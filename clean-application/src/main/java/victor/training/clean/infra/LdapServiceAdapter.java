@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+// Anti-corruption layer
 public class LdapServiceAdapter implements ILdapServiceAdapter {
    @Autowired
    public LdapUserWebserviceClient wsClient;
