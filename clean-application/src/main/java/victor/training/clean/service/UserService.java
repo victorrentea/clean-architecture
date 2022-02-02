@@ -4,26 +4,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import victor.training.clean.entity.User;
-import victor.training.clean.infra.LdapUser;
-import victor.training.clean.infra.LdapUserWebserviceClient;
-
-import java.util.List;
 
 @Slf4j
 @Service
+// presupunem ca in aceasta clasa vrem sa implementam logica centrala a app noastre : acea parte din requ care ne da fiori.
+// Domain Logic = partea dintr-o app pe care nu ai cum s-o copiezi in alta.
 public class UserService {
 	@Autowired
-	private LdapUserWebserviceClient wsClient;
+	private LdapServiceAdapter ldapServiceAdapter;
 
 	public void importUserFromLdap(String username) {
-		List<LdapUser> list = wsClient.search(username.toUpperCase(), null, null);
-		if (list.size() != 1) {
-			throw new IllegalArgumentException("There is no single user matching username " + username);
-		}
-		LdapUser ldapUser = list.get(0);
-		String fullName = ldapUser.getfName() + " " + ldapUser.getlName().toUpperCase();
-		User user = new User(ldapUser.getuId(), fullName, ldapUser.getWorkEmail());
-		
+		User user = ldapServiceAdapter.searchOneByUsername(username);
+
 		if (user.getWorkEmail() != null) {
 			log.debug("Send welcome email to " + user.getWorkEmail());
 		}
