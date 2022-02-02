@@ -25,3 +25,26 @@ public class UserService {
 
 
 }
+
+
+
+//@Enti
+class Customer {
+	private String firstName;
+	private String lastName;
+	private String email;
+//	private String streetAddress;
+//	private String streetNumber;
+//	private String city;
+//	private String country;
+	private Address address;
+	// 50 campuri
+}
+
+class Address {
+	private String streetAddress;
+	private String streetNumber;
+	private String city;
+	private String country;
+
+}
