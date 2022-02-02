@@ -15,6 +15,7 @@ public class CustomerDto {
    public String email;
    public Long siteId;
    public String creationDateStr;
+   public boolean cevaMarfa;
 
    public CustomerDto() {
    }

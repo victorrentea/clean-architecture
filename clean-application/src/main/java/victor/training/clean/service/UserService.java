@@ -11,7 +11,7 @@ import victor.training.clean.entity.User;
 // Domain Logic = partea dintr-o app pe care nu ai cum s-o copiezi in alta.
 public class UserService {
 	@Autowired
-	private LdapServiceAdapter ldapServiceAdapter;
+	private ILdapServiceAdapter ldapServiceAdapter;
 
 	public void importUserFromLdap(String username) {
 		User user = ldapServiceAdapter.searchOneByUsername(username);

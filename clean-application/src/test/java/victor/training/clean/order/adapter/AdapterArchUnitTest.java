@@ -15,4 +15,15 @@ public class AdapterArchUnitTest {
           .should().dependOnClassesThat().resideInAPackage("..infra..")
           .check(classes);
    }
+
+
+   @Test
+   public void domainServiceNuStieDeDtouri() {
+      JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
+
+      // DACA PICA TESTUL ASTA, da un mai lui victorrentea@gmail.com (leadu) ca sa-ti explice de ce.
+      noClasses().that().resideInAPackage("..service..")
+          .should().dependOnClassesThat().resideInAPackage("..dto..")
+          .check(classes);
+   }
 }

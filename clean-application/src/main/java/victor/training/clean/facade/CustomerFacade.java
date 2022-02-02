@@ -11,7 +11,7 @@ import victor.training.clean.facade.dto.CustomerSearchResult;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
-import victor.training.clean.service.CustomerService;
+import victor.training.clean.service.RegisterCustomerService;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class CustomerFacade {
    private final EmailSender emailSender;
    private final CustomerSearchRepo customerSearchRepo;
    private final CustomerMapper customerMapper;
-   private final CustomerService customerService;
+   private final RegisterCustomerService registerCustomerService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       return customerSearchRepo.search(searchCriteria);
@@ -39,7 +39,7 @@ public class CustomerFacade {
       if (customerRepo.existsByEmail(customer.getEmail())) {
          throw new IllegalArgumentException("Email already registered");
       }
-      customerService.register(customer, dto);
+      registerCustomerService.register(customer);
 
       sendRegistrationEmail(customer.getEmail());
    }
