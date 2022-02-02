@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 	private final ExternalUserProvider adapter;
-
+//@TransactionalEventListener(phase = AF)
 	public void importUserFromLdap(String username) {
 		List<User> list = adapter.searchByUsername(username);
 //		LdapUser ldap;
