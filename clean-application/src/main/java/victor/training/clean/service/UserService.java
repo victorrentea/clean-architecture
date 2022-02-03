@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import victor.training.clean.entity.User;
+import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
-import victor.training.clean.infra.LdapUserWebserviceClient;
 
 import java.util.List;
 
@@ -13,16 +13,16 @@ import java.util.List;
 @Service
 public class UserService {
 	@Autowired
-	private LdapUserWebserviceClient wsClient;
+	private LdapApi ldapApi;
 
 	public void importUserFromLdap(String username) {
-		List<LdapUserDto> list = wsClient.search(username.toUpperCase(), null, null);
+		List<LdapUserDto> list = ldapApi.searchUsingGET(username.toUpperCase(), null, null);
 		if (list.size() != 1) {
 			throw new IllegalArgumentException("There is no single user matching username " + username);
 		}
 		LdapUserDto ldapUser = list.get(0);
-		String fullName = ldapUser.getfName() + " " + ldapUser.getlName().toUpperCase();
-		User user = new User(ldapUser.getuId(), fullName, ldapUser.getWorkEmail());
+		String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
+		User user = new User(ldapUser.getUid(), fullName, ldapUser.getWorkEmail());
 		
 		if (user.getWorkEmail() != null) {
 			log.debug("Send welcome email to " + user.getWorkEmail());

@@ -82,8 +82,8 @@
                             <generateModelTests>false</generateModelTests>
                             <library>resttemplate</library>
                             <modelNameSuffix>Dto</modelNameSuffix>
-                            <apiPackage>victor.training.clean.infra.ldap</apiPackage>
-                            <modelPackage>victor.training.clean.infra.ldap</modelPackage>
+                            <apiPackage>victor.training.clean.infra</apiPackage>
+                            <modelPackage>victor.training.clean.infra</modelPackage>
                         </configuration>
                     </execution>
                 </executions>

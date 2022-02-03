@@ -12,7 +12,7 @@ import java.util.List;
 public class Ldap {
 
    @GetMapping("ldap/user")
-   public List<LdapUser> method(String username, String fName, String lName) {
+   public List<LdapUser> search(String username, String fName, String lName) {
       return List.of(ldapUser1, ldapUser2);
    }
 
