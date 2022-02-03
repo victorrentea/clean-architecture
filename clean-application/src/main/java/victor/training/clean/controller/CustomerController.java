@@ -15,19 +15,18 @@ import java.util.List;
 public class CustomerController {
    private final CustomerFacade customerFacade;
 
-   @GetMapping("{id}")
-   public CustomerDto findById(@PathVariable long id) {
-      return customerFacade.findById(id);
-   }
-
-   @PostMapping("search")
-   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-      return customerFacade.search(searchCriteria);
-   }
-
-   @PostMapping
-   //   @PreAuthorized("hasRole('CRM')")
-   public void register(@RequestBody CustomerDto customerDto) {
-      customerFacade.register(customerDto);
-   }
+//   @GetMapping("{id}")
+//   public CustomerDto findById(@PathVariable long id) {
+//      return customerFacade.findById(id);
+//   }
+//
+//   @PostMapping("search")
+//   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
+//      return customerFacade.search(searchCriteria);
+//   }
+//
+//   @PostMapping("")
+//   public void register(@RequestBody CustomerDto customerDto) {
+//      customerFacade.register(customerDto);
+//   }
 }

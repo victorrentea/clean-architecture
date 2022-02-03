@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class LdapUser {
+public class LdapUserDto {
 	private String uId;
 	private String fName;
 	private String lName;
 	private Date creationDate;
 	private String workEmail;
 	private List<LdapUserPhone> emailAddresses = new ArrayList<>();
-	
+
 	public final String getuId() {
 		return uId;
 	}
@@ -36,7 +36,7 @@ public class LdapUser {
 	public final void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
-	
+
 	public final String getWorkEmail() {
 		return workEmail;
 	}
@@ -49,5 +49,5 @@ public class LdapUser {
 	public final void setEmailAddresses(List<LdapUserPhone> emailAddresses) {
 		this.emailAddresses = emailAddresses;
 	}
-	
+
 }

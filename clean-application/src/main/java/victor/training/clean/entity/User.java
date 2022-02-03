@@ -1,31 +1,26 @@
 package victor.training.clean.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-import static lombok.AccessLevel.NONE;
-import static lombok.AccessLevel.PRIVATE;
-
-@Data
-@Entity
-@NoArgsConstructor(access = PRIVATE) // for hibernate
+// Value Object
 public class User {
-	@Id
-	@GeneratedValue
-	@Setter(NONE)
-	private Long id;
-	private String username;
-	private String fullName;
-	private String workEmail;
+	private final String username;
+	private final String fullName;
+	private final String workEmail;
 
 	public User(String username, String fullName, String workEmail) {
 		this.username = username;
 		this.fullName = fullName;
 		this.workEmail = workEmail;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public String getWorkEmail() {
+		return workEmail;
 	}
 }

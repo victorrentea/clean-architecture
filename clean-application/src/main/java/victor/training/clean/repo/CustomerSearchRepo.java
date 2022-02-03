@@ -1,7 +1,6 @@
 package victor.training.clean.repo;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -25,7 +24,7 @@ public class CustomerSearchRepo {
 
       Map<String, Object> paramMap = new HashMap<>();
 
-      if (StringUtils.isNotEmpty(criteria.getName())) {
+      if (criteria.getName() != null) {
          jpql += "  AND UPPER(c.name) LIKE UPPER('%' || :name || '%')   ";
          paramMap.put("name", criteria.getName());
       }

@@ -19,7 +19,7 @@ public class QuotationService {
       log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customer.getName());
       InsurancePolicy policy = new InsurancePolicy();
       policy.setCustomer(customer);
-      policy.setValue(BigDecimal.ONE);
+      policy.setValueInEur(BigDecimal.ONE);
       insurancePolicyRepo.save(policy);
    }
 }

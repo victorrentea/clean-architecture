@@ -1,6 +1,7 @@
 package victor.training.clean.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +10,8 @@ import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class InsurancePolicy {
    @Id
    @GeneratedValue
@@ -18,5 +20,7 @@ public class InsurancePolicy {
    @ManyToOne
    private Customer customer;
 
-   private BigDecimal value;
+   private BigDecimal valueInEur;
+
+
 }
