@@ -68,7 +68,7 @@ public class CustomerFacade {
       customerRepo.save(customer);
       // Heavy business logic
 
-      quotationService.requoteCustomer(customer);
+      quotationService.quoteCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
    }

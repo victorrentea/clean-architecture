@@ -12,7 +12,7 @@ import victor.training.clean.service.UserService;
 @EnableAsync
 @SpringBootApplication
 @RequiredArgsConstructor
-public class Application {
+public class CleanApplication {
 
    @Bean
    public RestTemplate rest() {
@@ -20,11 +20,12 @@ public class Application {
    }
 
    public static void main(String[] args) {
-      SpringApplication.run(Application.class, args);
+      SpringApplication.run(CleanApplication.class, args);
    }
 
    @Autowired
    private UserService userService;
+
    public void someUsage() {
       userService.importUserFromLdap("a");
    }

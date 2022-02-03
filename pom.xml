@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.2</version>
+        <version>2.6.1</version>
     </parent>
 
     <modules>
@@ -24,8 +24,8 @@
 
     <dependencies>
 
-
     </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -53,19 +53,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <build>
-        <plugins>
-            <!--
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <compilerArgs>&#45;&#45;enable-preview</compilerArgs>
-                <source>12</source>
-                <target>12</target>
-            </configuration>
-          </plugin>
-    -->
-        </plugins>
-    </build>
 </project>
