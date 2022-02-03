@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+//@RestController
 public class Ldap {
 
    @GetMapping("ldap/user")
