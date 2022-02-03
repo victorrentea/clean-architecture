@@ -26,7 +26,7 @@ public class IndependentSubdomainsArchUnitTest {
           .matching("..clean.(*).*")
           // example: service.order should not depend on service.customer
           .should().notDependOnEachOther()
-          .ignoreDependency(alwaysTrue(), resideInAnyPackage("..common..", "..infra")); // allow dependencies to .events
+          .ignoreDependency(alwaysTrue(), resideInAnyPackage("..common..", "..infra","..api")); // allow dependencies to .events
 
       // progressive strangling the monolith
       EvaluationResult evaluationResult = sliceRule.evaluate(classes);
