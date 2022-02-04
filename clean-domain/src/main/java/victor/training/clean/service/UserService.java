@@ -13,7 +13,7 @@ public class UserService {
 
 	public void importUserFromLdap(String username) {
 		User user = userProvider.findOneUserByUsername(username);
-
+//LdapUserDto
 		if (user.getWorkEmail() != null) {
 			log.debug("Send welcome email to " + user.getWorkEmail());
 		}
