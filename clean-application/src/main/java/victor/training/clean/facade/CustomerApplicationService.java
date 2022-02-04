@@ -13,64 +13,51 @@ import victor.training.clean.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.repo.SiteRepo;
 import victor.training.clean.service.QuotationService;
+import victor.training.clean.service.RegisterCustomerService;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CustomerFacade {
+public class CustomerApplicationService {
    private final CustomerRepo customerRepo;
    private final EmailSender emailSender;
    private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
    private final QuotationService quotationService;
+   private final RegisterCustomerService registerCustomerService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-      return customerSearchRepo.search(searchCriteria);
+      // selecting projections(DTOs) with jpql on Entities
+      return customerSearchRepo.search(searchCriteria); // relaxed layer arch
    }
 
+   // first level of services IS OUT OF THE DOMAIN
    public CustomerDto findById(long customerId) {
-      Customer customer = customerRepo.findById(customerId).get();
-      CustomerDto dto = new CustomerDto();
-      dto.name = customer.getName();
-      dto.email = customer.getEmail();
-      dto.creationDateStr = new SimpleDateFormat("yyyy-MM-dd").format(customer.getCreationDate());
-      dto.id = customer.getId();
-      return dto;
+      return new CustomerDto(customerRepo.findById(customerId).get());
    }
 
    public void register(CustomerDto dto) {
-      Customer customer = new Customer();
-      customer.setEmail(dto.email);
-      customer.setName(dto.name);
-      customer.setSite(siteRepo.getOne(dto.siteId));
-
-      if (customer.getName().length() < 5) {
-         throw new IllegalArgumentException("Name too short");
-      }
+//      Customer customer = Customer.fromDto(dto); // HORROR. NEVER. GET YOU FIRED> NEC
+      Customer customer = /*mapper.*/fromDto(dto);
 
       if (customerRepo.existsByEmail(customer.getEmail())) {
          throw new IllegalArgumentException("Email already registered");
       }
 
-      // Heavy business logic
-      // Heavy business logic
-      // Heavy business logic
-      int discountPercentage = 3;
-      if (customer.isGoldMember()) {
-         discountPercentage += 1;
-      }
-      System.out.println("Biz Logic with discount " + discountPercentage);
-      // Heavy business logic
-      // Heavy business logic
-      customerRepo.save(customer);
-      // Heavy business logic
-
-      quotationService.quoteCustomer(customer);
+      registerCustomerService.register(customer);
 
       sendRegistrationEmail(customer.getEmail());
+   }
+
+
+   private Customer fromDto(CustomerDto dto) {
+      Customer customer = new Customer();
+      customer.setEmail(dto.email);
+      customer.setName(dto.name);
+      customer.setSite(siteRepo.getOne(dto.siteId));
+      return customer;
    }
 
    private void sendRegistrationEmail(String emailAddress) {

@@ -1,5 +1,7 @@
 package victor.training.clean.entity;
 
+import java.util.Objects;
+
 // Value Object
 public class User {
 	private final String username;
@@ -7,9 +9,9 @@ public class User {
 	private final String workEmail;
 
 	public User(String username, String fullName, String workEmail) {
-		this.username = username;
-		this.fullName = fullName;
-		this.workEmail = workEmail;
+		this.username = Objects.requireNonNull(username);
+		this.fullName = Objects.requireNonNull(fullName);
+		this.workEmail = Objects.requireNonNull(workEmail);
 	}
 
 	public String getUsername() {

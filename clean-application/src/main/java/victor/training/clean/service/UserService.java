@@ -1,29 +1,19 @@
 package victor.training.clean.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import victor.training.clean.entity.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
 
-import java.util.List;
-
+@RequiredArgsConstructor
 @Slf4j
-@Service
+@Service // DOmain Service : sacred grounds
 public class UserService {
-	@Autowired
-	private LdapApi ldapApi;
+	private final ExternalUserProvider userProvider;
 
 	public void importUserFromLdap(String username) {
-		List<LdapUserDto> list = ldapApi.searchUsingGET(username.toUpperCase(), null, null);
-		if (list.size() != 1) {
-			throw new IllegalArgumentException("There is no single user matching username " + username);
-		}
-		LdapUserDto ldapUser = list.get(0);
-		String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
-		User user = new User(ldapUser.getUid(), fullName, ldapUser.getWorkEmail());
-		
+		User user = userProvider.findOneUserByUsername(username);
+
 		if (user.getWorkEmail() != null) {
 			log.debug("Send welcome email to " + user.getWorkEmail());
 		}
