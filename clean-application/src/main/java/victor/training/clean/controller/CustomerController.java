@@ -25,7 +25,6 @@ public class CustomerController {
       return customerFacade.search(searchCriteria);
    }
 
-
    @PostMapping("")
    public void register(@RequestBody CustomerDto customerDto) {
       customerFacade.register(customerDto);

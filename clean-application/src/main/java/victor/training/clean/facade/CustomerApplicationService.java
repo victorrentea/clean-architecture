@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CustomerApplicationService {
+public class CustomerApplicationService /*implements  InterfaceGeneratedWithGetMappingAndCo*/{
    private final CustomerRepo customerRepo;
    private final EmailSender emailSender;
    private final SiteRepo siteRepo;
@@ -28,6 +28,7 @@ public class CustomerApplicationService {
    private final QuotationService quotationService;
    private final RegisterCustomerService registerCustomerService;
 
+//   @PreAuthorized
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       // selecting projections(DTOs) with jpql on Entities
       return customerSearchRepo.search(searchCriteria); // relaxed layer arch

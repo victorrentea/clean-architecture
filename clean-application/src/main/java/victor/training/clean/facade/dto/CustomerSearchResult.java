@@ -1,6 +1,7 @@
 package victor.training.clean.facade.dto;
 
 // sent as JSON to the grid in Frontend
+//@ValueObject
 public class CustomerSearchResult {
    private final long id;
    private final String name;
