@@ -4,6 +4,8 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import org.junit.Test;
 
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideOutsideOfPackage;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class ArchitectureTest {
@@ -22,6 +24,16 @@ public class ArchitectureTest {
 
       noClasses().that().resideInAPackage("..service..")
           .should().dependOnClassesThat().resideInAPackage("..facade..")
+          .check(classes);
+   }
+
+   @Test
+   public void domain_not_exposed_via_controller_methods() {
+      JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
+
+      methods().that().areDeclaredInClassesThat().resideInAPackage("..controller..")
+          .and().arePublic()
+          .should().haveRawReturnType(resideOutsideOfPackage("..entity.."))
           .check(classes);
    }
 }

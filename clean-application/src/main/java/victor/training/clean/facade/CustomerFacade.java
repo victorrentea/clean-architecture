@@ -1,8 +1,8 @@
 package victor.training.clean.facade;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import victor.training.clean.common.Facade;
 import victor.training.clean.entity.Customer;
 import victor.training.clean.entity.Email;
 import victor.training.clean.facade.dto.CustomerDto;
@@ -17,7 +17,8 @@ import victor.training.clean.service.QuotationService;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-@Service
+//@Service
+@Facade
 @Transactional
 @RequiredArgsConstructor
 public class CustomerFacade {
@@ -52,7 +53,8 @@ public class CustomerFacade {
       }
 
       if (customerRepo.existsByEmail(customer.getEmail())) {
-         throw new IllegalArgumentException("Email already registered");
+         throw new IllegalArgumentException("Customer email is already registered");
+//         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
       }
 
       // Heavy business logic

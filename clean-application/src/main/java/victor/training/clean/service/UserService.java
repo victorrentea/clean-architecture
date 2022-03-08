@@ -12,24 +12,24 @@ import java.util.List;
 @Slf4j
 @Service
 public class UserService {
-	@Autowired
-	private LdapApi ldapApi;
+   @Autowired
+   private LdapApi ldapApi;
 
-	public void importUserFromLdap(String username) {
-		List<LdapUserDto> list = ldapApi.searchUsingGET(username.toUpperCase(), null, null);
-		if (list.size() != 1) {
-			throw new IllegalArgumentException("There is no single user matching username " + username);
-		}
-		LdapUserDto ldapUser = list.get(0);
-		String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
-		User user = new User(ldapUser.getUid(), fullName, ldapUser.getWorkEmail());
-		
-		if (user.getWorkEmail() != null) {
-			log.debug("Send welcome email to " + user.getWorkEmail());
-		}
-		log.debug("Insert user in my database");
-		log.debug("More business logic with " + user.getFullName());
-	}
+   public void importUserFromLdap(String username) {
+      List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
+      if (list.size() != 1) {
+         throw new IllegalArgumentException("There is no single user matching username " + username);
+      }
+      LdapUserDto ldapUser = list.get(0);
+      String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
+      User user = new User(ldapUser.getUid(), fullName, ldapUser.getWorkEmail());
+
+      if (user.getWorkEmail() != null) {
+         log.debug("Send welcome email to " + user.getWorkEmail());
+      }
+      log.debug("Insert user in my database");
+      log.debug("More business logic with " + user.getFullName());
+   }
 
 
 }
