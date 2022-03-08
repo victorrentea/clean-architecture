@@ -11,10 +11,9 @@ import victor.training.clean.facade.dto.CustomerSearchResult;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
-import victor.training.clean.repo.SiteRepo;
 import victor.training.clean.service.QuotationService;
+import victor.training.clean.service.RegisterCustomerService;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -23,50 +22,24 @@ import java.util.List;
 public class CustomerFacade {
    private final CustomerRepo customerRepo;
    private final EmailSender emailSender;
-   private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
    private final QuotationService quotationService;
-
-   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-      return customerSearchRepo.search(searchCriteria);
-   }
+   private final CustomerMapper customerMapper;
+   private final RegisterCustomerService registerCustomerService;
 
    public CustomerDto findById(long customerId) {
-      Customer customer = customerRepo.findById(customerId).get();
-      CustomerDto dto = new CustomerDto();
-      dto.name = customer.getName();
-      dto.email = customer.getEmail();
-      dto.creationDateStr = new SimpleDateFormat("yyyy-MM-dd").format(customer.getCreationDate());
-      dto.id = customer.getId();
-      return dto;
+      Customer customer = customerRepo.findById(customerId).orElseThrow();
+      return new CustomerDto(customer);
    }
 
    public void register(CustomerDto dto) {
-      Customer customer = new Customer();
-      customer.setEmail(dto.email);
-      customer.setName(dto.name);
-      customer.setSite(siteRepo.getOne(dto.siteId));
-
-      if (customer.getName().length() < 5) {
-         throw new IllegalArgumentException("Name too short");
-      }
+      Customer customer = customerMapper.toEntity(dto);
 
       if (customerRepo.existsByEmail(customer.getEmail())) {
          throw new IllegalArgumentException("Email already registered");
       }
 
-      // Heavy business logic
-      // Heavy business logic
-      // Heavy business logic
-      int discountPercentage = 3;
-      if (customer.isGoldMember()) {
-         discountPercentage += 1;
-      }
-      System.out.println("Biz Logic with discount " + discountPercentage);
-      // Heavy business logic
-      // Heavy business logic
-      customerRepo.save(customer);
-      // Heavy business logic
+      registerCustomerService.register(customer);
 
       quotationService.quoteCustomer(customer);
 
@@ -81,5 +54,9 @@ public class CustomerFacade {
       email.setSubject("Welcome");
       email.setBody("You'll like it! Sincerely, Team");
       emailSender.sendEmail(email);
+   }
+
+   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+      return customerSearchRepo.search(searchCriteria);
    }
 }

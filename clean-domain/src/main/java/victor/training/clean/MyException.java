@@ -3,7 +3,7 @@ package victor.training.clean;
 public class MyException extends RuntimeException {
    public enum ErrorCode {
       GENERAL,
-      CUSTOMER_NAME_TOO_SHORT
+      NON_SINGLE_LDAP, CUSTOMER_NAME_TOO_SHORT
    }
    private final ErrorCode errorCode;
    private final String[] parameters;

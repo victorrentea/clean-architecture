@@ -1,5 +1,7 @@
 package victor.training.clean.entity;
 
+import java.util.Objects;
+
 // Value Object
 public class User {
 	private final String username;
@@ -7,7 +9,7 @@ public class User {
 	private final String workEmail;
 
 	public User(String username, String fullName, String workEmail) {
-		this.username = username;
+		this.username = Objects.requireNonNull(username, "LDAP uid is null");
 		this.fullName = fullName;
 		this.workEmail = workEmail;
 	}
