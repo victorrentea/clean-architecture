@@ -7,6 +7,7 @@ import org.junit.Test;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class ArchitectureTest {
+
    @Test
    public void service_independent_of_infrastructure() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
