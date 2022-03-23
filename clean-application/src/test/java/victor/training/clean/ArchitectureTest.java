@@ -31,6 +31,7 @@ public class ArchitectureTest {
    public void domain_not_exposed_via_controller_methods() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
 
+      // if this test fails, please email victorrentea@gmail.com (the tech lead),
       methods().that().areDeclaredInClassesThat().resideInAPackage("..controller..")
           .and().arePublic()
           .should().haveRawReturnType(resideOutsideOfPackage("..entity.."))
