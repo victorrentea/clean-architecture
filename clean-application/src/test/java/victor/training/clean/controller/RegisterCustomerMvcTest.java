@@ -45,10 +45,7 @@ public class RegisterCustomerMvcTest {
    @BeforeEach
    public final void before() {
       aSite = siteRepo.save(new Site());
-      requestDto = new CustomerDto()
-          .setEmail("::email::")
-          .setName("::name::")
-          .setSiteId(aSite.getId());
+//      requestDto = new CustomerDto(customer);
    }
    @Test
    void registerOk() throws Exception {

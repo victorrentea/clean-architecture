@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("customer")
 @RequiredArgsConstructor
 public class CustomerController {
-   private final CustomerFacade customerFacade;
+   private final CustomerFacade customerFacade; // "Facade" ~= "Application Service"
 
    @GetMapping("{id}")
    public CustomerDto findById(@PathVariable long id) {

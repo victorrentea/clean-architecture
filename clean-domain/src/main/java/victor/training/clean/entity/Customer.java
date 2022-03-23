@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 // An anemic Domain Entity (fullly opened with getters and setters, no encapsulation)
@@ -35,5 +36,13 @@ public class Customer {
 
 	public void setGoldMember(boolean goldMember) {
 		this.goldMember = goldMember;
+	}
+
+	public int getDiscountPercentage() {
+		int discountPercentage = 3;
+		if (goldMember) {
+			discountPercentage += 1;
+		}
+		return discountPercentage;
 	}
 }

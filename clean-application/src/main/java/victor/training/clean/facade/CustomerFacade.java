@@ -14,7 +14,6 @@ import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.repo.SiteRepo;
 import victor.training.clean.service.QuotationService;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 //@Service
@@ -27,20 +26,31 @@ public class CustomerFacade {
    private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
    private final QuotationService quotationService;
+   private final CustomerMapper customerMapper;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       return customerSearchRepo.search(searchCriteria);
    }
 
+
+
+
    public CustomerDto findById(long customerId) {
-      Customer customer = customerRepo.findById(customerId).get();
-      CustomerDto dto = new CustomerDto();
-      dto.name = customer.getName();
-      dto.email = customer.getEmail();
-      dto.creationDateStr = new SimpleDateFormat("yyyy-MM-dd").format(customer.getCreationDate());
-      dto.id = customer.getId();
+      Customer customer = customerRepo.findById(customerId).orElseThrow();
+      // Ways to convert data:
+      // - on the spot
+      // - in a "Mapper"
+      // - in the Dto ctor - OK to couple insignificant API/presentation model to the CORE MODEL
+      // - MapStruct (the first year of love)
+      // - NEVER: dto = customer.toDto(); // NOT OK, as it couples CRITICAL
+      // CORE ENTITIES to PRESENTATION/API (MVC principle violation)
+
+
+      CustomerDto dto = new CustomerDto(customer);
+
       return dto;
    }
+
 
    public void register(CustomerDto dto) {
       Customer customer = new Customer();
@@ -60,10 +70,7 @@ public class CustomerFacade {
       // Heavy business logic
       // Heavy business logic
       // Heavy business logic
-      int discountPercentage = 3;
-      if (customer.isGoldMember()) {
-         discountPercentage += 1;
-      }
+      int discountPercentage = customer.getDiscountPercentage();
       System.out.println("Biz Logic with discount " + discountPercentage);
       // Heavy business logic
       // Heavy business logic
