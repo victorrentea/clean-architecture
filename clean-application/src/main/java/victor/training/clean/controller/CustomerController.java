@@ -1,6 +1,7 @@
 package victor.training.clean.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.facade.CustomerFacade;
 import victor.training.clean.facade.dto.CustomerDto;
@@ -15,10 +16,13 @@ import java.util.List;
 public class CustomerController {
    private final CustomerFacade customerFacade; // "Facade" ~= "Application Service"
 
+//   @PreAuthorized("hasRole('ADMIN'")
    @GetMapping("{id}")
    public CustomerDto findById(@PathVariable long id) {
       return customerFacade.findById(id);
    }
+   //the controller should exist if :   /*MultipartFile */ /*HttpServletRequest */
+   // or if we expose data over 2 channels RMI, REST or GraphQL and WSDL
 
    @PostMapping("search")
    public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
@@ -26,7 +30,7 @@ public class CustomerController {
    }
 
    @PostMapping("")
-   public void register(@RequestBody CustomerDto customerDto) {
+   public void register( @Validated @RequestBody CustomerDto customerDto) {
       customerFacade.register(customerDto);
    }
 }

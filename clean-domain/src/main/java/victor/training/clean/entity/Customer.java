@@ -1,34 +1,36 @@
 package victor.training.clean.entity;
 
-import lombok.*;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.text.SimpleDateFormat;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-// An anemic Domain Entity (fullly opened with getters and setters, no encapsulation)
+// consider encapsulating changes
 @Entity
-
-// *** LOMBOK BEST PRACTICES ***
-// @Data - avoid. Instead:
-@Getter @Setter
-@ToString // @Exclude the child collections fields to avoid accidental lazy loading (Hibernate)
-// @NoArgsConstructor(access = AccessLevel.PRIVATE) // PRO: keep the default constructor only for the persistence (Hibernate/nosql)
-// @EqualsAndHashCode - usually a bad practice on Hibernate @Entity!
 public class Customer {
-	@Setter(AccessLevel.NONE) // KNOW this
+	// KNOW this
 	@Id
 	@GeneratedValue
 	private Long id;
+	@Size(min = 5) // VALIDATION 2: automatically done by hibernate or your own ASPECT
 	private String name;
 	private String email;
 	private LocalDate creationDate;
 	private boolean goldMember;
 	@ManyToOne
 	private Site site;
+
+	private Customer() {} // for hibernate
+
+	public Customer(String name) {
+		if (name.length() < 5) { // VALIDATION 3 : The best ~ DDD
+			throw new IllegalArgumentException("Name too short");
+		}
+		this.name = name;
+	}
+
 
 	public boolean isGoldMember() {
 		return goldMember;
@@ -44,5 +46,40 @@ public class Customer {
 			discountPercentage += 1;
 		}
 		return discountPercentage;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public LocalDate getCreationDate() {
+		return creationDate;
+	}
+
+	public Site getSite() {
+		return site;
+	}
+
+	public Customer setEmail(String email) {
+		this.email = email;
+		return this;
+	}
+
+	public Customer setCreationDate(LocalDate creationDate) {
+		this.creationDate = creationDate;
+		return this;
+	}
+
+	public Customer setSite(Site site) {
+		this.site = site;
+		return this;
 	}
 }

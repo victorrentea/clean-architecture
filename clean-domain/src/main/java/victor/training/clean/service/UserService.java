@@ -1,15 +1,17 @@
 package victor.training.clean.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import victor.training.clean.entity.User;
 
 @Slf4j
 @Service // place for my core logic. peace. harmony. ZEN. Ying and Yang.
 public class UserService {
-   @Autowired
-   private ExternalUserProvider externalUserProvider;
+   private final ExternalUserProvider externalUserProvider;
+
+   public UserService(ExternalUserProvider externalUserProvider) {
+      this.externalUserProvider = externalUserProvider;
+   }
 
    public void importUserFromLdap(String username) {
       User user = externalUserProvider.loadUser(username);

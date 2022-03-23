@@ -2,6 +2,8 @@ package victor.training.clean.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import victor.training.clean.CleanException;
+import victor.training.clean.CleanException.ErrorCode;
 import victor.training.clean.common.Facade;
 import victor.training.clean.entity.Customer;
 import victor.training.clean.entity.Email;
@@ -12,9 +14,11 @@ import victor.training.clean.infra.EmailSender;
 import victor.training.clean.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.repo.SiteRepo;
+import victor.training.clean.service.RegisterCustomerService;
 import victor.training.clean.service.QuotationService;
 
 import java.util.List;
+
 
 //@Service
 @Facade
@@ -27,12 +31,11 @@ public class CustomerFacade {
    private final CustomerSearchRepo customerSearchRepo;
    private final QuotationService quotationService;
    private final CustomerMapper customerMapper;
+   private final RegisterCustomerService customerService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       return customerSearchRepo.search(searchCriteria);
    }
-
-
 
 
    public CustomerDto findById(long customerId) {
@@ -44,43 +47,24 @@ public class CustomerFacade {
       // - MapStruct (the first year of love)
       // - NEVER: dto = customer.toDto(); // NOT OK, as it couples CRITICAL
       // CORE ENTITIES to PRESENTATION/API (MVC principle violation)
-
-
-      CustomerDto dto = new CustomerDto(customer);
-
-      return dto;
+      return new CustomerDto(customer);
    }
 
-
    public void register(CustomerDto dto) {
-      Customer customer = new Customer();
-      customer.setEmail(dto.email);
-      customer.setName(dto.name);
-      customer.setSite(siteRepo.getOne(dto.siteId));
-
-      if (customer.getName().length() < 5) {
-         throw new IllegalArgumentException("Name too short");
-      }
+      Customer customer = customerMapper.toEntity(dto);
 
       if (customerRepo.existsByEmail(customer.getEmail())) {
-         throw new IllegalArgumentException("Customer email is already registered");
-//         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
+//         throw new IllegalArgumentException("Customer email is already registered");
+         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
       }
 
-      // Heavy business logic
-      // Heavy business logic
-      // Heavy business logic
-      int discountPercentage = customer.getDiscountPercentage();
-      System.out.println("Biz Logic with discount " + discountPercentage);
-      // Heavy business logic
-      // Heavy business logic
-      customerRepo.save(customer);
-      // Heavy business logic
+      customerService.register(customer);
 
       quotationService.quoteCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
    }
+
 
    private void sendRegistrationEmail(String emailAddress) {
       System.out.println("Sending activation link via email to " + emailAddress);
