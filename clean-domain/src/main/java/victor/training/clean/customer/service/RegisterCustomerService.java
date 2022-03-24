@@ -32,7 +32,7 @@ public class RegisterCustomerService {
       // Heavy business logic
 
 //      quotationService.quoteCustomer(customer);
-      eventPublisher.publishEvent(new CustomerRegistrationCreatedEvent(customer.getId()));
+      eventPublisher.publishEvent(new CustomerRegistrationCreatedEvent(customer.getId(), customer.getName()));
       // by default spring processes (calls all listeners) right here, on the spot, waiting for them to finish
    }
 }

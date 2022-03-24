@@ -29,6 +29,7 @@ public class QuotationService {
       InsurancePolicy policy = new InsurancePolicy();
 //      policy.setCustomer(customer);
       policy.setCustomerId(event.getCustomerId());
+      policy.setCustomerName(event.getName());
       policy.setValueInEur(BigDecimal.ONE);
       insurancePolicyRepo.save(policy);
    }
@@ -37,6 +38,9 @@ public class QuotationService {
    public void sendPaymentReminder(InsurancePolicy policy) {
       CustomerVO customer= customerApi.getCustomer(policy.getCustomerId());
       String customerEmail = customer.getEmail();
+
+      System.out.println("Sending email to " + policy.getCustomerName() + " at " + customer.getEmail());
+
       // one idea to send an event to the customer asking for the customer details
       // they will reply with a message with the details
 

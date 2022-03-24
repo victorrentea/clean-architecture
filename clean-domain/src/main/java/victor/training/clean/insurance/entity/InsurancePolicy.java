@@ -17,6 +17,8 @@ public class InsurancePolicy {
    private Long id;
 
    private Long customerId;
+
+   private String customerName; // eventual consistnecy > what if it changes on the master source ?!
 //   @ManyToOne
 //   private Customer customer; // this dependency crosses the boundary
 
