@@ -1,7 +1,7 @@
 package victor.training.clean.infra;
 
 import org.springframework.stereotype.Service;
-import victor.training.clean.entity.Email;
+import victor.training.clean.user.entity.Email;
 
 // We pretend this is an external API we have to use
 @Service

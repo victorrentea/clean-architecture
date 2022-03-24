@@ -1,4 +1,4 @@
-package victor.training.clean.entity;
+package victor.training.clean.insurance.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Entity
@@ -17,8 +16,9 @@ public class InsurancePolicy {
    @GeneratedValue
    private Long id;
 
-   @ManyToOne
-   private Customer customer;
+   private Long customerId;
+//   @ManyToOne
+//   private Customer customer; // this dependency crosses the boundary
 
    private BigDecimal valueInEur;
 

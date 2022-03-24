@@ -1,4 +1,4 @@
-package victor.training.clean.entity;
+package victor.training.clean.user.entity;
 
 import org.apache.logging.log4j.util.Strings;
 

@@ -1,8 +1,8 @@
-package victor.training.clean.service;
+package victor.training.clean.user.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.entity.User;
+import victor.training.clean.user.entity.User;
 
 @Slf4j
 @Service // place for my core logic. peace. harmony. ZEN. Ying and Yang.

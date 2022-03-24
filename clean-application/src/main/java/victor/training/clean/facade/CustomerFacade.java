@@ -5,21 +5,39 @@ import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.CleanException;
 import victor.training.clean.CleanException.ErrorCode;
 import victor.training.clean.common.Facade;
-import victor.training.clean.entity.Customer;
-import victor.training.clean.entity.Email;
+import victor.training.clean.customer.entity.Customer;
+import victor.training.clean.user.entity.Email;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.repo.CustomerRepo;
+import victor.training.clean.customer.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
-import victor.training.clean.repo.SiteRepo;
-import victor.training.clean.service.RegisterCustomerService;
-import victor.training.clean.service.QuotationService;
+import victor.training.clean.insurance.service.QuotationService;
+import victor.training.clean.customer.service.RegisterCustomerService;
 
 import java.util.List;
 
 
+//
+//@Service
+//@Transactional
+//@RequiredArgsConstructor
+//public class SearchUseCase {
+//   private final CustomerSearchRepo customerSearchRepo;
+//
+//   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+//      return customerSearchRepo.search(searchCriteria);
+//   }
+//}
+//
+
+
+//@Scope("singleton") // default
+
+//@Scope("session") // browser session > NOT REST.
+//@Scope("request") // current http request > replace with SecurityContextHolder.
+//@Scope("prototype") // every time you ask, spring gives you a new instance./
 //@Service
 @Facade
 @Transactional
@@ -27,7 +45,6 @@ import java.util.List;
 public class CustomerFacade {
    private final CustomerRepo customerRepo;
    private final EmailSender emailSender;
-   private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
    private final QuotationService quotationService;
    private final CustomerMapper customerMapper;
@@ -36,7 +53,6 @@ public class CustomerFacade {
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       return customerSearchRepo.search(searchCriteria);
    }
-
 
    public CustomerDto findById(long customerId) {
       Customer customer = customerRepo.findById(customerId).orElseThrow();
@@ -60,7 +76,7 @@ public class CustomerFacade {
 
       customerService.register(customer);
 
-      quotationService.quoteCustomer(customer);
+
 
       sendRegistrationEmail(customer.getEmail());
    }

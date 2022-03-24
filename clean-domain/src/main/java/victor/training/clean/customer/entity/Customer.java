@@ -1,11 +1,20 @@
-package victor.training.clean.entity;
+package victor.training.clean.customer.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+//class LiskovViolation {
+//	public static void main(String[] args) {
+//
+//		Customer customer = new Customer("namfffe");
+//		List<String> phone = customer.getPhone();
+//		phone.add("this too"); // liskov substitution violation.
+//	}
+//}
 
 // consider encapsulating changes
 @Entity
@@ -21,6 +30,14 @@ public class Customer {
 	private boolean goldMember;
 	@ManyToOne
 	private Site site;
+	@ElementCollection
+	private final List<String> phone = new ArrayList<>();
+
+	public List<String> getPhone() {
+//		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+		return Collections.unmodifiableList(phone); // "static factory method" used to hide from the caller the concrete type returned,
+	}
+
 
 	private Customer() {} // for hibernate
 
