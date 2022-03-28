@@ -1,4 +1,4 @@
-package victor.training.clean.controller;
+package victor.training.clean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
