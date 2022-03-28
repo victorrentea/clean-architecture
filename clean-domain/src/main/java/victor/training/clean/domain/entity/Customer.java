@@ -2,10 +2,7 @@ package victor.training.clean.domain.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 // An anemic Domain Entity (fullly opened with getters and setters, no encapsulation)
@@ -22,6 +19,8 @@ public class Customer {
 	@Id
 	@GeneratedValue
 	private Long id;
+//	@Embedded
+//	private FullName{first,last} fullName;
 	private String name;
 	private String email;
 	private LocalDate creationDate;

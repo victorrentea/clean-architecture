@@ -47,9 +47,9 @@ public class CustomerFacade {
       customer.setSite(siteRepo.getOne(dto.siteId));
 
       // TODO after lunch
-      if (customer.getName().length() < 5) {
-         throw new IllegalArgumentException("Name too short");
-      }
+//      if (customer.getName().length() < 5) {
+//         throw new IllegalArgumentException("Name too short");
+//      }
       if (customerRepo.existsByEmail(customer.getEmail())) {
          throw new IllegalArgumentException("Customer email is already registered");
 //         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
