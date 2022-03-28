@@ -15,6 +15,7 @@ public class UserService {
    public void importUserFromLdap(String username) {
       User user = ldapService.loadUser(username);
 
+//      LdapUserDto canNeverCompile;
       // biz logic from here on
       if (user.hasEmail()) {
          log.debug("Send welcome email to " + user.getWorkEmail().get());

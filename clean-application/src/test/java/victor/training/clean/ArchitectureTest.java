@@ -3,6 +3,7 @@ package victor.training.clean;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideOutsideOfPackage;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
@@ -10,6 +11,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class ArchitectureTest {
    @Test
+//   @Disabled
    public void service_independent_of_infrastructure() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
 
