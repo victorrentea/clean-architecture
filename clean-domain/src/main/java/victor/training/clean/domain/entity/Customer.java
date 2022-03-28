@@ -36,4 +36,14 @@ public class Customer {
 	public void setGoldMember(boolean goldMember) {
 		this.goldMember = goldMember;
 	}
+
+	///speaks the ubiquitous language of the domain
+	public int getDiscountPercentage() {
+		int discountPercentage = 3;
+		if (goldMember) {
+			discountPercentage += 1;
+		}
+		return discountPercentage;
+	}
+
 }

@@ -45,7 +45,7 @@ public class RegisterCustomerMvcTest {
    @BeforeEach
    public final void before() {
       aSite = siteRepo.save(new Site());
-      requestDto = new CustomerDto()
+      requestDto = new CustomerDto(customer)
           .setEmail("::email::")
           .setName("::name::")
           .setSiteId(aSite.getId());

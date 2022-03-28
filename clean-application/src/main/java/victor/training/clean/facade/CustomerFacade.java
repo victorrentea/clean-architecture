@@ -5,16 +5,16 @@ import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.entity.Customer;
 import victor.training.clean.domain.entity.Email;
+import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.repo.SiteRepo;
+import victor.training.clean.domain.service.RegisterCustomerService;
+import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
-import victor.training.clean.domain.repo.SiteRepo;
-import victor.training.clean.domain.service.QuotationService;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 //@Service
@@ -27,20 +27,18 @@ public class CustomerFacade {
    private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
    private final QuotationService quotationService;
+   private final CustomerMapper customerMapper;
+   private final RegisterCustomerService registerCustomerService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       return customerSearchRepo.search(searchCriteria);
    }
 
    public CustomerDto findById(long customerId) {
-      Customer customer = customerRepo.findById(customerId).get();
-      CustomerDto dto = new CustomerDto();
-      dto.name = customer.getName();
-      dto.email = customer.getEmail();
-      dto.creationDateStr = new SimpleDateFormat("yyyy-MM-dd").format(customer.getCreationDate());
-      dto.id = customer.getId();
-      return dto;
+      Customer customer = customerRepo.findById(customerId).orElseThrow();
+      return new CustomerDto(customer);
    }
+
 
    public void register(CustomerDto dto) {
       Customer customer = new Customer();
@@ -48,32 +46,23 @@ public class CustomerFacade {
       customer.setName(dto.name);
       customer.setSite(siteRepo.getOne(dto.siteId));
 
+      // TODO after lunch
       if (customer.getName().length() < 5) {
          throw new IllegalArgumentException("Name too short");
       }
-
       if (customerRepo.existsByEmail(customer.getEmail())) {
          throw new IllegalArgumentException("Customer email is already registered");
 //         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
       }
 
-      // Heavy business logic
-      // Heavy business logic
-      // Heavy business logic
-      int discountPercentage = 3;
-      if (customer.isGoldMember()) {
-         discountPercentage += 1;
-      }
-      System.out.println("Biz Logic with discount " + discountPercentage);
-      // Heavy business logic
-      // Heavy business logic
-      customerRepo.save(customer);
-      // Heavy business logic
+      registerCustomerService.register(customer);
 
       quotationService.quoteCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
    }
+
+
 
    private void sendRegistrationEmail(String emailAddress) {
       System.out.println("Sending activation link via email to " + emailAddress);
