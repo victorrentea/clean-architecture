@@ -1,21 +1,21 @@
-package victor.training.clean.service;
+package victor.training.clean.infra;
 
 import org.springframework.stereotype.Component;
-import victor.training.clean.entity.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.entity.User;
+import victor.training.clean.domain.service.LdapService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class LdapServiceClient {
+public class LdapServiceAdapter implements LdapService { // "Ports-and-Adapters"
    private final LdapApi ldapApi;
 
-   LdapServiceClient(LdapApi ldapApi) {
+   LdapServiceAdapter(LdapApi ldapApi) {
       this.ldapApi = ldapApi;
    }
 
+   @Override
    public User loadUser(String username) {
       List<User> list = ldapApi.searchUsingGET(null, null, username.toUpperCase())
           .stream().map(this::mapToDomain)
