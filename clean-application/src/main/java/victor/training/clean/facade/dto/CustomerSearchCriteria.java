@@ -6,4 +6,6 @@ import lombok.Value;
 @Value // see lombok.config for details how Jackson knows to unmarshall this
 public class CustomerSearchCriteria {
    String name;
+   String phone;
+   Long siteId;
 }

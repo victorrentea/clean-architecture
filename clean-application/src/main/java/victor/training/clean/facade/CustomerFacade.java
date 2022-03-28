@@ -33,7 +33,9 @@ public class CustomerFacade {
    }
 
    public CustomerDto findById(long customerId) {
-      Customer customer = customerRepo.findById(customerId).get();
+      Customer customer = customerRepo.findById(customerId).orElseThrow();
+
+      // where can I move this mapping logic to ?
       CustomerDto dto = new CustomerDto();
       dto.name = customer.getName();
       dto.email = customer.getEmail();
@@ -43,15 +45,16 @@ public class CustomerFacade {
    }
 
    public void register(CustomerDto dto) {
+      // mapping - keep DTOs out!
       Customer customer = new Customer();
       customer.setEmail(dto.email);
       customer.setName(dto.name);
-      customer.setSite(siteRepo.getOne(dto.siteId));
+      customer.setSite(siteRepo.getById(dto.siteId));
 
+      // validation
       if (customer.getName().length() < 5) {
          throw new IllegalArgumentException("Name too short");
       }
-
       if (customerRepo.existsByEmail(customer.getEmail())) {
          throw new IllegalArgumentException("Customer email is already registered");
 //         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
@@ -60,6 +63,7 @@ public class CustomerFacade {
       // Heavy business logic
       // Heavy business logic
       // Heavy business logic
+      // Where can I move this? (a bit of domain logic operating on the state of a single entity)
       int discountPercentage = 3;
       if (customer.isGoldMember()) {
          discountPercentage += 1;
