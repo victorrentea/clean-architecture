@@ -1,8 +1,8 @@
 package victor.training.clean.infra;
 
 import org.springframework.stereotype.Component;
-import victor.training.clean.domain.entity.User;
-import victor.training.clean.domain.service.LdapService;
+import victor.training.clean.user.entity.User;
+import victor.training.clean.user.service.LdapService;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,9 +1,9 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.user.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.entity.User;
+import victor.training.clean.user.entity.User;
 
 @Slf4j
 @Service // DOMAIN SERVICE : core logic

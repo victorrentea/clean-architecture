@@ -3,12 +3,12 @@ package victor.training.clean.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
-import victor.training.clean.domain.entity.Customer;
-import victor.training.clean.domain.entity.Email;
-import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.repo.SiteRepo;
-import victor.training.clean.domain.service.RegisterCustomerService;
-import victor.training.clean.domain.service.QuotationService;
+import victor.training.clean.customer.entity.Customer;
+import victor.training.clean.user.entity.Email;
+import victor.training.clean.customer.repo.CustomerRepo;
+import victor.training.clean.customer.repo.SiteRepo;
+import victor.training.clean.customer.service.RegisterCustomerService;
+import victor.training.clean.insurance.service.QuotationService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -39,7 +39,7 @@ public class CustomerFacade {
       return new CustomerDto(customer);
    }
 
-
+@Transactional
    public void register(CustomerDto dto) {
       Customer customer = new Customer();
       customer.setEmail(dto.email);
