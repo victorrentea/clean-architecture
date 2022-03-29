@@ -57,7 +57,7 @@ public class CustomerFacade {
 
       registerCustomerService.register(customer);
 
-      quotationService.quoteCustomer(customer);
+
 
       sendRegistrationEmail(customer.getEmail());
    }

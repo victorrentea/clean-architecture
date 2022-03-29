@@ -7,9 +7,11 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @Service
 public class RegisterCustomerService {
    private final CustomerRepo customerRepo;
+   private final QuotationService quotationService;
 
-   public RegisterCustomerService(CustomerRepo customerRepo) {
+   public RegisterCustomerService(CustomerRepo customerRepo, QuotationService quotationService) {
       this.customerRepo = customerRepo;
+      this.quotationService = quotationService;
    }
 
    public void register(Customer customer) {
@@ -31,5 +33,6 @@ public class RegisterCustomerService {
 
       customerRepo.save(customer);
       // Heavy business logic
+      quotationService.quoteCustomer(customer);
    }
 }
