@@ -9,7 +9,7 @@ import victor.training.clean.entity.User;
 @Service // DOMAIN LOGIC ONLY. PACE. ARMONIE. ZEN. YING si frasu'
 @RequiredArgsConstructor
 public class UserService {
-   private final Adapter adapter;
+   private final IAdapter adapter;
 
    public void importUserFromLdap(String username) {
       User user = adapter.getUserFromLdap(username);
