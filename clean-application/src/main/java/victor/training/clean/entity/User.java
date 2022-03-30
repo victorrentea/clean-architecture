@@ -1,14 +1,17 @@
 package victor.training.clean.entity;
 
+import java.util.Objects;
+import java.util.Optional;
+
 // Value Object
 public class User {
 	private final String username;
 	private final String fullName;
 	private final String workEmail;
 
-	public User(String username, String fullName, String workEmail) {
-		this.username = username;
-		this.fullName = fullName;
+	public User( String username, String fullName, String workEmail) {
+		this.username = Objects.requireNonNull(username);
+		this.fullName = Objects.requireNonNull(fullName);
 		this.workEmail = workEmail;
 	}
 
@@ -20,7 +23,8 @@ public class User {
 		return fullName;
 	}
 
-	public String getWorkEmail() {
-		return workEmail;
+	public Optional<String> getWorkEmail() {
+		return Optional.ofNullable(workEmail);
 	}
+
 }

@@ -1,35 +1,25 @@
 package victor.training.clean.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import victor.training.clean.entity.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
 
 @Slf4j
-@Service
+@Service // DOMAIN LOGIC ONLY. PACE. ARMONIE. ZEN. YING si frasu'
+@RequiredArgsConstructor
 public class UserService {
-   @Autowired
-   private LdapApi ldapApi;
+   private final Adapter adapter;
 
    public void importUserFromLdap(String username) {
-      List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
-      if (list.size() != 1) {
-         throw new IllegalArgumentException("There is no single user matching username " + username);
-      }
-      LdapUserDto ldapUser = list.get(0);
-      String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
-      User user = new User(ldapUser.getUid(), fullName, ldapUser.getWorkEmail());
+      User user = adapter.getUserFromLdap(username);
 
-      if (user.getWorkEmail() != null) {
-         log.debug("Send welcome email to " + user.getWorkEmail());
+      if (user.getWorkEmail().isPresent()) {
+         log.debug("Send welcome email to " + user.getWorkEmail().get().toLowerCase());
       }
       log.debug("Insert user in my database");
       log.debug("More business logic with " + user.getFullName());
    }
 
-
 }
+
