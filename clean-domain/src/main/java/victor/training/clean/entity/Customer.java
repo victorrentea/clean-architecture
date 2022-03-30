@@ -22,12 +22,20 @@ public class Customer {
 	@Id
 	@GeneratedValue
 	private Long id;
+	@Setter(AccessLevel.NONE)
 	private String name;
 	private String email;
 	private LocalDate creationDate;
 	private boolean goldMember;
 	@ManyToOne
 	private Site site;
+	protected Customer() {} // pt fratele hibernate
+	public Customer(String name) {
+		if (name.length() < 5) {
+			throw new IllegalArgumentException("Name too short");
+		}
+		this.name = name;
+	}
 
 	public boolean isGoldMember() {
 		return goldMember;
@@ -36,4 +44,12 @@ public class Customer {
 	public void setGoldMember(boolean goldMember) {
 		this.goldMember = goldMember;
 	}
+
+   public int getDiscountPercentage() {
+      int discountPercentage = 3;
+      if (isGoldMember()) {
+         discountPercentage += 1;
+      }
+      return discountPercentage;
+   }
 }

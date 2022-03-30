@@ -13,7 +13,7 @@ public class UserService {
 
    public void importUserFromLdap(String username) {
       User user = adapter.getUserFromLdap(username);
-
+//      LdapUserDto dto;
       if (user.getWorkEmail().isPresent()) {
          log.debug("Send welcome email to " + user.getWorkEmail().get().toLowerCase());
       }

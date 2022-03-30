@@ -45,10 +45,10 @@ public class RegisterCustomerMvcTest {
    @BeforeEach
    public final void before() {
       aSite = siteRepo.save(new Site());
-      requestDto = new CustomerDto()
-          .setEmail("::email::")
-          .setName("::name::")
-          .setSiteId(aSite.getId());
+//      requestDto = new CustomerDto(customer)
+//          .setEmail("::email::")
+//          .setName("::name::")
+//          .setSiteId(aSite.getId());
    }
    @Test
    void registerOk() throws Exception {
@@ -71,7 +71,7 @@ public class RegisterCustomerMvcTest {
    }
    @Test
    void existingEmailFails() throws Exception {
-      customerRepo.save(new Customer().setEmail("::email::"));
+      customerRepo.save(new Customer("name").setEmail("::email::"));
 
       register(requestDto)
           .andExpect(status().isInternalServerError())

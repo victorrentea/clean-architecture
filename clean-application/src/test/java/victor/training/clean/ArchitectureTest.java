@@ -10,6 +10,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class ArchitectureTest {
    @Test
+//   @DisplayName("Daca pica testul asta, da-i mai leadului victorrente@gmail.com")
    public void service_independent_of_infrastructure() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
 
