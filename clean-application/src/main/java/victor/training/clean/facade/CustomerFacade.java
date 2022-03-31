@@ -1,6 +1,8 @@
 package victor.training.clean.facade;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import victor.training.clean.common.Facade;
 import victor.training.clean.entity.Customer;
 import victor.training.clean.entity.Email;
@@ -11,8 +13,8 @@ import victor.training.clean.infra.EmailSender;
 import victor.training.clean.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.repo.SiteRepo;
+import victor.training.clean.service.IRegisterCustomerService;
 import victor.training.clean.service.QuotationService;
-import victor.training.clean.service.RegisterCustomerService;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class CustomerFacade {
    private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
    private final QuotationService quotationService;
-   private final RegisterCustomerService registerCustomerService;
+   private final IRegisterCustomerService registerCustomerService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       return customerSearchRepo.search(searchCriteria);

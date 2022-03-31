@@ -7,9 +7,12 @@ import victor.training.clean.repo.CustomerRepo;
 
 @Service
 @RequiredArgsConstructor
-public class RegisterCustomerService {
+public class RegisterCustomerService implements IRegisterCustomerService {
+
+
 private final CustomerRepo customerRepo;
 private final QuotationService quotationService;
+   @Override
    public void register(Customer customer) {
       // Heavy business logic
       // Heavy business logic
