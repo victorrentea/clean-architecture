@@ -24,8 +24,8 @@ public class UserService {
       String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
       User user = new User(ldapUser.getUid(), fullName, ldapUser.getWorkEmail());
 
-      if (user.getWorkEmail() != null) {
-         log.debug("Send welcome email to " + user.getWorkEmail());
+      if (user.getWorkEmail().endsWith("@gov.com")) {
+         log.debug("Send welcome email to Government staff: " + user.getWorkEmail().toLowerCase());
       }
       log.debug("Insert user in my database");
       log.debug("More business logic with " + user.getFullName());
