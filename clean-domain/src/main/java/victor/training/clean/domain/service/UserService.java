@@ -17,9 +17,8 @@ public class UserService {
 
    public void importUserFromLdap(String username) {
       User user = adapter.retrieveUser(username);
-
       if (user.hasWorkEmail()) {
-         log.debug("Send welcome email to " + user.getWorkEmail());
+         log.debug("Send welcome email to " + user.getWorkEmail().orElse(""));
       }
       log.debug("Insert user in my database");
       log.debug("More business logic with " + user.getFullName());

@@ -1,6 +1,9 @@
 package victor.training.clean.domain.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +13,6 @@ import java.time.LocalDate;
 
 // An anemic Domain Entity (fullly opened with getters and setters, no encapsulation)
 @Entity
-
 // *** LOMBOK BEST PRACTICES ***
 // @Data - avoid. Instead:
 @Getter @Setter
@@ -29,11 +31,21 @@ public class Customer {
 	@ManyToOne
 	private Site site;
 
+//	List<String > phone = new ArrayList<>();
+
 	public boolean isGoldMember() {
 		return goldMember;
 	}
 
 	public void setGoldMember(boolean goldMember) {
 		this.goldMember = goldMember;
+	}
+
+	public int getDiscountPercentage() {
+		int discountPercentage = 3;
+		if (goldMember) {
+			discountPercentage += 1;
+		}
+		return discountPercentage;
 	}
 }
