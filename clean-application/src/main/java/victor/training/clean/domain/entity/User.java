@@ -1,16 +1,19 @@
-package victor.training.clean.entity;
+package victor.training.clean.domain.entity;
 
-// Value Object
+import static java.util.Objects.requireNonNull;
+
+// Value Object al MEU!
 public class User {
 	private final String username;
 	private final String fullName;
 	private final String workEmail;
 
 	public User(String username, String fullName, String workEmail) {
-		this.username = username;
+		this.username = requireNonNull(username);
 		this.fullName = fullName;
 		this.workEmail = workEmail;
 	}
+
 
 	public String getUsername() {
 		return username;
@@ -22,5 +25,9 @@ public class User {
 
 	public String getWorkEmail() {
 		return workEmail;
+	}
+
+	public boolean hasWorkEmail() {
+		return getWorkEmail() != null;
 	}
 }
