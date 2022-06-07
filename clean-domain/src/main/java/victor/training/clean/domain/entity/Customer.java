@@ -2,10 +2,7 @@ package victor.training.clean.domain.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 // An anemic Domain Entity (fullly opened with getters and setters, no encapsulation)
@@ -28,6 +25,23 @@ public class Customer {
 	private boolean goldMember;
 	@ManyToOne
 	private Site site;
+//	@OneToMany
+//	@JsonIgnore
+//	List<Stuff> lazyLoadedBtyMistake;
+
+	protected Customer() {}
+	public Customer(String name) {
+		setName(name);
+	}
+
+
+	// smart setter
+	public void setName(String name) {
+		if (name.length() < 5) {
+			throw new IllegalArgumentException("Name too short");
+		}
+		this.name = name;
+	}
 
 	public boolean isGoldMember() {
 		return goldMember;
@@ -35,5 +49,13 @@ public class Customer {
 
 	public void setGoldMember(boolean goldMember) {
 		this.goldMember = goldMember;
+	}
+
+	public int getDiscountPercentage() {
+	   int discountPercentage = 3; // 3%
+		if (goldMember) {
+		  discountPercentage += 1; // 4%
+	   }
+	   return discountPercentage;
 	}
 }

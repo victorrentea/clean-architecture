@@ -5,28 +5,27 @@ import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.entity.Customer;
 import victor.training.clean.domain.entity.Email;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.repo.CustomerRepo;
+import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
-import victor.training.clean.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 //@Service
 @Facade
-@Transactional
+@Transactional // CAREFUL in a high RPS system.!! DO NOT CALL REST APIs in @Transacted method
 @RequiredArgsConstructor
 public class CustomerFacade {
    private final CustomerRepo customerRepo;
    private final EmailSender emailSender;
-   private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
-   private final QuotationService quotationService;
+   private final CustomerMapper customerMapper;
+   private final RegisterCustomerService registerCustomerService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       return customerSearchRepo.search(searchCriteria);
@@ -34,49 +33,33 @@ public class CustomerFacade {
 
    public CustomerDto findById(long customerId) {
       Customer customer = customerRepo.findById(customerId).orElseThrow();
-
       // where can I move this mapping logic to ?
-      CustomerDto dto = new CustomerDto();
-      dto.name = customer.getName();
-      dto.email = customer.getEmail();
-      dto.creationDateStr = new SimpleDateFormat("yyyy-MM-dd").format(customer.getCreationDate());
-      dto.id = customer.getId();
-      return dto;
+//      return customer.toDto(); // NEVER DO THAT: you are polluting your DOMAIN with shitty API models!!
+      return new CustomerDto(customer);
    }
 
    public void register(CustomerDto dto) {
+      // **** DATA MAPPING
       // mapping - keep DTOs out!
-      Customer customer = new Customer();
-      customer.setEmail(dto.email);
-      customer.setName(dto.name);
-      customer.setSite(siteRepo.getById(dto.siteId));
+//      mapper.fromDto()
+//      new Customer(dto); NEVER
+//      Customer customer = dto.asEntity(); // impossible here as I need access to @Autowired SiteRepo
+      Customer customer = customerMapper.fromDto(dto);
 
-      // validation
-      if (customer.getName().length() < 5) {
-         throw new IllegalArgumentException("Name too short");
-      }
+      // **** DATA VALIDATION
       if (customerRepo.existsByEmail(customer.getEmail())) {
          throw new IllegalArgumentException("Customer email is already registered");
 //         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
       }
 
-      // Heavy business logic
-      // Heavy business logic
-      // Heavy business logic
-      // Where can I move this? (a bit of domain logic operating on the state of a single entity)
-      int discountPercentage = 3;
-      if (customer.isGoldMember()) {
-         discountPercentage += 1;
-      }
-      System.out.println("Biz Logic with discount " + discountPercentage);
-      // Heavy business logic
-      // Heavy business logic
-      customerRepo.save(customer);
-      // Heavy business logic
-      quotationService.quoteCustomer(customer);
+      // ***** BIZ LOGIC
+
+      registerCustomerService.register(customer);
 
       sendRegistrationEmail(customer.getEmail());
    }
+
+
 
    private void sendRegistrationEmail(String emailAddress) {
       System.out.println("Sending activation link via email to " + emailAddress);

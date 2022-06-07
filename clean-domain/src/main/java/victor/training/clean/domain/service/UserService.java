@@ -10,17 +10,18 @@ import victor.training.clean.domain.entity.User;
 @Service
 // holy domain service : the most precious code you have
 public class UserService {
-   private final ExternalUserService adapter;
+   private final ExternalUserService externalUserService;
 
    public void importUserFromLdap(String username) {
-      User user = adapter.getUserByUsername(username);
+      User user = externalUserService.getUserByUsername(username);
 
       // imagine biz logc logic
-      if (user.getWorkEmail() != null) {
+      if (user.hasEmail()) {
          log.debug("Send welcome email to " + user.getWorkEmail());
       }
       log.debug("Insert user in my database");
       log.debug("More business logic with " + user.getFullName());
    }
+
 }
 

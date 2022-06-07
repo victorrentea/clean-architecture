@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.entity.Customer;
 import victor.training.clean.domain.entity.InsurancePolicy;
-import victor.training.clean.repo.InsurancePolicyRepo;
+import victor.training.clean.domain.repo.InsurancePolicyRepo;
 
 import java.math.BigDecimal;
 
