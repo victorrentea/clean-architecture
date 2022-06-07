@@ -76,7 +76,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>ldap-api-docs.json</inputSpec>
+                            <inputSpec>/Users/victorrentea/workspace/clean-architecture/clean-application/ldap-api-docs.json</inputSpec>
                             <language>java</language>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>

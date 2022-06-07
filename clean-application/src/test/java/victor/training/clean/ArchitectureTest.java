@@ -10,10 +10,10 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class ArchitectureTest {
    @Test
-   public void service_independent_of_infrastructure() {
+   public void domain_independent_of_infrastructure() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
 
-      noClasses().that().resideInAPackage("..service..")
+      noClasses().that().resideInAPackage("..domain..")
           .should().dependOnClassesThat().resideInAPackage("..infra..")
           .check(classes);
    }
