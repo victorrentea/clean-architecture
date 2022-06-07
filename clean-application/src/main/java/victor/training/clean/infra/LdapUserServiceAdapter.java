@@ -12,7 +12,6 @@ import java.util.List;
 public class LdapUserServiceAdapter implements ExternalUserService {
     private final LdapApi ldapApi;
 
-    @Override
     public LdapUserDto shitToTheDOmain() {
         return  null;
     }
