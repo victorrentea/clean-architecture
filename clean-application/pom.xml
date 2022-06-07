@@ -75,6 +75,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <!--fitza-->
                         <configuration>
                             <inputSpec>/Users/victorrentea/workspace/clean-architecture/clean-application/ldap-api-docs.json</inputSpec>
                             <language>java</language>

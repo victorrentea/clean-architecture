@@ -1,26 +1,28 @@
 package victor.training.clean.domain.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.entity.User;
 
-@RequiredArgsConstructor
 @Slf4j
+
+// STA in DOMAIN. ZEN. PACE. ARMONIE.
+// Codu fain, de pus la CV cum arata
+// Clean Code extrem, teste...
 @Service
-// holy domain service : the most precious code you have
 public class UserService {
-   private final ExternalUserService adapter;
+   @Autowired
+   private IAdapter adapter;
 
    public void importUserFromLdap(String username) {
-      User user = adapter.getUserByUsername(username);
+      User user = adapter.retrieveUser(username);
 
-      // imagine biz logc logic
-      if (user.getWorkEmail() != null) {
+      if (user.hasWorkEmail()) {
          log.debug("Send welcome email to " + user.getWorkEmail());
       }
       log.debug("Insert user in my database");
       log.debug("More business logic with " + user.getFullName());
    }
-}
 
+}
