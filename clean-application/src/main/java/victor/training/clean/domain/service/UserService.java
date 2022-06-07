@@ -4,15 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.entity.User;
-import victor.training.clean.infra.LdapUserDto;
-import victor.training.clean.infra.LdapUserServiceAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 // holy domain service : the most precious code you have
 public class UserService {
-   private final LdapUserServiceAdapter adapter;
+   private final ExternalUserService adapter;
 
    public void importUserFromLdap(String username) {
       User user = adapter.getUserByUsername(username);
