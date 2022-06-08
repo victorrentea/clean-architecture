@@ -2,8 +2,8 @@ package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;
-import victor.training.clean.domain.entity.User;
-import victor.training.clean.domain.service.ExternalUserService;
+import victor.training.clean.domain.insurance.model.User;
+import victor.training.clean.domain.insurance.service.ExternalUserService;
 
 import java.util.List;
 

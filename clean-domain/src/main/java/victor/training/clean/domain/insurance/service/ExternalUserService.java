@@ -1,6 +1,6 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.domain.insurance.service;
 
-import victor.training.clean.domain.entity.User;
+import victor.training.clean.domain.insurance.model.User;
 
 public interface ExternalUserService {
 //    LdapUserDto mistake();

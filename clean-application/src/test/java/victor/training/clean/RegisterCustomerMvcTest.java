@@ -11,12 +11,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.domain.entity.Customer;
-import victor.training.clean.domain.entity.Site;
+import victor.training.clean.domain.customer.model.Customer;
+import victor.training.clean.domain.customer.model.Site;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.repo.SiteRepo;
+import victor.training.clean.domain.customer.repo.CustomerRepo;
+import victor.training.clean.domain.customer.repo.SiteRepo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;

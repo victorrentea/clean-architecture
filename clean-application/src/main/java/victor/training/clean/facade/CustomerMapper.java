@@ -2,8 +2,8 @@ package victor.training.clean.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import victor.training.clean.domain.entity.Customer;
-import victor.training.clean.domain.repo.SiteRepo;
+import victor.training.clean.domain.customer.model.Customer;
+import victor.training.clean.domain.customer.repo.SiteRepo;
 import victor.training.clean.facade.dto.CustomerDto;
 
 @Component

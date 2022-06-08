@@ -3,7 +3,6 @@ package victor.training.clean.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import victor.training.clean.domain.entity.Customer;
 import victor.training.clean.facade.CustomerFacade;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
