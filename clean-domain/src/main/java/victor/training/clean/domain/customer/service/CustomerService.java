@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.customer.model.Customer;
 import victor.training.clean.domain.customer.repo.CustomerRepo;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
