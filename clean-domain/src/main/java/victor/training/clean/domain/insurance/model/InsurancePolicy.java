@@ -21,7 +21,8 @@ public class InsurancePolicy {
 //   @ManyToOne
 //   private Customer customer;
 
-   private Long customerId;
+   private Long customerId; // PLEASE 🙏 keep the FK in DB
+//   private String customerName; // keep a copy of the data for "snapshotting"
 
    private BigDecimal valueInEur;
 
