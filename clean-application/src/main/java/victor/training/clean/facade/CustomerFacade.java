@@ -37,7 +37,7 @@ public class CustomerFacade {
 //      return customer.toDto(); // NEVER DO THAT: you are polluting your DOMAIN with shitty API models!!
       return new CustomerDto(customer);
    }
-
+//@Transactional // WHY?!!
    public void register(CustomerDto dto) {
       // **** DATA MAPPING
       // mapping - keep DTOs out!
@@ -54,11 +54,15 @@ public class CustomerFacade {
 
       // ***** BIZ LOGIC
 
-      registerCustomerService.register(customer);
-//      quotationService.quoteCustomer(customer);
+      registerCustomerService.register(customer); // POST BLEAH
+//      quotationService.quoteCustomer(customer); // POST BLEAH
+      // using REST to orchestrate changes is veryrisky. Timeouts.
+      // So let's use messages on queues.
 
       sendRegistrationEmail(customer.getEmail());
    }
+    // 1) p2p QUEUE = (Command Design Pattern) SEND A MESSAGE TO CUSTOMER SERVICE TO TELL IT TO REGISTER THIS CUSTOMER
+   // 2) TOPIC (Observer aka pub/sub design pattern) LET EVERYONE KNOW THAT A CUSTOMER WAS REGISTERED
 
 private final QuotationService quotationService;
 

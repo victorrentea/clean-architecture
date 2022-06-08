@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.domain.customer.api.event.CustomerRegisteredEvent;
 import victor.training.clean.domain.customer.model.Customer;
 import victor.training.clean.domain.customer.repo.CustomerRepo;
@@ -16,6 +17,8 @@ public class  RegisterCustomerService{
     private final ApplicationEventPublisher eventPublisher;
 //    private final QuotationService quotationService;
 
+
+//    @Transactional
     public void register(Customer customer) {
         // EXTREME CLKEAN CODE. TESTS. TDD. PEACE.
         // Heavy business logic
@@ -36,5 +39,6 @@ public class  RegisterCustomerService{
 //        quotationService.quoteCustomer(customer);
         eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId()));
 
+//        jmsSender.send(new Message());
     }
 }
