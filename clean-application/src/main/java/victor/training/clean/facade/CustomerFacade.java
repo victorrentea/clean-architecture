@@ -6,6 +6,7 @@ import victor.training.clean.common.Facade;
 import victor.training.clean.domain.customer.model.Customer;
 import victor.training.clean.domain.customer.model.Email;
 import victor.training.clean.domain.customer.service.RegisterCustomerService;
+import victor.training.clean.domain.insurance.service.QuotationService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -54,11 +55,12 @@ public class CustomerFacade {
       // ***** BIZ LOGIC
 
       registerCustomerService.register(customer);
+//      quotationService.quoteCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
    }
 
-
+private final QuotationService quotationService;
 
    private void sendRegistrationEmail(String emailAddress) {
       System.out.println("Sending activation link via email to " + emailAddress);
