@@ -3,17 +3,17 @@ package victor.training.clean.infra;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import victor.training.clean.domain.entity.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.IAdapter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class Adapter {
+public class Adapter implements IAdapter {
     @Autowired
     private LdapApi ldapApi;
 
+    @Override
     public User retrieveUser(String username) {
         List<User> list = ldapApi
                 .searchUsingGET(null, null, username.toUpperCase())
