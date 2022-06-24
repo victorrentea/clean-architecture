@@ -4,8 +4,13 @@ import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validator;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Set;
 
 // An anemic Domain Entity (fullly opened with getters and setters, no encapsulation)
 @Entity
@@ -23,10 +28,12 @@ public class Customer {
 	private Long id;
 	@Size(min = 5) // automatically checked at persist/merge or auto-flush byu hibernate
 	private String name;
+	@Email
 	private String email;
 	private LocalDate creationDate;
 	private boolean goldMember;
 	@ManyToOne
+	@Valid
 	private Site site;
 	@Version
 	private Long version;
@@ -34,6 +41,15 @@ public class Customer {
 	protected Customer() {} // just for hibernate
 	public Customer(String name) {
 		setName(name); // the best
+
+//		Validator validator = hocusPocus();
+// 1: get a bean from spring via a static method.
+// 2: [evil] make @Autowired work in @ENtity ?!!!!!!!! @Configurable (DO NOT USE IT!!)
+//		Set<ConstraintViolation<Customer>> violations
+//				= validator.validate(this);
+//		if (!violations.isEmpty()) {
+//			throw new IllegalArgumentException(violations.toString());
+//		}
 
 	}
 
