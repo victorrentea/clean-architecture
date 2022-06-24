@@ -17,11 +17,10 @@ public class IndependentSubdomainsArchUnitTest {
    public void independentSubdomains() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training.clean");
 
-      SliceRule sliceRule = SlicesRuleDefinition.slices()
-          .matching("..clean.(*).*")
-          // example: service.order should not depend on service.customer
+      SliceRule sliceRule = SlicesRuleDefinition.slices().matching("..clean.(*).*")
           .should().notDependOnEachOther()
-          .ignoreDependency(alwaysTrue(), resideInAnyPackage("..common..", "..infra")); // allow dependencies to .events
+          .ignoreDependency(alwaysTrue(), resideInAnyPackage("..common..", "..api..")); // allow dependencies to .events
+       // example: service.order should not depend on service.customer
 
       // progressive strangling the monolith
       EvaluationResult evaluationResult = sliceRule.evaluate(classes);

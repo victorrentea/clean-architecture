@@ -47,7 +47,6 @@ public class CustomerFacade {
    }
 
    public void register(CustomerDto dto) {
-      // mapping - keep DTOs out!
       Customer customer = new Customer();
       customer.setEmail(dto.email);
       customer.setName(dto.name);
