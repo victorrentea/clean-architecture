@@ -15,6 +15,7 @@ import victor.training.clean.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
@@ -35,12 +36,13 @@ public class CustomerFacade {
    public CustomerDto findById(long customerId) {
       Customer customer = customerRepo.findById(customerId).orElseThrow();
 
-      // TODO move this logic somewhere else:
+      // TODO move mapping logic somewhere else
       CustomerDto dto = new CustomerDto();
+      dto.id = customer.getId();
       dto.name = customer.getName();
       dto.email = customer.getEmail();
-      dto.creationDateStr = new SimpleDateFormat("yyyy-MM-dd").format(customer.getCreationDate());
-      dto.id = customer.getId();
+      dto.creationDateStr = customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+      dto.siteId = customer.getSite().getId();
       return dto;
    }
 
@@ -51,7 +53,7 @@ public class CustomerFacade {
       customer.setName(dto.name);
       customer.setSite(siteRepo.getById(dto.siteId));
 
-      // validation
+      // TODO experiment all the ways to do validation
       if (customer.getName().length() < 5) {
          throw new IllegalArgumentException("Name too short");
       }
@@ -63,7 +65,7 @@ public class CustomerFacade {
       // Heavy business logic
       // Heavy business logic
       // Heavy business logic
-      // Where can I move this? (a bit of domain logic operating on the state of a single entity)
+      // TODO Where can I move this little logic? (... operating on the state of a single entity)
       int discountPercentage = 3;
       if (customer.isGoldMember()) {
          discountPercentage += 1;

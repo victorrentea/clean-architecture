@@ -59,6 +59,17 @@
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit4</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.1.Final</version>
+        </dependency>
+        <dependency>
+            <!-- generate mapstruct code -->
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.5.1.Final</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -67,6 +78,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
+                <!-- generates java API classes from Swagger/openapi -->
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
                 <version>2.2.3</version>
@@ -75,7 +87,6 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
-                        <!--fitza-->
                         <configuration>
                             <inputSpec>ldap-api-docs.json</inputSpec>
                             <language>java</language>
