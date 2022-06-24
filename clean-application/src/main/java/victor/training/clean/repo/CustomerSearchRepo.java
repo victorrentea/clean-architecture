@@ -19,7 +19,7 @@ public class CustomerSearchRepo {
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       String jpql = "SELECT new victor.training.clean.facade.dto.CustomerSearchResult(c.id, c.name)" +
-                    " FROM Customer c " +
+                    " FROM Customer c " + // " JOIN InsurancePolicy ip ON ip.customerId = c.id " +
                     " WHERE 1=1 ";
 
       Map<String, Object> paramMap = new HashMap<>();

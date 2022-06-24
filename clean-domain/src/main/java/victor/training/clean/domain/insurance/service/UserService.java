@@ -9,10 +9,10 @@ import victor.training.clean.domain.insurance.entity.User;
 @Service // holy domain logic
 public class UserService {
    @Autowired
-   private IAdapter adapter;
+   private ExternalUserProvider externalUserProvider;
 
    public void importUserFromLdap(String username) {
-      User user = adapter.retrieveUser(username);
+      User user = externalUserProvider.retrieveUser(username);
 //      LdapUserDto doesNotCompile; // innaccessible
 
       if (user.getWorkEmail().endsWith("@gov.com")) {

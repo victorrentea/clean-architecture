@@ -3,13 +3,13 @@ package victor.training.clean.infra;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import victor.training.clean.domain.insurance.entity.User;
-import victor.training.clean.domain.insurance.service.IAdapter;
+import victor.training.clean.domain.insurance.service.ExternalUserProvider;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class Adapter implements IAdapter {
+public class LdapApiAdapter implements ExternalUserProvider {
     @Autowired
     private LdapApi ldapApi;
 
