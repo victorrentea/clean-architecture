@@ -28,9 +28,8 @@ public class CustomerMapper {
     }
 
     public Customer toEntity(CustomerDto dto) {
-       Customer customer = new Customer();
+       Customer customer = new Customer(dto.name);
        customer.setEmail(dto.email);
-       customer.setName(dto.name);
        customer.setSite(siteRepo.getById(dto.siteId));
        return customer;
     }

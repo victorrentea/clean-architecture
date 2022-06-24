@@ -1,12 +1,14 @@
 package victor.training.clean.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.facade.CustomerFacade;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,7 +28,7 @@ public class CustomerController {
    }
 
    @PostMapping("")
-   public void register(@RequestBody CustomerDto customerDto) {
+   public void register(@RequestBody @Valid  CustomerDto customerDto) {
       customerFacade.register(customerDto);
    }
 }

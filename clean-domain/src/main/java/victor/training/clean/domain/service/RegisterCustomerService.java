@@ -15,13 +15,9 @@ public class RegisterCustomerService // 2000 lines of code, 2 years later;
     private final QuotationService quotationService;
 
     public void register(Customer customer) {
+
+
 //        CustomerDto doesNotCompile;
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
         // Heavy business logic
         // Heavy business logic
         // Heavy business logic
@@ -35,9 +31,15 @@ public class RegisterCustomerService // 2000 lines of code, 2 years later;
         System.out.println("Biz Logic with discount " + discountPercentage);
         // Heavy business logic
         // Heavy business logic
-        customerRepo.save(customer);
+        customerRepo.save(customer); // COMMITED
+//        customerRepo.save(stuff2);
         // Heavy business logic
         quotationService.quoteCustomer(customer);
+
+//        kafka.send( stuffv ); // BLOW UP
+//        messagesToSendRepo.save(new MessageToSend(Stuff));
+
+        throw new RuntimeException("BUM 500");
     }
 
 }

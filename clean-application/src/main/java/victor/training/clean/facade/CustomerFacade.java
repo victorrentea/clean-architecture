@@ -2,6 +2,7 @@ package victor.training.clean.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.entity.Customer;
 import victor.training.clean.domain.entity.Email;
@@ -34,6 +35,7 @@ public class CustomerFacade {
 
    public CustomerDto findById(long customerId) {
       Customer customer = customerRepo.findById(customerId).orElseThrow();
+//      new RestTemplate().getForEntity() // 2000 ms
       // where can I move this mapping logic to ?
       CustomerDto dto = new CustomerDto(customer);
       // can go to...
@@ -52,19 +54,26 @@ public class CustomerFacade {
       // mapping - keep DTOs out!
       Customer customer = customerMapper.toEntity(dto);
 
-      // validation
-      if (customer.getName().length() < 5) {
-         throw new IllegalArgumentException("Name too short");
-      }
-      if (customerRepo.existsByEmail(customer.getEmail())) {
-         throw new IllegalArgumentException("Customer email is already registered");
-//         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-      }
+      validate(customer);
 
       registerCustomerService.register(customer);
 
       sendRegistrationEmail(customer.getEmail());
    }
+
+   private void validate(Customer customer) {
+      // validation
+      // type 1 -
+      if (customer.getName().length() < 5) {
+         throw new IllegalArgumentException("Name too short");
+      }
+      // type 2
+      if (customerRepo.existsByEmail(customer.getEmail())) {
+         throw new IllegalArgumentException("Customer email is already registered");
+//         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
+      }
+   }
+
    private final RegisterCustomerService registerCustomerService;
 
 
