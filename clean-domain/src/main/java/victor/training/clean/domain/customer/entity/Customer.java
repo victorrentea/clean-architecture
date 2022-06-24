@@ -1,16 +1,13 @@
-package victor.training.clean.domain.entity;
+package victor.training.clean.domain.customer.entity;
 
 import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
-import javax.validation.Validator;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Set;
 
 // An anemic Domain Entity (fullly opened with getters and setters, no encapsulation)
 @Entity

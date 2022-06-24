@@ -1,7 +1,7 @@
 package victor.training.clean.facade.dto;
 
 import lombok.Data;
-import victor.training.clean.domain.entity.Customer;
+import victor.training.clean.domain.customer.entity.Customer;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;

@@ -1,4 +1,4 @@
-package victor.training.clean.domain.entity;
+package victor.training.clean.domain.insurance.entity;
 
 import static java.util.Objects.requireNonNull;
 

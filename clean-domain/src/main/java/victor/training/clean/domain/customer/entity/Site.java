@@ -1,4 +1,4 @@
-package victor.training.clean.domain.entity;
+package victor.training.clean.domain.customer.entity;
 
 import lombok.Data;
 

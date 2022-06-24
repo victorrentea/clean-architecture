@@ -2,8 +2,8 @@ package victor.training.clean.infra;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import victor.training.clean.domain.entity.User;
-import victor.training.clean.domain.service.IAdapter;
+import victor.training.clean.domain.insurance.entity.User;
+import victor.training.clean.domain.insurance.service.IAdapter;
 
 import java.util.List;
 import java.util.stream.Collectors;

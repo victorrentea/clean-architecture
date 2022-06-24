@@ -1,7 +1,8 @@
-package victor.training.clean.domain.entity;
+package victor.training.clean.domain.insurance.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import victor.training.clean.domain.customer.entity.Customer;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
