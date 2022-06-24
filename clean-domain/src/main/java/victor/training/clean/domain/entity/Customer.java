@@ -36,4 +36,21 @@ public class Customer {
 	public void setGoldMember(boolean goldMember) {
 		this.goldMember = goldMember;
 	}
+
+	public int getDiscountPercentage() {
+	   int discountPercentage = 3;
+		if (goldMember) {
+		  discountPercentage += 1;
+	   }
+	   return discountPercentage;
+	}
+
+//    public CustomerDto toDto() {
+//       CustomerDto dto = new CustomerDto();
+//       dto.name = getName();
+//       dto.email = getEmail();
+//       dto.creationDateStr = new SimpleDateFormat("yyyy-MM-dd").format(getCreationDate());
+//       dto.id = getId();
+//       return dto;
+//    }
 }

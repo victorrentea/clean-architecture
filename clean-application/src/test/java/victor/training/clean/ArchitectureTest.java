@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import javax.annotation.processing.Generated;
+
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideOutsideOfPackage;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
@@ -18,7 +20,8 @@ public class ArchitectureTest {
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
 
       noClasses().that().resideInAPackage("..domain..")
-          .should().dependOnClassesThat().resideInAPackage("..infra..")
+          .should().dependOnClassesThat()//.areAnnotatedWith(Generated)
+              .resideInAPackage("..infra..")
           .check(classes);
    }
 

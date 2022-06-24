@@ -13,6 +13,7 @@ public class UserService {
 
    public void importUserFromLdap(String username) {
       User user = adapter.retrieveUser(username);
+//      LdapUserDto doesNotCompile; // innaccessible
 
       if (user.getWorkEmail().endsWith("@gov.com")) {
          log.debug("Send welcome email to Government staff: " + user.getWorkEmail().toLowerCase());

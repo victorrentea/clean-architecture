@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.entity.Customer;
 import victor.training.clean.domain.entity.Email;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -14,7 +15,6 @@ import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 //@Service
@@ -29,27 +29,28 @@ public class CustomerFacade {
    private final QuotationService quotationService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-      return customerSearchRepo.search(searchCriteria);
+      return customerSearchRepo.search(searchCriteria); // Relaxed Layered Arch
    }
 
    public CustomerDto findById(long customerId) {
       Customer customer = customerRepo.findById(customerId).orElseThrow();
-
       // where can I move this mapping logic to ?
-      CustomerDto dto = new CustomerDto();
-      dto.name = customer.getName();
-      dto.email = customer.getEmail();
-      dto.creationDateStr = new SimpleDateFormat("yyyy-MM-dd").format(customer.getCreationDate());
-      dto.id = customer.getId();
+      CustomerDto dto = new CustomerDto(customer);
+      // can go to...
+      // 1 a mapper
+      // 2 a generated mapper
+      // 3 the DTO constructor if COde-First API (if changeable)
+      // NO NO NO in the ENTITY NEVER
+      // ? extension fucntions (Scala/Kotlin)
+
       return dto;
    }
 
+   private final CustomerMapper customerMapper;
+
    public void register(CustomerDto dto) {
       // mapping - keep DTOs out!
-      Customer customer = new Customer();
-      customer.setEmail(dto.email);
-      customer.setName(dto.name);
-      customer.setSite(siteRepo.getById(dto.siteId));
+      Customer customer = customerMapper.toEntity(dto);
 
       // validation
       if (customer.getName().length() < 5) {
@@ -60,23 +61,12 @@ public class CustomerFacade {
 //         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
       }
 
-      // Heavy business logic
-      // Heavy business logic
-      // Heavy business logic
-      // Where can I move this? (a bit of domain logic operating on the state of a single entity)
-      int discountPercentage = 3;
-      if (customer.isGoldMember()) {
-         discountPercentage += 1;
-      }
-      System.out.println("Biz Logic with discount " + discountPercentage);
-      // Heavy business logic
-      // Heavy business logic
-      customerRepo.save(customer);
-      // Heavy business logic
-      quotationService.quoteCustomer(customer);
+      registerCustomerService.register(customer);
 
       sendRegistrationEmail(customer.getEmail());
    }
+   private final RegisterCustomerService registerCustomerService;
+
 
    private void sendRegistrationEmail(String emailAddress) {
       System.out.println("Sending activation link via email to " + emailAddress);
