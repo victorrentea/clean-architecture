@@ -35,7 +35,7 @@ public class CustomerFacade {
    public CustomerDto findById(long customerId) {
       Customer customer = customerRepo.findById(customerId).orElseThrow();
 
-      // where can I move this mapping logic to ?
+      // TODO move this logic somewhere else:
       CustomerDto dto = new CustomerDto();
       dto.name = customer.getName();
       dto.email = customer.getEmail();

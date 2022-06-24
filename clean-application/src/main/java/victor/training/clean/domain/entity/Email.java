@@ -2,7 +2,7 @@ package victor.training.clean.domain.entity;
 
 import lombok.Data;
 
-@Data // Value Object
+@Data
 public class Email {
 	private String to;
 	private String from;

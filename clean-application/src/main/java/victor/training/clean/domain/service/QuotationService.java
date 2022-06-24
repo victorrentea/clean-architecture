@@ -16,10 +16,16 @@ public class QuotationService {
    private final InsurancePolicyRepo insurancePolicyRepo;
 
    public void quoteCustomer(Customer customer) {
-      log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customer.getName());
+      log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customer.getId());
       InsurancePolicy policy = new InsurancePolicy();
       policy.setCustomer(customer);
       policy.setValueInEur(BigDecimal.ONE);
       insurancePolicyRepo.save(policy);
+   }
+
+   public void printPolicy(long policyId) {
+      InsurancePolicy policy = insurancePolicyRepo.findById(policyId).orElseThrow();
+      String customerName = policy.getCustomer().getName();
+      System.out.println("Insurange Policy for " + customerName);
    }
 }

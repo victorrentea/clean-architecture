@@ -22,5 +22,4 @@ public class InsurancePolicy {
 
    private BigDecimal valueInEur;
 
-
 }
