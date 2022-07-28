@@ -14,7 +14,6 @@ public class UserService {
 
    public void importUserFromLdap(String username) {
       User user = externalUserService.getUserByUsername(username);
-
       // imagine biz logc logic
       if (user.hasEmail()) {
          log.debug("Send welcome email to " + user.getWorkEmail());
