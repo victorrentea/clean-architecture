@@ -1,18 +1,18 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.domain.entity.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.ILdapUserDoor;
 
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class LdapUserDoor {
+public class LdapUserDoor implements ILdapUserDoor {
     private final LdapApi ldapApi;
 
+    @Override
     public User retrieveByUsername(String username) {
         List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
         if (list.size() != 1) {

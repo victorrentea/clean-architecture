@@ -11,9 +11,8 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class ArchitectureTest {
    @Test
-   @DisplayName("daca pica testul asta, suna-ma (TL)+4: 0720019564")
+   @DisplayName("if this test fails, please DO NOT @Ignore it, but call me (TL)+4: 0720019564")
    public void domain_independent_of_infrastructure() {
-      // daca pica testul asta, suna-ma (TL)+4: 0720019564
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
 
       noClasses().that().resideInAPackage("..domain..")
