@@ -1,11 +1,12 @@
 package victor.training.clean.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import victor.training.clean.facade.CustomerFacade;
-import victor.training.clean.facade.dto.CustomerDto;
-import victor.training.clean.facade.dto.CustomerSearchCriteria;
-import victor.training.clean.facade.dto.CustomerSearchResult;
+import victor.training.clean.application.CustomerApplicationService;
+import victor.training.clean.application.dto.CustomerDto;
+import victor.training.clean.application.dto.CustomerSearchCriteria;
+import victor.training.clean.application.dto.CustomerSearchResult;
 
 import java.util.List;
 
@@ -13,20 +14,20 @@ import java.util.List;
 @RequestMapping("customer")
 @RequiredArgsConstructor
 public class CustomerController {
-   private final CustomerFacade customerFacade;
+   private final CustomerApplicationService customerApplicationService;
 
    @GetMapping("{id}")
    public CustomerDto findById(@PathVariable long id) {
-      return customerFacade.findById(id);
+      return customerApplicationService.findById(id);
    }
 
    @PostMapping("search")
    public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-      return customerFacade.search(searchCriteria);
+      return customerApplicationService.search(searchCriteria);
    }
 
    @PostMapping("")
-   public void register(@RequestBody CustomerDto customerDto) {
-      customerFacade.register(customerDto);
+   public void register(@RequestBody @Validated CustomerDto customerDto) {
+      customerApplicationService.register(customerDto);
    }
 }

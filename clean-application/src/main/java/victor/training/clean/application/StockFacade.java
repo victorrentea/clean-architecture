@@ -1,9 +1,9 @@
-package victor.training.clean.facade;
+package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
-import victor.training.clean.common.Facade;
+import victor.training.clean.common.ApplicationService;
 
-@Facade
+@ApplicationService
 @RequiredArgsConstructor
 public class StockFacade {
 

@@ -1,4 +1,4 @@
-package victor.training.clean.facade.dto;
+package victor.training.clean.application.dto;
 
 // sent as JSON to the grid in Frontend
 public class CustomerSearchResult {

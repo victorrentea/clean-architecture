@@ -1,4 +1,4 @@
-package victor.training.clean.facade.dto;
+package victor.training.clean.application.dto;
 
 import lombok.Value;
 
