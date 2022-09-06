@@ -2,7 +2,7 @@ package victor.training.clean.domain.entity;
 
 import static java.util.Objects.requireNonNull;
 
-// Value Object al MEU!
+// Value Object MINE! All Mine,,... .My Preciouis.....
 public class User {
 	private final String username;
 	private final String fullName;

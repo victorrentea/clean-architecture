@@ -2,7 +2,7 @@ package victor.training.clean.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.entity.User;
 import victor.training.clean.infra.LdapApi;
@@ -12,19 +12,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
-@Service
+@Service // DOmain Service... angels should sing here. peace. harmony. ying and yang. ZEN garden.
 public class UserService {
-   private final LdapApi ldapApi;
+   private final LdapUserDoor ldapUserDoor;
 
    public void importUserFromLdap(String username) {
-      List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
-      if (list.size() != 1) {
-         throw new IllegalArgumentException("There is no single user matching username " + username);
-      }
-
-      LdapUserDto ldapUser = list.get(0);
-      String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
-      User user = new User(ldapUser.getUid(), fullName, ldapUser.getWorkEmail());
+      User user = ldapUserDoor.retrieveByUsername(username);
 
 
       if (user.hasWorkEmail()) {
@@ -35,3 +28,4 @@ public class UserService {
    }
 
 }
+
