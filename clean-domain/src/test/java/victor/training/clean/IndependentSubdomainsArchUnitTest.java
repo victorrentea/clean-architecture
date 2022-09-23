@@ -17,7 +17,7 @@ public class IndependentSubdomainsArchUnitTest {
    public void independentSubdomains() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor.training.clean");
 
-      SliceRule sliceRule = SlicesRuleDefinition.slices().matching("..clean.(*).*")
+      SliceRule sliceRule = SlicesRuleDefinition.slices().matching("..clean.(*)")
           .should().notDependOnEachOther()
           .ignoreDependency(alwaysTrue(), resideInAnyPackage("..common..", "..api..")); // allow dependencies to .events
        // example: service.order should not depend on service.customer

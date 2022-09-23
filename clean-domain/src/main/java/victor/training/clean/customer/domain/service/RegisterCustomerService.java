@@ -11,6 +11,8 @@ import victor.training.clean.insurance.domain.service.QuotationService;
 public class RegisterCustomerService {
     private final CustomerRepo customerRepo;
     private final QuotationService quotationService;
+
+
     public void registerCustomer(Customer customer) {
        // Heavy business logic
        // Heavy business logic
@@ -23,7 +25,6 @@ public class RegisterCustomerService {
        customerRepo.save(customer);
        // Heavy business logic
 
-        quotationService.quoteCustomer(customer);
 
     }
 

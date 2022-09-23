@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
 import victor.training.clean.customer.domain.model.Customer;
+import victor.training.clean.insurance.domain.service.QuotationService;
 import victor.training.clean.user.domain.model.Email;
 import victor.training.clean.customer.domain.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
@@ -43,11 +44,14 @@ public class CustomerFacade {
       }
 
       registerCustomerService.registerCustomer(customer);
-
+      quotationService.quoteCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
       System.out.println("gata");
    }
+
+   private final QuotationService quotationService;
+
 
    public void updateCustomer(CustomerDto customerDto35campuri) {
       Customer customer = customerRepo.findById(customerDto35campuri.id).orElseThrow();
