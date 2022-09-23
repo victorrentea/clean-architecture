@@ -1,11 +1,13 @@
 package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
-import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.ExternalUserProvider;
+import org.springframework.stereotype.Component;
+import victor.training.clean.user.domain.model.User;
+import victor.training.clean.user.domain.service.ExternalUserProvider;
 
 import java.util.List;
 
+@Component
 @RequiredArgsConstructor
 public class LdapApiAdapter implements ExternalUserProvider {
     private final LdapApi ldapApi;

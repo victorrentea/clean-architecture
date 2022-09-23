@@ -1,14 +1,16 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.customer.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.customer.domain.model.Customer;
+import victor.training.clean.customer.domain.repo.CustomerRepo;
+import victor.training.clean.insurance.domain.service.QuotationService;
 
 @RequiredArgsConstructor
 @Service
 public class RegisterCustomerService {
     private final CustomerRepo customerRepo;
+    private final QuotationService quotationService;
     public void registerCustomer(Customer customer) {
        // Heavy business logic
        // Heavy business logic
@@ -20,6 +22,9 @@ public class RegisterCustomerService {
        // Heavy business logic
        customerRepo.save(customer);
        // Heavy business logic
+
+        quotationService.quoteCustomer(customer);
+
     }
 
 }

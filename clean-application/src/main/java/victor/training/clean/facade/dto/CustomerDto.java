@@ -1,7 +1,7 @@
 package victor.training.clean.facade.dto;
 
 import lombok.Data;
-import victor.training.clean.domain.model.Customer;
+import victor.training.clean.customer.domain.model.Customer;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -19,7 +19,7 @@ public class CustomerDto {
    public String email;
    public Long siteId;
    public String creationDateStr;
-
+public   CustomerDto() {}
    public CustomerDto(Customer customer) {
      id = customer.getId();
      name = customer.getName();

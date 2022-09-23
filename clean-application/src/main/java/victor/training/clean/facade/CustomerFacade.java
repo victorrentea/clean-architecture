@@ -3,30 +3,26 @@ package victor.training.clean.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
-import victor.training.clean.domain.service.RegisterCustomerService;
+import victor.training.clean.customer.domain.model.Customer;
+import victor.training.clean.user.domain.model.Email;
+import victor.training.clean.customer.domain.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.customer.domain.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
-import victor.training.clean.domain.repo.SiteRepo;
-import victor.training.clean.domain.service.QuotationService;
+import victor.training.clean.customer.domain.repo.SiteRepo;
 
 import java.util.List;
 
-//@Service
 @Facade
-@Transactional
 @RequiredArgsConstructor
 public class CustomerFacade {
    private final CustomerRepo customerRepo;
    private final EmailSender emailSender;
    private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
-   private final QuotationService quotationService;
    private final RegisterCustomerService registerCustomerService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
@@ -41,19 +37,31 @@ public class CustomerFacade {
    public void register(CustomerDto dto) {
       Customer customer = toEntity(dto);
 
-      // TODO experiment all the ways to do validation
-
       if (customerRepo.existsByEmail(customer.getEmail())) {
          throw new IllegalArgumentException("Customer email is already registered");
 //         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
       }
 
-
       registerCustomerService.registerCustomer(customer);
 
-      quotationService.quoteCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
+      System.out.println("gata");
+   }
+
+   public void updateCustomer(CustomerDto customerDto35campuri) {
+      Customer customer = customerRepo.findById(customerDto35campuri.id).orElseThrow();
+
+   }
+
+@Transactional
+   public void updateEmail(long customerId, String newEmail) {
+      Customer customer = customerRepo.findById(customerId).orElseThrow();
+      customer.setEmail(newEmail);
+      customerRepo.save(customer);
+//      customerRepo.save(); // nu face inca INSERT
+//      customerRepo.saveAndFlush() // face mereu insert
+//      sendEmail()
    }
 
    private Customer toEntity(CustomerDto dto) {
