@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.service.CustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -14,7 +15,6 @@ import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
@@ -27,6 +27,7 @@ public class CustomerFacade {
    private final SiteRepo siteRepo;
    private final CustomerSearchRepo customerSearchRepo;
    private final QuotationService quotationService;
+   private final CustomerService customerService;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
       return customerSearchRepo.search(searchCriteria);
@@ -48,19 +49,8 @@ public class CustomerFacade {
       }
 
 
-      // Heavy business logic
-      // Heavy business logic
-      // Heavy business logic
-      // TODO Where can I move this little logic? (... operating on the state of a single entity)
-      int discountPercentage = 3;
-      if (customer.isGoldMember()) {
-         discountPercentage += 1;
-      }
-      System.out.println("Biz Logic with discount " + discountPercentage);
-      // Heavy business logic
-      // Heavy business logic
-      customerRepo.save(customer);
-      // Heavy business logic
+      customerService.registerCustomer(customer);
+
       quotationService.quoteCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
