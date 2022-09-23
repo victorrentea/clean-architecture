@@ -18,7 +18,7 @@ public class QuotationService {
    private final InsurancePolicyRepo insurancePolicyRepo;
 
    public void quoteCustomer(QuotationRequestKnob dto) {
-      log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customer.getId());
+      log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + dto.getCustomerId());
       InsurancePolicy policy = new InsurancePolicy();
       policy.setCustomerId(dto.getCustomerId());
       policy.setValueInEur(BigDecimal.ONE);
@@ -29,7 +29,7 @@ public class QuotationService {
       InsurancePolicy policy = insurancePolicyRepo.findById(policyId).orElseThrow();
 
 
-      String customerName = customerDoor.get....
+      String customerName = "customerDoor.get....";
       System.out.println("Insurange Policy for " + customerName);
    }
 }

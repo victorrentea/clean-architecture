@@ -2,6 +2,7 @@ package victor.training.clean.customer.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.customer.domain.model.Customer;
 import victor.training.clean.customer.domain.repo.CustomerRepo;
 import victor.training.clean.insurance.domain.door.QuotationDoor;
