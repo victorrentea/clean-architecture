@@ -29,10 +29,10 @@ public class UserService {
 
    private void deepDomainLogic(LdapUserDto ldapUser) {
       if (ldapUser.getWorkEmail()!=null) {
-         log.debug("Send welcome email to " + ldapUser.getWorkEmail());
+         log.debug("Send welcome email to  " + ldapUser.getWorkEmail());
       }
 
-      log.debug("Insert user in my database");
+      log.debug("Insert user in my database: " + ldapUser.getUid());
 
       String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
       log.debug("More business logic with " + fullName + " of id " + ldapUser.getUid().toLowerCase());
