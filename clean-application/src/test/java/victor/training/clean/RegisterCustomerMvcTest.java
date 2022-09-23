@@ -15,8 +15,8 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Site;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.repo.CustomerRepo;
-import victor.training.clean.repo.SiteRepo;
+import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.repo.SiteRepo;
 
 import java.time.format.DateTimeFormatter;
 
