@@ -21,6 +21,7 @@ public class InsurancePolicy {
    //   @ManyToOne
    //   private Customer customer;
    private Long customerId;
+   private String customerName;
 
    private BigDecimal valueInEur;
 
