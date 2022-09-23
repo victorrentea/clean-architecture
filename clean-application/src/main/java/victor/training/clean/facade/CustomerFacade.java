@@ -3,8 +3,8 @@ package victor.training.clean.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
-import victor.training.clean.domain.entity.Customer;
-import victor.training.clean.domain.entity.Email;
+import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.Email;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -14,7 +14,6 @@ import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 

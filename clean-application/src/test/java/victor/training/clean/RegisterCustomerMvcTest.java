@@ -7,23 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.domain.entity.Customer;
-import victor.training.clean.domain.entity.Site;
+import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.Site;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.repo.CustomerRepo;
 import victor.training.clean.repo.SiteRepo;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static java.time.LocalDate.now;
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
