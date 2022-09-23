@@ -3,7 +3,8 @@ package victor.training.clean.insurance.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.customer.domain.model.Customer;
+import victor.training.clean.customer.domain.door.CustomerDoor;
+import victor.training.clean.insurance.domain.door.dto.QuotationRequestKnob;
 import victor.training.clean.insurance.domain.model.InsurancePolicy;
 import victor.training.clean.insurance.domain.repo.InsurancePolicyRepo;
 
@@ -13,19 +14,22 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 public class QuotationService {
+   private final CustomerDoor customerDoor;
    private final InsurancePolicyRepo insurancePolicyRepo;
 
-   public void quoteCustomer(Customer customer) {
+   public void quoteCustomer(QuotationRequestKnob dto) {
       log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customer.getId());
       InsurancePolicy policy = new InsurancePolicy();
-      policy.setCustomer(customer);
+      policy.setCustomerId(dto.getCustomerId());
       policy.setValueInEur(BigDecimal.ONE);
       insurancePolicyRepo.save(policy);
    }
 
    public void printPolicy(long policyId) {
       InsurancePolicy policy = insurancePolicyRepo.findById(policyId).orElseThrow();
-      String customerName = policy.getCustomer().getName();
+
+
+      String customerName = customerDoor.get....
       System.out.println("Insurange Policy for " + customerName);
    }
 }

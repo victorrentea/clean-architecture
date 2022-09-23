@@ -44,7 +44,6 @@ public class CustomerFacade {
       }
 
       registerCustomerService.registerCustomer(customer);
-      quotationService.quoteCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
       System.out.println("gata");

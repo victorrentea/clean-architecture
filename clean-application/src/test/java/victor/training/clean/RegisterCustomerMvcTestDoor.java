@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("db-mem")
 @AutoConfigureMockMvc
 @Transactional
-public class RegisterCustomerMvcTest {
+public class RegisterCustomerMvcTestDoor {
    private static final ObjectMapper JACKSON = new ObjectMapper();
    public static final String EMAIL = "a@b.com";
    @Autowired
