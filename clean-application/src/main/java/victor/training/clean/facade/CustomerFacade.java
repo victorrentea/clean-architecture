@@ -34,31 +34,19 @@ public class CustomerFacade {
 
    public CustomerDto findById(long customerId) {
       Customer customer = customerRepo.findById(customerId).orElseThrow();
-
-      // TODO move mapping logic somewhere else
-      CustomerDto dto = new CustomerDto();
-      dto.id = customer.getId();
-      dto.name = customer.getName();
-      dto.email = customer.getEmail();
-      dto.creationDateStr = customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-      dto.siteId = customer.getSite().getId();
-      return dto;
+      return new CustomerDto(customer);
    }
 
    public void register(CustomerDto dto) {
-      Customer customer = new Customer();
-      customer.setEmail(dto.email);
-      customer.setName(dto.name);
-      customer.setSite(siteRepo.getById(dto.siteId));
+      Customer customer = toEntity(dto);
 
       // TODO experiment all the ways to do validation
-      if (customer.getName().length() < 5) {
-         throw new IllegalArgumentException("Name too short");
-      }
+
       if (customerRepo.existsByEmail(customer.getEmail())) {
          throw new IllegalArgumentException("Customer email is already registered");
 //         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
       }
+
 
       // Heavy business logic
       // Heavy business logic
@@ -76,6 +64,13 @@ public class CustomerFacade {
       quotationService.quoteCustomer(customer);
 
       sendRegistrationEmail(customer.getEmail());
+   }
+
+   private Customer toEntity(CustomerDto dto) {
+      Customer customer = new Customer(dto.name);
+      customer.setEmail(dto.email);
+      customer.setSite(siteRepo.getById(dto.siteId));
+      return customer;
    }
 
    private void sendRegistrationEmail(String emailAddress) {

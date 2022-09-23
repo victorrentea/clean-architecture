@@ -13,7 +13,6 @@ public class UserService {
 
    public void importUserFromLdap(String username) {
       User user = externalUserProvider.fetchUserByUsername(username);
-
       if (user.hasWorkEmail()) {
          log.debug("Send welcome email to " + user.getWorkEmail());
       }
