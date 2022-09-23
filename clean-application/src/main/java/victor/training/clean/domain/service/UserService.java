@@ -9,18 +9,11 @@ import victor.training.clean.domain.model.User;
 @Slf4j
 @Service // ZEN DOMAIN LOGIOC> PACE. ARMONIE. VERDEATA
 public class UserService {
-   private final ILdapApiAdapter adapter;
+   private final ExternalUserProvider externalUserProvider;
 
    public void importUserFromLdap(String username) {
-      User user = adapter.fetchUserByUsername(username);
+      User user = externalUserProvider.fetchUserByUsername(username);
 
-      deepDomainLogic(user);
-
-   }
-
-
-
-   private void deepDomainLogic(User user) {
       if (user.hasWorkEmail()) {
          log.debug("Send welcome email to " + user.getWorkEmail());
       }
@@ -28,6 +21,7 @@ public class UserService {
       log.debug("Insert user in my database");
 
       log.debug("More business logic with " + user.getCorporateName() + " of id " + user.getUsername().toLowerCase());
+
    }
 
 }
