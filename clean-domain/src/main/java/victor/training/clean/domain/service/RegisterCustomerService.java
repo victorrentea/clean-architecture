@@ -7,21 +7,19 @@ import victor.training.clean.domain.repo.CustomerRepo;
 
 @RequiredArgsConstructor
 @Service
-public class CustomerService {
+public class RegisterCustomerService {
     private final CustomerRepo customerRepo;
     public void registerCustomer(Customer customer) {
        // Heavy business logic
        // Heavy business logic
        // Heavy business logic
        // TODO Where can I move this little logic? (... operating on the state of a single entity)
-       int discountPercentage = 3;
-       if (customer.isGoldMember()) {
-          discountPercentage += 1;
-       }
-       System.out.println("Biz Logic with discount " + discountPercentage);
+        int discountPercentage = customer.getDiscountPercentage();
+        System.out.println("Biz Logic with discount " + discountPercentage);
        // Heavy business logic
        // Heavy business logic
        customerRepo.save(customer);
        // Heavy business logic
     }
+
 }

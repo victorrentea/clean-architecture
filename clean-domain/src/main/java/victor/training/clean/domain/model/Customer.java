@@ -43,4 +43,13 @@ public class Customer {
 
 		this.name = Objects.requireNonNull(name);
 	}
+
+    public int getDiscountPercentage() {
+        int discountPercentage = 3;
+		if (goldMember) {
+           discountPercentage += 1;
+        }
+        return discountPercentage;
+    }
+
 }
