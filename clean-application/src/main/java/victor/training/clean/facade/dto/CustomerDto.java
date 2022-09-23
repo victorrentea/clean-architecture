@@ -1,17 +1,19 @@
 package victor.training.clean.facade.dto;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 
-@Data
+import javax.validation.constraints.Size;
+
+@Builder
+@Value
 public class CustomerDto {
-   public Long id;
-   public String name;
+   Long id;
+   String name;
    // @Email
-   public String email;
-   public Long siteId;
-   public String creationDateStr;
-
-   public CustomerDto() {
-   }
+   String email;
+   Long siteId;
+   String creationDateStr;
 
 }
