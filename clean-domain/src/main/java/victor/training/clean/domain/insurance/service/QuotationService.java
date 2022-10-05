@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 import victor.training.clean.domain.customer.api.CustomerApi;
 import victor.training.clean.domain.customer.api.dto.CustomerDto;
 import victor.training.clean.domain.customer.api.event.CustomerRegisteredEvent;
@@ -24,7 +26,7 @@ public class QuotationService {
    private final InsurancePolicyRepo insurancePolicyRepo;
    private final CustomerApi customerApi;
 
-   @EventListener
+   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
    public void onCustmerRegistede(CustomerRegisteredEvent event) {
       List<Long> customerIds = List.of();
 
@@ -44,6 +46,7 @@ public class QuotationService {
       policy.setCustomerId(customerId);
       policy.setCustomerName(customerName);
       policy.setValueInEur(BigDecimal.ONE);
+      log.info("Persist the policy");
       insurancePolicyRepo.save(policy);
    }
 

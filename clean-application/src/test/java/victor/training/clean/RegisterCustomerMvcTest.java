@@ -84,16 +84,6 @@ public class RegisterCustomerMvcTest {
         register(requestDto.build()).andExpect(status().isInternalServerError());
     }
 
-    @Test
-    void existingEmailFails() throws Exception {
-        customerRepo.save(new Customer("John").setEmail("::email::"));
-
-        register(requestDto.build())
-                .andExpect(status().isInternalServerError())
-        //          .andExpect(status().is4xxClientError())
-        //          .andExpect(content().string("Customer email is already registered"))
-        ;
-    }
 
     private ResultActions register(CustomerDto requestDto) throws Exception {
         return mockMvc.perform(post("/customer")

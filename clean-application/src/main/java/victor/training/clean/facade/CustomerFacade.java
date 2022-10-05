@@ -1,6 +1,7 @@
 package victor.training.clean.facade;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.customer.model.Customer;
@@ -18,6 +19,7 @@ import victor.training.clean.domain.insurance.service.QuotationService;
 import java.util.List;
 
 //@Service
+@Slf4j
 @Facade
 @Transactional
 @RequiredArgsConstructor
@@ -46,11 +48,12 @@ public class CustomerFacade {
             throw new IllegalArgumentException("Customer email is already registered");
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
+        customerRepo.save(customer);
+        log.info("Persist the customer");
 
         registerCustomerService.registerCustomer(customer);
 
 
-        customerRepo.save(customer);
         // Heavy business logic
 //        quotationService.quoteCustomer(customer);
 
