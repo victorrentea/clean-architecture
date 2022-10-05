@@ -3,12 +3,12 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.ILdapAdapter;
+import victor.training.clean.domain.service.ExternalUserProvider;
 
 import java.util.List;
 @Service
 @RequiredArgsConstructor
-public class LdapAdapter implements ILdapAdapter {
+public class LdapAdapter implements ExternalUserProvider {
     private final LdapApi ldapApi;
     @Override
     public User retrieveByUsername(String username) {
@@ -20,7 +20,6 @@ public class LdapAdapter implements ILdapAdapter {
 
         LdapUserDto ldapUser = list.get(0);
         String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
-        User user = new User(ldapUser.getUid(), ldapUser.getWorkEmail(), fullName);
-        return user;
+        return new User(ldapUser.getUid(), ldapUser.getWorkEmail(), fullName);
     }
 }
