@@ -10,33 +10,30 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class ArchitectureTest {
-   @Test
-   @DisplayName("daca pica testul asta, suna-ma (TL)+4: 0720019564")
-   public void domain_independent_of_infrastructure() {
-      // daca pica testul asta, suna-ma (TL)+4: 0720019564
-      JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
 
+   private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
+
+   @Test
+   // NOTE: In case you don't understand this test, contact me:
+   // +40720019564 or victorrentea@gmail.com (the anarchitect)
+   public void domain_independent_of_infrastructure() {
       noClasses().that().resideInAPackage("..domain..")
           .should().dependOnClassesThat().resideInAPackage("..infra..")
-          .check(classes);
+          .check(allProjectClasses);
    }
 
    @Test
    public void service_independent_of_facade() {
-      JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
-
       noClasses().that().resideInAPackage("..service..")
           .should().dependOnClassesThat().resideInAPackage("..facade..")
-          .check(classes);
+          .check(allProjectClasses);
    }
 
    @Test
    public void domain_not_exposed_via_controller_methods() {
-      JavaClasses classes = new ClassFileImporter().importPackages("victor.training");
-
       methods().that().areDeclaredInClassesThat().resideInAPackage("..controller..")
           .and().arePublic()
           .should().haveRawReturnType(resideOutsideOfPackage("..entity.."))
-          .check(classes);
+          .check(allProjectClasses);
    }
 }

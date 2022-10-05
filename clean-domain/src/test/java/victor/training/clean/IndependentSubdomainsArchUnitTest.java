@@ -7,33 +7,30 @@ import com.tngtech.archunit.library.dependencies.SliceRule;
 import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition;
 import org.junit.Test;
 
+import java.util.List;
+
 import static com.tngtech.archunit.base.DescribedPredicate.alwaysTrue;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndependentSubdomainsArchUnitTest {
 
+   private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..api.."};
    @Test
    public void independentSubdomains() {
-      JavaClasses classes = new ClassFileImporter().importPackages("victor.training.clean");
+      JavaClasses classes = new ClassFileImporter().importPackages("victor");
 
-      SliceRule sliceRule = SlicesRuleDefinition.slices().matching("..clean.(*).*")
+      SliceRule sliceRule = SlicesRuleDefinition.slices().matching("..clean.(*)..*")
           .should().notDependOnEachOther()
-          .ignoreDependency(alwaysTrue(), resideInAnyPackage("..common..", "..api..")); // allow dependencies to .events
-       // example: service.order should not depend on service.customer
+          .ignoreDependency(alwaysTrue(), resideInAnyPackage(ALLOWED_SHARED_PACKAGES)); // allow dependencies to .events
 
       // progressive strangling the monolith
-      EvaluationResult evaluationResult = sliceRule.evaluate(classes);
-      int violations = evaluationResult.getFailureReport().getDetails().size();
-      System.out.println("Number of violations: " + violations);
+      List<String> violations = sliceRule.evaluate(classes).getFailureReport().getDetails();
 
-      assertThat(violations)
-          .as("In case this test fails and you don't understand why, " +
-              "please contact victorrentea@gmail.com for clarifications")
-          .isLessThan(110);
+      // A: decoupling phase: progressively lower this number:
+      assertThat(violations).hasSizeLessThanOrEqualTo(5);
 
-      sliceRule.check(classes);
-
-
+      // B: maintenance phase: fail test at any deviation
+      // sliceRule.check(classes);
    }
 }
