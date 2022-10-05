@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class CustomerDto {
    Long id;
+   @Size(min = 5)
    String name;
    // @Email
    String email;
