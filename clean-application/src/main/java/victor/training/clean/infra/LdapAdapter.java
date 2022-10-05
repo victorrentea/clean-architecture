@@ -1,11 +1,12 @@
 package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.domain.service.ILdapAdapter;
 
 import java.util.List;
-
+@Service
 @RequiredArgsConstructor
 public class LdapAdapter implements ILdapAdapter {
     private final LdapApi ldapApi;
