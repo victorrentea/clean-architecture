@@ -3,6 +3,7 @@ package victor.training.clean.customer.domain.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import victor.training.clean.insurance.domain.model.InsurancePolicy;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
