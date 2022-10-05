@@ -24,7 +24,7 @@ public class CustomerDto {
       this(customer.getId(),
               customer.getName(),
               customer.getEmail(),
-              customer.getSite().getId(), customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+              customer.getSite().getId(), customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
    }
 
 
