@@ -20,7 +20,8 @@ public class IndependentSubdomainsArchUnitTest {
    public void independentSubdomains() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor");
 
-      SliceRule sliceRule = SlicesRuleDefinition.slices().matching("..clean.(*)..*")
+      SliceRule sliceRule = SlicesRuleDefinition.slices()
+           .matching("victor.training.clean.domain.(*)..*")
           .should().notDependOnEachOther()
           .ignoreDependency(alwaysTrue(), resideInAnyPackage(ALLOWED_SHARED_PACKAGES)); // allow dependencies to .events
 
@@ -28,7 +29,7 @@ public class IndependentSubdomainsArchUnitTest {
       List<String> violations = sliceRule.evaluate(classes).getFailureReport().getDetails();
 
       // A: decoupling phase: progressively lower this number:
-      assertThat(violations).hasSizeLessThanOrEqualTo(5);
+      assertThat(violations).hasSizeLessThanOrEqualTo(0);
 
       // B: maintenance phase: fail test at any deviation
       // sliceRule.check(classes);

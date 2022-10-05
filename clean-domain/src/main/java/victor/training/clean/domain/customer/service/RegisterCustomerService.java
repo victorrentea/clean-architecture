@@ -5,11 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.customer.model.Customer;
 import victor.training.clean.domain.customer.repo.CustomerRepo;
+import victor.training.clean.domain.insurance.api.InsuranceApi;
+import victor.training.clean.domain.insurance.api.dto.QuotationRequest;
+import victor.training.clean.domain.insurance.service.QuotationService;
 
 @Service
-@Slf4j@RequiredArgsConstructor
+@Slf4j
+@RequiredArgsConstructor
 public class RegisterCustomerService {
     private final CustomerRepo customerRepo;
+    private final InsuranceApi insuranceApi;
     ;
     public void registerCustomer(Customer customer) {
         // Heavy business logic
@@ -21,6 +26,9 @@ public class RegisterCustomerService {
         System.out.println("Biz Logic with discount " + discountPercentage);
         // Heavy business logic
         // Heavy business logic
+        QuotationRequest quotationRequest = new QuotationRequest(customer.getId(), customer.getName());
+        insuranceApi.requoteCustomer(quotationRequest);
+
     }
 
 }

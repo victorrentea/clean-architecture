@@ -52,7 +52,7 @@ public class CustomerFacade {
 
         customerRepo.save(customer);
         // Heavy business logic
-        quotationService.quoteCustomer(customer);
+//        quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer.getEmail());
     }

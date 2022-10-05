@@ -15,12 +15,12 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class QuotationService {
    private final InsurancePolicyRepo insurancePolicyRepo;
-   private final CustomerRepo customerRepo;
-   public void quoteCustomer(Customer customer) {
-      log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customer.getId());
+
+   public void quoteCustomer(Long customerId, String customerName) {
+      log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customerId);
       InsurancePolicy policy = new InsurancePolicy();
-      policy.setCustomerId(customer.getId());
-      policy.setCustomerName(customer.getName());
+      policy.setCustomerId(customerId);
+      policy.setCustomerName(customerName);
       policy.setValueInEur(BigDecimal.ONE);
       insurancePolicyRepo.save(policy);
    }
