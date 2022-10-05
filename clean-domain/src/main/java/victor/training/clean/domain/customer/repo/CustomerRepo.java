@@ -1,7 +1,7 @@
-package victor.training.clean.repo;
+package victor.training.clean.domain.customer.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.customer.model.Customer;
 
 public interface CustomerRepo extends JpaRepository<Customer, Long> {
 	Customer getCustomerByEmail(String email);

@@ -3,17 +3,17 @@ package victor.training.clean.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
-import victor.training.clean.domain.service.RegisterCustomerService;
+import victor.training.clean.domain.customer.model.Customer;
+import victor.training.clean.domain.user.model.Email;
+import victor.training.clean.domain.customer.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.repo.CustomerRepo;
+import victor.training.clean.domain.customer.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
-import victor.training.clean.repo.SiteRepo;
-import victor.training.clean.domain.service.QuotationService;
+import victor.training.clean.domain.customer.repo.SiteRepo;
+import victor.training.clean.domain.insurance.service.QuotationService;
 
 import java.util.List;
 

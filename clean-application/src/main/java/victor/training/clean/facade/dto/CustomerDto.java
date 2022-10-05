@@ -2,9 +2,8 @@ package victor.training.clean.facade.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Value;
-import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.customer.model.Customer;
 
 import javax.validation.constraints.Size;
 import java.time.format.DateTimeFormatter;

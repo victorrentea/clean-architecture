@@ -11,12 +11,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Site;
+import victor.training.clean.domain.customer.model.Customer;
+import victor.training.clean.domain.customer.model.Site;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.repo.CustomerRepo;
-import victor.training.clean.repo.SiteRepo;
+import victor.training.clean.domain.customer.repo.CustomerRepo;
+import victor.training.clean.domain.customer.repo.SiteRepo;
 
 import java.time.format.DateTimeFormatter;
 
@@ -86,7 +86,7 @@ public class RegisterCustomerMvcTest {
 
     @Test
     void existingEmailFails() throws Exception {
-        customerRepo.save(new Customer().setEmail("::email::"));
+        customerRepo.save(new Customer("John").setEmail("::email::"));
 
         register(requestDto.build())
                 .andExpect(status().isInternalServerError())

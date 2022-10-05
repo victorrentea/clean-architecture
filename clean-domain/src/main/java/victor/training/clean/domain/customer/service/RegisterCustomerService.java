@@ -1,10 +1,10 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.domain.customer.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.repo.CustomerRepo;
+import victor.training.clean.domain.customer.model.Customer;
+import victor.training.clean.domain.customer.repo.CustomerRepo;
 
 @Service
 @Slf4j@RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package victor.training.clean.domain.model;
+package victor.training.clean.domain.insurance.model;
 
 import lombok.Getter;
 import lombok.Setter;
