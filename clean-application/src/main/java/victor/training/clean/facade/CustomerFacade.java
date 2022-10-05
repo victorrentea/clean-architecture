@@ -36,13 +36,19 @@ public class CustomerFacade {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
         // TODO move mapping logic somewhere else
-       return CustomerDto.builder()
-               .id(customer.getId())
-               .name(customer.getName())
-               .email(customer.getEmail())
-               .siteId(customer.getSite().getId())
-               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-               .build();
+        return new CustomerDto(customer); // #1 in the ctor of my Dto (if I don;t generated it)
+
+//        return mapper.toDto(customer);// #2 Mapper ! careful with automapper
+
+//        return customer.toDto();// #3; never. if you do this, you get a free f2f code review tonight
+
+//       return CustomerDto.builder()
+//               .id(customer.getId())
+//               .name(customer.getName())
+//               .email(customer.getEmail())
+//               .siteId(customer.getSite().getId())
+//               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+//               .build();
     }
 
     public void register(CustomerDto dto) {
