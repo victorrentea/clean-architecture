@@ -4,16 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service // zen garden . peace. harmony, business logic.
 public class UserService {
-   private final LdapAdapter ldapAdapter;
+   private final ILdapAdapter ldapAdapter;
 
    public void importUserFromLdap(String username) {
       User user = ldapAdapter.retrieveByUsername(username);
