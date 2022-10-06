@@ -21,4 +21,11 @@ public class Customer {
 	@ManyToOne
 	private Site site;
 
+	public int getDiscountPercentage() { // = RICH domain model, bits of reusable biz logic
+		int discountPercentage = 3;
+		if (goldMember) {
+			discountPercentage += 1;
+		}
+		return discountPercentage;
+	}
 }
