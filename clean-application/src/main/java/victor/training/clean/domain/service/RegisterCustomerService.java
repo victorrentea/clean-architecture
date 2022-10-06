@@ -3,11 +3,11 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
-import victor.training.clean.repo.CustomerRepo;
+import victor.training.clean.domain.repo.CustomerRepo;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+public class RegisterCustomerService {
     private final CustomerRepo customerRepo;
     public void registerCustomer(Customer customer) {
         // Heavy business logic

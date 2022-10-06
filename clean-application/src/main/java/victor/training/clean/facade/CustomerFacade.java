@@ -5,14 +5,14 @@ import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.repo.CustomerRepo;
+import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
-import victor.training.clean.repo.SiteRepo;
+import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class CustomerFacade {
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
     private final CustomerMapper customerMapper;
-    private final CustomerService customerService;
+    private final RegisterCustomerService registerCustomerService;
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
@@ -55,7 +55,7 @@ public class CustomerFacade {
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
-        customerService.registerCustomer(customer);
+        registerCustomerService.registerCustomer(customer);
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer.getEmail());
