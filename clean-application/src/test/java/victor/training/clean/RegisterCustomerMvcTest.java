@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Site;
 import victor.training.clean.facade.dto.CustomerDto;
+import victor.training.clean.facade.dto.CustomerDto.CustomerDtoBuilder;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.repo.SiteRepo;
@@ -34,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 public class RegisterCustomerMvcTest {
-    private static final ObjectMapper JACKSON = new ObjectMapper();
+    private static final ObjectMapper jackson = new ObjectMapper();
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -43,16 +44,17 @@ public class RegisterCustomerMvcTest {
     private CustomerRepo customerRepo;
     @MockBean
     private EmailSender emailSender;
-    private Site aSite;
-    private CustomerDto.CustomerDtoBuilder requestDto;
+
+    private Site site;
+    private CustomerDtoBuilder requestDto;
 
     @BeforeEach
     public final void before() {
-        aSite = siteRepo.save(new Site());
+        site = siteRepo.save(new Site());
         requestDto = CustomerDto.builder()
                 .email("::email::")
                 .name("::name::")
-                .siteId(aSite.getId());
+                .siteId(site.getId());
     }
 
     @Test
@@ -64,7 +66,7 @@ public class RegisterCustomerMvcTest {
         Customer customer = customerRepo.findAll().get(0);
         assertThat(customer.getName()).isEqualTo("::name::");
         assertThat(customer.getEmail()).isEqualTo("::email::");
-        assertThat(customer.getSite().getId()).isEqualTo(aSite.getId());
+        assertThat(customer.getSite().getId()).isEqualTo(site.getId());
         verify(emailSender).sendEmail(argThat(email -> email.getTo().equals("::email::")));
 
 
@@ -72,7 +74,7 @@ public class RegisterCustomerMvcTest {
         assertThat(responseDto.getId()).isEqualTo(customer.getId());
         assertThat(responseDto.getName()).isEqualTo("::name::");
         assertThat(responseDto.getEmail()).isEqualTo("::email::");
-        assertThat(responseDto.getSiteId()).isEqualTo(aSite.getId());
+        assertThat(responseDto.getSiteId()).isEqualTo(site.getId());
         assertThat(responseDto.getCreationDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
     }
@@ -98,7 +100,7 @@ public class RegisterCustomerMvcTest {
     private ResultActions register(CustomerDto requestDto) throws Exception {
         return mockMvc.perform(post("/customer")
                 .contentType(APPLICATION_JSON)
-                .content(JACKSON.writeValueAsString(requestDto))
+                .content(jackson.writeValueAsString(requestDto))
         );
     }
 
@@ -107,7 +109,7 @@ public class RegisterCustomerMvcTest {
                 .accept(APPLICATION_JSON)
         ).andReturn().getResponse().getContentAsString();
         System.out.println("Got response string: " + responseString);
-        CustomerDto dto = JACKSON.readValue(responseString, CustomerDto.class);
+        CustomerDto dto = jackson.readValue(responseString, CustomerDto.class);
         return dto;
     }
 }
