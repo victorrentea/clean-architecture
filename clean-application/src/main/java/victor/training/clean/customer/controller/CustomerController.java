@@ -1,12 +1,11 @@
-package victor.training.clean.controller;
+package victor.training.clean.customer.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import victor.training.clean.facade.CustomerFacade;
-import victor.training.clean.facade.dto.CustomerDto;
-import victor.training.clean.facade.dto.CustomerSearchCriteria;
-import victor.training.clean.facade.dto.CustomerSearchResult;
+import victor.training.clean.customer.facade.CustomerFacade;
+import victor.training.clean.customer.facade.dto.CustomerDto;
+import victor.training.clean.customer.facade.dto.CustomerSearchCriteria;
+import victor.training.clean.customer.facade.dto.CustomerSearchResult;
 
 import java.util.List;
 

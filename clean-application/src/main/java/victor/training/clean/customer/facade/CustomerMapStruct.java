@@ -1,9 +1,9 @@
-package victor.training.clean.facade;
+package victor.training.clean.customer.facade;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.facade.dto.CustomerDto;
+import victor.training.clean.customer.model.Customer;
+import victor.training.clean.customer.facade.dto.CustomerDto;
 
 @Mapper(componentModel = "spring")
 public interface CustomerMapStruct {

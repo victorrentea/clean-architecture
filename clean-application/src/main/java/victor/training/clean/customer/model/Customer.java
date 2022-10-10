@@ -1,4 +1,4 @@
-package victor.training.clean.domain.model;
+package victor.training.clean.customer.model;
 
 import lombok.*;
 

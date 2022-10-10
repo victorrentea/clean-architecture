@@ -1,4 +1,4 @@
-package victor.training.clean.facade.dto;
+package victor.training.clean.customer.facade.dto;
 
 // sent as JSON
 public class CustomerSearchResult {

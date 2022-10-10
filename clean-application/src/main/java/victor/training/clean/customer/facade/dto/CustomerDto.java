@@ -1,4 +1,4 @@
-package victor.training.clean.facade.dto;
+package victor.training.clean.customer.facade.dto;
 
 import lombok.Builder;
 import lombok.Value;

@@ -1,9 +1,9 @@
-package victor.training.clean.repo;
+package victor.training.clean.customer.repo;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import victor.training.clean.facade.dto.CustomerSearchCriteria;
-import victor.training.clean.facade.dto.CustomerSearchResult;
+import victor.training.clean.customer.facade.dto.CustomerSearchCriteria;
+import victor.training.clean.customer.facade.dto.CustomerSearchResult;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

@@ -1,15 +1,10 @@
-package victor.training.clean.controller;
+package victor.training.clean.customer.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.facade.dto.CustomerDto;
-import victor.training.clean.facade.dto.CustomerSearchCriteria;
-import victor.training.clean.facade.dto.CustomerSearchResult;
-
-import java.util.List;
+import victor.training.clean.customer.model.Customer;
+import victor.training.clean.customer.repo.CustomerRepo;
 
 @RestController
 @RequestMapping("customerBAD")
