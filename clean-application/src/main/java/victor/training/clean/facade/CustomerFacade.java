@@ -19,7 +19,7 @@ import java.util.List;
 
 //@Service
 @Facade
-@Transactional
+@Transactional // probably too broad for high-TPS systems
 @RequiredArgsConstructor
 public class CustomerFacade {
     private final CustomerRepo customerRepo;
