@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import victor.training.clean.domain.service.UserService;
+//import springfox.documentation.swagger2.annotations.EnableSwagger2;
+//import victor.training.clean.domain.service.UserService;
 
-@EnableSwagger2
+//@EnableSwagger2
 @EnableAsync
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -30,10 +30,10 @@ public class CleanApplication {
       SpringApplication.run(CleanApplication.class, args);
    }
 
-   public void someUsage() {
-      UserService userService = null;
-      userService.importUserFromLdap("a");
-   }
+//   public void someUsage() {
+//      UserService userService = null;
+//      userService.importUserFromLdap("a");
+//   }
 
 }
 

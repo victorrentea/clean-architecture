@@ -1,5 +1,7 @@
 package victor.training.clean.facade.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 // sent as JSON
 public class CustomerSearchResult {
    private final long id;

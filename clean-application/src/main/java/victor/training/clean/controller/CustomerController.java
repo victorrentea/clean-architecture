@@ -1,5 +1,6 @@
 package victor.training.clean.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class CustomerController {
       return customerFacade.findById(id);
    }
 
+   @Operation(description = "Customer Search")
    @PostMapping("search")
    public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
       return customerFacade.search(searchCriteria);
