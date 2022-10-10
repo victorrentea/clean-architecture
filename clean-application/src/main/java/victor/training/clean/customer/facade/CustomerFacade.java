@@ -8,6 +8,7 @@ import victor.training.clean.customer.facade.dto.CustomerDto;
 import victor.training.clean.customer.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.customer.facade.dto.CustomerSearchResult;
 import victor.training.clean.customer.model.Email;
+import victor.training.clean.customer.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.customer.repo.CustomerRepo;
 import victor.training.clean.customer.repo.CustomerSearchRepo;
@@ -27,6 +28,7 @@ public class CustomerFacade {
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
+    private final RegisterCustomerService registerCustomerService;
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
@@ -36,6 +38,8 @@ public class CustomerFacade {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
         // TODO move mapping logic somewhere else
+//        return new CustomerDto(customer);//ok
+//        return customer.toDto(); // do not pollute Customer class Entity with Dto !
        return CustomerDto.builder()
                .id(customer.getId())
                .name(customer.getName())
@@ -51,29 +55,7 @@ public class CustomerFacade {
         customer.setName(dto.getName());
         customer.setSite(siteRepo.getById(dto.getSiteId()));
 
-        // TODO experiment all the ways to do validation
-        if (customer.getName().length() < 5) {
-            throw new IllegalArgumentException("Name too short");
-        }
-        if (customerRepo.existsByEmail(customer.getEmail())) {
-            throw new IllegalArgumentException("Customer email is already registered");
-            // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-        }
-
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
-        System.out.println("Biz Logic with discount " + discountPercentage);
-        // Heavy business logic
-        // Heavy business logic
-        customerRepo.save(customer);
-        // Heavy business logic
-        quotationService.quoteCustomer(customer);
+        registerCustomerService.register(customer);
 
         sendRegistrationEmail(customer.getEmail());
     }

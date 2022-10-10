@@ -29,9 +29,9 @@ public class IndependentSubdomainsArchUnitTest {
 
       // A: decoupling phase: progressively lower this number:
 
-//      assertThat(violations).hasSizeLessThanOrEqualTo(5);
+      assertThat(violations).hasSizeLessThanOrEqualTo(2);
 
       // B: maintenance phase: fail test at any deviation
-       sliceRule.check(classes);
+//       sliceRule.check(classes);
    }
 }
