@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -14,7 +15,6 @@ import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
@@ -27,6 +27,7 @@ public class CustomerFacade {
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
+    private final RegisterCustomerService registerCustomerService;
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
@@ -36,13 +37,10 @@ public class CustomerFacade {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
         // TODO move mapping logic somewhere else
-       return CustomerDto.builder()
-               .id(customer.getId())
-               .name(customer.getName())
-               .email(customer.getEmail())
-               .siteId(customer.getSite().getId())
-               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-               .build();
+        // #1 in mapper (scris de mana, automapper)
+        // #2 in ctor/fct static in DTO daca nu e generat
+//       return customer.toDto(); + extension
+        return CustomerDto.fromEntity(customer);
     }
 
     public void register(CustomerDto dto) {
@@ -55,24 +53,9 @@ public class CustomerFacade {
         if (customer.getName().length() < 5) {
             throw new IllegalArgumentException("Name too short");
         }
-        if (customerRepo.existsByEmail(customer.getEmail())) {
-            throw new IllegalArgumentException("Customer email is already registered");
-            // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-        }
 
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
-        System.out.println("Biz Logic with discount " + discountPercentage);
-        // Heavy business logic
-        // Heavy business logic
-        customerRepo.save(customer);
-        // Heavy business logic
+        registerCustomerService.register(customer);
+
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer.getEmail());
@@ -88,3 +71,15 @@ public class CustomerFacade {
         emailSender.sendEmail(email);
     }
 }
+
+//static class CustomerExtensions {
+//    public static CustomerDto toDto(this Customer customer) {
+//        return CustomerDto.builder()
+//                .id(customer.getId())
+//                .name(customer.getName())
+//                .email(customer.getEmail())
+//                .siteId(customer.getSite().getId())
+//                .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+//                .build();
+//    }
+//}

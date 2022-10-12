@@ -2,6 +2,7 @@ package victor.training.clean.domain.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import victor.training.clean.facade.dto.CustomerDto;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,4 +23,13 @@ public class Customer {
 	@ManyToOne
 	private Site site;
 
+//    public CustomerDto toDto() {
+//		return CustomerDto.builder()
+//				.id(getId())
+//				.name(getName())
+//				.email(getEmail())
+//				.siteId(getSite().getId())
+//				.creationDateStr(getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+//				.build();
+//    }
 }
