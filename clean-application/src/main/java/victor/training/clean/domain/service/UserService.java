@@ -3,39 +3,28 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
+import victor.training.clean.domain.model.User;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-   private final LdapApi ldapApi;
+   private final ILdapServiceAdapter adapter;
 
    public void importUserFromLdap(String username) {
-      List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
+      User user = adapter.retrieveUserByUsername(username);
 
-      if (list.size() != 1) {
-         throw new IllegalArgumentException("There is no single user matching username " + username);
+      // 60 teste
+      if (user.getEmail().isPresent()) {
+         log.debug("Send welcome email to  " + user.getEmail().get());
       }
+      // 70 de linii mai jos cineva face un apel
 
-      LdapUserDto ldapUser = list.get(0);
+      log.debug("Insert user in my database: " + user.getUsername());
 
-      deepDomainLogic(ldapUser);
-
+      log.debug("More business logic with " + user.getCorporateName() +
+                " of id " + user.getUsername().toLowerCase());
    }
 
-   private void deepDomainLogic(LdapUserDto ldapUser) {
-      if (ldapUser.getWorkEmail()!=null) {
-         log.debug("Send welcome email to  " + ldapUser.getWorkEmail());
-      }
-
-      log.debug("Insert user in my database: " + ldapUser.getUid());
-
-      String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
-      log.debug("More business logic with " + fullName + " of id " + ldapUser.getUid().toLowerCase());
-   }
 
 }
