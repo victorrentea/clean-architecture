@@ -1,7 +1,9 @@
 package victor.training.clean.facade;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import victor.training.clean.common.Facade;
 import victor.training.clean.customer.domain.model.Customer;
 import victor.training.clean.insurance.domain.service.QuotationService;
@@ -35,18 +37,26 @@ public class CustomerFacade {
       return new CustomerDto(customer);
    }
 
+   @Autowired
+   private TransactionTemplate transactionTemplate;
+
+   //   @Transactional // instead of AOP
    public void register(CustomerDto dto) {
-      Customer customer = toEntity(dto);
 
-      if (customerRepo.existsByEmail(customer.getEmail())) {
-         throw new IllegalArgumentException("Customer email is already registered");
-//         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-      }
+      transactionTemplate.executeWithoutResult(s -> {
 
-      registerCustomerService.registerCustomer(customer);
+         Customer customer = toEntity(dto);
 
-      sendRegistrationEmail(customer.getEmail());
-      System.out.println("gata");
+         if (customerRepo.existsByEmail(customer.getEmail())) {
+            throw new IllegalArgumentException("Customer email is already registered");
+   //         throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
+         }
+
+         registerCustomerService.registerCustomer(customer);
+
+         sendRegistrationEmail(customer.getEmail());
+         System.out.println("gata");
+      });
    }
 
    private final QuotationService quotationService;
