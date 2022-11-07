@@ -2,6 +2,7 @@ package victor.training.clean;
 
 import com.tngtech.archunit.core.domain.*;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -15,7 +16,7 @@ public class ArchitectureTest {
 
     @Test
     // NOTE: In case you don't understand this test, contact me:
-    // +40720019564 or victorrentea@gmail.com (the anarchitect)
+    // +40720019565 or victorrentea@gmail.com (the anarchitect)
     public void domain_independent_of_infrastructure() {
         noClasses().that().resideInAPackage("..domain..")
                 .should().dependOnClassesThat().resideInAPackage("..infra..")
