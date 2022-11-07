@@ -1,7 +1,5 @@
 package victor.training.clean.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -20,7 +18,6 @@ public class Customer {
 	private String email;
 	private LocalDate creationDate = LocalDate.now();
 	private boolean goldMember;
-//	List<Childern>
 	@ManyToOne
 	private Site site;
 
