@@ -14,6 +14,7 @@ public class UserService {
    public void importUserFromLdap(String username) {
       User user = adapter.fetchUser(username);
 //      LdapUserDto
+//      CustomerDto
       if (user.getWorkEmail().isPresent()) {
          log.debug("Send welcome email to  " + user.getWorkEmail().get());
       }

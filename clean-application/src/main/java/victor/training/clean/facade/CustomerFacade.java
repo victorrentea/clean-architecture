@@ -2,6 +2,8 @@ package victor.training.clean.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
@@ -21,6 +23,7 @@ import java.util.List;
 @Facade
 @Transactional // probably too broad for high-TPS systems
 @RequiredArgsConstructor
+@RestController
 public class CustomerFacade {
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
@@ -31,7 +34,8 @@ public class CustomerFacade {
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
-
+//    @PreAuthorized
+    @GetMapping("{id}")
     public CustomerDto findById(long customerId) {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
@@ -44,6 +48,7 @@ public class CustomerFacade {
                .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                .build();
     }
+
 
     public void register(CustomerDto dto) {
         Customer customer = new Customer();

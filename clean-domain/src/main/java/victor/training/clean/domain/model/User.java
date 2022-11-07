@@ -3,6 +3,8 @@ package victor.training.clean.domain.model;
 import lombok.NonNull;
 import lombok.Value;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -11,7 +13,7 @@ import static java.util.Objects.requireNonNull;
 // - immutable
 // - no persistent identity (vs Entity PK)
 // - valid in my Domain
-// - can contain logic
+// - can contain **PURE FUNCTION** logic
 // - hash/eq involves all fields
 @Value
 public class User {
@@ -19,6 +21,23 @@ public class User {
     String username;
     String workEmail;
     String fullName;
+//    Customer customer; // descouraged to have VO -> Entities.
+
+    // side-effecting function < NOT ALLOWED in a VO
+//    public void changeAnything() {
+////        username = "new";
+//        customer.setSite(null);
+//    }
+
+//    @Json...
+//    @NotNull
+//    @Pattern()
+//    private String fName;
+//    private String lName;
+
+//    public String getFullName() {
+//        return fName + " " + lName.toUpperCase();
+//    }
 
 //    public User(String username, String workEmail, String fullName) {
 //        this.username = requireNonNull(username);
