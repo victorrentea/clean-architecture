@@ -15,39 +15,44 @@ import static java.util.Objects.requireNonNull;
 // - valid in my Domain
 // - can contain **PURE FUNCTION** logic
 // - hash/eq involves all fields
-@Value
-public class User {
-    @NonNull
-    String username;
-    String workEmail;
-    String fullName;
-//    Customer customer; // descouraged to have VO -> Entities.
-
-    // side-effecting function < NOT ALLOWED in a VO
-//    public void changeAnything() {
-////        username = "new";
-//        customer.setSite(null);
+//@Value
+//public class User {
+//    @NonNull
+//    String username;
+//    String workEmail;
+//    String fullName;
+////    Customer customer; // descouraged to have VO -> Entities.
+//
+//    // side-effecting function < NOT ALLOWED in a VO
+////    public void changeAnything() {
+//////        username = "new";
+////        customer.setSite(null);
+////    }
+//
+////    @Json...
+////    @NotNull
+////    @Pattern()
+////    private String fName;
+////    private String lName;
+//
+////    public String getFullName() {
+////        return fName + " " + lName.toUpperCase();
+////    }
+//
+////    public User(String username, String workEmail, String fullName) {
+////        this.username = requireNonNull(username);
+////        this.workEmail = workEmail;
+////        this.fullName = fullName;
+////    }
+//
+//    public Optional<String> getWorkEmail() {
+//        return Optional.ofNullable(workEmail);
 //    }
+//}
 
-//    @Json...
-//    @NotNull
-//    @Pattern()
-//    private String fName;
-//    private String lName;
-
-//    public String getFullName() {
-//        return fName + " " + lName.toUpperCase();
-//    }
-
-//    public User(String username, String workEmail, String fullName) {
-//        this.username = requireNonNull(username);
-//        this.workEmail = workEmail;
-//        this.fullName = fullName;
-//    }
-
-    public Optional<String> getWorkEmail() {
-        return Optional.ofNullable(workEmail);
-    }
+public record User(String username,
+            Optional<String> workEmail,
+            String fullname) {
 }
 
 

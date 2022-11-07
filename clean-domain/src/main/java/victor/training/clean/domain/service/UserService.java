@@ -15,15 +15,15 @@ public class UserService {
       User user = adapter.fetchUser(username);
 //      LdapUserDto
 //      CustomerDto
-      if (user.getWorkEmail().isPresent()) {
-         log.debug("Send welcome email to  " + user.getWorkEmail().get());
+      if (user.workEmail().isPresent()) {
+         log.debug("Send welcome email to  " + user.workEmail().get());
       }
 
-      log.debug("Insert user in my database: " + user.getUsername());
+      log.debug("Insert user in my database: " + user.username());
 
 
-      log.debug("More business logic with " + user.getFullName() +
-                " of id " + user.getUsername().toLowerCase());
+      log.debug("More business logic with " + user.fullname() +
+                " of id " + user.username().toLowerCase());
 
    }
 

@@ -8,6 +8,7 @@ import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @Adapter
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class UserProviderAdapter implements IUserProviderAdapter {
         LdapUserDto ldapUser = list.get(0);
         String fullName = ldapUser.getFname() + " " +
                           ldapUser.getLname().toUpperCase();
-        User user = new User(ldapUser.getUid(), ldapUser.getWorkEmail(), fullName);
+        User user = new User(ldapUser.getUid(), Optional.of(ldapUser.getWorkEmail()), fullName);
         return user;
     }
 }
