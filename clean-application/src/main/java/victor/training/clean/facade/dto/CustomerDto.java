@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import victor.training.clean.domain.model.Customer;
 
+import javax.validation.constraints.Size;
 import java.time.format.DateTimeFormatter;
 
 @Builder
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 public class CustomerDto {
    Long id;
    @Schema(description = "Name of the customer")
+   @Size(min = 5)
    String name;
    String email;
    Long siteId;

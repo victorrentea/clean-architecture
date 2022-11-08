@@ -7,7 +7,7 @@ import victor.training.clean.domain.repo.CustomerRepo;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+public class RegisterCustomerService { // action not noun (breaking a norm in OOP)
     private final CustomerRepo customerRepo;
 
     public void register(Customer customer) {
@@ -29,4 +29,10 @@ public class CustomerService {
        customerRepo.save(customer);
         // Heavy business logic
     }
+
+    // NO = it's garbate
+//    public List<victor.training.clean.facade.dto.CustomerSearchResult> search(victor.training.clean.facade.dto.CustomerSearchCriteria searchCriteria) {
+//        return customerRepo.search(searchCriteria);
+//
+//    }
 }

@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Data // Avoid on @Entity
@@ -21,6 +20,13 @@ public class Customer {
 	private boolean goldMember;
 	@ManyToOne
 	private Site site;
+
+	public Customer(String name) {
+		if (name.length() < 5) {
+			throw new IllegalArgumentException();
+		}
+		this.name = name;
+	}
 
 	public int getDiscountPercentage() {
 		int discountPercentage = 3;

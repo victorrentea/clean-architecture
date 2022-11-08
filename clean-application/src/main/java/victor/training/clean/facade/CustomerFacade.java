@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -32,10 +31,11 @@ public class CustomerFacade {
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
     private final CustomerMapper customerMapper;
-    private final CustomerService customerService;
+    private final RegisterCustomerService registerCustomerService;
     private final NotificationService notificationService;
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+//        return customerService.search(searchCriteria);
         return customerSearchRepo.search(searchCriteria);
     }
 //    @PreAuthorized
@@ -55,16 +55,13 @@ public class CustomerFacade {
     public void register(CustomerDto dto) {
         Customer customer = customerMapper.toEntity(dto);
 
-        // TODO experiment all the ways to do validation
-        if (customer.getName().length() < 5) {
-            throw new IllegalArgumentException("Name too short");
-        }
+        //validation in DB
         if (customerRepo.existsByEmail(customer.getEmail())) {
             throw new IllegalArgumentException("Customer email is already registered");
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
-        customerService.register(customer);
+        registerCustomerService.register(customer);
         quotationService.quoteCustomer(customer);
         notificationService.sendRegistrationEmail(customer.getEmail());
     }

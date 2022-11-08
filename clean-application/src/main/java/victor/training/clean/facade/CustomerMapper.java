@@ -11,9 +11,8 @@ import victor.training.clean.facade.dto.CustomerDto;
 public class CustomerMapper {
     private final SiteRepo siteRepo;
     Customer toEntity(CustomerDto dto) {
-        Customer customer = new Customer();
+        Customer customer = new Customer(dto.getName());
         customer.setEmail(dto.getEmail());
-        customer.setName(dto.getName());
         customer.setSite(siteRepo.getById(dto.getSiteId()));
         return customer;
     }

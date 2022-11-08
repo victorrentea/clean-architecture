@@ -88,7 +88,7 @@ public class RegisterCustomerMvcTest {
 
     @Test
     void existingEmailFails() throws Exception {
-        customerRepo.save(new Customer().setEmail("::email::"));
+        customerRepo.save(new Customer(dto.getName()).setEmail("::email::"));
 
         register(requestDto.build())
                 .andExpect(status().isInternalServerError())
