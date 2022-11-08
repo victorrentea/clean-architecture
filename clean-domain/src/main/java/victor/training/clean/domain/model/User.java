@@ -53,6 +53,10 @@ import static java.util.Objects.requireNonNull;
 public record User(String username,
             Optional<String> workEmail,
             String fullname) {
+
+//    public void method() {
+//        work
+//    }
 }
 
 

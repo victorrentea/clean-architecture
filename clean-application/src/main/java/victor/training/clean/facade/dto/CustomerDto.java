@@ -19,4 +19,12 @@ public class CustomerDto {
    Long siteId;
    String creationDateStr;
 
+   public CustomerDto(Customer customer) {
+              id=customer.getId();
+              name=customer.getName();
+              email=customer.getEmail();
+              siteId=customer.getSite().getId();
+              creationDateStr=customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+   }
+
 }
