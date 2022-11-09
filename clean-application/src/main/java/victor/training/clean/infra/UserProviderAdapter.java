@@ -3,16 +3,14 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.IUserProviderAdapter;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.ExternalUserService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Adapter
 @RequiredArgsConstructor
-public class UserProviderAdapter implements IUserProviderAdapter {
+public class UserProviderAdapter implements ExternalUserService {
     private final LdapApi ldapApi;
 
     @Override

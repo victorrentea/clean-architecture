@@ -9,7 +9,7 @@ import victor.training.clean.domain.model.User;
 @Slf4j
 @Service // here, there shall be peace. harmony. zen. ying and yang. Biz Logic ! in a clean, friendly tested env.
 public class UserService {
-   private final IUserProviderAdapter adapter;
+   private final ExternalUserService adapter;
 
    public void importUserFromLdap(String username) {
       User user = adapter.fetchUser(username);
