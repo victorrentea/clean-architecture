@@ -29,7 +29,7 @@ public class CustomerController {
    }
 
    @PostMapping("")
-   public void register(@RequestBody CustomerDto customerDto) {
+   public void register(@RequestBody @Validated CustomerDto customerDto) {
       customerFacade.register(customerDto);
    }
 }

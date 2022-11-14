@@ -45,6 +45,10 @@ public class CustomerFacade {
                .build();
     }
 
+    public void customerGetsMarried(Customer customer, String lastNameOfHim) {
+        customer.setName(lastNameOfHim);
+    }
+
     public void register(CustomerDto dto) {
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
