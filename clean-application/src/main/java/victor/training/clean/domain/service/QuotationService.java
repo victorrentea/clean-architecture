@@ -25,7 +25,7 @@ public class QuotationService {
 
    public void printPolicy(long policyId) {
       InsurancePolicy policy = insurancePolicyRepo.findById(policyId).orElseThrow();
-      String customerName = policy.getCustomer().getName();
+      String customerName = policy.getCustomer().getName().getName();
       System.out.println("Insurange Policy for " + customerName);
    }
 }

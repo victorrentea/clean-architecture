@@ -3,7 +3,6 @@ package victor.training.clean.domain.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import victor.training.clean.domain.model.ValidCustomerName.MyValidatorDontDoIt;
 import victor.training.clean.domain.repo.CustomerRepo;
 
 import javax.validation.Constraint;

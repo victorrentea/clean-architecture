@@ -12,29 +12,6 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 
-@Embeddable
-@EqualsAndHashCode
-class CustomerName {// a value object wrapping around just the name
-
-//	@NotNull
-//	@NotBlank//(groups = ActivatedCustomerState.class)
-//	@Size(min = 3)
-	@ValidCustomerName
-	private String name;
-
-	public CustomerName(String name) {
-		if (StringUtils.isBlank(name) || name.length() < 3) {
-			throw new IllegalArgumentException("Customer name is not valid");
-		}
-		this.name = name;
-//		validate(this); // javax validator magically injected
-	}
-
-	public String getName() {
-		return name;
-	}
-}
-
 @Entity
 @Data // Avoid on @Entity
 public class Customer {

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.CustomerName;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
@@ -38,27 +39,24 @@ public class CustomerFacade {
         // TODO move mapping logic somewhere else
        return CustomerDto.builder()
                .id(customer.getId())
-               .name(customer.getName())
+               .name(customer.getName().getName())
                .email(customer.getEmail())
                .siteId(customer.getSite().getId())
                .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                .build();
     }
 
-    public void customerGetsMarried(Customer customer, String lastNameOfHim) {
-        customer.setName(lastNameOfHim);
-    }
+//    public void customerGetsMarried(Customer customer, String lastNameOfHim) {
+//        customer.setName(lastNameOfHim);
+//    }
 
     public void register(CustomerDto dto) {
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
-        customer.setName(dto.getName());
+        customer.setName(new CustomerName(dto.getName()));
         customer.setSite(siteRepo.getById(dto.getSiteId()));
 
         // TODO experiment all the ways to do validation
-        if (customer.getName().length() < 5) {
-            throw new IllegalArgumentException("Name too short");
-        }
         if (customerRepo.existsByEmail(customer.getEmail())) {
             throw new IllegalArgumentException("Customer email is already registered");
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);

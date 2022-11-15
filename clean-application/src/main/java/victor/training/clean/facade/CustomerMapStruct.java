@@ -9,5 +9,6 @@ import victor.training.clean.facade.dto.CustomerDto;
 public interface CustomerMapStruct {
     @Mapping(target = "creationDateStr", source = "creationDate", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "siteId", source = "site.id")
-    CustomerDto toDto(Customer customer);
+    @Mapping(target = "name", source = "name.name")
+    CustomerDto intoDto(Customer customer);
 }
