@@ -6,7 +6,7 @@ import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.CustomerName;
 import victor.training.clean.domain.model.Email;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -28,7 +28,7 @@ public class CustomerApplicationService {
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
-    private final CustomerService customerService;
+    private final RegisterCustomerService registerCustomer;
 
 //    @GetMapping("{id}") // merging controller with the first class with logic beanth it
 //    is only doable if you expose a single CHANNEL (eg REST)
@@ -69,9 +69,9 @@ public class CustomerApplicationService {
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
-        customerService.register(customer);
+        registerCustomer.register(customer);
 
-        customerRepo.save(customer);
+
         // Heavy business logic
         quotationService.quoteCustomer(customer);
 

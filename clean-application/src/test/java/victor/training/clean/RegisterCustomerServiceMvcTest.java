@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("db-mem")
 @AutoConfigureMockMvc
 @Transactional
-public class RegisterCustomerMvcTest {
+public class RegisterCustomerServiceMvcTest {
     private static final ObjectMapper jackson = new ObjectMapper();
     @Autowired
     private MockMvc mockMvc;

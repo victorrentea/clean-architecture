@@ -1,14 +1,18 @@
 package victor.training.clean.domain.service;
 
-import com.sun.xml.bind.XmlAccessorFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import victor.training.clean.DDD.DomainService;
 import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.repo.CustomerRepo;
 
-@Service
+
+@DomainService
 @RequiredArgsConstructor
-public class CustomerService {
+public class RegisterCustomerService { // action not a noun! FEATURE. pure behavior.
+  // removing the "Service" suffix hurts code navigability
+  private final CustomerRepo customerRepo;
   public void register(Customer customer) {
+//    CustomerDto // my API
     // Heavy business logic
     // Heavy business logic
     // Heavy business logic
@@ -16,6 +20,8 @@ public class CustomerService {
     // Heavy business logic
     // Heavy business logic
     // Heavy business logic
+//    new CustomerHistory().setCustomer(customer);
+
     // Heavy business logic
     // Heavy business logic
     // Heavy business logic
@@ -25,5 +31,10 @@ public class CustomerService {
     System.out.println("Biz Logic with discount " + discountPercentage);
     // Heavy business logic
     // Heavy business logic
+
+//    customerHistoryRepo.save(customer);
+    customerRepo.save(customer);
+
+    Long newId = customer.getId();
   }
 }
