@@ -6,6 +6,7 @@ import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.CustomerName;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.service.CustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -15,21 +16,28 @@ import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
 @Facade
 @Transactional // probably too broad for high-TPS systems
 @RequiredArgsConstructor
-public class CustomerFacade {
+public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
+    private final CustomerService customerService;
 
+//    @GetMapping("{id}") // merging controller with the first class with logic beanth it
+//    is only doable if you expose a single CHANNEL (eg REST)
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+        // to search there were 2 optiojns:
+        // 1) fetch Customer Entity from DB
+        // 2) (performance) only fetch 2 string that you display, no 20 filds + 2 JOINs
+        // #2 wins = "Use-Case Optimized Query" - for READING dta only
+
         return customerSearchRepo.search(searchCriteria);
     }
 
@@ -37,13 +45,11 @@ public class CustomerFacade {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
         // TODO move mapping logic somewhere else
-       return CustomerDto.builder()
-               .id(customer.getId())
-               .name(customer.getName().getName())
-               .email(customer.getEmail())
-               .siteId(customer.getSite().getId())
-               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-               .build();
+        // - manual mapper
+        // - automapper (mapStruct)
+        // - inside the Dto
+//        return customer.toDto();// NEVER: polluting entity with presentation - API model
+       return new CustomerDto(customer); // ok for API models to depend on Domain objects !!!
     }
 
 //    public void customerGetsMarried(Customer customer, String lastNameOfHim) {
@@ -51,34 +57,28 @@ public class CustomerFacade {
 //    }
 
     public void register(CustomerDto dto) {
+        //mapping : if big> move out
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
         customer.setName(new CustomerName(dto.getName()));
         customer.setSite(siteRepo.getById(dto.getSiteId()));
 
-        // TODO experiment all the ways to do validation
+        // validation
         if (customerRepo.existsByEmail(customer.getEmail())) {
             throw new IllegalArgumentException("Customer email is already registered");
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
-        System.out.println("Biz Logic with discount " + discountPercentage);
-        // Heavy business logic
-        // Heavy business logic
+        customerService.register(customer);
+
         customerRepo.save(customer);
         // Heavy business logic
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer.getEmail());
     }
+
+
 
     private void sendRegistrationEmail(String emailAddress) {
         System.out.println("Sending activation link via email to " + emailAddress);

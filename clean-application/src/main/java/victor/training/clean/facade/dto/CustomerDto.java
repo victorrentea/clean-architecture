@@ -2,6 +2,7 @@ package victor.training.clean.facade.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -15,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 
 @Builder
 @Value
+@AllArgsConstructor
 public class CustomerDto {
    Long id;
    @Schema(description = "Name of the customer")
@@ -27,5 +29,15 @@ public class CustomerDto {
    String email;
    Long siteId;
    String creationDateStr;
+
+
+   public CustomerDto(Customer entity) {
+
+      id=entity.getId();
+      name=entity.getName().getName();
+      email=entity.getEmail();
+      siteId=entity.getSite().getId();
+      creationDateStr=entity.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+   }
 
 }

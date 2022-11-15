@@ -4,9 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 
@@ -33,4 +31,12 @@ public class Customer {
 	@ManyToOne
 	private Site site;
 
+  public int getDiscountPercentage() {
+	  // even in non-official DDD projects <7 LOC, offcial 50 LOC, this is good to do. OOP.
+      int discountPercentage = 3;
+	  if (goldMember) {
+          discountPercentage += 1;
+      }
+      return discountPercentage;
+  }
 }

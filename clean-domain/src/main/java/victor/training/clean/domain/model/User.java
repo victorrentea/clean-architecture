@@ -6,6 +6,7 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
+// TESTING is MUCH easier here
 public class User {
   private final String username;
   private final String email;
