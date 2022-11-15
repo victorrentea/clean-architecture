@@ -17,7 +17,7 @@ public class UserService {
       if (user.getEmail().isPresent()) { // Replace with Optional<>
          log.debug("Send welcome email to  " + user.getEmail().get());
       }
-//      LdapUserDto wrong; !!
+      LdapUserDto wrong; // not compile
 
       //      System.out.println(user.getEmail().toLowerCase());// does not compile!
 

@@ -1,7 +1,7 @@
 package victor.training.clean.domain.model;
 
 import lombok.EqualsAndHashCode;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.Embeddable;
 

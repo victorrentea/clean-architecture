@@ -1,8 +1,6 @@
 package victor.training.clean.domain.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
