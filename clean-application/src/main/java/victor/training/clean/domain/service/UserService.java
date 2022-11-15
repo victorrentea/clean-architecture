@@ -3,6 +3,7 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
@@ -23,30 +24,35 @@ public class UserService {
 
       LdapUserDto ldapUser = list.get(0);
 
-      deepDomainLogic(ldapUser);
-
-   }
-
-   private void deepDomainLogic(LdapUserDto ldapUser) {
-      if (ldapUser.getWorkEmail()!=null) { // Replace with Optional<>
-         log.debug("Send welcome email to  " + ldapUser.getWorkEmail());
-      }
-
-//      System.out.println(ldapUser.getWorkEmail().toLowerCase());
-
-      log.debug("Insert user in my database: " + ldapUser.getUid()); // replace with username
-
-
       String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase(); // not here. The way i se the user's name
+      User user = new User(ldapUser.getUid()==null?"N/A": ldapUser.getUid(), ldapUser.getWorkEmail(), fullName);
 
-      log.debug("More business logic with " + fullName + " of id " + ldapUser.getUid().toLowerCase()); // reject username=null
-      innocentFix(ldapUser); // temporal coupling
+      deepDomainLogic(user);
+
    }
 
-   private void innocentFix(LdapUserDto ldapUser) { // setters. mutable data.
-      if (ldapUser.getUid() == null) {
-         ldapUser.setUid("N/A"); // dirty fix should be made earlier
+   private void deepDomainLogic(User user) {
+      if (user.getEmail().isPresent()) { // Replace with Optional<>
+         log.debug("Send welcome email to  " + user.getEmail().get());
       }
+
+//      System.out.println(user.getEmail().toLowerCase());// does not compile!
+
+      // imagine complex logic
+      // imagine complex logic
+      // imagine complex logic
+      // imagine complex logic
+      log.debug("Insert user in my database: " + user.getUsername()); // replace with username
+
+
+      log.debug("More business logic with " + user.getFullName() + " of id " + user.getUsername().toLowerCase()); // reject username=null
+//      innocentFix(user); // temporal coupling
    }
+
+//   private void innocentFix(LdapUserDto ldapUser) { // setters. mutable data.
+//      if (ldapUser.getUid() == null) {
+//         ldapUser.setUid("N/A"); // dirty fix should be made earlier
+//      }
+//   }
 
 }
