@@ -4,13 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApiAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-   private final LdapApiAdapter adapter;
+   private final ExternalUserProvider adapter;
 
    public void importUserFromLdap(String username) {
       User user = adapter.fetchByUsername(username);
@@ -18,6 +17,7 @@ public class UserService {
       if (user.getEmail().isPresent()) { // Replace with Optional<>
          log.debug("Send welcome email to  " + user.getEmail().get());
       }
+//      LdapUserDto wrong; !!
 
       //      System.out.println(user.getEmail().toLowerCase());// does not compile!
 
