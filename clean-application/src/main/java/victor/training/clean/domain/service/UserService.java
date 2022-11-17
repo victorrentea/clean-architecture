@@ -24,25 +24,27 @@ public class UserService {
 
       LdapUserDto dto = list.get(0);
 
-      deepDomainLogic(dto);
+      String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+      User user = new User(dto.getUid(), dto.getWorkEmail(), fullName);
+
+      deepDomainLogic(user);
 
    }
 
-   private void deepDomainLogic(LdapUserDto ldapUser) { //smaller object more tailored to my need
-      if (ldapUser.getWorkEmail()!=null) {
-         log.debug("Send welcome email to  " + ldapUser.getWorkEmail());
+   private void deepDomainLogic(User ldapUser) { //smaller object more tailored to my need
+      if (ldapUser.getEmail().isPresent()) {
+         log.debug("Send welcome email to  " + ldapUser.getEmail());
       }
-      ldapUser.getWorkEmail().toLowerCase(); // NPE : solution: Optional<> getters
+//      ldapUser.getEmail().toLowerCase(); // NPE : solution: Optional<> getters
 
-      ldapUser.setUid("N/A"); // OMG mutable!
+//      ldapUser.setUid("N/A"); // OMG mutable!
 
 //      ldapUser.logic();// NOT possible because ldapUser is generated from an OpenAPI
 
-      log.debug("Insert user in my database: " + ldapUser.getUid()); // rename "username"
+      log.debug("Insert user in my database: " + ldapUser.getUsername()); // rename "username"
 
-      String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
       // my domain only needs fullName not fName and lName
-      log.debug("More business logic with " + fullName + " of id " + ldapUser.getUid().toLowerCase());
+      log.debug("More business logic with " + ldapUser.getFullName() + " of id " + ldapUser.getUsername().toLowerCase());
    }
 
 }
