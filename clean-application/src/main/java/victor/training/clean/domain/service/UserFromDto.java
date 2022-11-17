@@ -25,6 +25,16 @@ public class UserFromDto {
   private String workEmail;
   // private String creationDate; // not mapped from JSON (others 4 skipped to)
 
+  protected UserFromDto() {} // for Jackson
+
+  // for testing
+  public UserFromDto(String uid, String fname, String lname, String workEmail) {
+    this.uid = uid;
+    this.fname = fname;
+    this.lname = lname;
+    this.workEmail = workEmail;
+  }
+
   // Using my domain names (ubiquitous language)
   public String getUsername() {
     return uid;
