@@ -1,6 +1,7 @@
 package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.customer.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.customer.domain.repo.SiteRepo;
+import victor.training.clean.customer.door.event.CustomerRegisteredEvent;
 import victor.training.clean.insurance.domain.service.QuotationService;
 
 import java.time.format.DateTimeFormatter;
@@ -30,7 +32,8 @@ public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
-    private final QuotationService quotationService;
+    private final ApplicationEventPublisher eventPublisher;
+//    private final QuotationService quotationService; // black sheep of the family
     private final RegisterCustomerService registerCustomerService;
     private final NotificationService notificationService;
 
@@ -68,7 +71,8 @@ public class CustomerApplicationService {
 
         registerCustomerService.register(customer);
 
-        quotationService.quoteCustomer(customer.getId(), customer.getName());
+//        quotationService.quoteCustomer(customer.getId(), customer.getName());
+        eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId(), customer.getName()));
 
         notificationService.sendRegistrationEmail(customer.getEmail());
     }
