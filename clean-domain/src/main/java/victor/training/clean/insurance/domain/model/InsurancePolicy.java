@@ -22,6 +22,9 @@ public class InsurancePolicy {
 //   private Customer customer;
    private Long customerId;
 
+   private String customerName; // immutable data associated with the policy life.
+   // if the customer name changes, we have to issue another policy
+
    private BigDecimal valueInEur;
 
 }

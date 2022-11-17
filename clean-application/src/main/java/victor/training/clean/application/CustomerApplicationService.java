@@ -68,7 +68,7 @@ public class CustomerApplicationService {
 
         registerCustomerService.register(customer);
 
-        quotationService.quoteCustomer(customer.getId());
+        quotationService.quoteCustomer(customer.getId(), customer.getName());
 
         notificationService.sendRegistrationEmail(customer.getEmail());
     }
