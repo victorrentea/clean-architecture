@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service // domain logic
 public class UserService {
-   private final LdapServiceAdapter adapter;
+   private final ExternalUserProvider adapter;
 
    // assume this is domain core lopgic
    public void importUserFromLdap(String username) {
