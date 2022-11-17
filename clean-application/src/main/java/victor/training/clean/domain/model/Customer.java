@@ -42,6 +42,6 @@ public class Customer {
 }
 //@Entity
 //class Child {
-//	@JsonIgnore
+//	@JsonIgnore. better: @JsonBackReference
 //	Customer customer;
 //}
