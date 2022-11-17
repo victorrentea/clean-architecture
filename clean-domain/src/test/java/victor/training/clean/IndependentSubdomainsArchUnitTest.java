@@ -11,6 +11,7 @@ import java.util.List;
 
 import static com.tngtech.archunit.base.DescribedPredicate.alwaysTrue;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
+import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndependentSubdomainsArchUnitTest {
@@ -20,7 +21,7 @@ public class IndependentSubdomainsArchUnitTest {
    public void independentSubdomains() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor");
 
-      SliceRule sliceRule = SlicesRuleDefinition.slices().matching("..clean.(*)..*")
+      SliceRule sliceRule = slices().matching("..clean.(*)..*")
           .should().notDependOnEachOther()
           .ignoreDependency(alwaysTrue(), resideInAnyPackage(ALLOWED_SHARED_PACKAGES)); // allow dependencies to .events
 
@@ -31,6 +32,6 @@ public class IndependentSubdomainsArchUnitTest {
       assertThat(violations).hasSizeLessThanOrEqualTo(5);
 
       // B: maintenance phase: fail test at any deviation
-      // sliceRule.check(classes);
-   }
+       sliceRule.check(classes);
+   }§
 }
