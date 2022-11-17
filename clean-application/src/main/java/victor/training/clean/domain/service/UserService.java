@@ -3,48 +3,33 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
-@Service
+@Service // domain logic
 public class UserService {
-   private final LdapApi ldapApi;
+   private final LdapServiceAdapter adapter;
 
    // assume this is domain core lopgic
    public void importUserFromLdap(String username) {
-      List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
+      User user = adapter.fetchByUsername(username);
 
-      if (list.size() != 1) {
-         throw new IllegalArgumentException("There is no single user matching username " + username);
+      //smaller object more tailored to my need
+      if (user.getEmail().isPresent()) {
+         log.debug("Send welcome email to  " + user.getEmail());
       }
+      //      ldapUser.getEmail().toLowerCase(); // NPE : solution: Optional<> getters
 
-      LdapUserDto dto = list.get(0);
+      //      ldapUser.setUid("N/A"); // OMG mutable!
 
-      String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
-      User user = new User(dto.getUid(), dto.getWorkEmail(), fullName);
+      //      ldapUser.logic();// NOT possible because ldapUser is generated from an OpenAPI
 
-      deepDomainLogic(user);
-
-   }
-
-   private void deepDomainLogic(User ldapUser) { //smaller object more tailored to my need
-      if (ldapUser.getEmail().isPresent()) {
-         log.debug("Send welcome email to  " + ldapUser.getEmail());
-      }
-//      ldapUser.getEmail().toLowerCase(); // NPE : solution: Optional<> getters
-
-//      ldapUser.setUid("N/A"); // OMG mutable!
-
-//      ldapUser.logic();// NOT possible because ldapUser is generated from an OpenAPI
-
-      log.debug("Insert user in my database: " + ldapUser.getUsername()); // rename "username"
+      log.debug("Insert user in my database: " + user.getUsername()); // rename "username"
 
       // my domain only needs fullName not fName and lName
-      log.debug("More business logic with " + ldapUser.getFullName() + " of id " + ldapUser.getUsername().toLowerCase());
+      log.debug("More business logic with " + user.getFullName() + " of id " + user.getUsername().toLowerCase());
+
    }
+
 
 }
