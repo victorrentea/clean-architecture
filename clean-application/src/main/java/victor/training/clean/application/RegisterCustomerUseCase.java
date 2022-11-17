@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.repo.SiteRepo;
-import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.domain.service.QuotationService;
+import victor.training.clean.customer.domain.model.Customer;
+import victor.training.clean.customer.domain.repo.CustomerRepo;
+import victor.training.clean.customer.domain.repo.SiteRepo;
+import victor.training.clean.common.domain.service.NotificationService;
+import victor.training.clean.insurance.domain.service.QuotationService;
 import victor.training.clean.application.dto.CustomerDto;
 
 @RequiredArgsConstructor

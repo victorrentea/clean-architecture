@@ -1,4 +1,4 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.common.domain.model;
 
 import java.util.Objects;
 import java.util.Optional;

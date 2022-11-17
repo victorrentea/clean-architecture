@@ -1,8 +1,8 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.common.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.model.Email;
+import victor.training.clean.common.domain.model.Email;
 
 @RequiredArgsConstructor
 @Service

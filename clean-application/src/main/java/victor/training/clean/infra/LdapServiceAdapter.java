@@ -3,8 +3,8 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import victor.training.clean.common.Adapter;
-import victor.training.clean.domain.service.ExternalUserProvider;
-import victor.training.clean.domain.service.User;
+import victor.training.clean.common.domain.service.ExternalUserProvider;
+import victor.training.clean.common.domain.model.User;
 
 import java.util.List;
 
