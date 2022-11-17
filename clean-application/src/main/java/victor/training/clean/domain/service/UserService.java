@@ -51,7 +51,8 @@ public class UserService {
    }
 
    private void sendMailTo(String emailContact) {
-      // implem left out
+      System.out.println("Contact: " + emailContact);
+      //..implem left out
    }
 
 }
