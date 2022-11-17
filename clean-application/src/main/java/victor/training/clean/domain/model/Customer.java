@@ -1,7 +1,8 @@
 package victor.training.clean.domain.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,8 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
+@ToString
+@Setter// consider encapsulating changes
+@Getter
 @Entity
-@Data // Avoid on @Entity
+// Avoid on @Entity
 public class Customer {
 	@Id
 	@GeneratedValue
