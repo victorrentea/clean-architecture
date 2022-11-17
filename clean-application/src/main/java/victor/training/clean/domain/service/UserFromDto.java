@@ -1,49 +1,42 @@
-//package victor.training.clean.domain.service;
-//
-//import victor.training.clean.infra.LdapUserPhoneDto;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//import static java.util.Objects.requireNonNull;
-//import static java.util.Optional.ofNullable;
-//
-////Value Object = small, immutable and hash/eq on all fields. no persistent identity.
-//public class UserFromDto {
-//
-//  // private String creationDate; // not mapped from JSON
-//  // private String departmentId;
-//
-//  private List<LdapUserPhoneDto> emailAddresses = null;
-//
-//  private String fname;
-//
-//  private String language;
-//
-//  private String lname;
-//
-//  private String uid;
-//
-//  private String workEmail;
-//  private final String username;
-//  private final String email;
-//  private final String fullName;
-//
-//  public UserFromDto(String username, String email, String fullName) {
-//    this.username = requireNonNull(username);
-//    this.email = email;
-//    this.fullName = fullName;
-//  }
-//
-//  public String getFullName() {
-//    return fullName;
-//  }
-//
-//  public String getUsername() {
-//    return username;
-//  }
-//
-//  public Optional<String> getEmail() {
-//    return ofNullable(email);
-//  }
-//}
+package victor.training.clean.domain.service;
+
+import victor.training.clean.infra.LdapUserPhoneDto;
+
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
+
+// This is a Value Object = small, immutable, hash/eq on all fields, with no persistent identity
+public class UserFromDto {
+
+  // private fields mapped to <=> JSON
+  private String uid;
+
+  private String fname;
+
+  private String lname;
+
+  private String workEmail;
+  // private String creationDate; // not mapped from JSON (others 4 skipped to)
+
+  // Using my domain names (ubiquitous language)
+  public String getUsername() {
+    return uid;
+  }
+
+  // Transforming data on-the-fly
+  public String getFullName() {
+    return fname + " " + lname.toUpperCase();
+  }
+
+  // - Null-safe
+  public Optional<String> getEmail() {
+    return ofNullable(workEmail);
+  }
+
+  // More Logic inside
+
+  // No setters!
+}
