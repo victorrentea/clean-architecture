@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
@@ -29,11 +30,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
-    private final EmailSender emailSender;
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
     private final RegisterCustomerService registerCustomerService;
+    private final NotificationService notificationService;
 
     @GetMapping("{id}")
     public CustomerDto findById(@PathVariable long customerId) {
@@ -52,7 +53,6 @@ public class CustomerApplicationService {
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
-
     public void register(CustomerDto dto) {
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
@@ -72,17 +72,10 @@ public class CustomerApplicationService {
 
         quotationService.quoteCustomer(customer);
 
-        sendRegistrationEmail(customer.getEmail());
+        notificationService.sendRegistrationEmail(customer.getEmail());
     }
 
-    private void sendRegistrationEmail(String emailAddress) {
-        System.out.println("Sending activation link via email to " + emailAddress);
-        Email email = new Email();
-        email.setFrom("noreply");
-        email.setTo(emailAddress);
-        email.setSubject("Welcome");
-        email.setBody("You'll like it! Sincerely, Team");
-        emailSender.sendEmail(email);
-    }
+
+
 
 }
