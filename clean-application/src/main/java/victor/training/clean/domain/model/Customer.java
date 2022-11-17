@@ -1,8 +1,10 @@
 package victor.training.clean.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +26,11 @@ public class Customer {
 	private LocalDate creationDate = LocalDate.now();
 	private boolean goldMember;
 	@ManyToOne
+	@Exclude
 	private Site site;
+
+//	private List<Child> children;
+
 
   public int getDiscountPercentage() {
       int discountPercentage = 3;
@@ -34,3 +40,8 @@ public class Customer {
       return discountPercentage;
   }
 }
+//@Entity
+//class Child {
+//	@JsonIgnore
+//	Customer customer;
+//}

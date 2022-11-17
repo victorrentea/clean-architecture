@@ -1,19 +1,18 @@
-package victor.training.clean.domain.service;
-
-import victor.training.clean.infra.LdapUserPhoneDto;
-
-import java.util.List;
-import java.util.Optional;
-
-import static java.util.Objects.requireNonNull;
-import static java.util.Optional.ofNullable;
-
+//package victor.training.clean.domain.service;
+//
+//import victor.training.clean.infra.LdapUserPhoneDto;
+//
+//import java.util.List;
+//import java.util.Optional;
+//
+//import static java.util.Objects.requireNonNull;
+//import static java.util.Optional.ofNullable;
+//
 ////Value Object = small, immutable and hash/eq on all fields. no persistent identity.
 //public class UserFromDto {
 //
-//  private String creationDate; // not needed from JSON
-//
-//  private String departmentId;
+//  // private String creationDate; // not mapped from JSON
+//  // private String departmentId;
 //
 //  private List<LdapUserPhoneDto> emailAddresses = null;
 //
