@@ -21,21 +21,37 @@ public class UserService {
          throw new IllegalArgumentException("There is no single user matching username " + username);
       }
 
-      LdapUserDto ldapUser = list.get(0);
+      LdapUserDto dto = list.get(0);
 
-      deepDomainLogic(ldapUser);
-
+      deepDomainLogic(dto);
    }
 
-   private void deepDomainLogic(LdapUserDto ldapUser) {
-      if (ldapUser.getWorkEmail()!=null) {
-         log.debug("Send welcome email to  " + ldapUser.getWorkEmail());
+   private void deepDomainLogic(LdapUserDto dto) {
+      if (dto.getWorkEmail()!=null) {
+         log.debug("Send welcome email to  " + dto.getWorkEmail());
       }
 
-      log.debug("Insert user in my database: " + ldapUser.getUid());
+      log.debug("Insert user in my database: " + dto.getUid());
 
-      String fullName = ldapUser.getFname() + " " + ldapUser.getLname().toUpperCase();
-      log.debug("More business logic with " + fullName + " of id " + ldapUser.getUid().toLowerCase());
+      String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+      innocentHack(dto);
+      log.debug("More business logic with " + fullName + " of id " + dto.getUid().toLowerCase());
+
+      // then, in multiple places:
+      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
+      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
+      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
+      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
+   }
+
+   private void innocentHack(LdapUserDto dto) {
+      if (dto.getUid() == null) {
+         dto.setUid("anonymous");
+      }
+   }
+
+   private void sendMailTo(String emailContact) {
+      // implem left out
    }
 
 }
