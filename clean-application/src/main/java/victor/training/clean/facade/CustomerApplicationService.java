@@ -75,8 +75,6 @@ public class CustomerApplicationService {
         sendRegistrationEmail(customer.getEmail());
     }
 
-
-
     private void sendRegistrationEmail(String emailAddress) {
         System.out.println("Sending activation link via email to " + emailAddress);
         Email email = new Email();
@@ -86,4 +84,5 @@ public class CustomerApplicationService {
         email.setBody("You'll like it! Sincerely, Team");
         emailSender.sendEmail(email);
     }
+
 }
