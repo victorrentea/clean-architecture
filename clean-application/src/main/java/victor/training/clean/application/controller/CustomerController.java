@@ -1,12 +1,12 @@
-package victor.training.clean.controller;
+package victor.training.clean.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import victor.training.clean.facade.CustomerApplicationService;
-import victor.training.clean.facade.dto.CustomerDto;
-import victor.training.clean.facade.dto.CustomerSearchCriteria;
-import victor.training.clean.facade.dto.CustomerSearchResult;
+import victor.training.clean.application.CustomerApplicationService;
+import victor.training.clean.application.dto.CustomerDto;
+import victor.training.clean.application.dto.CustomerSearchCriteria;
+import victor.training.clean.application.dto.CustomerSearchResult;
 
 import java.util.List;
 
