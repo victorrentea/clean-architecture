@@ -1,6 +1,4 @@
-package victor.training.clean.facade.dto;
-
-import io.swagger.v3.oas.annotations.media.Schema;
+package victor.training.clean.application.dto;
 
 // sent as JSON
 public class CustomerSearchResult {
