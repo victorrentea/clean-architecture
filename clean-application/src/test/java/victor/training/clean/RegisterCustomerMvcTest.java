@@ -15,9 +15,9 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Site;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerDto.CustomerDtoBuilder;
-import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.repo.SiteRepo;
+import victor.training.clean.domain.service.IEmailSender;
 
 import java.time.format.DateTimeFormatter;
 
@@ -43,7 +43,7 @@ public class RegisterCustomerMvcTest {
     @Autowired
     private CustomerRepo customerRepo;
     @MockBean
-    private EmailSender emailSender;
+    private IEmailSender emailSender;
 
     private Site site;
     private CustomerDtoBuilder requestDto;

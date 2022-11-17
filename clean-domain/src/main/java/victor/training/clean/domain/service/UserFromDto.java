@@ -1,6 +1,5 @@
 package victor.training.clean.domain.service;
 
-import victor.training.clean.infra.LdapUserPhoneDto;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

@@ -3,12 +3,11 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Email;
-import victor.training.clean.infra.EmailSender;
 
 @RequiredArgsConstructor
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
+  private final IEmailSender emailSender;
 
   public void sendRegistrationEmail(String emailAddress) {
     System.out.println("Sending activation link via email to " + emailAddress);
