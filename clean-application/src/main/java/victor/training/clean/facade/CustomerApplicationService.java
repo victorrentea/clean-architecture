@@ -2,9 +2,13 @@ package victor.training.clean.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.facade.dto.CustomerDto;
 import victor.training.clean.facade.dto.CustomerSearchCriteria;
 import victor.training.clean.facade.dto.CustomerSearchResult;
@@ -19,30 +23,34 @@ import java.util.List;
 
 //@Service
 @Facade
+//@RestController
+@RequestMapping("customer")
 @Transactional // probably too broad for high-TPS systems
 @RequiredArgsConstructor
-public class CustomerFacade {
+public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
+    private final RegisterCustomerService registerCustomerService;
 
-    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-        return customerSearchRepo.search(searchCriteria);
-    }
-
-    public CustomerDto findById(long customerId) {
+    @GetMapping("{id}")
+    public CustomerDto findById(@PathVariable long customerId) {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
         // TODO move mapping logic somewhere else
-       return CustomerDto.builder()
-               .id(customer.getId())
-               .name(customer.getName())
-               .email(customer.getEmail())
-               .siteId(customer.getSite().getId())
-               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-               .build();
+        return CustomerDto.builder()
+                .id(customer.getId())
+                .name(customer.getName())
+                .email(customer.getEmail())
+                .siteId(customer.getSite().getId())
+                .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .build();
+    }
+
+    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+        return customerSearchRepo.search(searchCriteria);
     }
 
     public void register(CustomerDto dto) {
@@ -60,23 +68,14 @@ public class CustomerFacade {
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
-        System.out.println("Biz Logic with discount " + discountPercentage);
-        // Heavy business logic
-        // Heavy business logic
-        customerRepo.save(customer);
-        // Heavy business logic
+        registerCustomerService.register(customer);
+
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer.getEmail());
     }
+
+
 
     private void sendRegistrationEmail(String emailAddress) {
         System.out.println("Sending activation link via email to " + emailAddress);

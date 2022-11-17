@@ -26,4 +26,11 @@ public class Customer {
 	@ManyToOne
 	private Site site;
 
+  public int getDiscountPercentage() {
+      int discountPercentage = 3;
+      if (isGoldMember()) {
+          discountPercentage += 1;
+      }
+      return discountPercentage;
+  }
 }
