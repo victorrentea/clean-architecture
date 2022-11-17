@@ -16,22 +16,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndependentSubdomainsArchUnitTest {
 
-   private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..api.."};
+   private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..door.."};
    @Test
    public void independentSubdomains() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor");
 
       SliceRule sliceRule = slices().matching("..clean.(*)..*")
-          .should().notDependOnEachOther()
-          .ignoreDependency(alwaysTrue(), resideInAnyPackage(ALLOWED_SHARED_PACKAGES)); // allow dependencies to .events
+              .should().notDependOnEachOther()
+              .ignoreDependency(alwaysTrue(), resideInAnyPackage(ALLOWED_SHARED_PACKAGES)); // allow dependencies to .events
 
       // progressive strangling the monolith
       List<String> violations = sliceRule.evaluate(classes).getFailureReport().getDetails();
 
       // A: decoupling phase: progressively lower this number:
-      assertThat(violations).hasSizeLessThanOrEqualTo(5);
+      assertThat(violations).hasSizeLessThanOrEqualTo(70);
 
       // B: maintenance phase: fail test at any deviation
-       sliceRule.check(classes);
-   }§
+      sliceRule.check(classes);
+   }
+
 }
