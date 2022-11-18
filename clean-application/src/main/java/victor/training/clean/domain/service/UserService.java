@@ -9,7 +9,7 @@ import victor.training.clean.domain.model.User;
 @Slf4j
 @Service
 public class UserService {
-   private final LdapUserApiAdapter adapter;
+   private final ExternalUserProvider adapter;
 
    public void importUserFromLdap(String username) {
       User user = adapter.fetchUserByUsername(username);
