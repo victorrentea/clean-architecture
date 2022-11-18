@@ -48,6 +48,7 @@ public class CustomerApplicationService {
 
     // [PERHAPS] put the @PostMapping also
     // maybe @Transactional
+
     public void register(Customer customer) {
 //        Customer customer = customerMapper.mapToEntity(dto);
 
@@ -59,7 +60,7 @@ public class CustomerApplicationService {
         customerService.register(customer);
 
         // orchestration from "above"
-        quotationService.quoteCustomer(customer.getId());
+//        quotationService.quoteCustomer(customer.getId());
 
         sendRegistrationEmail(customer.getEmail());
     }
@@ -87,3 +88,4 @@ public class CustomerApplicationService {
         emailSender.sendEmail(email);
     }
 }
+//
