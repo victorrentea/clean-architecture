@@ -21,7 +21,7 @@ public class CustomerService {
     // TODO Where can I move this little logic? (..
     //  . operating on the state of a single entity)
     int discountPercentage = customer.getDiscountPercentage();
-    System.out.println("Biz Logic with discount " + discountPercentage);
+    System.out.println("Biz Logic != -> with discount " + discountPercentage);
     // Heavy business logic
     // Heavy business logic
     customerRepo.save(customer);

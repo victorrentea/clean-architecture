@@ -20,7 +20,7 @@ public class QuotationService {
 
 @EventListener // in-memory syncrhronuous in-transaction event.
    public void onCustomerRegisteredEvent(CustomerRegisteredEvent event) {
-   quoteCustomer(event.getCustomerId(), event.getCustomerName());
+      quoteCustomer(event.getCustomerId(), event.getCustomerName());
    // running in the same tx as the CustomerService
    }
 
