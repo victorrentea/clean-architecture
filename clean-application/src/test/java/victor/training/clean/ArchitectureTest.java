@@ -15,7 +15,7 @@ public class ArchitectureTest {
     private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
 
     @Test // ArchUnit
-    @Disabled // i'll fix it on Mon (and other lies you can tell yourself)
+//    @Disabled // i'll fix it on Mon (and other lies you can tell yourself)
     // NOTE: In case you don't understand this test, please 🙏 call me:
     // +40720019564 or victorrentea@gmail.com (the anarchitect)
     public void agnostic_domain() {
