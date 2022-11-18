@@ -4,6 +4,8 @@ import lombok.Value;
 import org.springframework.context.ApplicationEvent;
 
 @Value
-public class CustomerRegisteredEvent extends ApplicationEvent {
+public class CustomerRegisteredEvent {
   Long customerId;
+  String customerName; // events carrying data = fat events : they are part of your API
+  // => Event Sourcing
 }

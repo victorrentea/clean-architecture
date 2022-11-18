@@ -17,9 +17,12 @@ public class InsurancePolicy {
    private Long id;
 
 //   @ManyToOne
-//   private Customer customer;
+//   private Customer customer; // NO: intermodule
 
-   private Long customerId;
+   private Long customerId; // option1) keep the ID from the other module
+
+   // the customerName cannot change on a policy
+   private String customerName; // option2) snapshot on this module data from another module
 
    private BigDecimal valueInEur;
 

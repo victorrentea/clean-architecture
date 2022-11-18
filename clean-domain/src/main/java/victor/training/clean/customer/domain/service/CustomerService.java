@@ -27,7 +27,7 @@ public class CustomerService {
     customerRepo.save(customer);
     // Heavy business logic
 //    quotationService.quoteCustomer(customer);
-      eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId()));
+    eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId(), customer.getName()));
     System.out.println("AFTER the handler in insurance ran");
   }
 
