@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
 
+// this is a hand-crafted Dto
+// - its private fields map to the external JSON
+// - speaks my domain with its public methods
 // This is a Value Object = small, immutable, hash/eq on all fields, with no persistent identity
 public class UserFromDto {
 

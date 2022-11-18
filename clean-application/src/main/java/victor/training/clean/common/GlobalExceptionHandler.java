@@ -5,12 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import victor.training.clean.CleanException;
 import victor.training.clean.CleanException.ErrorCode;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 import static org.springframework.http.ResponseEntity.internalServerError;
 import static org.springframework.http.ResponseEntity.status;
@@ -33,6 +35,13 @@ public class GlobalExceptionHandler {
       String userMessage = translateError(exception, ErrorCode.GENERAL, null, request);
       return internalServerError().body(userMessage);
    }
+
+//   @ResponseStatus(404)
+//   @ExceptionHandler(NoSuchElementException.class)
+//   public ResponseEntity<String> NoSuchElementException(NoSuchElementException request, Exception exception) throws Exception {
+//      String userMessage = translateError(exception, ErrorCode.GENERAL, null, request);
+//      return internalServerError().body(userMessage);
+//   }
 
    private String translateError(Throwable throwable, ErrorCode errorCode, String[] parameters, HttpServletRequest request) {
       String messageKey = "error." + errorCode + ".message";

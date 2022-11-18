@@ -17,7 +17,15 @@ public class Customer {
 	private boolean goldMember;
 	@ManyToOne
 	private Site site;
-//	@OneToMany
+
+  public int getDiscountPercentage() {
+    int discountPercentage = 3;
+    if (isGoldMember()) {
+      discountPercentage += 1;
+    }
+    return discountPercentage;
+  }
+  //	@OneToMany
 //	List<Phone>
 
 }
