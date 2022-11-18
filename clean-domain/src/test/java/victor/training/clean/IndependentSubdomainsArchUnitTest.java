@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndependentSubdomainsArchUnitTest {
 
-   private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..api.."};
+   private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..door.."};
    @Test
    public void independentSubdomains() {
       JavaClasses classes = new ClassFileImporter().importPackages("victor");
@@ -28,7 +28,7 @@ public class IndependentSubdomainsArchUnitTest {
       List<String> violations = sliceRule.evaluate(classes).getFailureReport().getDetails();
 
       // A: decoupling phase: progressively lower this number:
-      assertThat(violations).hasSizeLessThanOrEqualTo(123); // <-- real life: starting point after moving classes around
+      assertThat(violations).hasSizeLessThanOrEqualTo(121); // <-- real life: starting point after moving classes around
       assertThat(violations).hasSizeLessThanOrEqualTo(0); // goal, 6 mo from now
 
       // B: maintenance phase: fail test at any deviation

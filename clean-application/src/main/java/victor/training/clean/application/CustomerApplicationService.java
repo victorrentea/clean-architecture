@@ -57,7 +57,7 @@ public class CustomerApplicationService {
 
         customerService.register(customer);
 
-        quotationService.quoteCustomer(customer);
+        quotationService.quoteCustomer(customer.getId());
 
         sendRegistrationEmail(customer.getEmail());
     }
