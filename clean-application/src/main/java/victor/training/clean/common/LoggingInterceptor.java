@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.joining;
 @Slf4j
 @Aspect
 @Component
-public class FacadeLoggingInterceptor {
+public class LoggingInterceptor {
 	@Target(METHOD)
 	@Retention(RUNTIME)
 	public @interface NotLogged {
@@ -39,7 +39,7 @@ public class FacadeLoggingInterceptor {
 			jackson.enable(SerializationFeature.INDENT_OUTPUT);
 		}
 	}
-	@Around("@within(victor.training.clean.common.Facade))")
+	@Around("@within(victor.training.clean.common.ApplicationService))")
 	public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
 		logBefore(joinPoint);
 		long t0 = System.currentTimeMillis();

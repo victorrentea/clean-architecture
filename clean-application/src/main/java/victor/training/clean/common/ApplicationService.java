@@ -13,6 +13,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Service
 @Transactional
-public @interface Facade {
+public @interface ApplicationService {
 
 }

@@ -2,7 +2,7 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.common.Facade;
+import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
@@ -10,7 +10,7 @@ import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.repo.CustomerSearchRepo;
+import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
@@ -18,8 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
-@Facade
-@Transactional // probably too broad for high-TPS systems
+@ApplicationService // custom annotation
 @RequiredArgsConstructor
 public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
@@ -35,7 +34,7 @@ public class CustomerApplicationService {
     public CustomerDto findById(long customerId) {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
-        // TODO move mapping logic somewhere else
+        // mapping logic TODO move somewhere else
        return CustomerDto.builder()
                .id(customer.getId())
                .name(customer.getName())
@@ -45,6 +44,7 @@ public class CustomerApplicationService {
                .build();
     }
 
+    @Transactional
     public void register(CustomerDto dto) {
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());

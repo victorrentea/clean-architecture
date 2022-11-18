@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
-//import victor.training.clean.domain.service.UserService;
 
 @EnableAsync
 @SpringBootApplication
@@ -18,20 +17,9 @@ public class CleanApplication {
       return new RestTemplate();
    }
 
-//   @Bean
-//   public LdapApi ldapApi() {
-//      // TODO setup auth on ldapApi.getApiClient()....
-//      return new LdapApi();
-//   }
-
    public static void main(String[] args) {
       SpringApplication.run(CleanApplication.class, args);
    }
-
-//   public void someUsage() {
-//      UserService userService = null;
-//      userService.importUserFromLdap("a");
-//   }
 
 }
 
