@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean.customer.application;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import victor.training.clean.application.CustomerMapper;
 import victor.training.clean.customer.domain.model.Customer;
 import victor.training.clean.common.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
@@ -57,6 +58,7 @@ public class CustomerApplicationService {
 
         customerService.register(customer);
 
+        // orchestration from "above"
         quotationService.quoteCustomer(customer.getId());
 
         sendRegistrationEmail(customer.getEmail());
