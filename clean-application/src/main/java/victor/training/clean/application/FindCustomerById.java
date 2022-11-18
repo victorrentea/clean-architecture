@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.customer.domain.repo.CustomerRepo;
 
 @UseCase
 @RequiredArgsConstructor

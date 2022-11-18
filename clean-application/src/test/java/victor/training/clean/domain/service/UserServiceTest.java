@@ -9,9 +9,9 @@ import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import victor.training.clean.ApiClient;
+import victor.training.clean.common.domain.service.UserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(OutputCaptureExtension.class)

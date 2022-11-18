@@ -3,8 +3,8 @@ package victor.training.clean.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.repo.SiteRepo;
+import victor.training.clean.customer.domain.model.Customer;
+import victor.training.clean.customer.domain.repo.SiteRepo;
 
 @RequiredArgsConstructor
 @Component

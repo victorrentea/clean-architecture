@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
+import victor.training.clean.customer.domain.model.Customer;
+import victor.training.clean.common.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.customer.domain.service.CustomerService;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.customer.domain.repo.CustomerRepo;
 import victor.training.clean.repo.CustomerSearchRepo;
-import victor.training.clean.domain.repo.SiteRepo;
-import victor.training.clean.domain.service.QuotationService;
+import victor.training.clean.customer.domain.repo.SiteRepo;
+import victor.training.clean.insurance.domain.service.QuotationService;
 
 import java.util.List;
 
