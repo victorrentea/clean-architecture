@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.webjars.NotFoundException;
-import victor.training.clean.common.Facade;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
@@ -21,7 +19,6 @@ import victor.training.clean.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
@@ -36,6 +33,7 @@ public class CustomerApplicationService {
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
     private final CustomerService customerService;
+    private final CustomerMapper customerMapper;
 
     @Operation(description = "Customer Search")
     @PostMapping("search")
@@ -44,24 +42,16 @@ public class CustomerApplicationService {
     }
 
     public CustomerDto findById(long customerId) {
-
-        Customer customer = customerRepo.findById(customerId).orElseThrow();
-
-        // TODO move mapping logic somewhere else
-       return CustomerDto.builder()
-               .id(customer.getId())
-               .name(customer.getName())
-               .email(customer.getEmail())
-               .siteId(customer.getSite().getId())
-               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-               .build();
+        return new CustomerDto(customerRepo.findById(customerId).orElseThrow());
     }
 
-    public void register(CustomerDto dto) {
-        Customer customer = new Customer();
-        customer.setEmail(dto.getEmail());
-        customer.setName(dto.getName());
-        customer.setSite(siteRepo.getById(dto.getSiteId()));
+    // [PERHAPS] put the @PostMapping also
+    // maybe @Transactional
+    public void register(Customer customer) {
+//        Customer customer = customerMapper.mapToEntity(dto);
+
+        // i want my Dto in my AS because there are usecases for which the dto coming in
+        // does not cleanly map only to ONE domain object. -> make me create more Value Objects in my Domain
 
         validate(customer);
 
@@ -71,6 +61,7 @@ public class CustomerApplicationService {
 
         sendRegistrationEmail(customer.getEmail());
     }
+
 
     private void validate(Customer customer) {
         // TODO experiment all the ways to do validation

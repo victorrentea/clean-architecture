@@ -18,6 +18,7 @@ public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
+      // selecting Dtos from JPA
       String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE 1=1 ";
