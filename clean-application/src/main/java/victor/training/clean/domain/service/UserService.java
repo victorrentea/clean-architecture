@@ -26,22 +26,28 @@ public class UserService {
       deepDomainLogic(dto);
    }
 
-   private void deepDomainLogic(LdapUserDto dto) {
-      if (dto.getWorkEmail()!=null) {
-         log.debug("Send welcome email to  " + dto.getWorkEmail());
+   private void deepDomainLogic(LdapUserDto dto) { // an object enters my domain logic with too much data
+      if (dto.getWorkEmail()!=null) { // null in fields. NO i want optional !
+         log.debug("Send welcome email to  " + dto.getWorkEmail()); // "work" is redundant
       }
 
-      log.debug("Insert user in my database: " + dto.getUid());
+      log.debug("Insert user in my database: " + dto.getUid()); // bad name "username"
 
-      String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
-      innocentHack(dto);
+      String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // i used a derived value from the original fieelds
+      innocentHack(dto); // mutability opens the door to GARBAGE
       log.debug("More business logic with " + fullName + " of id " + dto.getUid().toLowerCase());
 
       // then, in multiple places:
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
+      sendMailTo(asContact(dto, fullName));
+      sendMailTo(asContact(dto, fullName));
+      sendMailTo(asContact(dto, fullName));
+      sendMailTo(asContact(dto, fullName));
+   }
+
+
+   // the next big util tomorow: UserUtil
+   private static String asContact(LdapUserDto dto, String fullName) {
+      return fullName + " <" + dto.getWorkEmail() + ">";
    }
 
    private void innocentHack(LdapUserDto dto) {
