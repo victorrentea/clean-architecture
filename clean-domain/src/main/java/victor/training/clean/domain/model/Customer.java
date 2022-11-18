@@ -1,6 +1,5 @@
 package victor.training.clean.domain.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.persistence.*;
