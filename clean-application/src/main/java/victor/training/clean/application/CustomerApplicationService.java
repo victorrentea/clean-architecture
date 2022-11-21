@@ -63,7 +63,7 @@ public class CustomerApplicationService {
         customer = customerService.register(customer);
         customerRepo.save(customer);
 
-        quotationService.quoteCustomer(customer);
+//        quotationService.quoteCustomer(customer);
 
 
 
