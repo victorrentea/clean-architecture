@@ -11,26 +11,14 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
-@Service
+@Service // domain service
 public class UserService {
    private final LdapApi ldapApi;
+   private final ClientApiAdapter adapter;
 
    public void importUserFromLdap(String username) {
-      List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
+      User user = adapter.fetchUserByUsername(username);
 
-      if (list.size() != 1) {
-         throw new IllegalArgumentException("There is no single user matching username " + username);
-      }
-
-      LdapUserDto dto = list.get(0);
-
-      String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
-      User user = new User(dto.getUid() == null ?"anonymous":dto.getUid(), dto.getWorkEmail(), fullName);
-
-      deepDomainLogic(user);
-   }
-
-   private void deepDomainLogic(User user) { // too many fields
       if (user.getEmail().isPresent()) {
          log.debug("Send welcome email to  " + user.getEmail().get());
       }
