@@ -8,13 +8,13 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
@@ -28,6 +28,7 @@ public class CustomerApplicationService { // ± handler/orchestrator
     private final QuotationService quotationService;
     private final CustomerValidator customerValidator;
 
+    // use-case optimized query: select Dtos from queries directly
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
@@ -58,7 +59,7 @@ public class CustomerApplicationService { // ± handler/orchestrator
         // it's risky to enforce validity of your domain OUTSIDE of the MODEL
         customerValidator.validate(customer);
 
-        customer = customerService.register(customer);
+        customer = registerCustomerService.register(customer);
         customerRepo.save(customer);
 
 //        quotationService.quoteCustomer(customer);
@@ -74,7 +75,7 @@ public class CustomerApplicationService { // ± handler/orchestrator
     // more coupling in the orchestrator = OK
     // less coupling in the service containing domain complexity
 
-    private final CustomerService customerService;
+    private final RegisterCustomerService registerCustomerService;
 
 
     private void sendRegistrationEmail(String emailAddress) {

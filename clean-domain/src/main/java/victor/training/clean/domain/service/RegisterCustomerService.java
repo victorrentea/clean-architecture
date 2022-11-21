@@ -1,16 +1,17 @@
-package victor.training.clean.application;
+package victor.training.clean.domain.service;
 
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.service.QuotationService;
 
 @Service
-public class CustomerService {
+
+// promoted into the Domain, into a better world, only using MY DOMAIN MODEL.
+public class RegisterCustomerService {// action, not noun. it's a piece of logic.
   private final CustomerRepo customerRepo;
   private final QuotationService quotationService;
 
-  public CustomerService(CustomerRepo customerRepo, QuotationService quotationService, QuotationService quotationService1) {
+  public RegisterCustomerService(CustomerRepo customerRepo, QuotationService quotationService, QuotationService quotationService1) {
     this.customerRepo = customerRepo;
     this.quotationService = quotationService1;
   }
@@ -19,11 +20,10 @@ public class CustomerService {
     // Heavy business logic
     // Heavy business logic
     // Heavy business logic
-    // TODO Where can I move this little logic? (... operating on the state of a single entity)
-    int discountPercentage = 3;
-    if (customer.isGoldMember()) {
-      discountPercentage += 1;
-    }
+
+    // TODO Where can I move this little logic?
+    //    (... operating on the state of a single entity)
+    int discountPercentage = customer.getDiscountPercentage();
     System.out.println("Biz Logic with discount " + discountPercentage);
     // Heavy business logic
     // Heavy business logic
@@ -34,4 +34,5 @@ public class CustomerService {
     // Heavy business logic
     return customer;
   }
+
 }
