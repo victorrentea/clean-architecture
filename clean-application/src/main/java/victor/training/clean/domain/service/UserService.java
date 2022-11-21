@@ -26,27 +26,33 @@ public class UserService {
       deepDomainLogic(dto);
    }
 
-   private void deepDomainLogic(LdapUserDto dto) {
+   private void deepDomainLogic(LdapUserDto dto) { // too many fields
       if (dto.getWorkEmail()!=null) {
          log.debug("Send welcome email to  " + dto.getWorkEmail());
       }
 
-      log.debug("Insert user in my database: " + dto.getUid());
+      log.debug("Insert user in my database: " + dto.getUid()); // bad names : "username"
 
       String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+
+      // evil unexpected temporal coupling: hack should happen before uid.toLowerCase()
       innocentHack(dto);
-      log.debug("More business logic with " + fullName + " of id " + dto.getUid().toLowerCase());
+      log.debug("More business logic with " + fullName + " of id " + dto.getUid().toLowerCase()); // NUll !!! OMG
 
       // then, in multiple places:
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
+      sendMailTo(asContact(dto, fullName));
+      sendMailTo(asContact(dto, fullName));
+      sendMailTo(asContact(dto, fullName));
+      sendMailTo(asContact(dto, fullName));
+   }
+
+   private static String asContact(LdapUserDto dto, String fullName) {
+      return fullName + " <" + dto.getWorkEmail() + ">";
    }
 
    private void innocentHack(LdapUserDto dto) {
       if (dto.getUid() == null) {
-         dto.setUid("anonymous");
+         dto.setUid("anonymous"); // setters ??!! yuuu 🤢
       }
    }
 

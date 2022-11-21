@@ -29,6 +29,8 @@ public class CustomerController {
 
    @PostMapping("")
    public void register(@RequestBody CustomerDto customerDto) {
+//      customerDto.setName("diff"); // terror: changing dto on the way.
+      // to avoid: java 17 records, private final all fields.
       customerApplicationService.register(customerDto);
    }
 }
