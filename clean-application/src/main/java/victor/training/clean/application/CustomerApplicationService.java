@@ -20,7 +20,7 @@ import java.util.List;
 //@Service
 @ApplicationService // custom annotation
 @RequiredArgsConstructor
-public class CustomerApplicationService {
+public class CustomerApplicationService { // ± handler/orchestrator
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
@@ -35,22 +35,24 @@ public class CustomerApplicationService {
     public CustomerDto findById(long customerId) {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
-        // mapping logic TODO move somewhere else
-       return CustomerDto.builder()
-               .id(customer.getId())
-               .name(customer.getName())
-               .email(customer.getEmail())
-               .siteId(customer.getSite().getId())
-               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-               .build();
+        // mapping logic TODO move somewhere else to reduce the size of the facade
+        // 💡 mapper hand written or  MapStruct
+        //       return mapper.toDto(customer);
+
+        // WRONG: return customer.toDto(); // NO !
+
+        // 💡 OK. It's never a problem to depend on your domain:
+        return new CustomerDto(customer);
     }
 
     @Transactional
     public void register(CustomerDto dto) {
-        Customer customer = new Customer();
-        customer.setEmail(dto.getEmail());
+        Customer customer = new Customer(dto.getName());
         customer.setName(dto.getName());
+        customer.setEmail(dto.getEmail());
         customer.setSite(siteRepo.getById(dto.getSiteId()));
+
+        // DDD: The Domain Model (JDO) data structures shoud enforce their own consistency.
 
         // risky to 'remember to validate'
         // it's risky to enforce validity of your domain OUTSIDE of the MODEL

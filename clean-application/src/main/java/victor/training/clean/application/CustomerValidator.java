@@ -13,9 +13,12 @@ public class CustomerValidator {
   }
 
   void validate(Customer customer) {
-    if (customer.getName().length() < 5) {
-      throw new IllegalArgumentException("Name too short");
-    }
+    // move inside the model. HoW?
+//    if (customer.getName().length() < 5) {
+//      throw new IllegalArgumentException("Name too short");
+//    }
+
+    // remains here as it hits the database
     if (customerRepo.existsByEmail(customer.getEmail())) {
       throw new IllegalArgumentException("Customer email is already registered");
       // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
