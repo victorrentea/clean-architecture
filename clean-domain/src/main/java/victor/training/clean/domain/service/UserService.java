@@ -13,7 +13,8 @@ public class UserService {
 
    public void importUserFromLdap(String username) {
       User user = adapter.fetchUserByUsername(username);
-//      LdapUserDto notVisibleToCompiler;
+//      LdapUserDto notVisibleToCompiler; // the API of others
+//      CustomerDto myApiModelIsAlsoNotVisibleInsideDomain;
       if (user.getEmail().isPresent()) {
          log.debug("Send welcome email to  " + user.getEmail().get());
       }
