@@ -10,6 +10,7 @@ import static java.util.Optional.ofNullable;
 // - immutable
 // - no persistent identity PK
 // - hash/eq on all fields
+
 public class User {
   private final String username;
   private final String email;
