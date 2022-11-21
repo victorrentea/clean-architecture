@@ -26,6 +26,7 @@ public class CustomerApplicationService {
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
+    private final CustomerValidator customerValidator;
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
@@ -51,14 +52,9 @@ public class CustomerApplicationService {
         customer.setName(dto.getName());
         customer.setSite(siteRepo.getById(dto.getSiteId()));
 
-        // TODO experiment all the ways to do validation
-        if (customer.getName().length() < 5) {
-            throw new IllegalArgumentException("Name too short");
-        }
-        if (customerRepo.existsByEmail(customer.getEmail())) {
-            throw new IllegalArgumentException("Customer email is already registered");
-            // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-        }
+        // risky to 'remember to validate'
+        // it's risky to enforce validity of your domain OUTSIDE of the MODEL
+        customerValidator.validate(customer);
 
         customer = customerService.register(customer);
         customerRepo.save(customer);
@@ -69,6 +65,7 @@ public class CustomerApplicationService {
 
         sendRegistrationEmail(customer.getEmail());
     }
+
     // The orchestrator.
     // the facade that is telling other services what to do
 

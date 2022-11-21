@@ -1,0 +1,24 @@
+package victor.training.clean.application;
+
+import org.springframework.stereotype.Component;
+import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.repo.CustomerRepo;
+
+@Component
+public class CustomerValidator {
+  private final CustomerRepo customerRepo;
+
+  public CustomerValidator(CustomerRepo customerRepo) {
+    this.customerRepo = customerRepo;
+  }
+
+  void validate(Customer customer) {
+    if (customer.getName().length() < 5) {
+      throw new IllegalArgumentException("Name too short");
+    }
+    if (customerRepo.existsByEmail(customer.getEmail())) {
+      throw new IllegalArgumentException("Customer email is already registered");
+      // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
+    }
+  }
+}
