@@ -31,6 +31,7 @@ public class ArchitectureTest {
 
     @Test
     public void domain_not_leaked_via_controller_methods() {
+        // BUM
         methods().that().areMetaAnnotatedWith(RequestMapping.class)
                 .and().arePublic()
                 .should().haveRawReturnType(not(resideInAPackage("..domain..")))
