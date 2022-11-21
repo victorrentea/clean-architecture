@@ -60,23 +60,23 @@ public class CustomerApplicationService {
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
-        System.out.println("Biz Logic with discount " + discountPercentage);
-        // Heavy business logic
-        // Heavy business logic
+        customer = customerService.register(customer);
         customerRepo.save(customer);
-        // Heavy business logic
+
         quotationService.quoteCustomer(customer);
+
+
 
         sendRegistrationEmail(customer.getEmail());
     }
+    // The orchestrator.
+    // the facade that is telling other services what to do
+
+    // more coupling in the orchestrator = OK
+    // less coupling in the service containing domain complexity
+
+    private final CustomerService customerService;
+
 
     private void sendRegistrationEmail(String emailAddress) {
         System.out.println("Sending activation link via email to " + emailAddress);
