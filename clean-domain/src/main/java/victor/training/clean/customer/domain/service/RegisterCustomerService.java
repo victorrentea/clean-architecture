@@ -3,6 +3,7 @@ package victor.training.clean.customer.domain.service;
 import org.springframework.stereotype.Service;
 import victor.training.clean.customer.domain.model.Customer;
 import victor.training.clean.customer.domain.repo.CustomerRepo;
+import victor.training.clean.shared.domain.model.InsurancePolicy;
 import victor.training.clean.shared.domain.service.QuotationService;
 
 @Service
@@ -16,6 +17,7 @@ public class RegisterCustomerService {// action, not noun. it's a piece of logic
     this.customerRepo = customerRepo;
     this.quotationService = quotationService1;
   }
+
 
   public Customer register(Customer customer) {
     // Heavy business logic
