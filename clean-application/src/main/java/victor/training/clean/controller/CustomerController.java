@@ -21,11 +21,11 @@ public class CustomerController {
       return customerApplicationService.findById(id);
    }
 
-   @Operation(description = "Customer Search")
-   @PostMapping("search")
-   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-      return customerApplicationService.search(searchCriteria);
-   }
+//   @Operation(description = "Customer Search")
+//   @PostMapping("search")
+//   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
+//      return customerApplicationService.search(searchCriteria);
+//   }
 
    @PostMapping("")
    public void register(@RequestBody CustomerDto customerDto) {

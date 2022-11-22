@@ -16,10 +16,11 @@ public class RegisterCustomerService {// action, not noun. it's a piece of logic
     this.quotationService = quotationService1;
   }
 
-  public Customer register(Customer customer) {
+  public Customer register(Customer customer, int couponId, int customerId) {
     // Heavy business logic
     // Heavy business logic
     // Heavy business logic
+
 
     // TODO Where can I move this little logic?
     //    (... operating on the state of a single entity)

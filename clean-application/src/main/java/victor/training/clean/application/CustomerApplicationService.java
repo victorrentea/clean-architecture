@@ -11,7 +11,6 @@ import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
@@ -24,14 +23,14 @@ public class CustomerApplicationService { // ± handler/orchestrator
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
-    private final CustomerSearchRepo customerSearchRepo;
+//    private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
     private final CustomerValidator customerValidator;
 
     // use-case optimized query: select Dtos from queries directly
-    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-        return customerSearchRepo.search(searchCriteria);
-    }
+//    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+//        return customerSearchRepo.search(searchCriteria);
+//    }
 
     public CustomerDto findById(long customerId) {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
@@ -59,7 +58,7 @@ public class CustomerApplicationService { // ± handler/orchestrator
         // it's risky to enforce validity of your domain OUTSIDE of the MODEL
         customerValidator.validate(customer);
 
-        customer = registerCustomerService.register(customer);
+        customer = registerCustomerService.register(customer,dto.customerId,dto.cuponId);
         customerRepo.save(customer);
 
 //        quotationService.quoteCustomer(customer);
