@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
-import victor.training.clean.shared.domain.model.Customer;
+import victor.training.clean.customer.domain.model.Customer;
 
 import java.time.format.DateTimeFormatter;
 

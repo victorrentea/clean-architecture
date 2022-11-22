@@ -3,8 +3,8 @@ package victor.training.clean.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import victor.training.clean.shared.domain.model.Customer;
-import victor.training.clean.shared.domain.repo.CustomerRepo;
+import victor.training.clean.customer.domain.model.Customer;
+import victor.training.clean.customer.domain.repo.CustomerRepo;
 
 @RestController
 @RequestMapping("customerLeaking")

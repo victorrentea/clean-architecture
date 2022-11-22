@@ -2,6 +2,7 @@ package victor.training.clean.shared.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import victor.training.clean.customer.domain.model.Customer;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

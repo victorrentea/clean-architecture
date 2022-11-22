@@ -3,7 +3,7 @@ package victor.training.clean.shared.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.shared.domain.model.Customer;
+import victor.training.clean.customer.domain.model.Customer;
 import victor.training.clean.shared.domain.model.InsurancePolicy;
 import victor.training.clean.shared.domain.repo.InsurancePolicyRepo;
 

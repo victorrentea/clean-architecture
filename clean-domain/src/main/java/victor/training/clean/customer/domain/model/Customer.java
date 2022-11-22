@@ -1,4 +1,4 @@
-package victor.training.clean.shared.domain.model;
+package victor.training.clean.customer.domain.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
