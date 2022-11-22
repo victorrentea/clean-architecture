@@ -1,11 +1,11 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.shared.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.InsurancePolicy;
-import victor.training.clean.domain.repo.InsurancePolicyRepo;
+import victor.training.clean.shared.domain.model.Customer;
+import victor.training.clean.shared.domain.model.InsurancePolicy;
+import victor.training.clean.shared.domain.repo.InsurancePolicyRepo;
 
 import java.math.BigDecimal;
 

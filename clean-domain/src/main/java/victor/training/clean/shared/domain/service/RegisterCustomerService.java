@@ -1,8 +1,8 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.shared.domain.service;
 
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.shared.domain.model.Customer;
+import victor.training.clean.shared.domain.repo.CustomerRepo;
 
 @Service
 

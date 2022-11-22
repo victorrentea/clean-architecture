@@ -1,8 +1,8 @@
 package victor.training.clean.application;
 
 import org.springframework.stereotype.Component;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.shared.domain.model.Customer;
+import victor.training.clean.shared.domain.repo.CustomerRepo;
 
 @Component
 public class CustomerValidator {
