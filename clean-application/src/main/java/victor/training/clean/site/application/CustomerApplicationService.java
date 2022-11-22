@@ -57,7 +57,7 @@ public class CustomerApplicationService { // ± handler/orchestrator
         customer = registerCustomerService.register(customer);
         customerRepo.save(customer);
 
-        quotationService.quoteCustomer(customer.getId());// orchestration from "above"
+//        quotationService.quoteCustomer(customer.getId());// orchestration from "above"
 
 
 

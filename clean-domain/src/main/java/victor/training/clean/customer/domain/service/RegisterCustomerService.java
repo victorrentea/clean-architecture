@@ -1,9 +1,11 @@
 package victor.training.clean.customer.domain.service;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import victor.training.clean.customer.domain.model.Customer;
 import victor.training.clean.customer.domain.repo.CustomerRepo;
 import victor.training.clean.customer.door.QuotationServiceForCustomer;
+import victor.training.clean.customer.door.event.CustomerRegisteredEvent;
 import victor.training.clean.insurance.door.InsuranceDoor;
 
 @Service
@@ -13,10 +15,11 @@ public class RegisterCustomerService {// action, not noun. it's a piece of logic
   private final CustomerRepo customerRepo;
   private final QuotationServiceForCustomer quotationServiceForCustomer;
 
-  public RegisterCustomerService(CustomerRepo customerRepo, QuotationServiceForCustomer quotationServiceForCustomer, QuotationServiceForCustomer quotationService1, InsuranceDoor insuranceDoor) {
+  public RegisterCustomerService(CustomerRepo customerRepo, QuotationServiceForCustomer quotationServiceForCustomer, QuotationServiceForCustomer quotationService1, InsuranceDoor insuranceDoor, ApplicationEventPublisher eventPublisher) {
     this.customerRepo = customerRepo;
     this.quotationServiceForCustomer = quotationService1;
     this.insuranceDoor = insuranceDoor;
+    this.eventPublisher = eventPublisher;
   }
 
 
@@ -46,9 +49,14 @@ public class RegisterCustomerService {// action, not noun. it's a piece of logic
 //    // option B (just calls) customer -> insurance
 //    insuranceDoor.quoteCustomer(customer.getId());
 
+    // fire an event
+    eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId()));
+    System.out.println("Before this line, all the listeners would have already ran");
+
     return customer;
   }
   private final InsuranceDoor insuranceDoor;
+  private final ApplicationEventPublisher eventPublisher;
 
 }
 
