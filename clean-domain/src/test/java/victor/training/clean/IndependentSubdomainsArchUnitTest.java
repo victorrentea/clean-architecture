@@ -20,14 +20,14 @@ public class IndependentSubdomainsArchUnitTest {
 
       SliceRule sliceRule = SlicesRuleDefinition.slices().matching("..clean.(*)..*")
           .should().notDependOnEachOther()
-          .ignoreDependency(alwaysTrue(), resideInAnyPackage(new String[]{"..common..", "..api.."})); // allow dependencies to .events
+          .ignoreDependency(alwaysTrue(), resideInAnyPackage(new String[]{"..shared..", "..door.."})); // allow dependencies to .events
 
       // progressive strangling the monolith
       List<String> violations = sliceRule.evaluate(classes).getFailureReport().getDetails();
 
       // A: decoupling phase: progressively lower this number:
-      assertThat(violations).hasSizeLessThanOrEqualTo(2); // <-- real life: starting point after moving classes around
-//      assertThat(violations).hasSizeLessThanOrEqualTo(0); // goal, 6 mo from now
+//      assertThat(violations).hasSizeLessThanOrEqualTo(2); // <-- real life: starting point after moving classes around
+      assertThat(violations).hasSizeLessThanOrEqualTo(0); // goal, 6 mo from now
 
       // B: maintenance phase: fail test at any deviation
       // sliceRule.check(classes);

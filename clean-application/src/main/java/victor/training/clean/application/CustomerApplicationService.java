@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.customer.domain.model.Customer;
+import victor.training.clean.customer.door.QuotationServiceForCustomer;
 import victor.training.clean.shared.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.customer.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.customer.domain.repo.CustomerRepo;
 import victor.training.clean.customer.domain.repo.SiteRepo;
-import victor.training.clean.shared.domain.service.QuotationService;
 
 //@Service
 @ApplicationService // custom annotation
@@ -20,7 +20,7 @@ public class CustomerApplicationService { // ± handler/orchestrator
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
 //    private final CustomerSearchRepo customerSearchRepo;
-    private final QuotationService quotationService;
+    private final QuotationServiceForCustomer quotationService;
     private final CustomerValidator customerValidator;
 
     // use-case optimized query: select Dtos from queries directly

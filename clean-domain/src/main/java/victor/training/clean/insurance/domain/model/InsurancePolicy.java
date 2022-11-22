@@ -1,4 +1,4 @@
-package victor.training.clean.shared.domain.model;
+package victor.training.clean.insurance.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +18,13 @@ public class InsurancePolicy {
    @GeneratedValue
    private Long id;
 
-   @ManyToOne
-   private Customer customer;
+//   @ManyToOne
+//   private Customer customer;
+
+   // Option1:
+   private Long customerId; // But, please 🙏 keep the FK !!!
+   // (don't sacrifice consistency in a Modulity) - that's what keeps today many teams from
+   // breaking out microservices;
 
    private BigDecimal valueInEur;
 
