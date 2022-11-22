@@ -18,9 +18,9 @@ public class CustomerDto {
    String email;
    Long siteId;
    String creationDateStr;
-   public int customerId
-           ;
-   public int cuponId;
+//   public int customerId
+//           ;
+//   public int cuponId;
 
    public CustomerDto(Customer customer) {
       this(customer.getId(), customer.getName(), customer.getEmail(), customer.getSite().getId(), customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));

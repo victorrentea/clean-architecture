@@ -17,7 +17,7 @@ public class RegisterCustomerService {// action, not noun. it's a piece of logic
     this.quotationService = quotationService1;
   }
 
-  public Customer register(Customer customer, int couponId, int customerId) {
+  public Customer register(Customer customer) {
     // Heavy business logic
     // Heavy business logic
     // Heavy business logic

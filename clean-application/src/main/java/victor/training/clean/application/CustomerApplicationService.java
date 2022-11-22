@@ -54,7 +54,7 @@ public class CustomerApplicationService { // ± handler/orchestrator
         // it's risky to enforce validity of your domain OUTSIDE of the MODEL
         customerValidator.validate(customer);
 
-        customer = registerCustomerService.register(customer,dto.customerId,dto.cuponId);
+        customer = registerCustomerService.register(customer);
         customerRepo.save(customer);
 
 //        quotationService.quoteCustomer(customer);
