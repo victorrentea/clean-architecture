@@ -22,6 +22,7 @@ public class QuotationService  {
       log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customerId);
       InsurancePolicy policy = new InsurancePolicy();
       policy.setCustomerId(customerId);
+      policy.setCustomerName(customerDoor.getCustomer(policy.getCustomerId()).getName());
       policy.setValueInEur(BigDecimal.ONE);
       insurancePolicyRepo.save(policy);
    }
