@@ -14,6 +14,6 @@ public class InsurancePluginForCustomer implements QuotationServiceForCustomer {
 
   @Override
   public void quoteCustomer(Long customerId) {
-    quotationService.quoteCustomer(customerId);
+    quotationService.quoteCustomer(customerId, "TODO");
   }
 }

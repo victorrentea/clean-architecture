@@ -18,11 +18,12 @@ public class QuotationService  {
    private final InsurancePolicyRepo insurancePolicyRepo;
    private final CustomerDoor customerDoor;
 
-   public void quoteCustomer(Long customerId) {
+   public void quoteCustomer(Long customerId, String customerName) {
       log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customerId);
       InsurancePolicy policy = new InsurancePolicy();
       policy.setCustomerId(customerId);
-      policy.setCustomerName(customerDoor.getCustomer(policy.getCustomerId()).getName());
+      policy.setCustomerName(customerName);
+//      policy.setCustomerName(customerDoor.getCustomer(policy.getCustomerId()).getName());
       policy.setValueInEur(BigDecimal.ONE);
       insurancePolicyRepo.save(policy);
    }

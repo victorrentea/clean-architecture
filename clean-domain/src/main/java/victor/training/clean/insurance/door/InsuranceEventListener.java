@@ -17,7 +17,7 @@ public class InsuranceEventListener {
   @EventListener // @Subscribe
 //  @Async // fire-and-forget on a different thread + 5 weird bugs / year
   public void onCustomerRegisteredEvent(CustomerRegisteredEvent event) {
-    quotationService.quoteCustomer(event.getCustomerId());
+    quotationService.quoteCustomer(event.getCustomerId(), event.getCustomerName());
     // IMPORTANT NOTE: the events are dispatched via memory instantaneous, in the same thread, thus in the same transaction.
   }
 }

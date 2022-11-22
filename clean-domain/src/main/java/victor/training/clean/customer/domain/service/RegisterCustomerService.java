@@ -50,7 +50,7 @@ public class RegisterCustomerService {// action, not noun. it's a piece of logic
 //    insuranceDoor.quoteCustomer(customer.getId());
 
     // fire an event
-    eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId()));
+    eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId(), customer.getName()));
     System.out.println("Before this line, all the listeners would have already ran");
 
     return customer;
