@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean.site.application;
 
 import org.springframework.stereotype.Component;
 import victor.training.clean.customer.domain.model.Customer;

@@ -1,14 +1,9 @@
-package victor.training.clean.controller;
+package victor.training.clean.site.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import victor.training.clean.application.CustomerApplicationService;
-import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.application.dto.CustomerSearchCriteria;
-import victor.training.clean.application.dto.CustomerSearchResult;
-
-import java.util.List;
+import victor.training.clean.site.application.CustomerApplicationService;
+import victor.training.clean.site.application.dto.CustomerDto;
 
 @RestController
 @RequestMapping("customer")

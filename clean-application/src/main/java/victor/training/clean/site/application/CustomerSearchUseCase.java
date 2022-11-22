@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean.site.application;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import victor.training.clean.application.dto.CustomerSearchCriteria;
-import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.site.application.dto.CustomerSearchCriteria;
+import victor.training.clean.site.application.dto.CustomerSearchResult;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

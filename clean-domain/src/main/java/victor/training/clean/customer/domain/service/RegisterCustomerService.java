@@ -40,11 +40,11 @@ public class RegisterCustomerService {// action, not noun. it's a piece of logic
     // option A (dep inversion😱 a bit more scary): customer module does not KNOW
     // (is not Coupled) to the insurance module: insurance -> customer
     // I ❤️ to protect to customer <== I don't couple it to insurance
-    quotationServiceForCustomer.quoteCustomer(customer.getId());
-      // similary to event-driven
-
-    // option B (just calls) customer -> insurance
-    insuranceDoor.quoteCustomer(customer.getId());
+//    quotationServiceForCustomer.quoteCustomer(customer.getId());
+//      // similary to event-driven
+//
+//    // option B (just calls) customer -> insurance
+//    insuranceDoor.quoteCustomer(customer.getId());
 
     return customer;
   }

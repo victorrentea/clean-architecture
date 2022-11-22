@@ -1,4 +1,4 @@
-package victor.training.clean.controller;
+package victor.training.clean.site.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

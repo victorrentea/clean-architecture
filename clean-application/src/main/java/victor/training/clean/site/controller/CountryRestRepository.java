@@ -1,4 +1,4 @@
-package victor.training.clean.controller;
+package victor.training.clean.site.controller;
 
 import lombok.*;
 import org.springframework.boot.context.event.ApplicationStartedEvent;

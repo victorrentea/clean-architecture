@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean.site.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -6,7 +6,7 @@ import victor.training.clean.common.ApplicationService;
 import victor.training.clean.customer.domain.model.Customer;
 import victor.training.clean.customer.door.QuotationServiceForCustomer;
 import victor.training.clean.shared.domain.model.Email;
-import victor.training.clean.application.dto.CustomerDto;
+import victor.training.clean.site.application.dto.CustomerDto;
 import victor.training.clean.customer.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.customer.domain.repo.CustomerRepo;
@@ -57,7 +57,7 @@ public class CustomerApplicationService { // ± handler/orchestrator
         customer = registerCustomerService.register(customer);
         customerRepo.save(customer);
 
-//        quotationService.quoteCustomer(customer);
+        quotationService.quoteCustomer(customer.getId());// orchestration from "above"
 
 
 

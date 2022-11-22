@@ -1,4 +1,4 @@
-package victor.training.clean.application.dto;
+package victor.training.clean.site.application.dto;
 
 // sent as JSON
 public class CustomerSearchResult {

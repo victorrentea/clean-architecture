@@ -1,4 +1,4 @@
-package victor.training.clean.application.dto;
+package victor.training.clean.site.application.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
