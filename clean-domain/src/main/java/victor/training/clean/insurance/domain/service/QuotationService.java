@@ -28,8 +28,10 @@ public class QuotationService  {
 
    public void printPolicy(long policyId) {
       InsurancePolicy policy = insurancePolicyRepo.findById(policyId).orElseThrow();
-      CustomerKnob customer = customerDoor.getCustomer(policy.getCustomerId());
-      String customerName = customer.getName();
+      // can I avoid this call?
+//      CustomerKnob customer = customerDoor.getCustomer(policy.getCustomerId());
+
+      String customerName = policy.getCustomerName();
       System.out.println("Insurange Policy for " + customerName);
    }
 }

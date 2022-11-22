@@ -26,6 +26,11 @@ public class InsurancePolicy {
    // (don't sacrifice consistency in a Modulity) - that's what keeps today many teams from
    // breaking out microservices;
 
+   // immutable for the life of this policy
+   private String customerName;
+
+   // Loan{branchId; branchName
+
    private BigDecimal valueInEur;
 
 }
