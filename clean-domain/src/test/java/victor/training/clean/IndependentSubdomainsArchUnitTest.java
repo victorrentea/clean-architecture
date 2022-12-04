@@ -5,6 +5,7 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.EvaluationResult;
 import com.tngtech.archunit.library.dependencies.SliceRule;
 import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition;
+import com.tngtech.archunit.library.dependencies.syntax.GivenSlices;
 import org.junit.Test;
 
 import java.util.List;
@@ -16,13 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class IndependentSubdomainsArchUnitTest {
 
    private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..api.."};
+
+   private JavaClasses classes = new ClassFileImporter().importPackages("victor");
+   private GivenSlices slices = SlicesRuleDefinition.slices()
+           .matching("..clean.(*)..*");
+
    @Test
    public void independentSubdomains() {
-      JavaClasses classes = new ClassFileImporter().importPackages("victor");
-
-      SliceRule sliceRule = SlicesRuleDefinition.slices().matching("..clean.(*)..*")
+      SliceRule sliceRule = slices
           .should().notDependOnEachOther()
-          .ignoreDependency(alwaysTrue(), resideInAnyPackage(ALLOWED_SHARED_PACKAGES)); // allow dependencies to .events
+          .ignoreDependency(alwaysTrue(), resideInAnyPackage(ALLOWED_SHARED_PACKAGES));
 
       // progressive strangling the monolith
       List<String> violations = sliceRule.evaluate(classes).getFailureReport().getDetails();
@@ -33,5 +37,10 @@ public class IndependentSubdomainsArchUnitTest {
 
       // B: maintenance phase: fail test at any deviation
       // sliceRule.check(classes);
+   }
+
+   @Test
+   public void noCyclesBetweenSlices() {
+      slices.should().beFreeOfCycles().check(classes);
    }
 }
