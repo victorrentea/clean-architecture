@@ -23,11 +23,13 @@ import java.time.format.DateTimeFormatter;
 
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -58,7 +60,7 @@ public class RegisterCustomerMvcTest {
     }
 
     @Test
-    void register_and_get() throws Exception {
+    void register_and_get_and_search() throws Exception {
 
         register(requestDto.build()).andExpect(status().isOk());
 
@@ -71,12 +73,14 @@ public class RegisterCustomerMvcTest {
 
 
         CustomerDto responseDto = getCustomer(customer.getId());
+
         assertThat(responseDto.getId()).isEqualTo(customer.getId());
         assertThat(responseDto.getName()).isEqualTo("::name::");
         assertThat(responseDto.getEmail()).isEqualTo("::email::");
         assertThat(responseDto.getSiteId()).isEqualTo(site.getId());
         assertThat(responseDto.getCreationDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
+        search("ame", 1);
     }
 
     @Test
@@ -102,6 +106,14 @@ public class RegisterCustomerMvcTest {
                 .contentType(APPLICATION_JSON)
                 .content(jackson.writeValueAsString(requestDto))
         );
+    }
+    private void search(String name, int expectedNumberOfResults) throws Exception {
+        mockMvc.perform(post("/customer/search")
+                .contentType(APPLICATION_JSON)
+                .content("""
+                        {"name": "%s"}
+                        """.formatted(name)))
+        .andExpect(jsonPath("$", hasSize(expectedNumberOfResults)));
     }
 
     private CustomerDto getCustomer(long customerId) throws Exception {

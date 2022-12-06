@@ -22,7 +22,7 @@ public class CustomerController {
    }
 
    @Operation(description = "Customer Search")
-   @PostMapping("search")
+//   @PostMapping("search")
    public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
       return customerApplicationService.search(searchCriteria);
    }
