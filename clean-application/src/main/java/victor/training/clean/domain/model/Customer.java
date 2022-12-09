@@ -2,6 +2,7 @@ package victor.training.clean.domain.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,5 +22,10 @@ public class Customer {
 	private boolean goldMember;
 	@ManyToOne
 	private Site site;
+//	List<Childretn> // lazy load
 
+//	@JsonIgnore
+//	public Site getSite() {
+//		return site;
+//	}
 }

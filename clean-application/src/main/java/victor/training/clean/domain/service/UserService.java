@@ -3,6 +3,7 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
@@ -22,32 +23,32 @@ public class UserService {
       }
 
       LdapUserDto dto = list.get(0);
+      String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
 
-      deepDomainLogic(dto);
+      String uid = dto.getUid();
+      if (uid == null) {
+         uid = "anonymous";
+      }
+      User user = new User(uid, dto.getWorkEmail(), fullName);
+      deepDomainLogic(user);
    }
 
-   private void deepDomainLogic(LdapUserDto dto) {
-      if (dto.getWorkEmail()!=null) {
-         log.debug("Send welcome email to  " + dto.getWorkEmail());
+   private void deepDomainLogic(User user) {
+      // DO NOT DO defensive programming in our core logic  < fear driven development
+      if (user.getEmail().isPresent()) {
+         log.debug("Send welcome email to  " + user.getEmail().get());
       }
 
-      log.debug("Insert user in my database: " + dto.getUid());
+      log.debug("Insert user in my database: " + user.getUsername());
 
-      String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
-      innocentHack(dto);
-      log.debug("More business logic with " + fullName + " of id " + dto.getUid().toLowerCase());
+      log.debug("More business logic with " + user.getFullName() + " of id " + user.getUsername().toLowerCase());
 
       // then, in multiple places:
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
-      sendMailTo(fullName + " <" + dto.getWorkEmail()+ ">");
-   }
+      user.getEmailContact().ifPresent(this::sendMailTo);
+      user.getEmailContact().ifPresent(this::sendMailTo);
+      user.getEmailContact().ifPresent(this::sendMailTo);
+      user.getEmailContact().ifPresent(this::sendMailTo);
 
-   private void innocentHack(LdapUserDto dto) {
-      if (dto.getUid() == null) {
-         dto.setUid("anonymous");
-      }
    }
 
    private void sendMailTo(String emailContact) {
