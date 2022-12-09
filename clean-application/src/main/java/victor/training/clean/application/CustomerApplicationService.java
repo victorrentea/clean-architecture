@@ -1,6 +1,8 @@
 package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.common.ApplicationService;
+import victor.training.clean.crm.domain.door.events.CustomerNameChangedEvent;
 import victor.training.clean.crm.domain.entity.Customer;
 import victor.training.clean.common.entity.Email;
 import victor.training.clean.application.dto.CustomerDto;
@@ -61,10 +64,24 @@ public class CustomerApplicationService {
         }
 
         registerCustomer.register(customer);
-        quotationService.quoteCustomer(customer.getId());
+        quotationService.quoteCustomer(customer.getId(), customer.getName());
 
         sendRegistrationEmail(customer.getEmail());
     }
+
+    @Transactional
+    public void updateCustoemrName(Long customerId, String newName) {
+        Customer customer = customerRepo.findById(customerId).orElseThrow();
+        customer.setName(newName);
+
+        // i have to notify the insurance module that customer name changed
+//        A) door call: insuranceDoor.notifyCustomerNameChanged()
+
+        // B) evnten
+        eventPublisher.publishEvent(new CustomerNameChangedEvent(customerId, newName));
+
+    }
+    private final ApplicationEventPublisher eventPublisher;
 
 
     private void sendRegistrationEmail(String emailAddress) {

@@ -22,6 +22,7 @@ public class InsurancePolicy {
    //   private Customer customer;
    private Long customerId; // !! + KEEP THE FK PLEASE 🙏 DO NOT SACRIFICE CONSISTENCY until you are going to extract
    // out a module in microservice NEXT MONTH
+   private String customerName;
 
    private BigDecimal valueInEur;
 
