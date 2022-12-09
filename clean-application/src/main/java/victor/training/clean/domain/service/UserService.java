@@ -9,10 +9,10 @@ import victor.training.clean.domain.model.User;
 @Slf4j
 @Service
 public class UserService {
-   private final ExternalUserClient externalUserClient;
+   private final ExternalUserProvider externalUserProvider;
 
    public void importUserFrom(String username) {
-      User user = externalUserClient.retrieveUserById(username);
+      User user = externalUserProvider.retrieveUserById(username);
       // DO NOT DO defensive programming in our core logic  < fear driven development
       if (user.getEmail().isPresent()) {
          log.debug("Send welcome email to  " + user.getEmail().get());

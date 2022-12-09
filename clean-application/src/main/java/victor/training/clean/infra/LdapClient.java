@@ -1,20 +1,20 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.ExternalUserProvider;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
 @Setter
-public class ExternalUserClient { // = Adapter design pattern
+public class LdapClient implements ExternalUserProvider { // = Adapter design pattern
   private final LdapApi ldapApi;
 
+  @Override
   public User retrieveUserById(String username) {
     List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
 
