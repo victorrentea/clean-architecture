@@ -11,7 +11,6 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import victor.training.clean.ApiClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(OutputCaptureExtension.class)
@@ -31,7 +30,7 @@ class UserServiceTest {
 
   @Test
   void importUserFromLdap(CapturedOutput capturedOutput) {
-    userService.importUserFromLdap("jdoe");
+    userService.importUserFrom("jdoe");
 
     assertThat(capturedOutput)
             .contains("More business logic with John DOE of id jdoe")

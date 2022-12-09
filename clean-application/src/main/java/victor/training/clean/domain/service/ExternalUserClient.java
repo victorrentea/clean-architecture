@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Setter
-public class LdapClient { // = Adapter design pattern
+public class ExternalUserClient { // = Adapter design pattern
   private final LdapApi ldapApi;
 
   public User retrieveUserById(String username) {
