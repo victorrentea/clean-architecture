@@ -28,7 +28,10 @@ public class CustomerSearchRepo {
          jpql += "  AND UPPER(c.name) LIKE UPPER('%' || :name || '%')   ";
          paramMap.put("name", criteria.getName());
       }
-
+      if (criteria.getName() != null) {
+         jpql += "  AND UPPER(c.name) LIKE UPPER('%' || :name || '%')   ";
+         paramMap.put("name", criteria.getName());
+      }
       // etc
 
       // or CriteriaBuilder, or QueryDSL

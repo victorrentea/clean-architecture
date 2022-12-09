@@ -26,6 +26,7 @@ public class Customer {
 	@ManyToOne
 	private Site site;
 
+//	protected Customer() {}
 	public int getDiscountPercentage() {
 		// < 10 lines of logic, 50 if DDD is the mouth of Management.
 		// ofc no repo/api calls inside => only loigic related to the sate of THIS entity.
