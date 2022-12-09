@@ -7,10 +7,10 @@ import victor.training.clean.domain.repo.CustomerRepo;
 
 @RequiredArgsConstructor
 @Service
-public class RegisterCustomerService {
+public class RegisterCustomer {
   private final CustomerRepo customerRepo;
 
-  public void registerCustomer(Customer customer) {
+  public void register(Customer customer) {
     // Heavy business logic
     // Heavy business logic
     // Heavy business logic

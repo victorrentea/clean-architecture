@@ -12,7 +12,7 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.domain.service.RegisterCustomerService;
+import victor.training.clean.domain.service.RegisterCustomer;
 import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
@@ -33,7 +33,7 @@ public class CustomerApplicationService {
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
-    private final RegisterCustomerService registerCustomerService;
+    private final RegisterCustomer registerCustomer;
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
@@ -60,7 +60,7 @@ public class CustomerApplicationService {
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
-        registerCustomerService.registerCustomer(customer);
+        registerCustomer.register(customer);
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer.getEmail());
