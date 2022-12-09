@@ -4,36 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-   private final LdapApi ldapApi;
+   private final LdapClient ldapClient;
 
    public void importUserFromLdap(String username) {
-      List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
-
-      if (list.size() != 1) {
-         throw new IllegalArgumentException("There is no single user matching username " + username);
-      }
-
-      LdapUserDto dto = list.get(0);
-      String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
-
-      String uid = dto.getUid();
-      if (uid == null) {
-         uid = "anonymous";
-      }
-      User user = new User(uid, dto.getWorkEmail(), fullName);
-      deepDomainLogic(user);
-   }
-
-   private void deepDomainLogic(User user) {
+      User user = ldapClient.retrieveUserById(username);
       // DO NOT DO defensive programming in our core logic  < fear driven development
       if (user.getEmail().isPresent()) {
          log.debug("Send welcome email to  " + user.getEmail().get());
@@ -50,6 +29,7 @@ public class UserService {
       user.getEmailContact().ifPresent(this::sendMailTo);
 
    }
+
 
    private void sendMailTo(String emailContact) {
       System.out.println("Contact: " + emailContact);
