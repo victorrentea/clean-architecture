@@ -2,23 +2,30 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
-import victor.training.clean.domain.service.QuotationService;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
 @ApplicationService // custom annotation
+@RestController
+@RequestMapping("customer")
+
 @RequiredArgsConstructor
 public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
@@ -26,26 +33,19 @@ public class CustomerApplicationService {
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
+    private final CustomerService customerService;
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
 
-    public CustomerDto findById(long customerId) {
-        Customer customer = customerRepo.findById(customerId).orElseThrow();
-
-        // mapping logic TODO move somewhere else
-       return CustomerDto.builder()
-               .id(customer.getId())
-               .name(customer.getName())
-               .email(customer.getEmail())
-               .siteId(customer.getSite().getId())
-               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-               .build();
+    @GetMapping("{id}")
+    public CustomerDto findById(@PathVariable long customerId) {
+        return new CustomerDto(customerRepo.findById(customerId).orElseThrow());
     }
 
     @Transactional
-    public void register(CustomerDto dto) {
+    public void register( CustomerDto dto) {
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
@@ -60,23 +60,12 @@ public class CustomerApplicationService {
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
-        System.out.println("Biz Logic with discount " + discountPercentage);
-        // Heavy business logic
-        // Heavy business logic
-        customerRepo.save(customer);
-        // Heavy business logic
+        customerService.registerCustomer(customer);
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer.getEmail());
     }
+
 
     private void sendRegistrationEmail(String emailAddress) {
         System.out.println("Sending activation link via email to " + emailAddress);

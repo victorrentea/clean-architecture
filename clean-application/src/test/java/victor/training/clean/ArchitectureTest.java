@@ -27,7 +27,7 @@ public class ArchitectureTest {
     @Test
     public void domain_independent_of_my_api() {
         noClasses().that().resideInAPackage("..domain..")
-                .should().dependOnClassesThat().resideInAPackage("..facade..")
+                .should().dependOnClassesThat().resideInAPackage("..application..")
                 .check(allProjectClasses);
     }
 
