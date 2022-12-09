@@ -2,13 +2,12 @@ package victor.training.clean.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
 @RequiredArgsConstructor
 @Service
-public class CustomerService {
+public class RegisterCustomerService {
   private final CustomerRepo customerRepo;
 
   public void registerCustomer(Customer customer) {
