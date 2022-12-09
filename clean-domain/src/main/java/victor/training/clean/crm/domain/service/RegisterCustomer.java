@@ -1,9 +1,9 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.crm.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.crm.domain.entity.Customer;
+import victor.training.clean.crm.domain.repo.CustomerRepo;
 
 @RequiredArgsConstructor
 @Service

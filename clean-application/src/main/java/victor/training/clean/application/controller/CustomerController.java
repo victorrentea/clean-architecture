@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.application.CustomerApplicationService;
+import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
-import victor.training.clean.application.dto.CustomerSearchResult;
 
 import java.util.List;
 

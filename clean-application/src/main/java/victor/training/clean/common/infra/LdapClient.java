@@ -1,10 +1,12 @@
-package victor.training.clean.infra;
+package victor.training.clean.common.infra;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.ExternalUserProvider;
+import victor.training.clean.common.entity.User;
+import victor.training.clean.common.ExternalUserProvider;
+import victor.training.clean.infra.LdapApi;
+import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
 

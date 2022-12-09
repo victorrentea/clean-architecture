@@ -2,7 +2,6 @@ package victor.training.clean;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.tngtech.archunit.lang.EvaluationResult;
 import com.tngtech.archunit.library.dependencies.SliceRule;
 import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition;
 import com.tngtech.archunit.library.dependencies.syntax.GivenSlices;
@@ -16,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndependentSubdomainsArchUnitTest {
 
-   private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..door.."};
+   private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..api.."};
 
    private JavaClasses classes = new ClassFileImporter().importPackages("victor");
    private GivenSlices slices = SlicesRuleDefinition.slices()

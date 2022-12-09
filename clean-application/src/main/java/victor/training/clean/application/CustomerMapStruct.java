@@ -2,7 +2,7 @@ package victor.training.clean.application;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import victor.training.clean.domain.model.Customer;
+import victor.training.clean.crm.domain.entity.Customer;
 import victor.training.clean.application.dto.CustomerDto;
 
 @Mapper(componentModel = "spring")

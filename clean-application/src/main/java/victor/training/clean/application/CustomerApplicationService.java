@@ -6,18 +6,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.common.ApplicationService;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
+import victor.training.clean.crm.domain.entity.Customer;
+import victor.training.clean.common.entity.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
-import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.domain.service.RegisterCustomer;
-import victor.training.clean.domain.service.QuotationService;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.application.repo.CustomerSearchRepo;
-import victor.training.clean.domain.repo.SiteRepo;
+import victor.training.clean.crm.domain.service.RegisterCustomer;
+import victor.training.clean.insurance.domain.service.QuotationService;
+import victor.training.clean.common.infra.EmailSender;
+import victor.training.clean.crm.domain.repo.CustomerRepo;
+import victor.training.clean.crm.domain.repo.SiteRepo;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ public class CustomerApplicationService {
         }
 
         registerCustomer.register(customer);
-        quotationService.quoteCustomer(customer);
+        quotationService.quoteCustomer(customer.getId());
 
         sendRegistrationEmail(customer.getEmail());
     }
