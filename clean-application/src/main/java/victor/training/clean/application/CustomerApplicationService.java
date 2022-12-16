@@ -43,7 +43,9 @@ public class CustomerApplicationService implements CustomerRestAPI {
 
     @Override
     public CustomerDto findById(long customerId) {
-        Customer customer = customerService.findById(customerId).orElseThrow();
+//        Customer customer = customerService.findById(customerId).orElseThrow();
+
+        Customer customer = customerRepo.findById(customerId).orElseThrow();
 
         // mapping logic TODO move somewhere else
        return CustomerDto.builder()
