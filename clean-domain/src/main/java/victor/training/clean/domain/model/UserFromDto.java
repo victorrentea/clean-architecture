@@ -1,5 +1,6 @@
 package victor.training.clean.domain.model;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -14,6 +15,7 @@ public class UserFromDto {
 
   private String lname;
 
+  @NotNull
   private String workEmail;
   // private String creationDate; // not mapped from JSON (others 4 skipped to)
 
