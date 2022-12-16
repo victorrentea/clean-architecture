@@ -17,6 +17,7 @@ import java.util.Map;
 public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
+   // light-CQRS
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +

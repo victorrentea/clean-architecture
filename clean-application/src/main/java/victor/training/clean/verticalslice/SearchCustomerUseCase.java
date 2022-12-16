@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-public class SearchCustomer {
+public class SearchCustomerUseCase {
+//  private final JdbcTemplate euPot;
   private final EntityManager entityManager;
 
   @Value

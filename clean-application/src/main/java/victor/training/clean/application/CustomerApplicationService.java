@@ -29,7 +29,7 @@ public class CustomerApplicationService implements CustomerRestAPI {
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
-    private final RegisterCustomerService registerCustomerService;
+    private final RegisterCustomerService registerCustomerServiceDegeabaInterface;
 
     @Override
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
@@ -55,7 +55,7 @@ public class CustomerApplicationService implements CustomerRestAPI {
         customer.setName(dto.getName());
         customer.setSite(siteRepo.getById(dto.getSiteId()));
 
-        registerCustomerService.register(customer);
+        registerCustomerServiceDegeabaInterface.register(customer);
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer.getEmail());
