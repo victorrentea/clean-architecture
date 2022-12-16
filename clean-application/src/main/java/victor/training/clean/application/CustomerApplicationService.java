@@ -45,11 +45,10 @@ public class CustomerApplicationService implements CustomerRestAPI {
     @Override
     public CustomerDto findById(long customerId) {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
-
         // mapping logic TODO move somewhere else - principala intrebare pe care ti-o pui fiecare ora intr-un ApplicationService
         // - intr-un mapper (scris al mano sau generat)
-
-       return customer.toDto(); // NICIODATA !!!!!!!
+//       return customer.toDto(); // NICIODATA !!!!!!! pentru ca poluezi domeniul cu 'presentation' concern - M VC
+        return new CustomerDto(customer);
     }
 
     @Override
