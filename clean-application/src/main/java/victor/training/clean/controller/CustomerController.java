@@ -12,32 +12,28 @@ import victor.training.clean.application.dto.CustomerSearchResult;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-
-@RestController
-@RequestMapping("customer")
-@RequiredArgsConstructor
-public class CustomerController {
-   private final CustomerApplicationService customerApplicationService;
-
-   @GetMapping("{id}")
-   public ResponseEntity<CustomerDto> findById(@PathVariable long id) {
-      try {
-         return ResponseEntity.ok(customerApplicationService.findById(id));
-      } catch (NoSuchElementException e) {
-         return ResponseEntity.notFound().build();
-      }
-   }
-
-   // NU vreau layere inutile!
-
-   @Operation(description = "Customer Search")
-//   @PostMapping("search")
-   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-      return customerApplicationService.search(searchCriteria);
-   }
-
-   @PostMapping("")
-   public void register(@Validated @RequestBody CustomerDto customerDto) {
-      customerApplicationService.register(customerDto);
-   }
-}
+//
+//@RestController
+//@RequestMapping("customer")
+//@RequiredArgsConstructor
+//public class CustomerController {
+//   private final CustomerApplicationService customerApplicationService;
+//
+////   @GetMapping("{id}")
+////   public CustomerDto findById(@PathVariable long id) {
+////      return customerApplicationService.findById(id);
+////   }
+//
+//   // NU vreau layere inutile!
+//
+////   @Operation(description = "Customer Search")
+//////   @PostMapping("search")
+////   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
+////      return customerApplicationService.search(searchCriteria);
+////   }
+//
+////   @PostMapping("")
+////   public void register(@Validated @RequestBody CustomerDto customerDto) {
+////      customerApplicationService.register(customerDto);
+////   }
+//}
