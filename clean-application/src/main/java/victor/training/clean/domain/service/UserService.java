@@ -3,6 +3,7 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
@@ -22,33 +23,35 @@ public class UserService { // DOmain!!!
     }
 
     LdapUserDto dto = list.get(0);
-
-    deepDomainLogic(dto);
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // ⚠️ data mapping mixed with biz logic
+    User user = new User(dto.getUid(), dto.getWorkEmail(), fullName);
+    deepDomainLogic(user);
   }
 
-  private void deepDomainLogic(LdapUserDto dto) { // ⚠️ useless fields ; i only need 4 not 10
-    if (dto.getWorkEmail() != null) { // ⚠️ how about other unguarded places?
-      log.debug("Send welcome email to  " + dto.getWorkEmail());
+  private void deepDomainLogic(User user) { // ⚠️ useless fields ; i only need 4 not 10
+    if (user.getEmail().isPresent()) { // ⚠️ how about other unguarded places?
+      log.debug("Send welcome email to  " + user.getEmail().get());
     }
 
-    log.debug("Insert user in my database: " + dto.getUid()); // ⚠️ bad attribute name -> "username"
+    log.debug("Insert user in my database: " + user.getUsername()); // ⚠️ bad attribute name -> "username"
 
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // ⚠️ data mapping mixed with biz logic
-    innocentHack(dto);
-    log.debug("More " + fullName + " of id " + dto.getUid().toLowerCase()); // ⚠️ pending NullPointerException
+//    innocentHack(user);
+    log.debug("More " + user.getFullName() + " of id " + user.getUsername().toLowerCase()); // ⚠️ pending NullPointerException
 
     // then, in multiple places:
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">"); // ⚠️ repeated logic
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
+
+    user.getEmailContact().ifPresent(this::sendMailTo);
+    user.getEmailContact().ifPresent(this::sendMailTo);
+    user.getEmailContact().ifPresent(this::sendMailTo);
+    user.getEmailContact().ifPresent(this::sendMailTo);
   }
 
-  private void innocentHack(LdapUserDto dto) {
-    if (dto.getUid() == null) {
-      dto.setUid("anonymous"); // ⚠️ mutability risks
-    }
-  }
+
+  //  private void innocentHack(User dto) {
+//    if (dto.getUsername() == null) {
+//      dto.setUsername("anonymous"); // ⚠️ mutability risks
+//    }
+//  }
 
   private void sendMailTo(String emailContact) {
     System.out.println("Contact: " + emailContact);
