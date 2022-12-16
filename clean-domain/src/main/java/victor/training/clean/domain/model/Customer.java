@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
@@ -14,6 +16,8 @@ public class Customer {
 	@Id
 	@GeneratedValue
 	private Long id;
+	@Size(min = 5)
+	@NotNull
 	private String name;
 
 //	private CustomerAddress address; // -6 campuri = ❤️

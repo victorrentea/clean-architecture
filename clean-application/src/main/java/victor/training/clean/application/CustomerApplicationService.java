@@ -1,11 +1,7 @@
 package victor.training.clean.application;
 
-import io.micrometer.core.annotation.Timed;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
@@ -13,14 +9,13 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
@@ -34,7 +29,7 @@ public class CustomerApplicationService implements CustomerRestAPI {
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
-    private final CustomerService customerService;
+    private final RegisterCustomerService registerCustomerService;
 
     @Override
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
@@ -60,16 +55,7 @@ public class CustomerApplicationService implements CustomerRestAPI {
         customer.setName(dto.getName());
         customer.setSite(siteRepo.getById(dto.getSiteId()));
 
-        // TODO experiment all the ways to do validation
-        if (customer.getName().length() < 5) {
-            throw new IllegalArgumentException("Name too short");
-        }
-        if (customerRepo.existsByEmail(customer.getEmail())) {
-            throw new IllegalArgumentException("Customer email is already registered");
-            // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-        }
-
-        customerService.register(customer);
+        registerCustomerService.register(customer);
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer.getEmail());

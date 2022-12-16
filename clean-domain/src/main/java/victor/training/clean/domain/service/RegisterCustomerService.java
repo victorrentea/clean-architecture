@@ -5,14 +5,19 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+public class RegisterCustomerService { // ACTION, verb, nu substantiv
   private final CustomerRepo customerRepo;
 
   public void register(Customer customer) {
+    if (customerRepo.existsByEmail(customer.getEmail())) {
+      throw new IllegalArgumentException("Customer email is already registered");
+      // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
+    }
+
+//    CustomerDto oups;
+    
     // Heavy business logic
     // Heavy business logic
     // Heavy business logic
