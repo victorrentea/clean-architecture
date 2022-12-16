@@ -1,7 +1,12 @@
 package victor.training.clean.application;
 
+import io.micrometer.core.annotation.Timed;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
@@ -18,6 +23,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
+@RestController
+@RequestMapping("customer")
 @ApplicationService // custom annotation
 @RequiredArgsConstructor
 public class CustomerApplicationService {
@@ -27,11 +34,18 @@ public class CustomerApplicationService {
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
 
+    @Operation(description = "Customer Search")
+    @PostMapping("search")
+
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
 
-    public CustomerDto findById(long customerId) {
+    @GetMapping("{id}")
+//    @Secured
+//    @Timed
+//    @Cacheable("search")
+    public CustomerDto findById(@PathVariable long customerId) {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
         // mapping logic TODO move somewhere else
@@ -45,7 +59,8 @@ public class CustomerApplicationService {
     }
 
     @Transactional
-    public void register(CustomerDto dto) {
+    @PostMapping("")
+    public void register(@Validated @RequestBody CustomerDto dto) {
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
