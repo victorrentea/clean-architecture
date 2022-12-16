@@ -1,7 +1,7 @@
-package victor.training.clean.domain.repo;
+package victor.training.clean.crm.domain.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import victor.training.clean.domain.model.Site;
+import victor.training.clean.crm.domain.model.Site;
 
 public interface SiteRepo extends JpaRepository<Site, Long> {
 }

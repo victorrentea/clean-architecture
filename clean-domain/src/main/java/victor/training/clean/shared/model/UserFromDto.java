@@ -1,4 +1,4 @@
-package victor.training.clean.domain.model;
+package victor.training.clean.shared.model;
 
 import javax.validation.constraints.NotNull;
 import java.util.Optional;

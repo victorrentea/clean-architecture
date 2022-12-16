@@ -1,9 +1,10 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.shared.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.model.User;
+import victor.training.clean.shared.model.User;
+import victor.training.clean.shared.service.ILdapApiAdapter;
 
 @RequiredArgsConstructor
 @Slf4j

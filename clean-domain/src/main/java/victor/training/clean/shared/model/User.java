@@ -1,4 +1,4 @@
-package victor.training.clean.domain.model;
+package victor.training.clean.shared.model;
 
 import java.util.Objects;
 import java.util.Optional;

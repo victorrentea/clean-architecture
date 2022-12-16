@@ -4,17 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.common.ApplicationService;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
+import victor.training.clean.crm.domain.model.Customer;
+import victor.training.clean.shared.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.domain.service.RegisterCustomerService;
+import victor.training.clean.crm.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.crm.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
-import victor.training.clean.domain.repo.SiteRepo;
-import victor.training.clean.domain.service.QuotationService;
+import victor.training.clean.crm.domain.repo.SiteRepo;
+import victor.training.clean.insurance.domain.service.QuotationService;
 
 import java.util.List;
 
