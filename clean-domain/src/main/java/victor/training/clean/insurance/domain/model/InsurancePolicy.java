@@ -18,8 +18,10 @@ public class InsurancePolicy {
    @GeneratedValue
    private Long id;
 
-   @ManyToOne
-   private Customer customer;
+//   @ManyToOne
+//   private Customer customer;
+
+   private Long customerId;
 
    private BigDecimal valueInEur;
 

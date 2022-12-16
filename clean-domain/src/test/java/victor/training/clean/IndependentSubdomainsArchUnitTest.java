@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndependentSubdomainsArchUnitTest {
 
-   private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..api.."};
+   private static final String[] ALLOWED_SHARED_PACKAGES = {"..shared..", "..api.."};
 
    private JavaClasses classes = new ClassFileImporter().importPackages("victor");
    private GivenSlices slices = SlicesRuleDefinition.slices()
