@@ -13,6 +13,7 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.domain.service.CustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
@@ -33,6 +34,7 @@ public class CustomerApplicationService implements CustomerRestAPI {
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
+    private final CustomerService customerService;
 
     @Override
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
@@ -41,7 +43,7 @@ public class CustomerApplicationService implements CustomerRestAPI {
 
     @Override
     public CustomerDto findById(long customerId) {
-        Customer customer = customerRepo.findById(customerId).orElseThrow();
+        Customer customer = customerService.findById(customerId).orElseThrow();
 
         // mapping logic TODO move somewhere else
        return CustomerDto.builder()
