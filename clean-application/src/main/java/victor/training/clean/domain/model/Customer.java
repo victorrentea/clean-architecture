@@ -1,7 +1,7 @@
 package victor.training.clean.domain.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,10 +16,21 @@ public class Customer {
 	@GeneratedValue
 	private Long id;
 	private String name;
+
+//	private CustomerAddress address; // -6 campuri = ❤️
+
 	private String email;
 	private LocalDate creationDate = LocalDate.now();
 	private boolean goldMember;
 	@ManyToOne
+//	@JsonIgnore
 	private Site site;
 
+	public int getDiscountPercentage() {
+		int discountPercentage = 3;
+		if (this.goldMember) {
+			discountPercentage += 1;
+		}
+		return discountPercentage;
+	}
 }

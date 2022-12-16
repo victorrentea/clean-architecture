@@ -64,10 +64,9 @@ public class CustomerApplicationService {
         // Heavy business logic
         // Heavy business logic
         // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
+        int discountPercentage = customer.getDiscountPercentage();
+
+        // enum {REGULAR(3), GOLD(4), BUSINESS(5), PLATINUM(5) }
         System.out.println("Biz Logic with discount " + discountPercentage);
         // Heavy business logic
         // Heavy business logic

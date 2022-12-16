@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class UserService {
+public class UserService { // DOmain!!!
   private final LdapApi ldapApi;
 
   public void importUserFromLdap(String username) {
@@ -26,12 +26,12 @@ public class UserService {
     deepDomainLogic(dto);
   }
 
-  private void deepDomainLogic(LdapUserDto dto) { // ⚠️ useless fields
+  private void deepDomainLogic(LdapUserDto dto) { // ⚠️ useless fields ; i only need 4 not 10
     if (dto.getWorkEmail() != null) { // ⚠️ how about other unguarded places?
       log.debug("Send welcome email to  " + dto.getWorkEmail());
     }
 
-    log.debug("Insert user in my database: " + dto.getUid()); // ⚠️ bad attribute name
+    log.debug("Insert user in my database: " + dto.getUid()); // ⚠️ bad attribute name -> "username"
 
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // ⚠️ data mapping mixed with biz logic
     innocentHack(dto);
