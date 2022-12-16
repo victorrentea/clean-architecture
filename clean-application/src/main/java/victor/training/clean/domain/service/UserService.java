@@ -34,15 +34,25 @@ public class UserService {
     log.debug("Insert user in my database: " + dto.getUid()); // ⚠️ bad attribute name
 
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // ⚠️ data mapping mixed with biz logic
-    innocentHack(dto);
-    log.debug("More " + fullName + " of id " + dto.getUid().toLowerCase()); // ⚠️ pending NullPointerException
-
     // then, in multiple places:
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">"); // ⚠️ repeated logic
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
+    anotherMethod(dto);
+    yetAnotherMethod(dto);
+
+    innocentHack(dto);
+    log.debug("Another call using the user id: " + dto.getUid().toLowerCase()); // ⚠️ pending NullPointerException
   }
+
+  private void anotherMethod(LdapUserDto dto) {
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // ⚠️ repeated logic
+    sendMailTo(fullName, dto.getWorkEmail());
+  }
+
+  private void yetAnotherMethod(LdapUserDto dto) {
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // ⚠️ repeated logic
+    System.out.println("Add comment by + " + fullName);
+  }
+
+
 
   private void innocentHack(LdapUserDto dto) {
     if (dto.getUid() == null) {
@@ -50,8 +60,9 @@ public class UserService {
     }
   }
 
-  private void sendMailTo(String emailContact) {
-    System.out.println("Contact: " + emailContact);
+  private void sendMailTo(String name, String email) {
+    System.out.println("Sending to " + name + " <" + email + ">");
+    System.out.println(".setTo("+email+");");
     //..implem left out
   }
 

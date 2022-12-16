@@ -3,14 +3,17 @@ package victor.training.clean.common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import victor.training.clean.CleanException;
 import victor.training.clean.CleanException.ErrorCode;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 import static org.springframework.http.ResponseEntity.internalServerError;
 import static org.springframework.http.ResponseEntity.status;
@@ -26,6 +29,13 @@ public class GlobalExceptionHandler {
       String userMessage = translateError(exception, ErrorCode.GENERAL, null, request);
       return internalServerError().body(userMessage);
    }
+
+   @ExceptionHandler(NoSuchElementException.class)
+   @ResponseStatus(HttpStatus.NOT_FOUND)
+   public String notFound(HttpServletRequest request, Exception exception) throws Exception {
+      return "nu-i!";
+   }
+
 
    @ExceptionHandler(CleanException.class)
    public ResponseEntity<String> handleCleanException(HttpServletRequest request, CleanException cleanException) {
