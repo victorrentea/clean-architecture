@@ -12,7 +12,7 @@ import java.util.Optional;
 public class CustomerService {
   private final CustomerRepo customerRepo;
 
-  public Optional<Customer> findById(long customerId) {
-    return customerRepo.findById(customerId); // code smell : Middle Man
-  }
+  //  public Optional<Customer> findById(long customerId) {
+  //    return customerRepo.findById(customerId); // code smell : Middle Man
+  //  }
 }
