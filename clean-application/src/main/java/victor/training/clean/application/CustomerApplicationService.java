@@ -55,6 +55,7 @@ public class CustomerApplicationService implements CustomerRestAPI {
     @Transactional
     public void register(CustomerDto dto) {
         Customer customer = new Customer();
+        // TODO move undeva maparea
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
         customer.setSite(siteRepo.getById(dto.getSiteId()));
@@ -68,22 +69,13 @@ public class CustomerApplicationService implements CustomerRestAPI {
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = customer.getDiscountPercentage();
-
-        // enum {REGULAR(3), GOLD(4), BUSINESS(5), PLATINUM(5) }
-        System.out.println("Biz Logic with discount " + discountPercentage);
-        // Heavy business logic
-        // Heavy business logic
-        customerRepo.save(customer);
-        // Heavy business logic
+        customerService.register(customer);
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer.getEmail());
     }
+
+
 
     private void sendRegistrationEmail(String emailAddress) {
         System.out.println("Sending activation link via email to " + emailAddress);
