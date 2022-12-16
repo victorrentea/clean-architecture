@@ -1,4 +1,4 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
