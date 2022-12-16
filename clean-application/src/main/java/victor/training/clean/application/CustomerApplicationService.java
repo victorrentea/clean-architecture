@@ -27,25 +27,20 @@ import java.util.List;
 @RequestMapping("customer")
 @ApplicationService // custom annotation
 @RequiredArgsConstructor
-public class CustomerApplicationService {
+public class CustomerApplicationService implements CustomerRestAPI {
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
 
-    @Operation(description = "Customer Search")
-    @PostMapping("search")
-
+    @Override
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
 
-    @GetMapping("{id}")
-//    @Secured
-//    @Timed
-//    @Cacheable("search")
-    public CustomerDto findById(@PathVariable long customerId) {
+    @Override
+    public CustomerDto findById(long customerId) {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
         // mapping logic TODO move somewhere else
@@ -58,9 +53,9 @@ public class CustomerApplicationService {
                .build();
     }
 
+    @Override
     @Transactional
-    @PostMapping("")
-    public void register(@Validated @RequestBody CustomerDto dto) {
+    public void register(CustomerDto dto) {
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
@@ -101,4 +96,5 @@ public class CustomerApplicationService {
         email.setBody("You'll like it! Sincerely, Team");
         emailSender.sendEmail(email);
     }
+
 }
