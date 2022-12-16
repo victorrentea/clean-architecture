@@ -1,18 +1,17 @@
 package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.ILdapApiAdapter;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Adapter
-public class LdapApiAdapter {
+public class LdapApiAdapter implements ILdapApiAdapter {
   private final LdapApi ldapApi;
+  @Override
   public User fetchUserByUsername(String username) {
     List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
 
