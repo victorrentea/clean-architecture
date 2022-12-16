@@ -17,6 +17,7 @@ public class UserService { // DOmain!!!
     if (user.getEmail().isPresent()) { // ⚠️ how about other unguarded places?
       log.debug("Send welcome email to  " + user.getEmail().get());
     }
+//    LdapUserDto oups;
 
     log.debug("Insert user in my database: " + user.getUsername()); // ⚠️ bad attribute name -> "username"
 

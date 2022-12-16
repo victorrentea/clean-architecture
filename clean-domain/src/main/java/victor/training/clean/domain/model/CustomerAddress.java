@@ -1,9 +1,7 @@
 package victor.training.clean.domain.model;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Embeddable;
 import java.util.Objects;
 import java.util.Optional;
 

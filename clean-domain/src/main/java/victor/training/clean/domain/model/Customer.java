@@ -1,7 +1,6 @@
 package victor.training.clean.domain.model;
 
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
