@@ -41,20 +41,15 @@ public class CustomerApplicationService implements CustomerRestAPI {
         return customerSearchRepo.search(searchCriteria);
     }
 
+//        Customer customer = customerService.findById(customerId).orElseThrow();
     @Override
     public CustomerDto findById(long customerId) {
-//        Customer customer = customerService.findById(customerId).orElseThrow();
-
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
-        // mapping logic TODO move somewhere else
-       return CustomerDto.builder()
-               .id(customer.getId())
-               .name(customer.getName())
-               .email(customer.getEmail())
-               .siteId(customer.getSite().getId())
-               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-               .build();
+        // mapping logic TODO move somewhere else - principala intrebare pe care ti-o pui fiecare ora intr-un ApplicationService
+        // - intr-un mapper (scris al mano sau generat)
+
+       return customer.toDto(); // NICIODATA !!!!!!!
     }
 
     @Override
