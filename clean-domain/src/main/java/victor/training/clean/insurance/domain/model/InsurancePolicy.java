@@ -23,6 +23,7 @@ public class InsurancePolicy {
 
    private Long customerId;
 
+
    private BigDecimal valueInEur;
 
 }
