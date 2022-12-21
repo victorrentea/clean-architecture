@@ -56,7 +56,7 @@ public class CustomerApplicationService implements CustomerRestAPI {
         customer.setSite(siteRepo.getById(dto.getSiteId()));
 
         registerCustomerServiceDegeabaInterface.register(customer);
-        quotationService.quoteCustomer(customer);
+        quotationService.quoteCustomer(customer.getId());
 
         sendRegistrationEmail(customer.getEmail());
     }
