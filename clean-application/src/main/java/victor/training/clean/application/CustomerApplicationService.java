@@ -1,19 +1,13 @@
 package victor.training.clean.application;
 
-import io.micrometer.core.annotation.Timed;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.domain.service.CustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
@@ -24,35 +18,32 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
-@RestController
-@RequestMapping("customer")
 @ApplicationService // custom annotation
 @RequiredArgsConstructor
-public class CustomerApplicationService implements CustomerRestAPI {
+public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
-    private final CustomerService customerService;
 
-    @Override
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
 
-//        Customer customer = customerService.findById(customerId).orElseThrow();
-    @Override
     public CustomerDto findById(long customerId) {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
-        // mapping logic TODO move somewhere else - principala intrebare pe care ti-o pui fiecare ora intr-un ApplicationService
-        // - intr-un mapper (scris al mano sau generat)
-
-       return customer.toDto(); // NICIODATA !!!!!!!
+        // mapping logic TODO move somewhere else
+       return CustomerDto.builder()
+               .id(customer.getId())
+               .name(customer.getName())
+               .email(customer.getEmail())
+               .siteId(customer.getSite().getId())
+               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+               .build();
     }
 
-    @Override
     @Transactional
     public void register(CustomerDto dto) {
         Customer customer = new Customer();
@@ -96,5 +87,4 @@ public class CustomerApplicationService implements CustomerRestAPI {
         email.setBody("You'll like it! Sincerely, Team");
         emailSender.sendEmail(email);
     }
-
 }
