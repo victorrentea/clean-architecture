@@ -1,4 +1,4 @@
-package victor.training.clean.orm_tricks;
+package victor.training.clean.jpatricks;
 
 import lombok.Data;
 
