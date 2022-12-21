@@ -2,7 +2,6 @@ package victor.training.clean;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.tngtech.archunit.lang.EvaluationResult;
 import com.tngtech.archunit.library.dependencies.SliceRule;
 import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition;
 import com.tngtech.archunit.library.dependencies.syntax.GivenSlices;
@@ -37,6 +36,12 @@ public class IndependentSubdomainsArchUnitTest {
 
       // B: maintenance phase: fail test at any deviation
       // sliceRule.check(classes);
+   }
+   @Test
+   public void independentApis() {
+       SlicesRuleDefinition.slices()
+              .matching("..shared.api.(*)..*")
+              .should().notDependOnEachOther().check(classes);
    }
 
    @Test

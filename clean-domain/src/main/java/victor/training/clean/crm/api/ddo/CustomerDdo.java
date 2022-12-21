@@ -1,4 +1,4 @@
-package victor.training.clean.shared.api.customer;
+package victor.training.clean.crm.api.ddo;
 
 import lombok.Value;
 

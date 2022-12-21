@@ -2,12 +2,13 @@ package victor.training.clean.insurance.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import victor.training.clean.crm.domain.model.Customer;
+import victor.training.clean.crm.api.CustomerInternalApi;
+import victor.training.clean.crm.api.events.CustomerChangedAddressEvent;
 import victor.training.clean.insurance.domain.model.InsurancePolicy;
 import victor.training.clean.insurance.domain.repo.InsurancePolicyRepo;
-import victor.training.clean.shared.api.customer.CustomerDdo;
-import victor.training.clean.shared.api.customer.ICustomerInternalApi;
+import victor.training.clean.crm.api.ddo.CustomerDdo;
 
 import java.math.BigDecimal;
 
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class QuotationService {
    private final InsurancePolicyRepo insurancePolicyRepo;
-   private final ICustomerInternalApi customerInternalApi;
+   private final CustomerInternalApi customerInternalApi;
 
    public void quoteCustomer(Long customerId) {
       log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customerId);
@@ -31,5 +32,10 @@ public class QuotationService {
       CustomerDdo ddo = customerInternalApi.getCustomer(policy.getCustomerId());
       String customerName = ddo.getName();
       System.out.println("Insurange Policy for " + customerName);
+   }
+
+   @EventListener
+   public void onCustomerAddressChanged(CustomerChangedAddressEvent event) {
+      System.out.println("Tre sa emit o noua polita de asigurare ca a plecat asiguratu din tara");
    }
 }

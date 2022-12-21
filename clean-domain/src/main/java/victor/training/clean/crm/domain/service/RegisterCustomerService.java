@@ -1,7 +1,11 @@
 package victor.training.clean.crm.domain.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import victor.training.clean.crm.api.events.CustomerChangedAddressEvent;
+import victor.training.clean.crm.domain.model.Address;
 import victor.training.clean.crm.domain.model.Customer;
 import victor.training.clean.crm.domain.repo.CustomerRepo;
 
@@ -35,6 +39,13 @@ public class RegisterCustomerService { // ACTION, verb, nu substantiv
     // Heavy business logic
     customerRepo.save(customer);
     // Heavy business logic
+  }
+
+  @Autowired
+  private ApplicationEventPublisher eventPublisher;
+
+  public void changeCustomerAddress(Long customerId, Address newAddress) {
+    eventPublisher.publishEvent(new CustomerChangedAddressEvent(customerId, "newAddress"));
   }
 
   //  public Optional<Customer> findById(long customerId) {
