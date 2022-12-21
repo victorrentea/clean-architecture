@@ -3,6 +3,7 @@ package victor.training.clean.insurance.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import victor.training.clean.crm.api.CustomerInternalApi;
 import victor.training.clean.crm.api.events.CustomerChangedAddressEvent;

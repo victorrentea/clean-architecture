@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.crm.api.events.CustomerChangedAddressEvent;
 import victor.training.clean.crm.domain.model.Address;
 import victor.training.clean.crm.domain.model.Customer;
@@ -44,8 +45,11 @@ public class RegisterCustomerService { // ACTION, verb, nu substantiv
   @Autowired
   private ApplicationEventPublisher eventPublisher;
 
+  @Transactional
   public void changeCustomerAddress(Long customerId, Address newAddress) {
+    System.out.println("INAINTE handler");
     eventPublisher.publishEvent(new CustomerChangedAddressEvent(customerId, "newAddress"));
+    System.out.println("DUPA handler");
   }
 
   //  public Optional<Customer> findById(long customerId) {
