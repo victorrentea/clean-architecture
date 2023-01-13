@@ -110,9 +110,7 @@ public class RegisterCustomerMvcTest {
     private void search(String name, int expectedNumberOfResults) throws Exception {
         mockMvc.perform(post("/customer/search")
                 .contentType(APPLICATION_JSON)
-                .content("""
-                        {"name": "%s"}
-                        """.formatted(name)))
+                .content(String.format("{\"name\": \"%s\"}\n", name)))
         .andExpect(jsonPath("$", hasSize(expectedNumberOfResults)));
     }
 
