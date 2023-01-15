@@ -34,7 +34,7 @@ public class SearchCustomer {
 
 
   @Operation(description = "Customer Search")
-  @PostMapping("customer/search")
+  @PostMapping("customer/search2")
   public List<Response> search(@RequestBody Request criteria) {
     String jpql = "SELECT new victor.training.clean.application.SearchCustomer$Response(c.id, c.name)" +
                   " FROM Customer c " +
