@@ -7,6 +7,7 @@ import victor.training.clean.application.dto.CustomerSearchResult;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,22 +19,27 @@ public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
-      String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
+      List<String> jpqlParts = new ArrayList<>();
+      jpqlParts.add("SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +
-                    " WHERE 1=1 ";
+                    " WHERE 1=1 ");
 
       Map<String, Object> paramMap = new HashMap<>();
-
       if (criteria.getName() != null) {
-         jpql += "  AND UPPER(c.name) LIKE UPPER('%' || :name || '%')   ";
+         jpqlParts.add("AND UPPER(c.name) LIKE UPPER('%' || :name || '%')");
          paramMap.put("name", criteria.getName());
+      }
+
+      if (criteria.getSiteId() != null) {
+         jpqlParts.add("AND c.site.id = :siteId");
+         paramMap.put("siteId", criteria.getSiteId());
       }
 
       // etc
 
-      // or CriteriaBuilder, or QueryDSL
+      // Alternatives: CriteriaBuilder, or QueryDSL
 
-      TypedQuery<CustomerSearchResult> query = entityManager.createQuery(jpql, CustomerSearchResult.class);
+      TypedQuery<CustomerSearchResult> query = entityManager.createQuery(String.join(" ", jpqlParts), CustomerSearchResult.class);
       for (String paramName : paramMap.keySet()) {
          query.setParameter(paramName, paramMap.get(paramName));
       }

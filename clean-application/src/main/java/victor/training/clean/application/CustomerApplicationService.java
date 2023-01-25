@@ -49,9 +49,9 @@ public class CustomerApplicationService {
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
-        customer.setSite(siteRepo.getById(dto.getSiteId()));
+        customer.setSite(siteRepo.getReferenceById(dto.getSiteId()));
 
-        // TODO experiment all the ways to do validation
+        // validation TODO explore alternatives
         if (customer.getName().length() < 5) {
             throw new IllegalArgumentException("Name too short");
         }

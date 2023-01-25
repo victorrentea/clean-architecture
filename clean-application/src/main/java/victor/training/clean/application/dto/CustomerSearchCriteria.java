@@ -2,8 +2,8 @@ package victor.training.clean.application.dto;
 
 import lombok.Value;
 
-// received as JSON (eg from search form in Frontend)
-@Value // @see lombok.config that  allows Jackson to unmarshall this
+// received as JSON from a search screen in Frontend
+@Value // @see lombok.config that allows Jackson to unmarshall via constructor into this class
 public class CustomerSearchCriteria {
    String name;
    String phone;

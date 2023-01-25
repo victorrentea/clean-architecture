@@ -8,9 +8,9 @@ import lombok.Value;
 @Builder
 @Value
 @AllArgsConstructor
-public class CustomerDto {
+public class CustomerDto { // is this used to both QUERY and COMMAND use-cases ?
    Long id;
-   @Schema(description = "Name of the customer") // Open API documentation
+   @Schema(description = "Name of the customer") // Open API doc
    String name;
    String email;
    Long siteId;
