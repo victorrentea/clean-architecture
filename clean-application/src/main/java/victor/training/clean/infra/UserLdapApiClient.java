@@ -3,12 +3,13 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
 
+// PR reject: poti mai mult: cum te asiguri de ce a spun Andreea : ca nu calca picior de Dto exgtern in Domain meu?!
 
+// teste sa pice sau compilator sa bubuie
+// => nevoia de interfata
 
 // Adapter pattern din GoF
 @RequiredArgsConstructor
