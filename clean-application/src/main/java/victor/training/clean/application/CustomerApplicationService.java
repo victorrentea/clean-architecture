@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import victor.training.clean.application.dto.CustomerRegistrationRequest;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
@@ -56,7 +57,7 @@ public class CustomerApplicationService  /*implements CustomerAPiPtOpenAPI*/ {
     }
 
     @Transactional
-    public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
+    public void register(CustomerRegistrationRequest dto) { // TODO use different models for read vs write (Lite CQRS)
         Customer customer = dto.toCustomer();
 
         registerCustomerService.register(customer);

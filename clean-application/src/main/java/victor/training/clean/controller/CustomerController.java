@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.application.CustomerApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
+import victor.training.clean.application.dto.CustomerRegistrationRequest;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 
@@ -32,7 +33,7 @@ public class CustomerController {
    }
 
    @PostMapping
-   public void register(@RequestBody CustomerDto customerDto) {
+   public void register(@RequestBody CustomerRegistrationRequest customerDto) {
       customerApplicationService.register(customerDto);
    }
 
