@@ -40,10 +40,10 @@ public class UserService {
     log.debug("More " + user.getFullName() + " of id " + user.getUsername().toLowerCase()); // ⚠️ pending NullPointerException
 
     // then, in multiple places:
-    sendMailTo(user.asEmailContact()); // ⚠️ repeated logic
-    sendMailTo(user.asEmailContact());
-    sendMailTo(user.asEmailContact());
-    sendMailTo(user.asEmailContact());
+    user.asEmailContact().ifPresent(c->sendMailTo(c)); // ⚠️ repeated logic
+    user.asEmailContact().ifPresent(c->sendMailTo(c));
+    user.asEmailContact().ifPresent(c->sendMailTo(c));
+    user.asEmailContact().ifPresent(c->sendMailTo(c));
   }
 
   //  private void innocentHack(User dto) {

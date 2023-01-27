@@ -1,7 +1,6 @@
 package victor.training.clean.domain.model;
 
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -26,8 +25,8 @@ public final class User {
   }
 
   //EmailUtil {}
-  public String asEmailContact() {
-    return getFullName() + " <" + getEmail() + ">";
+  public Optional<String> asEmailContact() {
+    return getEmail().map(e-> fullName + " <" + e + ">");
   }
 
   public String getUsername() {
