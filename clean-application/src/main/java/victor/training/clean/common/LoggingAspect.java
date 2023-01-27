@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.joining;
 @Slf4j
 @Aspect
 @Component
-public class LoggingInterceptor {
+public class LoggingAspect {
 	@Target(METHOD)
 	@Retention(RUNTIME)
 	public @interface NotLogged {

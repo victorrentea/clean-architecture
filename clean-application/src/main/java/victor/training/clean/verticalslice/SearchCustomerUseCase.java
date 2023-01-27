@@ -8,25 +8,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
 @RequiredArgsConstructor
-public class SearchCustomer {
+//@RestController
+public class SearchCustomerUseCase {
   private final EntityManager entityManager;
 
   @Value
-  // private!
+  // private -> inaccessible from other Use-Cases!
   private static class Request { // <== JSON
     String name;
     String phone;
     Long siteId;
   }
   @Value
-  // private!
   private static class Response { // ==> JSON
     long id;
     String name;
@@ -34,9 +32,9 @@ public class SearchCustomer {
 
 
   @Operation(description = "Customer Search")
-  @PostMapping("customer/search2")
+  @PostMapping("customer/search")
   public List<Response> search(@RequestBody Request criteria) {
-    String jpql = "SELECT new victor.training.clean.application.SearchCustomer$Response(c.id, c.name)" +
+    String jpql = "SELECT new victor.training.clean.application.SearchCustomerUseCase$Response(c.id, c.name)" +
                   " FROM Customer c " +
                   " WHERE 1=1 ";
 

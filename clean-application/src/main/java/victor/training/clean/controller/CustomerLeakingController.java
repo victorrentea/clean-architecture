@@ -17,9 +17,4 @@ public class CustomerLeakingController {
       return customerRepo.findById(id).orElseThrow();
    }
 
-   @GetMapping("{id}/2")
-   public ResponseEntity<Customer> findByIdEntity(@PathVariable long id) {
-      return ResponseEntity.ok(customerRepo.findById(id).orElseThrow());
-   }
-
 }

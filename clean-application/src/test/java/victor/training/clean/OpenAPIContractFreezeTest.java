@@ -32,7 +32,8 @@ public class OpenAPIContractFreezeTest {
     @Test
     void myOpenAPIDidNotChange() throws Exception {
         String actualOpenAPIJson = mockMvc.perform(get("/v3/api-docs")).andReturn().getResponse().getContentAsString();
-        String expectedOpenAPIJson = IOUtils.toString(myExpectedOpenAPI.getInputStream());
+        String expectedOpenAPIJson = IOUtils.toString(myExpectedOpenAPI.getInputStream())
+                .replace(":8080",""); // hack the extracted port
         assertThat(prettifyJsonString(actualOpenAPIJson)).isEqualTo(prettifyJsonString(expectedOpenAPIJson));
     }
 

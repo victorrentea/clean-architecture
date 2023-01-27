@@ -3,17 +3,20 @@ package victor.training.clean.common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import victor.training.clean.CleanException;
 import victor.training.clean.CleanException.ErrorCode;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
-import static org.springframework.http.ResponseEntity.internalServerError;
-import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.ResponseEntity.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,20 +24,25 @@ import static org.springframework.http.ResponseEntity.status;
 public class GlobalExceptionHandler {
    private final MessageSource messageSource;
 
-   @ExceptionHandler(Exception.class)
-   public ResponseEntity<String> handleGeneralException(HttpServletRequest request, Exception exception) throws Exception {
-      String userMessage = translateError(exception, ErrorCode.GENERAL, null, request);
-      return internalServerError().body(userMessage);
+   @ResponseStatus(NOT_FOUND)
+   @ExceptionHandler(NoSuchElementException.class)
+   public ResponseEntity<String> handleGeneralException() {
+      return notFound().build();
    }
 
    @ExceptionHandler(CleanException.class)
-   public ResponseEntity<String> handleCleanException(HttpServletRequest request, CleanException cleanException) {
+   public ResponseEntity<String> onCleanException(HttpServletRequest request, CleanException cleanException) {
       String userMessage = translateError(cleanException, cleanException.getErrorCode(), cleanException.getParameters(), request);
       String httpStatusCodeStr = messageSource.getMessage("error." + cleanException.getErrorCode() + ".code", null, "500", Locale.ENGLISH);
       int httpStatusCode = Integer.parseInt(httpStatusCodeStr);
       return status(httpStatusCode).body(userMessage);
    }
 
+   @ExceptionHandler(Exception.class)
+   public ResponseEntity<String> onAnyException(HttpServletRequest request, Exception exception) {
+      String userMessage = translateError(exception, ErrorCode.GENERAL, null, request);
+      return internalServerError().body(userMessage);
+   }
 
    private String translateError(Throwable throwable, ErrorCode errorCode, String[] parameters, HttpServletRequest request) {
       String messageKey = "error." + errorCode + ".message";
