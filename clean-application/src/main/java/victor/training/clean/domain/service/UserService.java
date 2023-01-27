@@ -26,7 +26,7 @@ public class UserService {
     deepDomainLogic(dto);
   }
 
-  private void deepDomainLogic(LdapUserDto dto) { // ⚠️ useless fields
+  private void deepDomainLogic(LdapUserDto dto) { // ⚠️ useless fields -> i only need 3 not 7 fields
     if (dto.getWorkEmail() != null) { // ⚠️ how about other unguarded places?
       log.debug("Send welcome email to  " + dto.getWorkEmail());
     }
@@ -34,14 +34,19 @@ public class UserService {
     log.debug("Insert user in my database: " + dto.getUid()); // ⚠️ bad attribute name
 
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // ⚠️ data mapping mixed with biz logic
+
     innocentHack(dto);
     log.debug("More " + fullName + " of id " + dto.getUid().toLowerCase()); // ⚠️ pending NullPointerException
 
     // then, in multiple places:
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">"); // ⚠️ repeated logic
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
+    sendMailTo(asEmailContact(dto, fullName)); // ⚠️ repeated logic
+    sendMailTo(asEmailContact(dto, fullName));
+    sendMailTo(asEmailContact(dto, fullName));
+    sendMailTo(asEmailContact(dto, fullName));
+  }
+//EmailUtil {}
+  private static String asEmailContact(LdapUserDto dto, String fullName) {
+    return fullName + " <" + dto.getWorkEmail() + ">";
   }
 
   private void innocentHack(LdapUserDto dto) {
