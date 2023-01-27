@@ -12,7 +12,9 @@ public class CustomerDto { // is this used to both QUERY and COMMAND use-cases ?
    Long id;
    @Schema(description = "Name of the customer") // Open API doc
    String name;
+//   @VisibleFor("user-scope1")
    String emailAddress;
+//   @VisibleFor("user-scope1") + @Aspect pus pe metode @within(RestController)
    Long siteId;
    String creationDateStr;
    boolean gold;
