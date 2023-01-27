@@ -15,9 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Adapter
 // PR reject: ce cauta asta in acelasi pachet cu domain logic/ poti mai mult. de la tine vroiam mai mult
-public class UserLdapApiClient {
+public class UserLdapApiClient implements IUserLdapApiClient {
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchUser(String username) {
     List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
 

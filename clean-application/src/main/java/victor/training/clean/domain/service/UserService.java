@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.UserLdapApiClient;
+import victor.training.clean.infra.IUserLdapApiClient;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-  private final UserLdapApiClient client;
+  private final IUserLdapApiClient client;
 
   // PR reject: class is doing things at a different level of abstraction: adica...
   //  faci [domain logic] sfant si [mapari/validari/apicalls] murdare.
