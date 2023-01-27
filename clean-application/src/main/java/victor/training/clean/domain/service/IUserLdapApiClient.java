@@ -1,4 +1,4 @@
-package victor.training.clean.infra;
+package victor.training.clean.domain.service;
 
 import victor.training.clean.domain.model.User;
 
