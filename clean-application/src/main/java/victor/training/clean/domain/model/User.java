@@ -1,21 +1,25 @@
 package victor.training.clean.domain.model;
 
-import lombok.NonNull;
-import lombok.Value;
 
+import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
 // Value Object la care voi mapa datele din Dto extern
-@Value //=love e mai bun ca @Data = hate
+//=love e mai bun ca @Data = hate
 // imutable
-public class User {
-  @NonNull // >> pune in constructorul invizibil un if care arunca NPE daca primeste null
-  String username;
-  @NonNull
-  String fullName;
-  String email;
+public final class User {
+  private final String username;
+  private final String fullName;
+  private final String email;
+
+  public User(String username, String fullName, String email) {
+    this.username = requireNonNull(username);
+    this.fullName = requireNonNull(fullName);
+    this.email = email;
+  }
 
   public Optional<String> getEmail() {
     return ofNullable(email);
@@ -23,6 +27,18 @@ public class User {
 
   //EmailUtil {}
   public String asEmailContact() {
-      return getFullName() + " <" + getEmail() + ">";
-    }
+    return getFullName() + " <" + getEmail() + ">";
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public String getFullName() {
+    return fullName;
+  }
+
+  public String toString() {
+    return "User(username=" + getUsername() + ", fullName=" + getFullName() + ", email=" + getEmail() + ")";
+  }
 }
