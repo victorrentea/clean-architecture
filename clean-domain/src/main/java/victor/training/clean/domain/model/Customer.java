@@ -3,6 +3,8 @@ package victor.training.clean.domain.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -14,6 +16,8 @@ public class Customer {
 	private Long id;
 //	@NotNull
 //	@Pattern(regexp = "[^Aa].*")
+	@NotNull
+	@Size(min = 5)
 	private String name;
 //	private String firstName;
 //	private String lastName;

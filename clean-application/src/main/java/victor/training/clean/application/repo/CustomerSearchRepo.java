@@ -20,7 +20,9 @@ public class CustomerSearchRepo {
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       List<String> jpqlParts = new ArrayList<>();
-      jpqlParts.add("SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
+      // MUST HAVE: orice search    NU are voie sa selecteze @ENtit ci doar new ...Dto
+      jpqlParts.add("SELECT new victor.training.clean.application.dto.CustomerSearchResult(" +
+                    "c.id, c.name, c.gold)" +
                     " FROM Customer c " +
                     " WHERE 1=1 ");
 

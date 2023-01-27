@@ -7,4 +7,5 @@ import lombok.Value;
 public class CustomerSearchResult {
    long id;
    String name;
+   boolean gold;
 }
