@@ -20,20 +20,15 @@ public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
    @GetMapping("{id}")
-   public ResponseEntity<CustomerDto> findById(@PathVariable long id) {
-      CustomerDto customer = null;
-      try {
-         customer = customerApplicationService.findById(id);
-      } catch (NoSuchElementException e) {
-         return ResponseEntity.status(404).build();
-      }
-      return ResponseEntity.ok(customer);
+   public CustomerDto findById(@PathVariable long id) {
+      return customerApplicationService.findById(id);
    }
 
    @Operation(description = "Customer Search")
    @PostMapping("search")
    public List<CustomerSearchResult> search(@Validated @RequestBody CustomerSearchCriteria searchCriteria) {
-      return customerApplicationService.search(searchCriteria);
+      return customerApplicationService.search(searchCriteria); // code smell din carte Refactoring 2nd 2018 dec M Fowler
+      // Middle Man = cod degeaba
    }
 
    @PostMapping
