@@ -2,6 +2,9 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
@@ -17,11 +20,20 @@ import victor.training.clean.domain.service.QuotationService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
+//class CustomerService {
+//    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+//        return customerSearchRepo.search(searchCriteria);
+//    }
+//    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+//        return customerSearchRepo.search(searchCriteria);
+//    }
+//}
 //@Service
 @ApplicationService // custom annotation
 @RequiredArgsConstructor
-public class CustomerApplicationService {
+@RestController
+// AKA FACADE
+public class CustomerApplicationService /*implements CustomerAPiPtOpenAPI*/ {
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
@@ -29,20 +41,18 @@ public class CustomerApplicationService {
     private final QuotationService quotationService;
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-        return customerSearchRepo.search(searchCriteria);
+        return customerSearchRepo.search(searchCriteria); // Relaxed Layer Architecture. am voie. ca sa nu pun boilerplate in Domain Se§rvice
     }
 
-    public CustomerDto findById(long customerId) {
-        Customer customer = customerRepo.findById(customerId).orElseThrow();
+    @GetMapping("{id}")
+    public CustomerDto findById(@PathVariable long id) {
+        Customer customer = customerRepo.findById(id).orElseThrow();
 
+        //        return customer.toDto(); < niciodata pentru ca ar CUPLA ce-ai mai sfant (Entity de Domain) cu Mizeria (API)
         // mapping logic TODO move somewhere else
-       return CustomerDto.builder()
-               .id(customer.getId())
-               .name(customer.getName())
-               .emailAddress(customer.getEmail())
-               .siteId(customer.getSite().getId())
-               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-               .build();
+        // a) Mapper (autogenerat sau scris de mana) <- classic solution; merge
+        // b) Dto constructor (daca ai control pe Dto = nu le generezi)
+       return new CustomerDto(customer);
     }
 
     @Transactional
