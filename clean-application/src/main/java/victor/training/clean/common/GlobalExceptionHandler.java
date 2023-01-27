@@ -3,14 +3,17 @@ package victor.training.clean.common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import victor.training.clean.CleanException;
 import victor.training.clean.CleanException.ErrorCode;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 import static org.springframework.http.ResponseEntity.internalServerError;
 import static org.springframework.http.ResponseEntity.status;
@@ -25,6 +28,11 @@ public class GlobalExceptionHandler {
    public ResponseEntity<String> handleGeneralException(HttpServletRequest request, Exception exception) throws Exception {
       String userMessage = translateError(exception, ErrorCode.GENERAL, null, request);
       return internalServerError().body(userMessage);
+   }
+   @ResponseStatus(HttpStatus.NOT_FOUND)
+   @ExceptionHandler(NoSuchElementException.class)
+   public String notFound(HttpServletRequest request, NoSuchElementException exception) throws Exception {
+      return "oups";
    }
 
    @ExceptionHandler(CleanException.class)

@@ -32,6 +32,9 @@ public class UserFromDto {
     return ofNullable(workEmail);
   }
 
+  public void method() {
+    // pot #sieu, am control!
+  }
   // More Logic inside
 
   // No setters!
