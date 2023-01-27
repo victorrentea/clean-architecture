@@ -12,7 +12,7 @@ public class CustomerDto { // is this used to both QUERY and COMMAND use-cases ?
    Long id;
    @Schema(description = "Name of the customer") // Open API doc
    String name;
-   String email;
+   String emailAddress;
    Long siteId;
    String creationDateStr;
    boolean gold;

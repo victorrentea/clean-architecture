@@ -54,7 +54,7 @@ public class RegisterCustomerMvcTest {
     public final void before() {
         site = siteRepo.save(new Site());
         requestDto = CustomerDto.builder()
-                .email("::email::")
+                .emailAddress("::email::")
                 .name("::name::")
                 .siteId(site.getId());
     }
@@ -76,7 +76,7 @@ public class RegisterCustomerMvcTest {
 
         assertThat(responseDto.getId()).isEqualTo(customer.getId());
         assertThat(responseDto.getName()).isEqualTo("::name::");
-        assertThat(responseDto.getEmail()).isEqualTo("::email::");
+        assertThat(responseDto.getEmailAddress()).isEqualTo("::email::");
         assertThat(responseDto.getSiteId()).isEqualTo(site.getId());
         assertThat(responseDto.getCreationDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
@@ -92,7 +92,7 @@ public class RegisterCustomerMvcTest {
 
     @Test
     void existingEmailFails() throws Exception {
-        customerRepo.save(new Customer().setEmail("::email::"));
+        customerRepo.save(new Customer("name").setEmail("::email::"));
 
         register(requestDto.build())
                 .andExpect(status().isInternalServerError())

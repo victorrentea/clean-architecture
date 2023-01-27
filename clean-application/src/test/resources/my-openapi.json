@@ -11,6 +11,58 @@
     }
   ],
   "paths": {
+    "/customer/{id}": {
+      "get": {
+        "tags": [
+          "customer-controller"
+        ],
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "customer-controller"
+        ],
+        "operationId": "update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/customer": {
       "post": {
         "tags": [
@@ -163,37 +215,6 @@
           }
         }
       }
-    },
-    "/customer/{id}": {
-      "get": {
-        "tags": [
-          "customer-controller"
-        ],
-        "operationId": "findById_1",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerDto"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -217,6 +238,12 @@
             "format": "int64"
           },
           "creationDateStr": {
+            "type": "string"
+          },
+          "gold": {
+            "type": "boolean"
+          },
+          "goldMemberRemovalReason": {
             "type": "string"
           }
         }
@@ -297,6 +324,10 @@
           },
           "site": {
             "$ref": "#/components/schemas/Site"
+          },
+          "discountPercentage": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

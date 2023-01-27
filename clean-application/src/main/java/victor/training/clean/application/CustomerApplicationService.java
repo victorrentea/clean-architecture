@@ -39,7 +39,7 @@ public class CustomerApplicationService {
        return CustomerDto.builder()
                .id(customer.getId())
                .name(customer.getName())
-               .email(customer.getEmail())
+               .emailAddress(customer.getEmail())
                .siteId(customer.getSite().getId())
                .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                .build();
@@ -47,9 +47,8 @@ public class CustomerApplicationService {
 
     @Transactional
     public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
-        Customer customer = new Customer();
-        customer.setEmail(dto.getEmail());
-        customer.setName(dto.getName());
+        Customer customer = new Customer(dto.getName());
+        customer.setEmail(dto.getEmailAddress());
         customer.setCreationDate(LocalDate.now());
         customer.setSite(siteRepo.getReferenceById(dto.getSiteId()));
 
@@ -66,10 +65,7 @@ public class CustomerApplicationService {
         // Heavy business logic
         // Heavy business logic
         // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
+        int discountPercentage = customer.getDiscountPercentage();
         System.out.println("Biz Logic with discount " + discountPercentage);
         // Heavy business logic
         // Heavy business logic
@@ -84,7 +80,7 @@ public class CustomerApplicationService {
         Customer customer = customerRepo.findById(dto.getId()).orElseThrow();
         // CRUD part
         customer.setName(dto.getName());
-        customer.setEmail(dto.getEmail());
+        customer.setEmail(dto.getEmailAddress());
         customer.setSite(siteRepo.getReferenceById(dto.getSiteId()));
 
         // tricky part
