@@ -1,13 +1,10 @@
 package victor.training.clean.domain.model;
 
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.AssertTrue;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Optional;
 
 @Entity
 @Data // Avoid on @Entity

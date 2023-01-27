@@ -14,6 +14,7 @@ public class UserService {
   // PR reject: class is doing things at a different level of abstraction: adica...
   //  faci [domain logic] sfant si [mapari/validari/apicalls] murdare.
   public void importUserFromLdap(String username) {
+//    victor.training.clean.infra.LdapUserDto dto;
     User user = client.fetchUser(username);
 
     // ⚠️ useless fields -> i only need 3 not 7 fields
