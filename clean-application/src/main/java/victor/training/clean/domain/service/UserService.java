@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.infra.UserLdapApiClient;
 
 @RequiredArgsConstructor
 @Slf4j

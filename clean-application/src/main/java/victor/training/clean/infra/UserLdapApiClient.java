@@ -1,4 +1,4 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;
@@ -8,9 +8,12 @@ import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
 
+
+
 // Adapter pattern din GoF
 @RequiredArgsConstructor
 @Adapter
+// PR reject: ce cauta asta in acelasi pachet cu domain logic/ poti mai mult. de la tine vroiam mai mult
 public class UserLdapApiClient {
   private final LdapApi ldapApi;
 
