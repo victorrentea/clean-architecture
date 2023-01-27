@@ -17,7 +17,7 @@ public class Customer {
 	private Long id;
 	private String name;
 	private String email;
-	private LocalDate creationDate = LocalDate.now();
+	private LocalDate creationDate;
 	private boolean goldMember;
 	@ManyToOne
 	private Site site;

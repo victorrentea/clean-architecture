@@ -15,4 +15,6 @@ public class CustomerDto { // is this used to both QUERY and COMMAND use-cases ?
    String email;
    Long siteId;
    String creationDateStr;
+   boolean gold;
+   String goldMemberRemovalReason;
 }

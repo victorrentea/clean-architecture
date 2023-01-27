@@ -14,6 +14,7 @@ import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -45,10 +46,11 @@ public class CustomerApplicationService {
     }
 
     @Transactional
-    public void register(CustomerDto dto) {
+    public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
+        customer.setCreationDate(LocalDate.now());
         customer.setSite(siteRepo.getReferenceById(dto.getSiteId()));
 
         // validation TODO explore alternatives
@@ -75,16 +77,48 @@ public class CustomerApplicationService {
         // Heavy business logic
         quotationService.quoteCustomer(customer);
 
-        sendRegistrationEmail(customer.getEmail());
+        sendRegistrationEmail(customer);
     }
 
-    private void sendRegistrationEmail(String emailAddress) {
-        System.out.println("Sending activation link via email to " + emailAddress);
+    public void update(CustomerDto dto) { // TODO move to Task-based Commands
+        Customer customer = customerRepo.findById(dto.getId()).orElseThrow();
+        // CRUD part
+        customer.setName(dto.getName());
+        customer.setEmail(dto.getEmail());
+        customer.setSite(siteRepo.getReferenceById(dto.getSiteId()));
+
+        // tricky part
+        if (!customer.isGoldMember() && dto.isGold()) {
+            customer.setGoldMember(true);
+            sendGoldWelcomeEmail(customer);
+        }
+        if (customer.isGoldMember() && !dto.isGold()) {
+            // TODO api call get order history, and check stuff..
+            customer.setGoldMember(false);
+            auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalReason());
+        }
+
+        customerRepo.save(customer); // not required by the ORM because of @Transactional
+    }
+
+    private void sendRegistrationEmail(Customer customer) {
         Email email = new Email();
-        email.setFrom("noreply");
-        email.setTo(emailAddress);
-        email.setSubject("Welcome");
-        email.setBody("You'll like it! Sincerely, Team");
+        email.setFrom("noreply@cleanapp.com");
+        email.setTo(customer.getEmail());
+        email.setSubject("Account created for");
+        email.setBody("Welcome to our world, "+ customer.getName()+". You'll like it! Sincerely, Team");
         emailSender.sendEmail(email);
+    }
+
+    private void sendGoldWelcomeEmail(Customer customer) {
+        Email email = new Email();
+        email.setFrom("noreply@cleanapp.com");
+        email.setTo(customer.getEmail());
+        email.setSubject("Welcome to the Gold membership!");
+        email.setBody("Here are your perks: ...");
+        emailSender.sendEmail(email);
+    }
+    private void auditGoldMemberRemoval(Customer customer, String reason) {
+        System.out.println("Send message on Kafka: name:" + customer.getName() + ", reason:" + reason);
     }
 }

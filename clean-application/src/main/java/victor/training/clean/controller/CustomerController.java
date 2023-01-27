@@ -27,8 +27,14 @@ public class CustomerController {
       return customerApplicationService.search(searchCriteria);
    }
 
-   @PostMapping("")
+   @PostMapping
    public void register(@RequestBody CustomerDto customerDto) {
       customerApplicationService.register(customerDto);
    }
+
+   @PutMapping("{id}")
+   public void update(@RequestBody CustomerDto customerDto) {
+      customerApplicationService.update(customerDto);
+   }
 }
+
