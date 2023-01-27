@@ -15,6 +15,8 @@ import java.util.List;
 public class UserService {
   private final LdapApi ldapApi;
 
+  // PR reject: class is doing things at a different level of abstraction: adica...
+  //  faci [domain logic] sfant si [mapari/validari/apicalls] murdare.
   public void importUserFromLdap(String username) {
     List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
 
