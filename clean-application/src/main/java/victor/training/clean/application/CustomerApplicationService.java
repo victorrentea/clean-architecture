@@ -31,7 +31,7 @@ import java.util.List;
 //@Service
 @ApplicationService // custom annotation
 @RequiredArgsConstructor
-@RestController
+//@RestController
 // AKA FACADE
 public class CustomerApplicationService  /*implements CustomerAPiPtOpenAPI*/ {
     private final CustomerRepo customerRepo;
@@ -45,16 +45,16 @@ public class CustomerApplicationService  /*implements CustomerAPiPtOpenAPI*/ {
         return customerSearchRepo.search(searchCriteria); // Relaxed Layer Architecture. am voie. ca sa nu pun boilerplate in Domain Se§rvice
     }
 
-    @GetMapping("{id}")
-    public CustomerDto findById(@PathVariable long id) {
-        Customer customer = customerRepo.findById(id).orElseThrow();
-
-        //        return customer.toDto(); < niciodata pentru ca ar CUPLA ce-ai mai sfant (Entity de Domain) cu Mizeria (API)
-        // mapping logic TODO move somewhere else
-        // a) Mapper (autogenerat sau scris de mana) <- classic solution; merge
-        // b) Dto constructor (daca ai control pe Dto = nu le generezi)
-       return new CustomerDto(customer);
-    }
+//    @GetMapping("{id}")
+//    public CustomerDto findById(@PathVariable long id) {
+//        Customer customer = customerRepo.findById(id).orElseThrow();
+//
+//        //        return customer.toDto(); < niciodata pentru ca ar CUPLA ce-ai mai sfant (Entity de Domain) cu Mizeria (API)
+//        // mapping logic TODO move somewhere else
+//        // a) Mapper (autogenerat sau scris de mana) <- classic solution; merge
+//        // b) Dto constructor (daca ai control pe Dto = nu le generezi)
+//       return new CustomerDto(customer);
+//    }
 
     @Transactional
     public void register(CustomerRegistrationRequest dto) { // TODO use different models for read vs write (Lite CQRS)

@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-public class SearchCustomer {
+public class SearchCustomerUseCase {
+//  private final OInterfataDeSearch interfata;
   private final EntityManager entityManager;
 
   @Value
   // private!
-  private static class Request { // <== JSON
+  private static class Request { // <== JSON da private ca nu cumva alt cod din proj sa le vada
     String name;
     String phone;
     Long siteId;

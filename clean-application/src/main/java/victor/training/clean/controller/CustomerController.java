@@ -20,10 +20,10 @@ import java.util.NoSuchElementException;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @GetMapping("{id}")
-   public CustomerDto findById(@PathVariable long id) {
-      return customerApplicationService.findById(id);
-   }
+//   @GetMapping("{id}")
+//   public CustomerDto findById(@PathVariable long id) {
+//      return customerApplicationService.findById(id);
+//   }
 
    @Operation(description = "Customer Search")
    @PostMapping("search")
