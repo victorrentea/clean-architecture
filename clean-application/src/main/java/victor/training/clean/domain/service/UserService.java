@@ -3,6 +3,7 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
@@ -22,38 +23,34 @@ public class UserService {
     }
 
     LdapUserDto dto = list.get(0);
-
-    deepDomainLogic(dto);
-  }
-
-  private void deepDomainLogic(LdapUserDto dto) { // ⚠️ useless fields -> i only need 3 not 7 fields
-    if (dto.getWorkEmail() != null) { // ⚠️ how about other unguarded places?
-      log.debug("Send welcome email to  " + dto.getWorkEmail());
-    }
-
-    log.debug("Insert user in my database: " + dto.getUid()); // ⚠️ bad attribute name
-
+    String un = dto.getUid() == null ? "anonymous" : dto.getUid().toUpperCase();
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // ⚠️ data mapping mixed with biz logic
 
-    innocentHack(dto);
-    log.debug("More " + fullName + " of id " + dto.getUid().toLowerCase()); // ⚠️ pending NullPointerException
+    User user = new User(un, fullName, dto.getWorkEmail());
+    deepDomainLogic(user);
+  }
+
+  private void deepDomainLogic(User user) { // ⚠️ useless fields -> i only need 3 not 7 fields
+    if (user.getEmail().isPresent()) { // ⚠️ how about other unguarded places?
+      log.debug("Send welcome email to  " + user.getEmail().get());
+    }
+
+    log.debug("Insert user in my database: " + user.getUsername()); // ⚠️ bad attribute name
+
+    log.debug("More " + user.getFullName() + " of id " + user.getUsername().toLowerCase()); // ⚠️ pending NullPointerException
 
     // then, in multiple places:
-    sendMailTo(asEmailContact(dto, fullName)); // ⚠️ repeated logic
-    sendMailTo(asEmailContact(dto, fullName));
-    sendMailTo(asEmailContact(dto, fullName));
-    sendMailTo(asEmailContact(dto, fullName));
-  }
-//EmailUtil {}
-  private static String asEmailContact(LdapUserDto dto, String fullName) {
-    return fullName + " <" + dto.getWorkEmail() + ">";
+    sendMailTo(user.asEmailContact()); // ⚠️ repeated logic
+    sendMailTo(user.asEmailContact());
+    sendMailTo(user.asEmailContact());
+    sendMailTo(user.asEmailContact());
   }
 
-  private void innocentHack(LdapUserDto dto) {
-    if (dto.getUid() == null) {
-      dto.setUid("anonymous"); // ⚠️ mutability risks
-    }
-  }
+  //  private void innocentHack(User dto) {
+//    if (dto.getUid() == null) {
+//      dto.setUid("anonymous"); // ⚠️ mutability risks
+//    }
+//  }
 
   private void sendMailTo(String emailContact) {
     System.out.println("Contact: " + emailContact);
