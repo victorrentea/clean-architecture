@@ -10,7 +10,7 @@ import lombok.Value;
 @AllArgsConstructor
 public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
    Long id;
-   @Schema(description = "Name of the customer - Open API doc")
+   @Schema(description = "Name of the customer")
    String name;
    String email;
    Long siteId;
