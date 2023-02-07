@@ -10,7 +10,7 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
@@ -30,7 +30,7 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
-    private final CustomerService customerService;
+    private final RegisterCustomerService registerCustomerService;
 
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
@@ -53,7 +53,7 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
 //    @PostMapping
     public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
         Customer customer = dto.toEntity();
-        customerService.register(customer);
+        registerCustomerService.register(customer);
         quotationService.quoteCustomer(customer);
         sendRegistrationEmail(customer);
     }

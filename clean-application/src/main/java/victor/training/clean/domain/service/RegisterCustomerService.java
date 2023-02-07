@@ -2,14 +2,12 @@ package victor.training.clean.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import victor.training.clean.application.CustomerApplicationService;
-import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
 @RequiredArgsConstructor
 @Service // ZEN TATA! Pace armonie, clean code
-public class CustomerService {
+public class RegisterCustomerService {
   private final CustomerRepo customerRepo;
 
   // GU-NOI! cod degeaba rezultat din "Strict Layers Arch"
@@ -18,7 +16,7 @@ public class CustomerService {
 //  }
 
   public void register(Customer customer) {
-    // o metoda cu 10 ifuri pline de reguli de business
+    // o metoda cu 10 ifuri pline de reguli de business 55 de linii
     // care sade acum in Application Service
     if (customerRepo.existsByEmail(customer.getEmail())) {
       throw new IllegalArgumentException("Customer email is already registered");
