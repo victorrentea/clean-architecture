@@ -23,13 +23,5 @@ public class CleanApplication {
    public static void main(String[] args) {
       SpringApplication.run(CleanApplication.class, args);
    }
-
-
-   @Bean
-   public LocalValidatorFactoryBean getValidator(ApplicationContext context) {
-      LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-      bean.setValidationMessageSource(context);
-      return bean;
-   }
 }
 
