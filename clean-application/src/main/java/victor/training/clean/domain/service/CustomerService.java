@@ -2,7 +2,8 @@ package victor.training.clean.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import victor.training.clean.common.DomainService;
+import victor.training.clean.application.CustomerApplicationService;
+import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
@@ -10,6 +11,11 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @Service // ZEN TATA! Pace armonie, clean code
 public class CustomerService {
   private final CustomerRepo customerRepo;
+
+  // GU-NOI! cod degeaba rezultat din "Strict Layers Arch"
+//  public Customer findById(long id) {
+//    return customerRepo.findById(id).orElseThrow();
+//  }
 
   public void register(Customer customer) {
     // o metoda cu 10 ifuri pline de reguli de business

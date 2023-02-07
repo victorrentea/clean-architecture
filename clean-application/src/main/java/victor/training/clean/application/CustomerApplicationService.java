@@ -45,13 +45,16 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
         // 2) in alta clasa mapper/ transformers.CustomerTransformer
 //        return customer.toDto(); // 3) -> NU CUMVA
     }
+
+    // ( cum testam metoda asta:
+    // a) cu @Mockuri in jur - NU ASA CA TE VOR RANI TESTELE
+    // b) ASA: end-to-end @SPringBootTest cu o DB in mem (H2) sau in docker (@Testcontainer)
     @Transactional
+//    @PostMapping
     public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
         Customer customer = dto.toEntity();
-
         customerService.register(customer);
         quotationService.quoteCustomer(customer);
-
         sendRegistrationEmail(customer);
     }
 

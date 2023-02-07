@@ -14,8 +14,6 @@ public class ArchitectureTest {
     private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
 
     @Test
-    // NOTE: In case you don't understand this test, contact me:
-    // +40720019564 or victorrentea@gmail.com (the anarchitect)
     public void domain_independent_of_infrastructure() {
         noClasses().that().resideInAPackage("..domain..")
                 .should().dependOnClassesThat().resideInAPackage("..infra..")
@@ -23,9 +21,11 @@ public class ArchitectureTest {
     }
 
     @Test
+    // NOTE: In case you don't understand this test, contact me:
+    // +40720019564 or victorrentea@gmail.com (the anarchitect)
     public void domain_independent_of_my_api() {
         noClasses().that().resideInAPackage("..domain..")
-                .should().dependOnClassesThat().resideInAPackage("..facade..")
+                .should().dependOnClassesThat().resideInAPackage("..application..")
                 .check(allProjectClasses);
     }
 
