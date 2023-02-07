@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import victor.training.clean.common.DomainService;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapUserClient;
+import victor.training.clean.infra.LdapUserClientInterface;
 
 @RequiredArgsConstructor
 @Slf4j
 @DomainService // ce-ai tu mai sfant in app, aici e
 public class UserService {
-  private final LdapUserClient client;
+  private final LdapUserClientInterface client;
 
   public void importUserFromLdap(String username) {
     User user = client.fetchUserByUsername(username);

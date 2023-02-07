@@ -12,9 +12,10 @@ import java.util.List;
 // detaliile interactiunii cu LDAP sunt aici
 @RequiredArgsConstructor
 @Component // ADapter pattern (TM)
-public class LdapUserClient {
+public class LdapUserClient implements LdapUserClientInterface {
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchUserByUsername(String username) {
     List<LdapUserDto> list = ldapApi.searchUsingGET(
             null, null, username.toUpperCase());
