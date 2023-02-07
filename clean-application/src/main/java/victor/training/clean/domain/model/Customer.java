@@ -2,12 +2,14 @@ package victor.training.clean.domain.model;
 
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
+import victor.training.clean.application.dto.CustomerDto;
 
 import javax.persistence.*;
 import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 // un Value Object (VO) este un obiect
@@ -96,7 +98,18 @@ public class Customer {
 		return discountPercentage;
 	}
 
-//	public String asCSV() { // = presentation; depinde de altu; MVC
+	// NU CUMVA!!!! GU-NOI: poluezi modelul cu un detaliu de API
+//	public CustomerDto toDto() {
+//		return CustomerDto.builder()
+//						.id(getId())
+//						.name(getName())
+//						.email(getEmail())
+//						.siteId(getSite().getId())
+//						.creationDateStr(getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+//						.build();
+//	}
+
+	//	public String asCSV() { // = presentation; depinde de altu; MVC
 //		return name + ";"+ email.toUpperCase()+ ";"+ creationDate.format(LDT)
 //	}
 }

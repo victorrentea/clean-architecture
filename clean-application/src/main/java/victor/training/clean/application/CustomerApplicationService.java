@@ -1,6 +1,7 @@
 package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
@@ -36,18 +37,15 @@ public class CustomerApplicationService {
         Customer customer = customerRepo.findById(customerId).orElseThrow();
 
         // mapping logic TODO move somewhere else
-       return CustomerDto.builder()
-               .id(customer.getId())
-               .name(customer.getName())
-               .email(customer.getEmail())
-               .siteId(customer.getSite().getId())
-               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-               .build();
+       return new CustomerDto(customer);
+       // 1) in ctor Dto, ca si-asa statea Dtoul degeaba
+        // 2) in alta clasa mapper/ transformers.CustomerTransformer
+//        return customer.toDto(); // 3) -> NU CUMVA
     }
 
     @Transactional
     public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
-        Customer customer = new Customer(dto.getName());
+        Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
         customer.setCreationDate(LocalDate.now());
