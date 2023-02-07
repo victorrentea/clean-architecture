@@ -5,34 +5,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-// un Value Object (VO) este un obiect
-// - immutabil
-// - mic (de obiecei)
-// - nu are PK indentitate persistenta (lacks continuity of change)
-// - hash/equals pe toate campurile
-@Embeddable
-class FullName {
-	private String firstName;
-	private String lastName;
-
-	protected FullName() {} // doar pt hibernate
-	public FullName(String firstName, String lastName) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-}
-
 @Entity
 @Data // Avoid on @Entity
-public class Customer {
+public class Customer /*interface CustomerInterface cel mai horrror overengin */{
 	@Id
 	@GeneratedValue
 	private Long id;

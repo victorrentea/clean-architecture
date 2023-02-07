@@ -35,7 +35,7 @@ public class SearchCustomerUseCase {
   @PostMapping("customer/search")
   public List<Response> search(@RequestBody Request criteria) {
     String jpql = "SELECT new victor.training.clean.application.SearchCustomerUseCase$Response(c.id, c.name)" +
-                  " FROM Customer c " +
+                  " FROM CustomerHibEnt c " +
                   " WHERE 1=1 ";
 
     Map<String, Object> paramMap = new HashMap<>();
