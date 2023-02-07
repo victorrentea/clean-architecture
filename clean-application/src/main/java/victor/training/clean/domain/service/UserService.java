@@ -9,7 +9,7 @@ import victor.training.clean.domain.model.User;
 @Slf4j
 @DomainService // ce-ai tu mai sfant in app, aici e
 public class UserService {
-  private final LdapUserClientInterface client;
+  private final ExternalUserProvider client;
   // ba nu e ok
 
   public void importUserFromLdap(String username) {
