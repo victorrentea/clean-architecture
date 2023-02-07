@@ -3,14 +3,14 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.LdapUserClientInterface;
+import victor.training.clean.domain.service.ExternalUserProvider;
 
 import java.util.List;
 
 // detaliile interactiunii cu LDAP sunt aici
 @RequiredArgsConstructor
 @Component // ADapter pattern (TM)
-public class LdapUserClient implements LdapUserClientInterface {
+public class LdapUserClient implements ExternalUserProvider {
   private final LdapApi ldapApi;
 
   @Override
