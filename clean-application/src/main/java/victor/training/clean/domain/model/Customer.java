@@ -1,6 +1,7 @@
 package victor.training.clean.domain.model;
 
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.Validator;
@@ -55,16 +56,22 @@ public class Customer {
 	@ManyToOne
 	private Site site;
 
-	protected Customer() {} // for hibernate
 
-	public Customer(String name) {
-		if (name.length() < 5) { // DDD-like
-			// mai prost ca adnotarile ca arunca doar prima exceptie
-			// mai complicat in teste (ca ob trebuie sa fie valide)
-			throw new IllegalArgumentException("Name too short");
-		}
-		this.name = name;
-	}
+//	@Transient
+//	String gunoi
+//	@OneToMany
+//	List<Copil> copii;
+
+//	protected Customer() {} // for hibernate
+
+//	public Customer(String name) {
+//		if (name.length() < 5) { // DDD-like
+//			// mai prost ca adnotarile ca arunca doar prima exceptie
+//			// mai complicat in teste (ca ob trebuie sa fie valide)
+//			throw new IllegalArgumentException("Name too short");
+//		}
+//		this.name = name;
+//	}
 
 	// null-safe model: getteri pe campuri care pot fi null sa de Optional
 //	public Optional<String> getEmail() {
@@ -80,6 +87,7 @@ public class Customer {
 	//   * presentation (formatari, parsari), chestii super specifice unui sg usecase
 	//   * nici prea multa logica ( < 7-10 ) asa incat sa nu fii nevoit sa mockuiesti met asta.
 
+//	@JsonIgnore // gu_noi
 	public int getDiscountPercentage() {
 		int discountPercentage = 3;
 		if (goldMember) {
