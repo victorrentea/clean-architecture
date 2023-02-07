@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping("customer")
 @ApplicationService // custom annotation
 @RequiredArgsConstructor
-public class CustomerApplicationService {
+public class CustomerApplicationService implements CustomerApplicationServiceApiCuMetadate {
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
@@ -37,8 +37,8 @@ public class CustomerApplicationService {
         return customerSearchRepo.search(searchCriteria);
     }
 
-    @GetMapping("{id}")
-    public CustomerDto findById(@PathVariable long id) {
+    @Override
+    public CustomerDto findById(long id) {
         Customer customer = customerRepo.findById(id).orElseThrow();
 
         // mapping logic TODO move somewhere else
