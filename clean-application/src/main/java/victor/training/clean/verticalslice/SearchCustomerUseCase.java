@@ -13,19 +13,19 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-//@RestController
+@RestController
 public class SearchCustomerUseCase {
   private final EntityManager entityManager;
 
   @Value
   // private -> inaccessible from other Use-Cases!
-  private static class Request { // <== JSON
+  private static class SearchRequest { // <== JSON
     String name;
     String phone;
     Long siteId;
   }
   @Value
-  private static class Response { // ==> JSON
+  private static class SearchResponse { // ==> JSON
     long id;
     String name;
   }
@@ -33,8 +33,8 @@ public class SearchCustomerUseCase {
 
   @Operation(description = "Customer Search")
   @PostMapping("customer/search")
-  public List<Response> search(@RequestBody Request criteria) {
-    String jpql = "SELECT new victor.training.clean.application.SearchCustomerUseCase$Response(c.id, c.name)" +
+  public List<SearchResponse> search(@RequestBody SearchRequest criteria) {
+    String jpql = "SELECT new victor.training.clean.application.SearchCustomerUseCase$SearchResponse(c.id, c.name)" +
                   " FROM CustomerHibEnt c " +
                   " WHERE 1=1 ";
 
@@ -46,7 +46,7 @@ public class SearchCustomerUseCase {
     }
     // + more
 
-    var query = entityManager.createQuery(jpql, Response.class);
+    var query = entityManager.createQuery(jpql, SearchResponse.class);
     for (String paramName : paramMap.keySet()) {
       query.setParameter(paramName, paramMap.get(paramName));
     }

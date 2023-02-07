@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import victor.training.clean.application.dto.CustomerView;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
@@ -36,14 +37,14 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
     // "noi testam tot" - bravo! dar CUM testezi tot ?
     // - clasa cu clasa
     // - valeu!! => shitty tests. => met asta nu se testeaza in izolare, ci end to end (DB pe bune) @SpringBootTest
-    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-        return customerSearchRepo.search(searchCriteria);
-    }
+//    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+//        return customerSearchRepo.search(searchCriteria);
+//    }
 
     @Override
-    public CustomerDto findById(long id) {
+    public CustomerView findById(long id) {
         Customer customer = customerRepo.findById(id).orElseThrow();
-        return new CustomerDto(customer);
+        return new CustomerView(customer);
        // 1) in ctor Dto, ca si-asa statea Dtoul degeaba
         // 2) in alta clasa mapper/ transformers.CustomerTransformer
 //        return customer.toDto(); // 3) -> NU CUMVA
@@ -69,8 +70,14 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
 
     }
 
-    public void update(CustomerDto dto) { // TODO move to Task-based Commands
-        Customer customer = customerRepo.findById(dto.getId()).orElseThrow();
+    public void update(long customerId, CustomerDto dto) { // TODO move to Task-based Commands
+//        areVoieSaModifice(customerId, userCurent)//
+//        Customer ccUpdated = new Customer().setId(customerId);
+//        mapperAutomat.map(dto, ccUpdated);
+//        customerRepo.save(ccUpdated);
+
+
+        Customer customer = customerRepo.findById(customerId).orElseThrow();
         // CRUD part
         if (customer.getName().length() < 5) {
             throw new IllegalArgumentException("Name too short");

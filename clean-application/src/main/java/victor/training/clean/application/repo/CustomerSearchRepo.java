@@ -20,6 +20,7 @@ public class CustomerSearchRepo {
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       List<String> jpqlParts = new ArrayList<>();
+      // Use-case optimized query
       jpqlParts.add("SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE 1=1 ");

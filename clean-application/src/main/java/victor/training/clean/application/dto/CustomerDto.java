@@ -10,40 +10,27 @@ import victor.training.clean.domain.model.Site;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Builder
 @Value
 @AllArgsConstructor
-public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
-   Long id;
-   @Schema(description = "Name of the customer")
-   @Size(min = 5)
-   @NotNull
-   String name;
-//  FullName fullName;
-   String email;
-   Long siteId;
-   String creationDateStr;
-   boolean gold;
-   String goldMemberRemovalComment;
+public class CustomerDto { // Dto folosit pt WRITE
+  @Schema(description = "Name of the customer")
+  @Size(min = 5)
+  @NotNull
+  String name;
+  String email;
+  Long siteId;
+  boolean gold;
+  String goldMemberRemovalComment;
 
-   public CustomerDto(Customer customer) {
-     id=customer.getId();
-     name=customer.getName();
-     email=customer.getEmail();
-     siteId=customer.getSite().getId();
-     creationDateStr=customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-     gold=false;
-     goldMemberRemovalComment =null;
-   }
 
   public Customer toEntity() {
-      Customer customer = new Customer();
+    Customer customer = new Customer();
     customer.setEmail(this.email);
     customer.setName(this.name);
-      customer.setCreationDate(LocalDate.now());
-      customer.setSite(new Site().setId(getSiteId()));
-      return customer;
+    customer.setCreationDate(LocalDate.now());
+    customer.setSite(new Site().setId(getSiteId()));
+    return customer;
   }
 }

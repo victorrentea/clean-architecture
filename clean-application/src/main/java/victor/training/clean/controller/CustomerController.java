@@ -9,6 +9,7 @@ import victor.training.clean.application.CustomerApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.application.dto.CustomerView;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,10 +20,9 @@ import java.util.NoSuchElementException;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-//   @GetMapping("{id}")
-//   public CustomerDto findById(@PathVariable long id) {
-//      return customerApplicationService.findById(id);
-//   }
+   public CustomerView findById(@PathVariable long id) {
+      return customerApplicationService.findById(id);
+   }
 
    @Operation(description = "Customer Search")
    @PostMapping("search")
@@ -36,8 +36,8 @@ public class CustomerController {
    }
 
    @PutMapping("{id}")
-   public void update(@RequestBody @Validated CustomerDto customerDto) {
-      customerApplicationService.update(customerDto);
+   public void update(@PathVariable Long id, @RequestBody @Validated CustomerDto customerDto) {
+      customerApplicationService.update(id, customerDto);
    }
 }
 
