@@ -2,11 +2,35 @@ package victor.training.clean.domain.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
+
+// un Value Object (VO) este un obiect
+// - immutabil
+// - mic (de obiecei)
+// - nu are PK indentitate persistenta (lacks continuity of change)
+// - hash/equals pe toate campurile
+@Embeddable
+class FullName {
+	private String firstName;
+	private String lastName;
+
+	protected FullName() {} // doar pt hibernate
+	public FullName(String firstName, String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+}
 
 @Entity
 @Data // Avoid on @Entity
@@ -14,7 +38,15 @@ public class Customer {
 	@Id
 	@GeneratedValue
 	private Long id;
+//	@Embedded
+//	private FullName name;
+
+	// la orice repo.save se valideaza aceste adnotari
+				// sau custom @Aspect sa validezi orice param de tipul Customer
+	@Size(min = 5)
+	@NotNull
 	private String name;
+
 	private String email;
 	private LocalDate creationDate;
 	private boolean goldMember;

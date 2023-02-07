@@ -5,12 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 @Builder
 @Value
 @AllArgsConstructor
 public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
    Long id;
    @Schema(description = "Name of the customer")
+   @Size(min = 5)
+   @NotNull
    String name;
    String email;
    Long siteId;

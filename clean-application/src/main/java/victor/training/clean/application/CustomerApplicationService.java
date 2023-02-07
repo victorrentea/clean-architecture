@@ -54,9 +54,9 @@ public class CustomerApplicationService {
         customer.setSite(siteRepo.getReferenceById(dto.getSiteId()));
 
         // validation TODO explore alternatives
-        if (customer.getName().length() < 5) {
-            throw new IllegalArgumentException("Name too short");
-        }
+//        if (customer.getName().length() < 5) {
+//            throw new IllegalArgumentException("Name too short");
+//        }
         if (customerRepo.existsByEmail(customer.getEmail())) {
             throw new IllegalArgumentException("Customer email is already registered");
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
@@ -89,6 +89,9 @@ public class CustomerApplicationService {
     public void update(CustomerDto dto) { // TODO move to Task-based Commands
         Customer customer = customerRepo.findById(dto.getId()).orElseThrow();
         // CRUD part
+        if (customer.getName().length() < 5) {
+            throw new IllegalArgumentException("Name too short");
+        }
         customer.setName(dto.getName());
         customer.setEmail(dto.getEmail());
         customer.setSite(siteRepo.getReferenceById(dto.getSiteId()));
