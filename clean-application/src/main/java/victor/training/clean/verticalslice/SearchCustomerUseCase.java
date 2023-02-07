@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
 import java.util.HashMap;
@@ -19,13 +18,13 @@ public class SearchCustomerUseCase {
 
   @Value
   // private -> inaccessible from other Use-Cases!
-  private static class Request { // <== JSON
+  private static class SearchCustomerRequest { // <== JSON
     String name;
     String phone;
     Long siteId;
   }
   @Value
-  private static class Response { // ==> JSON
+  private static class SearchCustomerResponse { // ==> JSON
     long id;
     String name;
   }
@@ -33,8 +32,8 @@ public class SearchCustomerUseCase {
 
   @Operation(description = "Customer Search")
   @PostMapping("customer/search")
-  public List<Response> search(@RequestBody Request criteria) {
-    String jpql = "SELECT new victor.training.clean.application.SearchCustomerUseCase$Response(c.id, c.name)" +
+  public List<SearchCustomerResponse> search(@RequestBody SearchCustomerRequest criteria) {
+    String jpql = "SELECT new victor.training.clean.application.SearchCustomerUseCase$SearchCustomerResponse(c.id, c.name)" +
                   " FROM Customer c " +
                   " WHERE 1=1 ";
 
@@ -46,7 +45,7 @@ public class SearchCustomerUseCase {
     }
     // + more
 
-    var query = entityManager.createQuery(jpql, Response.class);
+    var query = entityManager.createQuery(jpql, SearchCustomerResponse.class);
     for (String paramName : paramMap.keySet()) {
       query.setParameter(paramName, paramMap.get(paramName));
     }

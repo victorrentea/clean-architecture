@@ -1,4 +1,4 @@
-package victor.training.clean.controller;
+package victor.training.clean.verticalslice;
 
 import lombok.*;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -15,7 +15,7 @@ import java.util.List;
 
 // Brutal example of vertical slicing to enable flexible architecture per use-case: here- the lack of it :)
 @RepositoryRestResource(collectionResourceRel = "countries", path = "countries")
-public interface CountryRestRepository extends PagingAndSortingRepository<Country, Long> {
+public interface CountryCRUD extends PagingAndSortingRepository<Country, Long> {
     List<Country> findByName(@Param("name") String name);
 }
 @Entity
@@ -38,10 +38,10 @@ class Country {
 @Component
 @RequiredArgsConstructor
 class InitialCountries {
-    private final CountryRestRepository countryRestRepository;
+    private final CountryCRUD countryCRUD;
     @EventListener(ApplicationStartedEvent.class)
     public void init() {
-        countryRestRepository.save(new Country("Romania", "RO"));
-        countryRestRepository.save(new Country("France", "FR"));
+        countryCRUD.save(new Country("Romania", "RO"));
+        countryCRUD.save(new Country("France", "FR"));
     }
 }

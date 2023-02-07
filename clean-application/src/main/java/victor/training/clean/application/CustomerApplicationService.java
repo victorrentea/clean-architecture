@@ -8,6 +8,7 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.domain.model.Site;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
@@ -32,8 +33,8 @@ public class CustomerApplicationService {
         return customerSearchRepo.search(searchCriteria);
     }
 
-    public CustomerDto findById(long customerId) {
-        Customer customer = customerRepo.findById(customerId).orElseThrow();
+    public CustomerDto findById(long id) {
+        Customer customer = customerRepo.findById(id).orElseThrow();
 
         // mapping logic TODO move somewhere else
        return CustomerDto.builder()
@@ -51,7 +52,7 @@ public class CustomerApplicationService {
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
         customer.setCreationDate(LocalDate.now());
-        customer.setSite(siteRepo.getReferenceById(dto.getSiteId()));
+        customer.setSite(new Site().setId(dto.getSiteId()));
 
         // validation TODO explore alternatives
         if (customer.getName().length() < 5) {
@@ -80,12 +81,12 @@ public class CustomerApplicationService {
         sendRegistrationEmail(customer);
     }
 
-    public void update(CustomerDto dto) { // TODO move to Task-based Commands
-        Customer customer = customerRepo.findById(dto.getId()).orElseThrow();
+    public void update(long id, CustomerDto dto) { // TODO move to Task-based Commands
+        Customer customer = customerRepo.findById(id).orElseThrow();
         // CRUD part
         customer.setName(dto.getName());
         customer.setEmail(dto.getEmail());
-        customer.setSite(siteRepo.getReferenceById(dto.getSiteId()));
+        customer.setSite(new Site().setId(dto.getSiteId()));
 
         // tricky part
         if (!customer.isGoldMember() && dto.isGold()) {

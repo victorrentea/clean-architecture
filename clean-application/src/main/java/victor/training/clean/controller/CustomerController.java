@@ -28,13 +28,13 @@ public class CustomerController {
    }
 
    @PostMapping
-   public void register(@RequestBody CustomerDto customerDto) {
-      customerApplicationService.register(customerDto);
+   public void register(@RequestBody CustomerDto dto) {
+      customerApplicationService.register(dto);
    }
 
    @PutMapping("{id}")
-   public void update(@RequestBody CustomerDto customerDto) {
-      customerApplicationService.update(customerDto);
+   public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
+      customerApplicationService.update(id, dto);
    }
 }
 
