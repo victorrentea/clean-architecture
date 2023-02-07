@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
       String userMessage = translateError(cleanException, cleanException.getErrorCode(), cleanException.getParameters(), request);
       String httpStatusCodeStr = messageSource.getMessage("error." + cleanException.getErrorCode() + ".code", null, "500", Locale.ENGLISH);
       int httpStatusCode = Integer.parseInt(httpStatusCodeStr);
+      // chestii interesante
       return status(httpStatusCode).body(userMessage);
    }
 

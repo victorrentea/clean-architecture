@@ -19,14 +19,10 @@ import java.util.NoSuchElementException;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @GetMapping("{id}")
-   public ResponseEntity<CustomerDto> findById(@PathVariable long id) {
-      try { // NU gu_noi
-         return ResponseEntity.ok(customerApplicationService.findById(id));
-      } catch (NoSuchElementException e) {
-         return ResponseEntity.notFound().build();
-      }
-   }
+//   @GetMapping("{id}")
+//   public CustomerDto findById(@PathVariable long id) {
+//      return customerApplicationService.findById(id);
+//   }
 
    @Operation(description = "Customer Search")
    @PostMapping("search")

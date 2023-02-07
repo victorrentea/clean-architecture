@@ -2,6 +2,10 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
@@ -18,6 +22,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 //@Service
+@RestController
+@RequestMapping("customer")
 @ApplicationService // custom annotation
 @RequiredArgsConstructor
 public class CustomerApplicationService {
@@ -31,8 +37,9 @@ public class CustomerApplicationService {
         return customerSearchRepo.search(searchCriteria);
     }
 
-    public CustomerDto findById(long customerId) {
-        Customer customer = customerRepo.findById(customerId).orElseThrow();
+    @GetMapping("{id}")
+    public CustomerDto findById(@PathVariable long id) {
+        Customer customer = customerRepo.findById(id).orElseThrow();
 
         // mapping logic TODO move somewhere else
        return new CustomerDto(customer);
