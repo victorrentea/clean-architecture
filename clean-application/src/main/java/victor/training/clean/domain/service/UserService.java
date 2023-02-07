@@ -10,6 +10,7 @@ import victor.training.clean.domain.model.User;
 @DomainService // ce-ai tu mai sfant in app, aici e
 public class UserService {
   private final LdapUserClientInterface client;
+  // ba nu e ok
 
   public void importUserFromLdap(String username) {
     User user = client.fetchUserByUsername(username);
