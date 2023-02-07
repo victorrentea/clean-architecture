@@ -1,8 +1,6 @@
 package victor.training.clean.common;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.domain.model.Customer;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

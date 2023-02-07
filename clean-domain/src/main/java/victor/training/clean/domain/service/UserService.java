@@ -2,12 +2,13 @@ package victor.training.clean.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import victor.training.clean.common.DomainService;
+import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+
 
 @RequiredArgsConstructor
 @Slf4j
-@DomainService // ce-ai tu mai sfant in app, aici e
+@Service // ce-ai tu mai sfant in app, aici e
 public class UserService {
   private final ExternalUserProvider client;
   // ba nu e ok
