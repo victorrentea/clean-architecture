@@ -1,7 +1,6 @@
 package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
@@ -16,7 +15,6 @@ import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Service
@@ -102,7 +100,7 @@ public class CustomerApplicationService {
         if (customer.isGoldMember() && !dto.isGold()) {
             // TODO api call get order history, and check stuff..
             customer.setGoldMember(false);
-            auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalReason());
+            auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalComment());
         }
 
         customerRepo.save(customer); // not required by the ORM because of @Transactional

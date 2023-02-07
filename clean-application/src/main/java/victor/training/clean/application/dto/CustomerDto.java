@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.FullName;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -19,11 +20,12 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
    @Size(min = 5)
    @NotNull
    String name;
+//  FullName fullName;
    String email;
    Long siteId;
    String creationDateStr;
    boolean gold;
-   String goldMemberRemovalReason;
+   String goldMemberRemovalComment;
 
    public CustomerDto(Customer customer) {
      id=customer.getId();
@@ -32,6 +34,6 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
      siteId=customer.getSite().getId();
      creationDateStr=customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
      gold=false;
-     goldMemberRemovalReason=null;
+     goldMemberRemovalComment =null;
    }
 }

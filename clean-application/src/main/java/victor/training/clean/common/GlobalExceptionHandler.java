@@ -26,8 +26,8 @@ public class GlobalExceptionHandler {
 
    @ResponseStatus(NOT_FOUND)
    @ExceptionHandler(NoSuchElementException.class)
-   public ResponseEntity<String> handleGeneralException() {
-      return notFound().build();
+   public String handleGeneralException() {
+      return "Nu-i!";
    }
 
    @ExceptionHandler(CleanException.class)
