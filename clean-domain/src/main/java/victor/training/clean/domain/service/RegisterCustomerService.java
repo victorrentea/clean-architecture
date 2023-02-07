@@ -7,7 +7,7 @@ import victor.training.clean.domain.repo.CustomerRepo;
 
 @RequiredArgsConstructor
 @Service // ZEN TATA! Pace armonie, clean code
-public class RegisterCustomerService implements IRegisterCustomerService {
+public class RegisterCustomerService {
   private final CustomerRepo customerRepo;
 
   // GU-NOI! cod degeaba rezultat din "Strict Layers Arch"
@@ -15,7 +15,6 @@ public class RegisterCustomerService implements IRegisterCustomerService {
 //    return customerRepo.findById(id).orElseThrow();
 //  }
 
-  @Override
   public void register(Customer customer) {
     // o metoda cu 10 ifuri pline de reguli de business 55 de linii
     // care sade acum in Application Service
