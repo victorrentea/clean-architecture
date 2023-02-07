@@ -29,6 +29,7 @@ public class UserService {
     User user = new User(uname, dto.getWorkEmail(), fullName);
     deepDomainLogic(user);
   }
+  // Gata!
 
   private void deepDomainLogic(User user) {
     if (user.getEmail().isPresent()) {
