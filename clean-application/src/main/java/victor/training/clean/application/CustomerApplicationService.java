@@ -66,18 +66,24 @@ public class CustomerApplicationService {
         // Heavy business logic
         // Heavy business logic
         // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
+        int discountPercentage = customer.getDiscountPercentage();
         System.out.println("Biz Logic with discount " + discountPercentage);
         // Heavy business logic
+
+
         // Heavy business logic
         customerRepo.save(customer);
         // Heavy business logic
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer);
+    }
+
+    public void method(Customer customer) {
+
+        int discountPercentage = customer.getDiscountPercentage();
+        System.out.println("Biz Logic with discount " + discountPercentage);
+
     }
 
     public void update(CustomerDto dto) { // TODO move to Task-based Commands
