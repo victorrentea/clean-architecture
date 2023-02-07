@@ -33,6 +33,9 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
     private final RegisterCustomerService registerCustomerService;
 
 
+    // "noi testam tot" - bravo! dar CUM testezi tot ?
+    // - clasa cu clasa
+    // - valeu!! => shitty tests. => met asta nu se testeaza in izolare, ci end to end (DB pe bune) @SpringBootTest
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }

@@ -32,6 +32,7 @@ public class ArchitectureTest {
     @Test
     public void domain_not_leaked_via_controller_methods() {
         methods().that().areMetaAnnotatedWith(RequestMapping.class)
+//                .and(areNot)
                 .and().arePublic()
                 .should().haveRawReturnType(not(resideInAPackage("..domain..")))
                 .andShould(new ParameterizedReturnTypeCondition(not(resideInAPackage("..domain.."))))
