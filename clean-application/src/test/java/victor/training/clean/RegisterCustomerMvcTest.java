@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+import victor.training.clean.application.dto.CustomerView;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Site;
 import victor.training.clean.application.dto.CustomerDto;
@@ -72,7 +73,7 @@ public class RegisterCustomerMvcTest {
         verify(emailSender).sendEmail(argThat(email -> email.getTo().equals("::email::")));
 
 
-        CustomerDto responseDto = getCustomer(customer.getId());
+        CustomerView responseDto = getCustomer(customer.getId());
 
         assertThat(responseDto.getId()).isEqualTo(customer.getId());
         assertThat(responseDto.getName()).isEqualTo("::name::");
@@ -114,12 +115,12 @@ public class RegisterCustomerMvcTest {
         .andExpect(jsonPath("$", hasSize(expectedNumberOfResults)));
     }
 
-    private CustomerDto getCustomer(long customerId) throws Exception {
+    private CustomerView getCustomer(long customerId) throws Exception {
         String responseString = mockMvc.perform(get("/customer/{id}", customerId)
                 .accept(APPLICATION_JSON)
         ).andReturn().getResponse().getContentAsString();
         System.out.println("Got response string: " + responseString);
-        CustomerDto dto = jackson.readValue(responseString, CustomerDto.class);
+        CustomerView dto = jackson.readValue(responseString, CustomerView.class);
         return dto;
     }
 }
