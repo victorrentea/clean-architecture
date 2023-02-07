@@ -3,8 +3,10 @@ package victor.training.clean.common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,10 +14,12 @@ import victor.training.clean.CleanException;
 import victor.training.clean.CleanException.ErrorCode;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.ResponseEntity.*;
 
 @Slf4j
@@ -26,8 +30,8 @@ public class GlobalExceptionHandler {
 
    @ResponseStatus(NOT_FOUND)
    @ExceptionHandler(NoSuchElementException.class)
-   public ResponseEntity<String> handleGeneralException() {
-      return notFound().build();
+   public String handleGeneralException() {
+      return "Not found";
    }
 
    @ExceptionHandler(CleanException.class)
@@ -36,6 +40,12 @@ public class GlobalExceptionHandler {
       String httpStatusCodeStr = messageSource.getMessage("error." + cleanException.getErrorCode() + ".code", null, "500", Locale.ENGLISH);
       int httpStatusCode = Integer.parseInt(httpStatusCodeStr);
       return status(httpStatusCode).body(userMessage);
+   }
+
+   @ResponseStatus(INTERNAL_SERVER_ERROR)
+   @ExceptionHandler(MethodArgumentNotValidException.class)
+   public List<String> onJavaxValidationException(HttpServletRequest request, MethodArgumentNotValidException e) {
+      return e.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
    }
 
    @ExceptionHandler(Exception.class)
@@ -50,5 +60,7 @@ public class GlobalExceptionHandler {
       log.error(String.format("Error occurred [%s]: %s", errorCode, userMessage), throwable);
       return userMessage;
    }
+
+
 
 }

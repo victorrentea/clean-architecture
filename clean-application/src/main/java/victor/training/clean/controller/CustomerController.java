@@ -2,6 +2,7 @@ package victor.training.clean.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.application.CustomerApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
@@ -28,7 +29,7 @@ public class CustomerController {
    }
 
    @PostMapping
-   public void register(@RequestBody CustomerDto dto) {
+   public void register(@RequestBody @Validated CustomerDto dto) {
       customerApplicationService.register(dto);
    }
 
