@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import victor.training.clean.common.DomainService;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapUserClientInterface;
 
 @RequiredArgsConstructor
 @Slf4j
