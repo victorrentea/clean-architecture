@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
 
    @ResponseStatus(INTERNAL_SERVER_ERROR)
    @ExceptionHandler(MethodArgumentNotValidException.class)
-   public List<String> onJavaxValidationException(HttpServletRequest request, MethodArgumentNotValidException e) {
+   public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
       return e.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
    }
 
