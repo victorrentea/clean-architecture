@@ -2,8 +2,6 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.common.ApplicationService;
@@ -12,13 +10,13 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.domain.service.CustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 //@Service
@@ -32,6 +30,8 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
+    private final CustomerService customerService;
+
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
@@ -40,47 +40,21 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
     @Override
     public CustomerDto findById(long id) {
         Customer customer = customerRepo.findById(id).orElseThrow();
-
-        // mapping logic TODO move somewhere else
-       return new CustomerDto(customer);
+        return new CustomerDto(customer);
        // 1) in ctor Dto, ca si-asa statea Dtoul degeaba
         // 2) in alta clasa mapper/ transformers.CustomerTransformer
 //        return customer.toDto(); // 3) -> NU CUMVA
     }
-
     @Transactional
     public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
-        Customer customer = new Customer();
-        customer.setEmail(dto.getEmail());
-        customer.setName(dto.getName());
-        customer.setCreationDate(LocalDate.now());
-        customer.setSite(siteRepo.getReferenceById(dto.getSiteId()));
+        Customer customer = dto.toEntity();
 
-        // validation TODO explore alternatives
-//        if (customer.getName().length() < 5) {
-//            throw new IllegalArgumentException("Name too short");
-//        }
-        if (customerRepo.existsByEmail(customer.getEmail())) {
-            throw new IllegalArgumentException("Customer email is already registered");
-            // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-        }
-
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = customer.getDiscountPercentage();
-        System.out.println("Biz Logic with discount " + discountPercentage);
-        // Heavy business logic
-
-
-        // Heavy business logic
-        customerRepo.save(customer);
-        // Heavy business logic
+        customerService.register(customer);
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer);
     }
+
 
     public void method(Customer customer) {
 

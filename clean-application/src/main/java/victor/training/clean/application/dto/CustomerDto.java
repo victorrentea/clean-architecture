@@ -5,10 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.FullName;
+import victor.training.clean.domain.model.Site;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Builder
@@ -36,4 +37,13 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
      gold=false;
      goldMemberRemovalComment =null;
    }
+
+  public Customer toEntity() {
+      Customer customer = new Customer();
+    customer.setEmail(this.email);
+    customer.setName(this.name);
+      customer.setCreationDate(LocalDate.now());
+      customer.setSite(new Site().setId(getSiteId()));
+      return customer;
+  }
 }
