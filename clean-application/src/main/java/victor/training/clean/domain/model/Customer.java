@@ -3,9 +3,11 @@ package victor.training.clean.domain.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Optional;
 
 // un Value Object (VO) este un obiect
 // - immutabil
@@ -43,8 +45,8 @@ public class Customer {
 
 	// la orice repo.save se valideaza aceste adnotari
 				// sau custom @Aspect sa validezi orice param de tipul Customer
-	@Size(min = 5)
-	@NotNull
+//	@Size(min = 5)
+//	@NotNull
 	private String name;
 
 	private String email;
@@ -52,6 +54,22 @@ public class Customer {
 	private boolean goldMember;
 	@ManyToOne
 	private Site site;
+
+	protected Customer() {} // for hibernate
+
+	public Customer(String name) {
+		if (name.length() < 5) { // DDD-like
+			// mai prost ca adnotarile ca arunca doar prima exceptie
+			// mai complicat in teste (ca ob trebuie sa fie valide)
+			throw new IllegalArgumentException("Name too short");
+		}
+		this.name = name;
+	}
+
+	// null-safe model: getteri pe campuri care pot fi null sa de Optional
+//	public Optional<String> getEmail() {
+//		return Optional.ofNullable(email);
+//	}
 
 	// reguli de domeniu in model!
 	// cand pui logica in model.. faci OOP

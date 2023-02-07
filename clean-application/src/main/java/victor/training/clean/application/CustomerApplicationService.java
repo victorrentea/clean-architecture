@@ -47,7 +47,7 @@ public class CustomerApplicationService {
 
     @Transactional
     public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
-        Customer customer = new Customer();
+        Customer customer = new Customer(dto.getName());
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
         customer.setCreationDate(LocalDate.now());
