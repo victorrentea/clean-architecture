@@ -14,11 +14,11 @@ import java.util.List;
 public class UserService {
   private final LdapApi ldapApi;
 
-  public void importUserFromLdap(String username) {
-    List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, username.toUpperCase());
+  public void importUserFromLdap(String targetUsername) {
+    List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
 
     if (list.size() != 1) {
-      throw new IllegalArgumentException("There is no single user matching username " + username);
+      throw new IllegalArgumentException("There is no single user matching username " + targetUsername);
     }
 
     LdapUserDto dto = list.get(0);

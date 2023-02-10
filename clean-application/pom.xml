@@ -110,7 +110,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>clean-application/ldap-api-docs.json</inputSpec>
+                            <inputSpec>clean-application/ldap-api-docs.yaml</inputSpec>
                             <generatorName>java</generatorName>
                             <library>resttemplate</library>
                             <apiPackage>victor.training.clean.infra</apiPackage>
