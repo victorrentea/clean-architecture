@@ -2,6 +2,7 @@ package victor.training.clean;
 
 import com.tngtech.archunit.core.domain.*;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
 import victor.training.clean.utils.ParameterizedReturnTypeCondition;

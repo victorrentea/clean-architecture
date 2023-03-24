@@ -4,17 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapClient;
-import victor.training.clean.infra.LdapUserDto;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-  private final LdapClient ldapClient;
+  private final ILdapClient ILdapClient;
 
   public void importUserFromLdap(String targetUsername) {
-    User user = ldapClient.fetchOneUserByUsername(targetUsername);
+    User user = ILdapClient.fetchOneUserByUsername(targetUsername);
 
     user.getEmail().map(String::toLowerCase).ifPresent(this::checkNewUser);
 
@@ -29,11 +27,7 @@ public class UserService {
     user.asEmailContact().ifPresent(this::sendMailTo);
   }
 
-  private void fixUser(LdapUserDto dto) {
-    if (dto.getUid() == null) {
-      dto.setUid("anonymous"); // ⚠️ mutability risks
-    }
-  }
+
 
   private void sendMailTo(String emailContact) { // don't change this <- it's library code
     //... implementation left out
