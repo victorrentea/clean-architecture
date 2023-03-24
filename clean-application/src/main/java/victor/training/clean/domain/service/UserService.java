@@ -3,6 +3,7 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
@@ -23,26 +24,30 @@ public class UserService {
 
     LdapUserDto dto = dtoList.get(0);
 
-    complexLogic(dto);
-  }
 
-  private void complexLogic(LdapUserDto dto) { // ⚠️ many useless fields
-    if (dto.getWorkEmail() != null) { // ⚠️ NPE in other unguarded places?
-      checkNewUser(dto.getWorkEmail().toLowerCase());
-    }
-
-    // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
-    log.debug("Insert user in my database: " + dto.getUid());
-
-    // ⚠️ data mapping mixed with biz logic
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
 
-    fixUser(dto); // ⚠️ temporal coupling with the next line
-    log.debug("More logic for " + fullName + " of id " + dto.getUid().toLowerCase());
+    String username = dto.getUid();
+    if (username == null) {
+      username = "anonymous";
+    }
+    User user = new User(username, dto.getWorkEmail(), fullName);
 
-    sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
+    complexLogic(user);
+  }
+
+  private void complexLogic(User user) {
+    user.getEmail().map(String::toLowerCase).ifPresent(this::checkNewUser);
+
+    // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
+    log.debug("Insert user in my database: " + user.getUsername());
+
+//    fixUser(dto); // ⚠️ temporal coupling with the next line
+    log.debug("More logic for " + user.getFullName() + " of id " + user.getUsername().toLowerCase());
+
+    user.asEmailContact().ifPresent(this::sendMailTo);
     // then later, again (⚠️ repeated logic):
-    sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
+    user.asEmailContact().ifPresent(this::sendMailTo);
   }
 
   private void fixUser(LdapUserDto dto) {
