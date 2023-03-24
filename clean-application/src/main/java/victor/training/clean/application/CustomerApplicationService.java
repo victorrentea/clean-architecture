@@ -48,9 +48,8 @@ public class CustomerApplicationService {
 
     @Transactional
     public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
-        Customer customer = new Customer();
+        Customer customer = new Customer(dto.getName());
         customer.setEmail(dto.getEmail());
-        customer.setName(dto.getName());
         customer.setCreationDate(LocalDate.now());
         customer.setSite(new Site().setId(dto.getSiteId()));
 
@@ -67,10 +66,7 @@ public class CustomerApplicationService {
         // Heavy business logic
         // Heavy business logic
         // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
+        int discountPercentage = customer.getDiscountPercentage();
         System.out.println("Biz Logic with discount " + discountPercentage);
         // Heavy business logic
         // Heavy business logic

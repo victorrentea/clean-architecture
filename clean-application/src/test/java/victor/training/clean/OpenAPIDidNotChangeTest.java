@@ -42,6 +42,10 @@ public class OpenAPIDidNotChangeTest {
     assertThat(actualOpenAPIJson).isEqualTo(expectedOpenAPIJson);
   }
 
+
+
+
+
   private String prettifyJsonString(String rawJson) throws JsonProcessingException {
       return StringUtils.isBlank(rawJson) ? rawJson :
               jackson.writerWithDefaultPrettyPrinter().writeValueAsString(
