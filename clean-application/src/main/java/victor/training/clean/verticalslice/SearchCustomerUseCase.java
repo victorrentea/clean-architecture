@@ -27,13 +27,14 @@ public class SearchCustomerUseCase {
   private static class SearchCustomerResponse { // ==> JSON
     long id;
     String name;
+    String siteName;
   }
 
 
   @Operation(description = "Customer Search")
   @PostMapping("customer/search")
   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerRequest criteria) {
-    String jpql = "SELECT new victor.training.clean.application.SearchCustomerUseCase$SearchCustomerResponse(c.id, c.name)" +
+    String jpql = "SELECT new victor.training.clean.application.veSearchCustomerUseCase$SearchCustomerResponse(c.id, c.name,c.site.name)" +
                   " FROM Customer c " +
                   " WHERE 1=1 ";
 

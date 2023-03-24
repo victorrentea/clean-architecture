@@ -11,9 +11,17 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @RequiredArgsConstructor
 public class RegisterCustomerService {
   private final CustomerRepo customerRepo;
-  private final QuotationService quotationService;
 
   public void register(Customer customer) {
+    if (customerRepo.existsByEmail(customer.getEmail())) {
+      throw new IllegalArgumentException("Customer email is already registered");
+      // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
+    }
+    if (customer.isGoldMember()) {
+      // 300 lines of logic
+    } else {
+      // 20 lines of logic
+    }
     // Heavy business logic
     // Heavy business logic
     // Heavy business logic
@@ -24,6 +32,5 @@ public class RegisterCustomerService {
     // Heavy business logic
     customerRepo.save(customer);
     // Heavy business logic
-    quotationService.quoteCustomer(customer);
   }
 }

@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
-public class CustomerSearchRepo {
+public class SearchRepo {
    private final EntityManager entityManager;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
@@ -43,6 +43,8 @@ public class CustomerSearchRepo {
       for (String paramName : paramMap.keySet()) {
          query.setParameter(paramName, paramMap.get(paramName));
       }
+      query.setFirstResult(100);
+      query.setMaxResults(50);
       return query.getResultList();
    }
 }
