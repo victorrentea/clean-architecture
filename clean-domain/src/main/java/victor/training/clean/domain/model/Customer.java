@@ -11,17 +11,17 @@ import java.util.Objects;
 class Address {
 	private String city;
 	private String street;
-	private int zipCode;
+	private Integer zipCode;
 
 	protected Address() {} // for Hibernate only
 
-	public Address(String city, String street, int zipCode) {
-		this.city = city;
-		this.street = street;
+	public Address(String city, String street, Integer zipCode) {
+		this.city = Objects.requireNonNull(city);
+		this.street = Objects.requireNonNull(street);
 		this.zipCode = zipCode;
 	}
 
-	public int getZipCode() {
+	public Integer getZipCode() {
 		return zipCode;
 	}
 
