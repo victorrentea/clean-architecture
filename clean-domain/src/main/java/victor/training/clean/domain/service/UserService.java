@@ -18,7 +18,7 @@ public class UserService {
 
     // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
     log.debug("Insert user in my database: " + user.getUsername());
-
+//LdapUserDto c;
     //    fixUser(dto); // ⚠️ temporal coupling with the next line
     log.debug("More logic for " + user.getFullName() + " of id " + user.getUsername().toLowerCase());
 
