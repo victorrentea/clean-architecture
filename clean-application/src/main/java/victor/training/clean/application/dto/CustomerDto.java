@@ -7,7 +7,6 @@ import lombok.Value;
 import victor.training.clean.domain.model.Customer;
 
 import javax.validation.constraints.Size;
-import java.time.format.DateTimeFormatter;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 

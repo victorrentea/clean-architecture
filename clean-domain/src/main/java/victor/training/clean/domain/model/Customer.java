@@ -1,8 +1,6 @@
 package victor.training.clean.domain.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.threeten.bp.jdk8.Jdk8Methods;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
