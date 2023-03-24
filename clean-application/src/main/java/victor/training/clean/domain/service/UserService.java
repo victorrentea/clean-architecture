@@ -15,44 +15,48 @@ public class UserService {
   private final LdapApi ldapApi;
 
   public void importUserFromLdap(String targetUsername) {
-    List<LdapUserDto> list = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
+    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
 
-    if (list.size() != 1) {
-      throw new IllegalArgumentException("There is no single user matching username " + targetUsername);
+    if (dtoList.size() != 1) {
+      throw new IllegalArgumentException("Expected single user to match username " + targetUsername + ", got: " + dtoList);
     }
 
-    LdapUserDto dto = list.get(0);
+    LdapUserDto dto = dtoList.get(0);
 
-    deepDomainLogic(dto);
+    complexLogic(dto);
   }
 
-  private void deepDomainLogic(LdapUserDto dto) { // ⚠️ useless fields
-    if (dto.getWorkEmail() != null) { // ⚠️ how about other unguarded places?
-      log.debug("Send welcome email to  " + dto.getWorkEmail());
+  private void complexLogic(LdapUserDto dto) { // ⚠️ many useless fields
+    if (dto.getWorkEmail() != null) { // ⚠️ NPE in other unguarded places?
+      checkNewUser(dto.getWorkEmail().toLowerCase());
     }
 
-    log.debug("Insert user in my database: " + dto.getUid()); // ⚠️ bad attribute name
+    // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
+    log.debug("Insert user in my database: " + dto.getUid());
 
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // ⚠️ data mapping mixed with biz logic
-    innocentHack(dto);
-    log.debug("More " + fullName + " of id " + dto.getUid().toLowerCase()); // ⚠️ pending NullPointerException
+    // ⚠️ data mapping mixed with biz logic
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
 
-    // then, in multiple places:
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">"); // ⚠️ repeated logic
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
+    fixUser(dto); // ⚠️ temporal coupling with the next line
+    log.debug("More logic for " + fullName + " of id " + dto.getUid().toLowerCase());
+
+    sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
+    // then later, again (⚠️ repeated logic):
+    sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
   }
 
-  private void innocentHack(LdapUserDto dto) {
+  private void fixUser(LdapUserDto dto) {
     if (dto.getUid() == null) {
       dto.setUid("anonymous"); // ⚠️ mutability risks
     }
   }
 
-  private void sendMailTo(String emailContact) {
-    System.out.println("Contact: " + emailContact);
-    //..implem left out
+  private void sendMailTo(String emailContact) { // don't change this <- it's library code
+    //... implementation left out
+  }
+
+  public void checkNewUser(String email) {
+    log.debug("Check this user is not already in my system  " + email);
   }
 
 }
