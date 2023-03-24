@@ -2,6 +2,9 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
@@ -9,6 +12,7 @@ import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.domain.model.Site;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
@@ -19,22 +23,26 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@RestController
 //@Service
 @ApplicationService // custom annotation
 @RequiredArgsConstructor
-public class CustomerApplicationService {
+public class  CustomerApplicationService{ // aka facade, orchestrator
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
+    private final RegisterCustomerService registerCustomer;
 
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
 
-    public CustomerDto findById(long id) {
+    @GetMapping("{id}")
+    public CustomerDto findById(@PathVariable long id) {
         Customer customer = customerRepo.findById(id).orElseThrow();
+//        Customer customer = customerService.findById(id).orElseThrow();
 
         // mapping logic TODO move somewhere else
        return CustomerDto.builder()
@@ -62,20 +70,12 @@ public class CustomerApplicationService {
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
-        // Heavy business logic
-        // Heavy business logic
-        // Heavy business logic
-        // TODO Where can I move this little logic? (... operating on the state of a single entity)
-        int discountPercentage = customer.getDiscountPercentage();
-        System.out.println("Biz Logic with discount " + discountPercentage);
-        // Heavy business logic
-        // Heavy business logic
-        customerRepo.save(customer);
-        // Heavy business logic
-        quotationService.quoteCustomer(customer);
+        registerCustomer.register(customer);
 
         sendRegistrationEmail(customer);
     }
+
+
 
     public void update(long id, CustomerDto dto) { // TODO move to Task-based Commands
         Customer customer = customerRepo.findById(id).orElseThrow();

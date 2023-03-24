@@ -11,16 +11,18 @@ import victor.training.clean.application.dto.CustomerSearchResult;
 
 import java.util.List;
 
+
+
 @RestController
 @RequestMapping("customer")
 @RequiredArgsConstructor
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @GetMapping("{id}")
-   public CustomerDto findById(@PathVariable long id) {
-      return customerApplicationService.findById(id);
-   }
+//   @GetMapping("{id}")
+//   public CustomerDto findById(@PathVariable long id) {
+//      return customerApplicationService.findById(id);
+//   }
 
    @Operation(description = "Customer Search")
    @PostMapping("search")
