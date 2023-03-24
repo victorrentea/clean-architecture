@@ -6,11 +6,12 @@ import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.String.join;
 
 
 @Repository
@@ -19,29 +20,32 @@ public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
-      List<String> jpqlParts = new ArrayList<>();
-      jpqlParts.add("SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
+      String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +
-                    " WHERE 1=1 ");
+                    " WHERE ";
+      List<String> jpqlParts = new ArrayList<>();
+      jpqlParts.add("1=1"); // alternatives: Criteria API ± Spring Specifications or Query DSL
+      Map<String, Object> params = new HashMap<>();
 
-      Map<String, Object> paramMap = new HashMap<>();
       if (criteria.getName() != null) {
-         jpqlParts.add("AND UPPER(c.name) LIKE UPPER('%' || :name || '%')");
-         paramMap.put("name", criteria.getName());
+         jpqlParts.add("UPPER(c.name) LIKE UPPER('%' || :name || '%')");
+         params.put("name", criteria.getName());
+      }
+
+      if (criteria.getEmail() != null) {
+         jpqlParts.add("UPPER(c.email) = UPPER(:email)");
+         params.put("email", criteria.getEmail());
       }
 
       if (criteria.getSiteId() != null) {
-         jpqlParts.add("AND c.site.id = :siteId");
-         paramMap.put("siteId", criteria.getSiteId());
+         jpqlParts.add("c.site.id = :siteId");
+         params.put("siteId", criteria.getSiteId());
       }
 
-      // etc
-
-      // Alternatives: CriteriaBuilder, or QueryDSL
-
-      TypedQuery<CustomerSearchResult> query = entityManager.createQuery(String.join(" ", jpqlParts), CustomerSearchResult.class);
-      for (String paramName : paramMap.keySet()) {
-         query.setParameter(paramName, paramMap.get(paramName));
+      String whereCriteria = join(" AND ", jpqlParts);
+      var query = entityManager.createQuery(jpql + whereCriteria, CustomerSearchResult.class);
+      for (String paramName : params.keySet()) {
+         query.setParameter(paramName, params.get(paramName));
       }
       return query.getResultList();
    }

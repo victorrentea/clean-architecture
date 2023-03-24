@@ -53,6 +53,7 @@ public class UserService {
 
   private void sendMailTo(String emailContact) { // don't change this <- it's library code
     //... implementation left out
+    log.debug("Contact: " + emailContact);
   }
 
   public void checkNewUser(String email) {

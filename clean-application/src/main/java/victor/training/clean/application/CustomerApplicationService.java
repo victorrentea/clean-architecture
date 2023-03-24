@@ -18,6 +18,9 @@ import victor.training.clean.domain.service.QuotationService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 //@Service
 @ApplicationService // custom annotation
@@ -71,7 +74,7 @@ public class CustomerApplicationService {
         if (customer.isGoldMember()) {
             discountPercentage += 1;
         }
-        System.out.println("Biz Logic with discount " + discountPercentage);
+        System.out.println("Domain Logic using discount " + discountPercentage);
         // Heavy business logic
         // Heavy business logic
         customerRepo.save(customer);
@@ -81,6 +84,7 @@ public class CustomerApplicationService {
         sendRegistrationEmail(customer);
     }
 
+    @Transactional
     public void update(long id, CustomerDto dto) { // TODO move to Task-based Commands
         Customer customer = customerRepo.findById(id).orElseThrow();
         // CRUD part
@@ -88,18 +92,19 @@ public class CustomerApplicationService {
         customer.setEmail(dto.getEmail());
         customer.setSite(new Site().setId(dto.getSiteId()));
 
-        // tricky part
+        // custom logic when a SPECIAL part of the customer data changes => Task-Based UI
         if (!customer.isGoldMember() && dto.isGold()) {
             customer.setGoldMember(true);
             sendGoldWelcomeEmail(customer);
         }
+
         if (customer.isGoldMember() && !dto.isGold()) {
-            // TODO api call get order history, and check stuff..
             customer.setGoldMember(false);
+            customer.setGoldMemberRemovalReason(requireNonNull(dto.getGoldMemberRemovalReason()));
             auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalReason());
         }
 
-        customerRepo.save(customer); // not required by the ORM because of @Transactional
+        customerRepo.save(customer); // ORM Trick: not required by the ORM because of @Transactional on the method
     }
 
     private void sendRegistrationEmail(Customer customer) {
@@ -120,6 +125,6 @@ public class CustomerApplicationService {
         emailSender.sendEmail(email);
     }
     private void auditGoldMemberRemoval(Customer customer, String reason) {
-        System.out.println("Send message on Kafka: name:" + customer.getName() + ", reason:" + reason);
+        System.out.println("Kafka.send ( {name:" + customer.getName() + ", reason:" + reason + "} )");
     }
 }

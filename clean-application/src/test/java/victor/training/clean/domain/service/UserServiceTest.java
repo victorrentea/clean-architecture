@@ -34,7 +34,7 @@ class UserServiceTest {
     userService.importUserFromLdap("jdoe");
 
     assertThat(capturedOutput)
-            .contains("More business logic with John DOE of id jdoe")
+            .contains("More logic for John DOE of id jdoe")
             .contains("Contact: John DOE <jdoe@corp.com>");
   }
 }
