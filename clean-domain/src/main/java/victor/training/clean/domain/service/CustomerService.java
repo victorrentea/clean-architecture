@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,5 +30,6 @@ public class CustomerService {
     // Heavy business logic
     customerRepo.save(customer);
     // Heavy business logic
+
   }
 }
