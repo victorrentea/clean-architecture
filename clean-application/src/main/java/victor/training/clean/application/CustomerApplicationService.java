@@ -44,16 +44,25 @@ public class CustomerApplicationService implements CustomerApi {
   @Override
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
+//    CustomerDto dto = mapper.toDto(customer);
+    // BORING mapping logic de la Entiy -> Dto? TODO move somewhere else
+//    return CustomerDto.builder()
+//            .id(customer.getId())
+//            .name(customer.getName())
+//            .email(customer.getEmail())
+//            .siteId(customer.getSite().getId())
+//            .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+//            .build();
 
-    CustomerDto dto = mapper.toDto(customer);
-    // mapping logic TODO move somewhere else
-    return CustomerDto.builder()
-            .id(customer.getId())
-            .name(customer.getName())
-            .email(customer.getEmail())
-            .siteId(customer.getSite().getId())
-            .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-            .build();
+    // #1 in DTO constructor
+    return new CustomerDto(customer);
+
+    // #2
+    //return customerMapper.toDto(customer); // mapper scris de mana
+
+    // NICIODATA: incalca dependency rule: domain nu ar trebui sa stie de Dto
+//    CustomerDto dto = customerEntity.toDto();
+//    return dto;
   }
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchRepo.search(searchCriteria);

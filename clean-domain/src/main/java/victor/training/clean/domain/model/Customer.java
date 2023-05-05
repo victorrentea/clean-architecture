@@ -13,21 +13,28 @@ class ShippingAddress { // value object
   private String city;
   private String street;
   private Integer zipCode;
-  protected ShippingAddress() {} // for Hibernate only
+
+  protected ShippingAddress() {
+  } // for Hibernate only
+
   public ShippingAddress(String city, String street, Integer zipCode) {
     this.city = city;
     this.street = street;
     this.zipCode = zipCode;
   }
+
   public Integer getZipCode() {
     return zipCode;
   }
+
   public String getCity() {
     return city;
   }
+
   public String getStreet() {
     return street;
   }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -35,6 +42,7 @@ class ShippingAddress { // value object
     ShippingAddress that = (ShippingAddress) o;
     return Objects.equals(city, that.city) && Objects.equals(street, that.street) && Objects.equals(zipCode, that.zipCode);
   }
+
   @Override
   public int hashCode() {
     return Objects.hash(city, street, zipCode);
@@ -52,17 +60,17 @@ public class Customer {
   @GeneratedValue
   private Long id;
   @NotNull // #1)⭐️ javax.validation => la .save() hibernate arunca ex
-//  @NonNull // #2) Lombok => in codul .class adauga un if(==null) throw in setterul generat, si in contructor
-  					// mai eager la crapau, dar mai magic
+  //  @NonNull // #2) Lombok => in codul .class adauga un if(==null) throw in setterul generat, si in contructor
+  // mai eager la crapau, dar mai magic
   @Column(nullable = false) // sau NOT NULL pe coloana in tabel DB
   // #4) ca vreun UPDATE SQL in DB direct sa nu puna null ->  ca sa dormi mai bine noaptea
   private String name;  // nu poate niciodata sa fie null
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix TODO ?
-//  private String shippingAddressCity;
-//  private String shippingAddressStreet;
-//  private Integer shippingAddressZipCode;
+  //  private String shippingAddressCity;
+  //  private String shippingAddressStreet;
+  //  private Integer shippingAddressZipCode;
   @Embedded
   private ShippingAddress shippingAddress;
 
@@ -70,31 +78,37 @@ public class Customer {
   private boolean goldMember;
   @JsonIgnore // poluarea modelului cu concernuri de API/presentation
   private String goldMemberRemovalReason;
-//  @ElementCollection
-//  private List<String> phones;
+  //  @ElementCollection
+  //  private List<String> phones;
 
 
-//  public String getCreationDateStr() { // presentation bullshit
-//    return creationDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//  }
+  //  public String getCreationDateStr() { // presentation bullshit
+  //    return creationDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+  //  }
 
   @ManyToOne
   private Site site;
 
-  protected Customer() {} // for Hibernate only
+  protected Customer() {
+  } // for Hibernate only
 
-	public Customer(String name) {
-		if (name == null) {
-			throw new IllegalArgumentException();
-		}
-		this.name = name;
-	}
+  public Customer(String name) {
+    if (name == null) {
+      throw new IllegalArgumentException();
+    }
+    this.name = name;
+  }
 
-	public int getDiscountPercentage() {
+  public int getDiscountPercentage() {
     int discountPercentage = 3;
     if (goldMember) {
       discountPercentage += 1;
     }
     return discountPercentage;
   }
+
+  //  public victor.training.clean.application.dto.CustomerDto toDto() {
+  // gresit pt ca Domain Entity nu ar trebui sa-i pese ca exista un Dto
+  // altfel: entitea -> tomberonul aplicatiei
+  //  }
 }

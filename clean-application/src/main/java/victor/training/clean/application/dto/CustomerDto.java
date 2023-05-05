@@ -24,7 +24,7 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
   boolean gold;
   String goldMemberRemovalReason;
 
-  public CustomerDto(Customer customer) {
+  public CustomerDto(Customer customer) { // de ce nu!?
     id = customer.getId();
     name = customer.getName();
     email = customer.getEmail();
