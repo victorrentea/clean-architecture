@@ -39,9 +39,7 @@ public class UserService {
   }
 
   private void complexLogic(User user) { // ⚠️ many useless fields
-    if (user.getEmail().isPresent()) { // ⚠️ NPE in other unguarded places?
-      checkNewUser(user.getEmail().get());
-    }
+    user.getEmail().ifPresent(this::checkNewUser);
 
     // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
     log.debug("Insert user in my database: " + user.getUserRct());
