@@ -26,7 +26,7 @@ public class SearchCustomerUseCaseTest {
 
   @Test
   void byNameLike() throws Exception {
-    customerRepo.save(new Customer().setName("John"));
+    customerRepo.save(new Customer("John"));
     String responseJson = mockMvc.perform(post("/customer/search-vertical")
                     .contentType("application/json")
                     .content("""

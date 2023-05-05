@@ -36,7 +36,7 @@ public class SearchCustomerTest {
   @BeforeEach
   final void before() {
 
-    customer = customerRepo.save(new Customer().setName("John"));
+    customer = customerRepo.save(new Customer("John"));
   }
   @Test
   void byNameLike() throws Exception {

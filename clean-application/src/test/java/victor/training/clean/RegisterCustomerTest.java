@@ -92,7 +92,7 @@ public class RegisterCustomerTest {
 
     @Test
     void existingEmailFails() throws Exception {
-        customerRepo.save(new Customer().setEmail("::email::"));
+        customerRepo.save(new Customer("john doe").setEmail("::email::"));
 
         register(requestDto.build())
                 .andExpect(status().isInternalServerError())
