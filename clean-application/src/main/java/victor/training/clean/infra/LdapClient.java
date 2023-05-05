@@ -3,17 +3,17 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.ILdapClient;
 
 import java.util.List;
 
 // Adapter Pattern: sa protejeze ceva la care tin de exterior
 @RequiredArgsConstructor
 @Adapter
-public class LdapClient {
+public class LdapClient implements ILdapClient {
   private final LdapApi ldapApi;
 
+  @Override
   public User retrieveUser(String username) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, username.toUpperCase());
 
