@@ -23,8 +23,9 @@ public class UserService {
     }
 
     LdapUserDto dto = dtoList.get(0);
-
-    complexLogic(dto);
+    String userRct = dto.getUid() !=null ? dto.getUid() : "anonymous";
+    User user = new User(dto.getWorkEmail(), userRct, dto.getFname(), dto.getLname());
+    complexLogic(user);
   }
 
   private void complexLogic(User user) { // ⚠️ many useless fields
@@ -38,7 +39,7 @@ public class UserService {
     // ⚠️ data mapping mixed with biz logic
     String fullName = user.getFirstName() + " " + user.getLastName().toUpperCase();
 
-    fixUser(user); // ⚠️ temporal coupling with the next line
+//    fixUser(user); // ⚠️ temporal coupling with the next line
     log.debug("More logic for " + fullName + " of id " + user.getUserRct().toLowerCase());
 
     sendMailTo(fullName + " <" + user.getWorkEmail().toLowerCase() + ">");
@@ -46,11 +47,11 @@ public class UserService {
     sendMailTo(fullName + " <" + user.getWorkEmail().toLowerCase() + ">");
   }
 
-  private void fixUser(User user) {
-    if (user.getUserRct() == null) {
-      user.setUid("anonymous"); // ⚠️ mutability risks
-    }
-  }
+//  private void fixUser(User user) {
+//    if (user.getUserRct() == null) {
+//      user.setUid("anonymous"); // ⚠️ mutability risks
+//    }
+//  }
 
   private void sendMailTo(String emailContact) { // don't change this <- it's library code
     //... implementation left out

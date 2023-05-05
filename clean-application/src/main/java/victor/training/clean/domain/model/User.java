@@ -9,7 +9,7 @@ public class User {
 
     public User(String workEmail, String userRct, String firstName, String lastName) {
         this.workEmail = workEmail;
-        this.userRct = userRct;
+        this.userRct = userRct ;
         this.firstName = firstName;
         this.lastName = lastName;
     }
