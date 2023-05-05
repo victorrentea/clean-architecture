@@ -4,46 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
 
-import java.util.List;
 
+//Sfantul Domain Service, doar cu logica MEA, pentru care sunt platit sa fac app asta.
+// #fiicunoinufiigunoi
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-  private final LdapApi ldapApi;
-
+  private final LdapClient ldapClient;
   public void importUserFromLdap(String targetUsername) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
+    User user = ldapClient.retrieveUser(targetUsername);
 
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Expected single user to match username " + targetUsername + ", got: " + dtoList);
-    }
-
-    LdapUserDto dto = dtoList.get(0);
-    User user = fromDto(dto);
-
-    // - am creat un nou ob de domain:
-    //- mic: cu strict campurile necesare
-    //- guardate (anonymous)
-    //- transformate (fullName)
-    //- nume bune (username)
-    //- logica in el (getEmailContact)
-    //- si null-safe (Optional)
-    //- immutable (nu am temporal coupling)
-    complexLogic(user);
-  }
-
-  private static User fromDto(LdapUserDto dto) {
-    String userRct = dto.getUid() != null ? dto.getUid() : "anonymous";
-    // ⚠️ data mapping mixed with biz logic
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
-    return new User(userRct, dto.getWorkEmail(), fullName);
-  }
-
-  private void complexLogic(User user) {
     user.getEmail().ifPresent(this::checkNewUser);
 
     log.debug("Insert user in my database: " + user.getUserRct());
@@ -52,7 +24,7 @@ public class UserService {
 
     user.getEmailContact().ifPresent(this::sendMailTo);
 
-      // then later, again (⚠️ repeated logic):
+    // then later, again (⚠️ repeated logic):
     user.getEmailContact().ifPresent(this::sendMailTo);
   }
 
