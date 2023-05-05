@@ -43,14 +43,11 @@ public class UserService {
     return new User(userRct, dto.getWorkEmail(), fullName);
   }
 
-  private void complexLogic(User user) { // ⚠️ many useless fields
+  private void complexLogic(User user) {
     user.getEmail().ifPresent(this::checkNewUser);
 
-    // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
     log.debug("Insert user in my database: " + user.getUserRct());
 
-
-//    fixUser(user); // ⚠️ temporal coupling with the next line
     log.debug("More logic for " + user.getFullName() + " of id " + user.getUserRct().toLowerCase());
 
     user.getEmailContact().ifPresent(this::sendMailTo);
@@ -59,12 +56,6 @@ public class UserService {
     user.getEmailContact().ifPresent(this::sendMailTo);
   }
 
-
-  //  private void fixUser(User user) {
-//    if (user.getUserRct() == null) {
-//      user.setUid("anonymous"); // ⚠️ mutability risks
-//    }
-//  }
 
   private void sendMailTo(String emailContact) { // don't change this <- it's library code
     //... implementation left out
