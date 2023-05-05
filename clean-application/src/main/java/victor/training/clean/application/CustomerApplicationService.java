@@ -13,7 +13,7 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.Site;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.repo.SiteRepo;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.infra.EmailSender;
 
@@ -36,7 +36,7 @@ public class CustomerApplicationService implements CustomerApi {
   private final CustomerMapStruct mapper;
 
 
-  private final CustomerService customerService;
+  private final RegisterCustomerService registerCustomerService;
 
   @Override
   public CustomerDto findById(long id) {
@@ -74,7 +74,7 @@ public class CustomerApplicationService implements CustomerApi {
 //    if (customer.getName().length() < 5) {
 //      throw new IllegalArgumentException("Name too short");
 //    }
-    customerService.register(customer);
+    registerCustomerService.register(customer);
     quotationService.quoteCustomer(customer);
 //    quotationService.quoteCustomer(customer);
     sendRegistrationEmail(customer);

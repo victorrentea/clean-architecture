@@ -5,12 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.service.QuotationService;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CustomerService {
+public class RegisterCustomerService {
   private final CustomerRepo customerRepo;
   // gu-noi
 //  public Customer findById(long id) {
