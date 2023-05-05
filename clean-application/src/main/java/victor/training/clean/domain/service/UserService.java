@@ -8,7 +8,6 @@ import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,12 +27,20 @@ public class UserService {
     // ⚠️ data mapping mixed with biz logic
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
     User user = new User(userRct, dto.getWorkEmail(), fullName);
+    // - am creat un nou ob de domain:
+    //- mic: cu strict campurile necesare
+    //- guardate (anonymous)
+    //- transformate (fullName)
+    //- nume bune (username)
+    //- logica in el (getEmailContact)
+    //- si null-safe (Optional)
+    //- immutable (nu am temporal coupling)
     complexLogic(user);
   }
 
   private void complexLogic(User user) { // ⚠️ many useless fields
     if (user.getEmail().isPresent()) { // ⚠️ NPE in other unguarded places?
-      checkNewUser(user.getEmail().get().toLowerCase());
+      checkNewUser(user.getEmail().get());
     }
 
     // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
@@ -43,21 +50,14 @@ public class UserService {
 //    fixUser(user); // ⚠️ temporal coupling with the next line
     log.debug("More logic for " + user.getFullName() + " of id " + user.getUserRct().toLowerCase());
 
-    if (getEmailContact(user).isPresent()) {
-      sendMailTo(getEmailContact(user).get());
-    }
+    user.getEmailContact().ifPresent(this::sendMailTo);
+
       // then later, again (⚠️ repeated logic):
-      if (getEmailContact(user).isPresent()) {
-      sendMailTo(getEmailContact(user).get());
-    }
-  }
-
-  private static Optional<String> getEmailContact(User user) {
-    return user.getEmail().map(mail -> user.getFullName() + " <" + user.getEmail().get().toLowerCase() + ">");
+    user.getEmailContact().ifPresent(this::sendMailTo);
   }
 
 
-//  private void fixUser(User user) {
+  //  private void fixUser(User user) {
 //    if (user.getUserRct() == null) {
 //      user.setUid("anonymous"); // ⚠️ mutability risks
 //    }

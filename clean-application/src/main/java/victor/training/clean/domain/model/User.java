@@ -14,8 +14,12 @@ public class User {
         this.fullName = fullName;
     }
 
+    public Optional<String> getEmailContact() {
+      return getEmail().map(mail -> fullName + " <" + mail + ">");
+    }
+
     public Optional<String> getEmail() {
-        return Optional.ofNullable(email);
+        return Optional.ofNullable(email).map(String::toLowerCase);
     }
 
     public String getUserRct() {
