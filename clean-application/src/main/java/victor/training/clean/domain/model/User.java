@@ -2,32 +2,25 @@ package victor.training.clean.domain.model;
 
 public class User {
 
-    private final String workEmail;
     private final String userRct;
-    private final String firstName;
-    private final String lastName;
+    private final String email;
+    private final String fullName;
 
-    public User(String workEmail, String userRct, String firstName, String lastName) {
-        this.workEmail = workEmail;
+    public User(String userRct, String email, String fullName) {
+        this.email = email;
         this.userRct = userRct ;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.fullName = fullName;
     }
 
-    public String getWorkEmail() {
-        return workEmail;
+    public String getEmail() {
+        return email;
     }
 
     public String getUserRct() {
         return userRct;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
-
-    public String getLastName() {
-        return lastName;
-    }
-
 }

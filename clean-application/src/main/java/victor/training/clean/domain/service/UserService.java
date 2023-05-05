@@ -24,27 +24,27 @@ public class UserService {
 
     LdapUserDto dto = dtoList.get(0);
     String userRct = dto.getUid() !=null ? dto.getUid() : "anonymous";
-    User user = new User(dto.getWorkEmail(), userRct, dto.getFname(), dto.getLname());
+    // ⚠️ data mapping mixed with biz logic
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+    User user = new User(userRct, dto.getWorkEmail(), fullName);
     complexLogic(user);
   }
 
   private void complexLogic(User user) { // ⚠️ many useless fields
-    if (user.getWorkEmail() != null) { // ⚠️ NPE in other unguarded places?
-      checkNewUser(user.getWorkEmail().toLowerCase());
+    if (user.getEmail() != null) { // ⚠️ NPE in other unguarded places?
+      checkNewUser(user.getEmail().toLowerCase());
     }
 
     // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
     log.debug("Insert user in my database: " + user.getUserRct());
 
-    // ⚠️ data mapping mixed with biz logic
-    String fullName = user.getFirstName() + " " + user.getLastName().toUpperCase();
 
 //    fixUser(user); // ⚠️ temporal coupling with the next line
-    log.debug("More logic for " + fullName + " of id " + user.getUserRct().toLowerCase());
+    log.debug("More logic for " + user.getFullName() + " of id " + user.getUserRct().toLowerCase());
 
-    sendMailTo(fullName + " <" + user.getWorkEmail().toLowerCase() + ">");
+    sendMailTo(user.getFullName() + " <" + user.getEmail().toLowerCase() + ">");
     // then later, again (⚠️ repeated logic):
-    sendMailTo(fullName + " <" + user.getWorkEmail().toLowerCase() + ">");
+    sendMailTo(user.getFullName() + " <" + user.getEmail().toLowerCase() + ">");
   }
 
 //  private void fixUser(User user) {
