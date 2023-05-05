@@ -8,6 +8,7 @@ import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -31,8 +32,8 @@ public class UserService {
   }
 
   private void complexLogic(User user) { // ⚠️ many useless fields
-    if (user.getEmail() != null) { // ⚠️ NPE in other unguarded places?
-      checkNewUser(user.getEmail().toLowerCase());
+    if (user.getEmail().isPresent()) { // ⚠️ NPE in other unguarded places?
+      checkNewUser(user.getEmail().get().toLowerCase());
     }
 
     // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
@@ -42,10 +43,19 @@ public class UserService {
 //    fixUser(user); // ⚠️ temporal coupling with the next line
     log.debug("More logic for " + user.getFullName() + " of id " + user.getUserRct().toLowerCase());
 
-    sendMailTo(user.getFullName() + " <" + user.getEmail().toLowerCase() + ">");
-    // then later, again (⚠️ repeated logic):
-    sendMailTo(user.getFullName() + " <" + user.getEmail().toLowerCase() + ">");
+    if (getEmailContact(user).isPresent()) {
+      sendMailTo(getEmailContact(user).get());
+    }
+      // then later, again (⚠️ repeated logic):
+      if (getEmailContact(user).isPresent()) {
+      sendMailTo(getEmailContact(user).get());
+    }
   }
+
+  private static Optional<String> getEmailContact(User user) {
+    return user.getEmail().map(mail -> user.getFullName() + " <" + user.getEmail().get().toLowerCase() + ">");
+  }
+
 
 //  private void fixUser(User user) {
 //    if (user.getUserRct() == null) {

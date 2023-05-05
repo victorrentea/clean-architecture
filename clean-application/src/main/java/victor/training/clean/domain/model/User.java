@@ -1,5 +1,7 @@
 package victor.training.clean.domain.model;
 
+import java.util.Optional;
+
 public class User {
 
     private final String userRct;
@@ -12,8 +14,8 @@ public class User {
         this.fullName = fullName;
     }
 
-    public String getEmail() {
-        return email;
+    public Optional<String> getEmail() {
+        return Optional.ofNullable(email);
     }
 
     public String getUserRct() {
