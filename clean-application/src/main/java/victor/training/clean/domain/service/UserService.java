@@ -24,6 +24,7 @@ public class UserService {
 
     LdapUserDto dto = dtoList.get(0);
     User user = fromDto(dto);
+
     // - am creat un nou ob de domain:
     //- mic: cu strict campurile necesare
     //- guardate (anonymous)
