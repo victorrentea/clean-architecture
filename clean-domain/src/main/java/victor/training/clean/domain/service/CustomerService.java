@@ -28,6 +28,7 @@ public class CustomerService {
     System.out.println("Domain Logic using discount " + discountPercentage);
     // Heavy business logic
     // Heavy business logic
+
     customerRepo.save(customer);
     // Heavy business logic
 

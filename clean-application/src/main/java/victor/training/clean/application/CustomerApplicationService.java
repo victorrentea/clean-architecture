@@ -76,7 +76,9 @@ public class CustomerApplicationService implements CustomerApi {
 //    }
     customerService.register(customer);
     quotationService.quoteCustomer(customer);
+//    quotationService.quoteCustomer(customer);
     sendRegistrationEmail(customer);
+
   }
 
 
