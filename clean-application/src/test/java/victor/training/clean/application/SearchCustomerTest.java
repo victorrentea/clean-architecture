@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;

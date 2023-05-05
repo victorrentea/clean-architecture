@@ -11,7 +11,6 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import victor.training.clean.ApiClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(OutputCaptureExtension.class)
