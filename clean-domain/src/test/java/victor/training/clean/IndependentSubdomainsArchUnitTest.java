@@ -15,7 +15,6 @@ import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyP
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndependentSubdomainsArchUnitTest {
-
    private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..api.."};
 
    private JavaClasses classes = new ClassFileImporter().importPackages("victor");

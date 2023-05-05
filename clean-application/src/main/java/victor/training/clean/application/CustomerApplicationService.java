@@ -9,16 +9,15 @@ import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.domain.model.Site;
+import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.domain.repo.SiteRepo;
-import victor.training.clean.domain.service.QuotationService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -30,8 +29,6 @@ public class CustomerApplicationService {
     private final EmailSender emailSender;
     private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
-    private final QuotationService quotationService;
-
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
@@ -83,6 +80,8 @@ public class CustomerApplicationService {
 
         sendRegistrationEmail(customer);
     }
+
+    private final QuotationService quotationService;
 
     @Transactional
     public void update(long id, CustomerDto dto) { // TODO move to Task-based Commands
