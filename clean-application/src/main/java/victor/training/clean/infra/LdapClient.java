@@ -1,4 +1,4 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;
@@ -14,11 +14,11 @@ import java.util.List;
 public class LdapClient {
   private final LdapApi ldapApi;
 
-  public User retrieveUser(String uid) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, uid.toUpperCase());
+  public User retrieveUser(String username) {
+    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, username.toUpperCase());
 
     if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Expected single user to match username " + uid + ", got: " + dtoList);
+      throw new IllegalArgumentException("Expected single user to match username " + username + ", got: " + dtoList);
     }
 
     LdapUserDto dto = dtoList.get(0);

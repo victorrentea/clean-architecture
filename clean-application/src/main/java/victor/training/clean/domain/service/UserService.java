@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.infra.LdapClient;
 
 
 //Sfantul Domain Service, doar cu logica MEA, pentru care sunt platit sa fac app asta.
@@ -13,6 +14,7 @@ import victor.training.clean.domain.model.User;
 @Service
 public class UserService {
   private final LdapClient ldapClient;
+
   public void importUserFromLdap(String targetUsername) {
     User user = ldapClient.retrieveUser(targetUsername);
 
