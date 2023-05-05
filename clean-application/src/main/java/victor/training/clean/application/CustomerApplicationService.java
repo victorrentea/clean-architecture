@@ -68,36 +68,17 @@ public class CustomerApplicationService implements CustomerApi {
 //  todo ? @PostMapping
   public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
     Customer customer = dto.toEntity();
-
     // validation TODO explore alternatives:
     //   javax.validation pe Dto facut de la intrare + apare in swagger
 //    if (customer.getName().length() < 5) {
 //      throw new IllegalArgumentException("Name too short");
 //    }
-
-
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("Customer email is already registered");
-      // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-    // Heavy business logic
-    // Heavy business logic
-    // Heavy business logic
-    // Heavy business logic
-    // Heavy business logic
-    // Heavy business logic
-    // Heavy business logic
-    // TODO Where can I move this little logic? (... operating on the state of a single entity)
-      int discountPercentage = customer.getDiscountPercentage();
-      System.out.println("Domain Logic using discount " + discountPercentage);
-    // Heavy business logic
-    // Heavy business logic
-    customerRepo.save(customer);
-    // Heavy business logic
+    customerService.register(customer);
     quotationService.quoteCustomer(customer);
-
     sendRegistrationEmail(customer);
   }
+
+
 
   private final QuotationService quotationService;
 
