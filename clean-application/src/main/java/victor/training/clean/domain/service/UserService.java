@@ -3,6 +3,7 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
@@ -26,28 +27,28 @@ public class UserService {
     complexLogic(dto);
   }
 
-  private void complexLogic(LdapUserDto dto) { // ⚠️ many useless fields
-    if (dto.getWorkEmail() != null) { // ⚠️ NPE in other unguarded places?
-      checkNewUser(dto.getWorkEmail().toLowerCase());
+  private void complexLogic(User user) { // ⚠️ many useless fields
+    if (user.getWorkEmail() != null) { // ⚠️ NPE in other unguarded places?
+      checkNewUser(user.getWorkEmail().toLowerCase());
     }
 
     // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
-    log.debug("Insert user in my database: " + dto.getUid());
+    log.debug("Insert user in my database: " + user.getUserRct());
 
     // ⚠️ data mapping mixed with biz logic
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+    String fullName = user.getFirstName() + " " + user.getLastName().toUpperCase();
 
-    fixUser(dto); // ⚠️ temporal coupling with the next line
-    log.debug("More logic for " + fullName + " of id " + dto.getUid().toLowerCase());
+    fixUser(user); // ⚠️ temporal coupling with the next line
+    log.debug("More logic for " + fullName + " of id " + user.getUserRct().toLowerCase());
 
-    sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
+    sendMailTo(fullName + " <" + user.getWorkEmail().toLowerCase() + ">");
     // then later, again (⚠️ repeated logic):
-    sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
+    sendMailTo(fullName + " <" + user.getWorkEmail().toLowerCase() + ">");
   }
 
-  private void fixUser(LdapUserDto dto) {
-    if (dto.getUid() == null) {
-      dto.setUid("anonymous"); // ⚠️ mutability risks
+  private void fixUser(User user) {
+    if (user.getUserRct() == null) {
+      user.setUid("anonymous"); // ⚠️ mutability risks
     }
   }
 
