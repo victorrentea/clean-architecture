@@ -30,11 +30,27 @@ class UserServiceTest {
   }
 
   @Test
-  void importUserFromLdap(CapturedOutput capturedOutput) {
-    userService.importUserFromLdap("jdoe");
+  void ok(CapturedOutput capturedOutput) {
+    userService.importUserFromLdap("full");
 
     assertThat(capturedOutput)
             .contains("More logic for John DOE of id jdoe")
+            .contains("Check this user is not already in my system  jdoe@corp.com")
             .contains("Contact: John DOE <jdoe@corp.com>");
+  }
+  @Test
+  void missingEmail(CapturedOutput capturedOutput) {
+    userService.importUserFromLdap("noemail");
+
+    assertThat(capturedOutput)
+            .contains("More logic for John DOE of id jdoe")
+            .doesNotContain("Contact: John DOE");
+  }
+  @Test
+  void missingUid(CapturedOutput capturedOutput) {
+    userService.importUserFromLdap("nouid");
+
+    assertThat(capturedOutput)
+            .contains("More logic for John DOE of id anonymous");
   }
 }

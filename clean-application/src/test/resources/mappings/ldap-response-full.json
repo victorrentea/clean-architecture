@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/ldap/user?username=FULL"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": [
+      {
+        "fname": "John",
+        "lname": "Doe",
+        "workEmail": "jDoe@corp.com",
+        "uid": "jdoe",
+        "departmentId": "2"
+      }
+    ],
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
