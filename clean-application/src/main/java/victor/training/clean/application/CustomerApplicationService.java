@@ -43,8 +43,7 @@ public class CustomerApplicationService implements CustomerApi {
 
   @Override
   public CustomerDto findById(long id) {
-//    Customer customer = customerRepo.findById(id).orElseThrow();
-    Customer customer = customerService.findById(id);
+    Customer customer = customerRepo.findById(id).orElseThrow();
 
     CustomerDto dto = mapper.toDto(customer);
     // mapping logic TODO move somewhere else
