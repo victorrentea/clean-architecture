@@ -9,10 +9,6 @@
     </parent>
     <artifactId>clean-domain</artifactId>
     <dependencies>
-       <!-- <dependency>
-            <groupId>victor.training</groupId>
-            <artifactId>clean-application</artifactId>
-        </dependency>-->
         <dependency>
             <!-- @Service.., @Entity.. -->
             <groupId>org.springframework.boot</groupId>

@@ -28,6 +28,7 @@ import static org.springframework.http.ResponseEntity.*;
 public class GlobalExceptionHandler {
    private final MessageSource messageSource;
 
+   // Asa da!
    @ResponseStatus(NOT_FOUND)
    @ExceptionHandler(NoSuchElementException.class)
    public String handleGeneralException() {

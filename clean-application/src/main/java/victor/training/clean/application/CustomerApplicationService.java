@@ -2,6 +2,9 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
@@ -22,9 +25,10 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 //@Service
+@RestController
 @ApplicationService // custom annotation
 @RequiredArgsConstructor
-public class CustomerApplicationService {
+public class CustomerApplicationService implements CustomerApi {
   private final CustomerRepo customerRepo;
   private final EmailSender emailSender;
   private final SiteRepo siteRepo;
@@ -34,7 +38,7 @@ public class CustomerApplicationService {
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchRepo.search(searchCriteria);
   }
-
+  @Override
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
