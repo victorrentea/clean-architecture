@@ -24,6 +24,9 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
+// scop: asta este un "Facade" - tre sa fie doar un coordonator care sa NU faca munca grea/boring.
+// sa ofere un overview asupra fluxului respectiv, delegant la alte clase de sub
+
 //@Service
 @RestController
 @ApplicationService // custom annotation
@@ -35,12 +38,13 @@ public class CustomerApplicationService implements CustomerApi {
   private final CustomerSearchRepo customerSearchRepo;
   private final CustomerMapStruct mapper;
 
-  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-    return customerSearchRepo.search(searchCriteria);
-  }
+
+  private final CustomerService customerService;
+
   @Override
   public CustomerDto findById(long id) {
-    Customer customer = customerRepo.findById(id).orElseThrow();
+//    Customer customer = customerRepo.findById(id).orElseThrow();
+    Customer customer = customerService.findById(id);
 
     CustomerDto dto = mapper.toDto(customer);
     // mapping logic TODO move somewhere else
@@ -51,6 +55,9 @@ public class CustomerApplicationService implements CustomerApi {
             .siteId(customer.getSite().getId())
             .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
             .build();
+  }
+  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+    return customerSearchRepo.search(searchCriteria);
   }
 
   @Transactional
