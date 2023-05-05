@@ -23,10 +23,7 @@ public class UserService {
     }
 
     LdapUserDto dto = dtoList.get(0);
-    String userRct = dto.getUid() !=null ? dto.getUid() : "anonymous";
-    // ⚠️ data mapping mixed with biz logic
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
-    User user = new User(userRct, dto.getWorkEmail(), fullName);
+    User user = fromDto(dto);
     // - am creat un nou ob de domain:
     //- mic: cu strict campurile necesare
     //- guardate (anonymous)
@@ -36,6 +33,13 @@ public class UserService {
     //- si null-safe (Optional)
     //- immutable (nu am temporal coupling)
     complexLogic(user);
+  }
+
+  private static User fromDto(LdapUserDto dto) {
+    String userRct = dto.getUid() != null ? dto.getUid() : "anonymous";
+    // ⚠️ data mapping mixed with biz logic
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+    return new User(userRct, dto.getWorkEmail(), fullName);
   }
 
   private void complexLogic(User user) { // ⚠️ many useless fields
