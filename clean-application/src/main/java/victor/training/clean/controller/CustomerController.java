@@ -37,7 +37,7 @@ public class CustomerController {
    }
 
    @PostMapping
-   public void register(@RequestBody @Validated CustomerDto dto) {
+   public void register(@RequestBody   @Validated   CustomerDto dto) {
       customerApplicationService.register(dto);
    }
 

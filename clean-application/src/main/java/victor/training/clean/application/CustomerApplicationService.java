@@ -2,8 +2,6 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
@@ -18,8 +16,6 @@ import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.infra.EmailSender;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -69,21 +65,21 @@ public class CustomerApplicationService implements CustomerApi {
   }
 
   @Transactional
+//  todo ? @PostMapping
   public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
-    Customer customer = new Customer(dto.getName());
-    customer.setEmail(dto.getEmail());
-    customer.setCreationDate(LocalDate.now());
-    customer.setSite(new Site().setId(dto.getSiteId()));
+    Customer customer = dto.toEntity();
 
-    // validation TODO explore alternatives
-    if (customer.getName().length() < 5) {
-      throw new IllegalArgumentException("Name too short");
-    }
+    // validation TODO explore alternatives:
+    //   javax.validation pe Dto facut de la intrare + apare in swagger
+//    if (customer.getName().length() < 5) {
+//      throw new IllegalArgumentException("Name too short");
+//    }
+
+
     if (customerRepo.existsByEmail(customer.getEmail())) {
       throw new IllegalArgumentException("Customer email is already registered");
       // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
     }
-
     // Heavy business logic
     // Heavy business logic
     // Heavy business logic
@@ -103,7 +99,7 @@ public class CustomerApplicationService implements CustomerApi {
     sendRegistrationEmail(customer);
   }
 
-    private final QuotationService quotationService;
+  private final QuotationService quotationService;
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to Task-based Commands
