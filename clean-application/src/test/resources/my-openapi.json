@@ -39,6 +39,19 @@
               }
             }
           },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -56,6 +69,17 @@
           "customer-controller"
         ],
         "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -73,6 +97,19 @@
               "*/*": {
                 "schema": {
                   "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -106,6 +143,19 @@
               "*/*": {
                 "schema": {
                   "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -144,6 +194,19 @@
               }
             }
           },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -152,6 +215,63 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/CustomerSearchResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/search-vertical": {
+      "post": {
+        "tags": [
+          "search-customer-use-case"
+        ],
+        "description": "Customer Search",
+        "operationId": "search_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchCustomerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SearchCustomerResponse"
                   }
                 }
               }
@@ -188,6 +308,19 @@
               }
             }
           },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -212,6 +345,8 @@
             "format": "int64"
           },
           "name": {
+            "maxLength": 2147483647,
+            "minLength": 5,
             "type": "string",
             "description": "Name of the customer"
           },
@@ -239,7 +374,7 @@
           "name": {
             "type": "string"
           },
-          "phone": {
+          "email": {
             "type": "string"
           },
           "siteId": {
@@ -249,6 +384,33 @@
         }
       },
       "CustomerSearchResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "SearchCustomerRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "siteId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "SearchCustomerResponse": {
         "type": "object",
         "properties": {
           "id": {
@@ -273,12 +435,25 @@
           "email": {
             "type": "string"
           },
+          "shippingAddressCity": {
+            "type": "string"
+          },
+          "shippingAddressStreet": {
+            "type": "string"
+          },
+          "shippingAddressZipCode": {
+            "type": "integer",
+            "format": "int32"
+          },
           "creationDate": {
             "type": "string",
             "format": "date"
           },
           "goldMember": {
             "type": "boolean"
+          },
+          "goldMemberRemovalReason": {
+            "type": "string"
           },
           "site": {
             "$ref": "#/components/schemas/Site"
