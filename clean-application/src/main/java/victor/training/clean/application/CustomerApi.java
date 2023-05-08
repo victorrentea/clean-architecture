@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import victor.training.clean.application.dto.CustomerDto;
 
 public interface CustomerApi {
-  @GetMapping("{id}")
-  @Operation(description = "Customer find")
-  CustomerDto findById(@PathVariable long id);
+//  @GetMapping("{id}")
+//  @Operation(description = "Customer find")
+//  CustomerDto findById(@PathVariable long id);
 }
