@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class RegisterCustomerTest {
     private static final ObjectMapper jackson = new ObjectMapper();
+    public static final String CUSTOMER_EMAIL = "a@b.com";
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -54,7 +55,7 @@ public class RegisterCustomerTest {
     public final void before() {
         site = siteRepo.save(new Site());
         requestDto = CustomerDto.builder()
-                .email("::email::")
+                .email(CUSTOMER_EMAIL)
                 .name("::name::")
                 .siteId(site.getId());
     }
@@ -67,16 +68,16 @@ public class RegisterCustomerTest {
         assertThat(customerRepo.findAll()).hasSize(1);
         Customer customer = customerRepo.findAll().get(0);
         assertThat(customer.getName()).isEqualTo("::name::");
-        assertThat(customer.getEmail()).isEqualTo("::email::");
+        assertThat(customer.getEmail()).isEqualTo(CUSTOMER_EMAIL);
         assertThat(customer.getSite().getId()).isEqualTo(site.getId());
-        verify(emailSender).sendEmail(argThat(email -> email.getTo().equals("::email::")));
+        verify(emailSender).sendEmail(argThat(email -> email.getTo().equals(CUSTOMER_EMAIL)));
 
 
         CustomerDto responseDto = getCustomer(customer.getId());
 
         assertThat(responseDto.getId()).isEqualTo(customer.getId());
         assertThat(responseDto.getName()).isEqualTo("::name::");
-        assertThat(responseDto.getEmail()).isEqualTo("::email::");
+        assertThat(responseDto.getEmail()).isEqualTo(CUSTOMER_EMAIL);
         assertThat(responseDto.getSiteId()).isEqualTo(site.getId());
         assertThat(responseDto.getCreationDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
@@ -92,7 +93,7 @@ public class RegisterCustomerTest {
 
     @Test
     void existingEmailFails() throws Exception {
-        customerRepo.save(new Customer().setEmail("::email::"));
+        customerRepo.save(new Customer().setEmail(CUSTOMER_EMAIL));
 
         register(requestDto.build())
                 .andExpect(status().isInternalServerError())
