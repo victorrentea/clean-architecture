@@ -38,6 +38,9 @@ public class SearchCustomerUseCase {
   @Operation(description = "Customer Search")
   @PostMapping("customer/search")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria criteria) {
+
+    // 50 linii de biz logic
+
     String jpql = "SELECT new victor.training.clean.verticalslice.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name)" +
                   " FROM Customer c " +
                   " WHERE ";

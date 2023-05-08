@@ -29,10 +29,10 @@ public class CustomerController {
 //      return customerApplicationService.search(searchCriteria);
 //   }
 
-   @PostMapping
-   public void register(@RequestBody   @Validated   CustomerDto dto) {
-      customerApplicationService.register(dto);
-   }
+//   @PostMapping
+//   public void register(@RequestBody   @Validated   CustomerDto dto) {
+//      customerApplicationService.register(dto);
+//   }
 
    @PutMapping("{id}")
    public void update(@PathVariable long id, @RequestBody CustomerDto dto) {

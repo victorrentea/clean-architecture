@@ -71,19 +71,19 @@ public class CustomerApplicationService implements CustomerApi {
   // a) rest API
   // b) listener de ActiveMQ
   // pt a refolosi cat mai mult din application logic
-  @Transactional
-//  todo ? @PostMapping
-  public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
-    Customer customer = dto.toEntity();
-    // validation TODO explore alternatives:
-    //   javax.validation pe Dto facut de la intrare + apare in swagger
-//    if (customer.getName().length() < 5) {
-//      throw new IllegalArgumentException("Name too short");
-//    }
-    registerCustomerService.register(customer);
-    quotationService.quoteCustomer(customer);
-    sendRegistrationEmail(customer);
-  }
+//  @Transactional
+////  todo ? @PostMapping
+//  public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
+//    Customer customer = dto.toEntity();
+//    // validation TODO explore alternatives:
+//    //   javax.validation pe Dto facut de la intrare + apare in swagger
+////    if (customer.getName().length() < 5) {
+////      throw new IllegalArgumentException("Name too short");
+////    }
+//    registerCustomerService.register(customer);
+//    quotationService.quoteCustomer(customer);
+//    sendRegistrationEmail(customer);
+//  }
 
   private final QuotationService quotationService;
 
@@ -110,14 +110,6 @@ public class CustomerApplicationService implements CustomerApi {
      customerRepo.save(customer); // ORM Trick: not required by the ORM because of @Transactional on the method
   }
 
-  private void sendRegistrationEmail(Customer customer) {
-    Email email = new Email();
-    email.setFrom("noreply@cleanapp.com");
-    email.setTo(customer.getEmail());
-    email.setSubject("Account created for");
-    email.setBody("Welcome to our world, " + customer.getName() + ". You'll like it! Sincerely, Team");
-    emailSender.sendEmail(email);
-  }
 
   private void sendGoldWelcomeEmail(Customer customer) {
     Email email = new Email();
