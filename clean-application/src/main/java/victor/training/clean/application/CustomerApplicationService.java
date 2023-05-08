@@ -96,18 +96,18 @@ public class CustomerApplicationService implements CustomerApi {
     customer.setSite(new Site().setId(dto.getSiteId()));
 
     // custom logic when a SPECIAL part of the customer data changes => Task-Based UI
-    if (!customer.isGoldMember() && dto.isGold()) {
+    if (!customer.isGoldMember() && dto.isGold()) { // cand customer DEVINE gold, fa:
       customer.setGoldMember(true);
       sendGoldWelcomeEmail(customer);
     }
 
-    if (customer.isGoldMember() && !dto.isGold()) {
+    if (customer.isGoldMember() && !dto.isGold()) { // cand e ELIMINAT DIN GOLD, fa:
       customer.setGoldMember(false);
       customer.setGoldMemberRemovalReason(requireNonNull(dto.getGoldMemberRemovalReason()));
       auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalReason());
     }
 
-     customerRepo.save(customer); // ORM Trick: not required by the ORM because of @Transactional on the method
+     //customerRepo.save(customer); // ORM Trick: not required by the ORM because of @Transactional on the method
   }
 
 

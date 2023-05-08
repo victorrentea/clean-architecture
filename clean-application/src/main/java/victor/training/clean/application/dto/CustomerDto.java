@@ -19,7 +19,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 @Value
 @AllArgsConstructor
 public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
-  Long id;
+  Long id; // NU la POST
   @Schema(description = "Name of the customer")
   @Size(min = 5, message = "{customer-name-too-short}")
   String name;
@@ -27,9 +27,9 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
   @NotNull
   String email;
   Long siteId;
-  String creationDateStr;
-  boolean gold;
-  String goldMemberRemovalReason;
+  String creationDateStr; // NU la POST
+  boolean gold; // NU la POST
+  String goldMemberRemovalReason; // NU la POST
 
   public CustomerDto(Customer customer) { // de ce nu!?
     id = customer.getId();
