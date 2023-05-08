@@ -1,17 +1,10 @@
 package victor.training.clean.application;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.application.dto.CustomerSearchCriteria;
-import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.application.repo.CustomerSearchRepo;
-import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.Site;
@@ -20,8 +13,6 @@ import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
-
-import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
@@ -37,7 +28,7 @@ public class CustomerApplicationService implements CustomerApi {
   private final CustomerRepo customerRepo;
   private final EmailSender emailSender;
   private final SiteRepo siteRepo;
-  private final CustomerSearchRepo customerSearchRepo;
+//  private final CustomerSearchRepo customerSearchRepo;
   private final CustomerMapStruct mapper;
 
 
@@ -70,9 +61,9 @@ public class CustomerApplicationService implements CustomerApi {
   // 301 Moved Permanently  to victor.training.clean.verticalslice.FindCustomerByIdUseCase Vertical Slice
 
 
-  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-    return customerSearchRepo.search(searchCriteria);
-  }
+//  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+//    return customerSearchRepo.search(searchCriteria);
+//  }
 
 
   // daca poti inregistra customer si prin POST REST si prin MQ =>

@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.verticalslice.SearchCustomerUseCase.CustomerSearchResult;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static victor.training.clean.application.dto.CustomerSearchCriteria.builder;
+import static victor.training.clean.verticalslice.SearchCustomerUseCase.CustomerSearchCriteria.builder;
 
 @SpringBootTest
 @Transactional
