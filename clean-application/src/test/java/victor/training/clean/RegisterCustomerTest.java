@@ -54,7 +54,7 @@ public class RegisterCustomerTest {
     public final void before() {
         site = siteRepo.save(new Site());
         requestDto = CustomerDto.builder()
-                .email("::email::")
+                .email("a@b.com")
                 .name("::name::")
                 .siteId(site.getId());
     }
@@ -67,16 +67,16 @@ public class RegisterCustomerTest {
         assertThat(customerRepo.findAll()).hasSize(1);
         Customer customer = customerRepo.findAll().get(0);
         assertThat(customer.getName()).isEqualTo("::name::");
-        assertThat(customer.getEmail()).isEqualTo("::email::");
+        assertThat(customer.getEmail()).isEqualTo("a@b.com");
         assertThat(customer.getSite().getId()).isEqualTo(site.getId());
-        verify(emailSender).sendEmail(argThat(email -> email.getTo().equals("::email::")));
+        verify(emailSender).sendEmail(argThat(email -> email.getTo().equals("a@b.com")));
 
 
         CustomerDto responseDto = getCustomer(customer.getId());
 
         assertThat(responseDto.getId()).isEqualTo(customer.getId());
         assertThat(responseDto.getName()).isEqualTo("::name::");
-        assertThat(responseDto.getEmail()).isEqualTo("::email::");
+        assertThat(responseDto.getEmail()).isEqualTo("a@b.com");
         assertThat(responseDto.getSiteId()).isEqualTo(site.getId());
         assertThat(responseDto.getCreationDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
@@ -92,7 +92,7 @@ public class RegisterCustomerTest {
 
     @Test
     void existingEmailFails() throws Exception {
-        customerRepo.save(new Customer("john doe").setEmail("::email::"));
+        customerRepo.save(new Customer("john doe").setEmail("a@b.com"));
 
         register(requestDto.build())
                 .andExpect(status().isInternalServerError())

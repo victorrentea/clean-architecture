@@ -1,7 +1,11 @@
 package victor.training.clean.application;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
@@ -26,7 +30,8 @@ import static java.util.Objects.requireNonNull;
 
 //@Service
 @RestController
-@ApplicationService // custom annotation
+@RequestMapping("customer")
+//@ApplicationService // custom annotation
 @RequiredArgsConstructor
 public class CustomerApplicationService implements CustomerApi {
   private final CustomerRepo customerRepo;
