@@ -2,8 +2,7 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
@@ -101,13 +100,25 @@ public class CustomerApplicationService implements CustomerApi {
       sendGoldWelcomeEmail(customer);
     }
 
-    if (customer.isGoldMember() && !dto.isGold()) { // cand e ELIMINAT DIN GOLD, fa:
-      customer.setGoldMember(false);
-      customer.setGoldMemberRemovalReason(requireNonNull(dto.getGoldMemberRemovalReason()));
-      auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalReason());
-    }
-
+//    if (customer.isGoldMember() && !dto.isGold()) { // cand e ELIMINAT DIN GOLD, fa:
+//      customer.setGoldMember(false);
+//      customer.setGoldMemberRemovalReason(requireNonNull(dto.getGoldMemberRemovalReason()));
+//      auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalReason());
+//    }
      //customerRepo.save(customer); // ORM Trick: not required by the ORM because of @Transactional on the method
+  }
+
+  // in FE e pretul de platit
+  @Transactional
+  @PostMapping("customer/{id}/remove-gold-status")
+  public void removeGoldStatusFromCustomer(@PathVariable long id, @RequestBody String reason) {
+    Customer customer = customerRepo.findById(id).orElseThrow();
+    if (!customer.isGoldMember()) {
+      throw new IllegalStateException("Customer is not gold");
+    }
+    customer.setGoldMember(false);
+    customer.setGoldMemberRemovalReason(requireNonNull(reason));
+    auditGoldMemberRemoval(customer, reason);
   }
 
 
