@@ -12,28 +12,27 @@ import victor.training.clean.application.dto.CustomerSearchResult;
 import java.util.List;
 
 @RestController
-@RequestMapping("customer")
 @RequiredArgsConstructor
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @GetMapping("{id}")
+   @GetMapping("customer/{id}")
    public CustomerDto findById(@PathVariable long id) {
       return customerApplicationService.findById(id);
    }
 
-   @Operation(description = "Customer Search")
-   @PostMapping("search")
+   @Operation(description = "Search Customer")
+   @PostMapping("customer/search")
    public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
       return customerApplicationService.search(searchCriteria);
    }
 
-   @PostMapping
+   @PostMapping("customer")
    public void register(@RequestBody @Validated CustomerDto dto) {
       customerApplicationService.register(dto);
    }
 
-   @PutMapping("{id}")
+   @PutMapping("customer/{id}")
    public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
       customerApplicationService.update(id, dto);
    }
