@@ -13,8 +13,8 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.Site;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.repo.SiteRepo;
-import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.domain.service.QuotationService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.EmailSender;
 
 import java.util.List;
@@ -65,6 +65,12 @@ public class CustomerApplicationService implements CustomerApi {
     return customerSearchRepo.search(searchCriteria);
   }
 
+
+  // daca poti inregistra customer si prin POST REST si prin MQ =>
+  // iti faci o structura noua de date numita CreateCustomerRequest pe care o creezi din
+  // a) rest API
+  // b) listener de ActiveMQ
+  // pt a refolosi cat mai mult din application logic
   @Transactional
 //  todo ? @PostMapping
   public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
@@ -101,7 +107,7 @@ public class CustomerApplicationService implements CustomerApi {
       auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalReason());
     }
 
-    customerRepo.save(customer); // ORM Trick: not required by the ORM because of @Transactional on the method
+     customerRepo.save(customer); // ORM Trick: not required by the ORM because of @Transactional on the method
   }
 
   private void sendRegistrationEmail(Customer customer) {

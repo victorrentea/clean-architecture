@@ -6,6 +6,8 @@ import net.minidev.json.annotate.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Embeddable
@@ -78,6 +80,11 @@ public class Customer {
   private boolean goldMember;
   @JsonIgnore // poluarea modelului cu concernuri de API/presentation
   private String goldMemberRemovalReason;
+
+
+//  @OneToMany
+//  private List<CustomerPhone> phones = new ArrayList<>();
+
   //  @ElementCollection
   //  private List<String> phones;
 

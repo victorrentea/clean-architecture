@@ -30,6 +30,7 @@ public class RegisterCustomerService {
 
     customerRepo.save(customer);
     // Heavy business logic
+    // aici customer.id != null
 
   }
 }
