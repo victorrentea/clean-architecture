@@ -3,14 +3,14 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.ILdapClient;
+import victor.training.clean.domain.service.LdapClient;
 
 import java.util.List;
 
 // Adapter Pattern: sa protejeze ceva la care tin de exterior
 @RequiredArgsConstructor
 @Adapter
-public class LdapClient implements ILdapClient {
+public class LdapClientImpl implements LdapClient {
   private final LdapApi ldapApi;
 
   @Override
