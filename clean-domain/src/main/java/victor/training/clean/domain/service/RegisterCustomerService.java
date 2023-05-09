@@ -11,7 +11,7 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @Slf4j
 public class RegisterCustomerService {
   private final CustomerRepo customerRepo;
-  // gu-noi
+  //  // gu-noi
 //  public Customer findById(long id) {
 //    return customerRepo.findById(id).orElseThrow();
 //  }

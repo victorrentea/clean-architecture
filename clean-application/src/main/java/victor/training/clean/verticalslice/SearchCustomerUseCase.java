@@ -41,6 +41,7 @@ public class SearchCustomerUseCase {
 
     // 50 linii de biz logic
 
+    // Use-case optimized query: a scoate direct DTO din SELECT din baza.
     String jpql = "SELECT new victor.training.clean.verticalslice.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name)" +
                   " FROM Customer c " +
                   " WHERE ";
