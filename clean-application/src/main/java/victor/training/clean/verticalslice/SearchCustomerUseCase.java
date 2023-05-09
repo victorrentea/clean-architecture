@@ -18,26 +18,26 @@ import static java.lang.String.join;
 
 @SuppressWarnings("JpaQlInspection")
 @RequiredArgsConstructor
-@RestController
+//@RestController
 public class SearchCustomerUseCase {
   private final EntityManager entityManager;
 
   @Value
   // in/out structures kept private, inaccessible from other Use-Cases!
-  private static class SearchCustomerRequest { // JSON
+  public static class SearchCustomerRequest { // JSON
     String name;
     String email;
     Long siteId;
   }
   @Value
-  private static class SearchCustomerResponse { // JSON
+  public static class SearchCustomerResponse { // JSON
     long id;
     String name;
-    // TODO add 'email' to results => only this file is impacted
+    // TODO if we add 'email' to results => only this file is impacted
   }
 
   @Operation(description = "Customer Search")
-  @PostMapping("customer/search-vertical")
+  @PostMapping("customer/search")
   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerRequest criteria) {
     String jpql = "SELECT new victor.training.clean.verticalslice.SearchCustomerUseCase$SearchCustomerResponse(c.id, c.name)" +
                   " FROM Customer c " +

@@ -22,13 +22,11 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-//@Service
-@ApplicationService // custom annotation
+@ApplicationService // custom annotation refining the classic @Service
 @RequiredArgsConstructor
 public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
-    private final SiteRepo siteRepo;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
 
@@ -46,18 +44,20 @@ public class CustomerApplicationService {
                .email(customer.getEmail())
                .siteId(customer.getSite().getId())
                .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+               .gold(customer.isGoldMember())
+               .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
                .build();
     }
 
     @Transactional
-    public void register(CustomerDto dto) { // TODO use different models for read vs write (Lite CQRS)
+    public void register(CustomerDto dto) { // TODO use dedicated DTOs for POST vs GET
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
         customer.setCreationDate(LocalDate.now());
         customer.setSite(new Site().setId(dto.getSiteId()));
 
-        // validation TODO explore alternatives
+        // validation TODO alternatives ?
         if (customer.getName().length() < 5) {
             throw new IllegalArgumentException("Name too short");
         }
@@ -69,7 +69,7 @@ public class CustomerApplicationService {
         // Heavy business logic
         // Heavy business logic
         // Heavy business logic
-        // TODO Where can I move this little logic? (... operating on the state of a single entity)
+        // TODO Where can I move this bit of domain logic? (using the state of a single Entity👑)
         int discountPercentage = 3;
         if (customer.isGoldMember()) {
             discountPercentage += 1;
@@ -85,7 +85,7 @@ public class CustomerApplicationService {
     }
 
     @Transactional
-    public void update(long id, CustomerDto dto) { // TODO move to Task-based Commands
+    public void update(long id, CustomerDto dto) { // TODO move to Task-based Commands (fine-grained)
         Customer customer = customerRepo.findById(id).orElseThrow();
         // CRUD part
         customer.setName(dto.getName());
@@ -125,6 +125,7 @@ public class CustomerApplicationService {
         emailSender.sendEmail(email);
     }
     private void auditGoldMemberRemoval(Customer customer, String reason) {
+        // stuff...
         System.out.println("Kafka.send ( {name:" + customer.getName() + ", reason:" + reason + "} )");
     }
 }
