@@ -62,7 +62,7 @@ public class CustomerApplicationService {
             throw new IllegalArgumentException("Name too short");
         }
         if (customerRepo.existsByEmail(customer.getEmail())) {
-            throw new IllegalArgumentException("Customer email is already registered");
+            throw new IllegalArgumentException("A customer with this email is already registered!");
             // throw new CleanException(ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
         }
 
@@ -78,7 +78,6 @@ public class CustomerApplicationService {
         // Heavy business logic
         // Heavy business logic
         customerRepo.save(customer);
-        // Heavy business logic
         quotationService.quoteCustomer(customer);
 
         sendRegistrationEmail(customer);
@@ -92,7 +91,7 @@ public class CustomerApplicationService {
         customer.setEmail(dto.getEmail());
         customer.setSite(new Site().setId(dto.getSiteId()));
 
-        // custom logic when a SPECIAL part of the customer data changes => Task-Based UI
+        // custom logic when a SPECIAL part of the customer data changes
         if (!customer.isGoldMember() && dto.isGold()) {
             customer.setGoldMember(true);
             sendGoldWelcomeEmail(customer);
@@ -104,7 +103,7 @@ public class CustomerApplicationService {
             auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalReason());
         }
 
-        customerRepo.save(customer); // ORM Trick: not required by the ORM because of @Transactional on the method
+        customerRepo.save(customer); // not required on a @Transactional method by the ORM
     }
 
     private void sendRegistrationEmail(Customer customer) {
