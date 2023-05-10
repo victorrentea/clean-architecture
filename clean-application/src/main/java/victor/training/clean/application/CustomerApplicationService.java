@@ -12,13 +12,11 @@ import victor.training.clean.domain.model.Site;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
-import victor.training.clean.domain.repo.SiteRepo;
 import victor.training.clean.domain.service.QuotationService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -80,7 +78,7 @@ public class CustomerApplicationService {
         customerRepo.save(customer);
         quotationService.quoteCustomer(customer);
 
-        sendRegistrationEmail(customer);
+        sendWelcomeEmail(customer);
     }
 
     @Transactional
@@ -94,7 +92,7 @@ public class CustomerApplicationService {
         // custom logic when a SPECIAL part of the customer data changes
         if (!customer.isGoldMember() && dto.isGold()) {
             customer.setGoldMember(true);
-            sendGoldWelcomeEmail(customer);
+            sendGoldBenefitsEmail(customer);
         }
 
         if (customer.isGoldMember() && !dto.isGold()) {
@@ -106,7 +104,7 @@ public class CustomerApplicationService {
         customerRepo.save(customer); // not required on a @Transactional method by the ORM
     }
 
-    private void sendRegistrationEmail(Customer customer) {
+    private void sendWelcomeEmail(Customer customer) {
         Email email = new Email();
         email.setFrom("noreply@cleanapp.com");
         email.setTo(customer.getEmail());
@@ -115,7 +113,7 @@ public class CustomerApplicationService {
         emailSender.sendEmail(email);
     }
 
-    private void sendGoldWelcomeEmail(Customer customer) {
+    private void sendGoldBenefitsEmail(Customer customer) {
         Email email = new Email();
         email.setFrom("noreply@cleanapp.com");
         email.setTo(customer.getEmail());
