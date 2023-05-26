@@ -1,9 +1,7 @@
 package victor.training.clean.verticalslice;
 
 import lombok.*;
-import org.springdoc.core.providers.RepositoryRestConfigurationProvider;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -21,7 +19,7 @@ import java.util.List;
 
 // Brutal example of vertical slicing to enable flexible architecture per use-case: here- the lack of it :)
 @RepositoryRestResource
-public interface CountryCRUD extends PagingAndSortingRepository<Country, Long> {
+public interface CountryRestRepo extends PagingAndSortingRepository<Country, Long> {
     List<Country> findByName(@Param("name") String name);
 }
 
@@ -33,8 +31,7 @@ class DontAutoExposeRepos implements RepositoryRestConfigurer {
     }
 }
 @Entity
-@Getter
-@Setter
+@Data
 class Country {
     @Id
     @GeneratedValue
@@ -52,10 +49,10 @@ class Country {
 @Component
 @RequiredArgsConstructor
 class InitialCountries {
-    private final CountryCRUD countryCRUD;
+    private final CountryRestRepo countryRestRepo;
     @EventListener(ApplicationStartedEvent.class)
-    public void init() {
-        countryCRUD.save(new Country("Romania", "RO"));
-        countryCRUD.save(new Country("France", "FR"));
+    public void insert() {
+        countryRestRepo.save(new Country("Romania", "RO"));
+        countryRestRepo.save(new Country("France", "FR"));
     }
 }

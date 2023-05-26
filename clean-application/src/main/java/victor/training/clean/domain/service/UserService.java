@@ -51,7 +51,7 @@ public class UserService {
     }
   }
 
-  private void sendMailTo(String emailContact) { // don't change this <- it's library code
+  private void sendMailTo(String emailContact) { // don't change this <- imagine it's library code
     //... implementation left out
     log.debug("Contact: " + emailContact);
   }

@@ -15,19 +15,22 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 @Value
 @AllArgsConstructor
 public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
-  Long id; // GET
+  Long id; // GET (from sequence in DB)
 
-  @Size(min = 5, message = "{customer-name-too-short}")
+  //@Size(min = 5, message = "{customer-name-too-short}")
   String name; // *
 
   String email; // *
 
   Long siteId; // *
 
-  String creationDateStr; // GET
+  String creationDateStr; // GET (server-side assigned)
 
-  boolean gold; // PUT+GET
-  String goldMemberRemovalReason; // PUT+GET
+  boolean gold; // GET & PUT
+  String goldMemberRemovalReason; // GET & PUT if gold=true->false
+
+  String legalEntityCode; // *
+  boolean discountedVat; // GET (server-side inferred)
 
   public CustomerDto(Customer customer) {
     id = customer.getId();
@@ -37,5 +40,7 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
     creationDateStr = customer.getCreationDate().format(ofPattern("yyyy-MM-dd"));
     gold = customer.isGoldMember();
     goldMemberRemovalReason = customer.getGoldMemberRemovalReason();
+    legalEntityCode = customer.getLegalEntityCode();
+    discountedVat = customer.isDiscountedVat();
   }
 }

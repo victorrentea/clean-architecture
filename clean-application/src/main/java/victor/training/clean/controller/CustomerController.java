@@ -18,6 +18,7 @@ public class CustomerController {
 
    @GetMapping("customer/{id}")
    public CustomerDto findById(@PathVariable long id) {
+      // TODO HTTP status should be returned if id not found? How to do this?
       return customerApplicationService.findById(id);
    }
 

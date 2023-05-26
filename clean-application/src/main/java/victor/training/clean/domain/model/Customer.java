@@ -1,13 +1,15 @@
 package victor.training.clean.domain.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Data;
+import org.threeten.bp.jdk8.Jdk8Methods;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
+
+import static java.util.Objects.requireNonNull;
 
 @Entity
 @Data // TODO remove:
@@ -16,21 +18,39 @@ import java.time.LocalDate;
 // 2) toString lazy-loading collections [ORM]
 // 3) setters for everything = lack of encapsulation
 public class Customer {
-	@Id
-	@GeneratedValue
-	private Long id;
-	private String name;
-	private String email;
+  @Id
+  @GeneratedValue
+  private Long id;
+  private String name;
+  private String email;
 
-	// 🤔 Hmm... 3 fields with the same prefix TODO ?
-	private String shippingAddressCity;
-	private String shippingAddressStreet;
-	private Integer shippingAddressZipCode;
+  // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
+  private String shippingAddressCity;
+  private String shippingAddressStreet;
+  private Integer shippingAddressZipCode;
 
-	private LocalDate creationDate;
-	private boolean goldMember;
-	private String goldMemberRemovalReason;
+  private LocalDate creationDate;
+  private boolean goldMember;
+  private String goldMemberRemovalReason;
 
-	@ManyToOne
-	private Site site;
+  @ManyToOne
+  private Site site;
+  private String legalEntityCode;
+  private boolean discountedVat;
+
+  public String getLegalEntityCode() {
+    return legalEntityCode;
+  }
+
+  public void setLegalEntityCode(String legalEntityCode) {
+    this.legalEntityCode = legalEntityCode;
+  }
+
+  public void setDiscountedVat(boolean discountedVat) {
+    this.discountedVat = discountedVat;
+  }
+
+  public boolean isDiscountedVat() {
+    return discountedVat;
+  }
 }

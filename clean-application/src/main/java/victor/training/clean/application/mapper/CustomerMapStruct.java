@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean.application.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
