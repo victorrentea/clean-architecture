@@ -111,14 +111,14 @@ public class CustomerApplicationService {
         customer.setEmail(dto.getEmail());
         customer.setSite(new Site().setId(dto.getSiteId()));
 
-        // specific user action: enable gold member status
         if (!customer.isGoldMember() && dto.isGold()) {
+            // enable gold member status
             customer.setGoldMember(true);
             sendGoldBenefitsEmail(customer);
         }
 
-        // specific user action: remove gold member status
         if (customer.isGoldMember() && !dto.isGold()) {
+            // remove gold member status
             customer.setGoldMember(false);
             customer.setGoldMemberRemovalReason(requireNonNull(dto.getGoldMemberRemovalReason()));
             auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalReason());

@@ -7,6 +7,8 @@ import victor.training.clean.domain.model.AnafResult;
 @Component
 public class AnafClient {
   public AnafResult query(String legalEntityCode) {
-    throw new RuntimeException("Not implemented yet");
+    // Imagine Dragons here
+    // Adapter that calls the ANAF endpoint and maps their result into a Domain Model object
+    return new AnafResult("CompanyName", true);
   }
 }
