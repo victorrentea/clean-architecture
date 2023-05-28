@@ -24,19 +24,21 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
 
   boolean gold; // GET & PUT
   String goldMemberRemovalReason; // GET & PUT if gold=true->false
+  int discountPercentage; // GET (server-side computed)
 
   String legalEntityCode; // *
-  boolean discountedVat; // GET (server-side inferred)
+  boolean discountedVat; // GET (server-side fetched)
 
-  public CustomerDto(Customer customer) {
-    id = customer.getId();
-    name = customer.getName();
-    email = customer.getEmail();
-    countryId = customer.getCountry().getId();
-    creationDateStr = customer.getCreationDate().format(ofPattern("yyyy-MM-dd"));
-    gold = customer.isGoldMember();
-    goldMemberRemovalReason = customer.getGoldMemberRemovalReason();
-    legalEntityCode = customer.getLegalEntityCode();
-    discountedVat = customer.isDiscountedVat();
-  }
+//  public CustomerDto(Customer customer) {
+//    id = customer.getId();
+//    name = customer.getName();
+//    email = customer.getEmail();
+//    countryId = customer.getCountry().getId();
+//    creationDateStr = customer.getCreationDate().format(ofPattern("yyyy-MM-dd"));
+//    gold = customer.isGoldMember();
+//    goldMemberRemovalReason = customer.getGoldMemberRemovalReason();
+//    legalEntityCode = customer.getLegalEntityCode();
+//    discountedVat = customer.isDiscountedVat();
+//    discountPercentage = ?
+//  }
 }

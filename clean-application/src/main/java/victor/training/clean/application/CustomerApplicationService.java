@@ -1,6 +1,7 @@
 package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.*;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
+@Slf4j
 @ApplicationService // custom annotation refining the classic @Service
 @RequiredArgsConstructor // generates constructor for all 'private final' fields
 public class CustomerApplicationService {
@@ -35,6 +37,13 @@ public class CustomerApplicationService {
     public CustomerDto findById(long id) {
         Customer customer = customerRepo.findById(id).orElseThrow();
 
+        // Small domain logic operating on the state of a single Entity.
+        // TODO Where can I move it? PS: it's repeating somewhere else
+        int discountPercentage = 1;
+        if (customer.isGoldMember()) {
+            discountPercentage += 3;
+        }
+
         // long & boring mapping logic TODO move somewhere else
         return CustomerDto.builder()
             .id(customer.getId())
@@ -43,6 +52,7 @@ public class CustomerApplicationService {
             .countryId(customer.getCountry().getId())
             .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
             .gold(customer.isGoldMember())
+            .discountPercentage(discountPercentage)
             .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
             .legalEntityCode(customer.getLegalEntityCode())
             .discountedVat(customer.isDiscountedVat())
@@ -82,17 +92,9 @@ public class CustomerApplicationService {
                 customer.setDiscountedVat(true);
             }
         }
-        // Heavy business logic
-        // TODO Where can I move this bit of domain logic? (using the state of a single Entity👑)
-        int discountPercentage = 3;
-        if (customer.isGoldMember()) {
-            discountPercentage += 1;
-        }
-        System.out.println("Domain Logic using discount " + discountPercentage);
-        // Heavy business logic
-        // Heavy business logic
+        log.info("More Business Logic (imagine)");
+        log.info("More Business Logic (imagine)");
         customerRepo.save(customer);
-        quotationService.quoteCustomer(customer);
         sendWelcomeEmail(customer);
     }
     private String normalize(String s) {
@@ -121,6 +123,7 @@ public class CustomerApplicationService {
         }
 
         customerRepo.save(customer); // not actually required within a @Transactional method if using ORM(JPA/Hibernate)
+        quotationService.customerDetailsChanged(customer);
     }
 
     private void sendWelcomeEmail(Customer customer) {
@@ -137,7 +140,11 @@ public class CustomerApplicationService {
         email.setFrom("noreply@cleanapp.com");
         email.setTo(customer.getEmail());
         email.setSubject("Welcome to the Gold membership!");
-        email.setBody("Here are your perks: ...");
+        int discountPercentage = 1;
+        if (customer.isGoldMember()) {
+            discountPercentage += 3;
+        }
+        email.setBody("Here are your perks: ... Enjoy your special discount of " + discountPercentage + "%");
         emailSender.sendEmail(email);
     }
     private void auditGoldMemberRemoval(Customer customer, String reason) {

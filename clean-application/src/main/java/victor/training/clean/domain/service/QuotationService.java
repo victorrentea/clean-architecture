@@ -4,23 +4,40 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.InsurancePolicy;
+import victor.training.clean.domain.model.PolicyNotification;
 import victor.training.clean.domain.repo.InsurancePolicyRepo;
-
-import java.math.BigDecimal;
+import victor.training.clean.domain.repo.PolicyNotificationRepo;
+import victor.training.clean.infra.EmailSender;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class QuotationService {
    private final InsurancePolicyRepo insurancePolicyRepo;
+   private final PolicyNotificationRepo policyNotificationRepo;
+   private final EmailSender emailSender;
 
-   public void quoteCustomer(Customer customer) {
-      log.debug("Quoting customer (~230 total lines of code, 40 Cyclomatic Complexity): " + customer.getId());
-      InsurancePolicy policy = new InsurancePolicy();
-      policy.setCustomer(customer);
-      policy.setValueInEur(BigDecimal.ONE);
-      insurancePolicyRepo.save(policy);
+   public void customerDetailsChanged(Customer newCustomer) {
+      InsurancePolicy currentPolicy = insurancePolicyRepo.findByCustomerId(newCustomer.getId());
+      if (newCustomer.getCountry().getId() != currentPolicy.getCountry().getId()) {
+         // Imagine: 💭 calculations to see if the policy has to be updated
+         sendReevaluatePolicy(newCustomer, "Country changed");
+         policyNotificationRepo.save(new PolicyNotification()
+             .setTitle("Policy update requested due to country changed")
+             .setPolicy(currentPolicy)
+         );
+      }
+   }
+
+   private void sendReevaluatePolicy(Customer customer, String reason) {
+      Email email = new Email();
+      email.setFrom("noreply@cleanapp.com");
+      email.setTo("reps@cleanapp.com");
+      email.setSubject("Customer " + customer.getName() + " policy has to be re-evaluated");
+      email.setBody("Please review the policy due to : " + reason);
+      emailSender.sendEmail(email);
    }
 
    public void printPolicy(long policyId) {
