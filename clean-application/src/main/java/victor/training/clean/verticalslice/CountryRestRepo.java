@@ -22,7 +22,7 @@ public interface CountryRestRepo extends PagingAndSortingRepository<Country, Lon
 }
 
 @Component
-class DontAutoExposeRepos implements RepositoryRestConfigurer {
+class DontAutoExposeRestRepos implements RepositoryRestConfigurer {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         config.setRepositoryDetectionStrategy(RepositoryDetectionStrategy.RepositoryDetectionStrategies.ANNOTATED);
         // config.setExposeRepositoryMethodsByDefault(false);
