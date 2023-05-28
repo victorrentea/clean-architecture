@@ -2,6 +2,8 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.*;
@@ -20,9 +22,9 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
-@Slf4j
+@Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
+@RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
-@RequiredArgsConstructor // generates constructor for all 'private final' fields
 public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
