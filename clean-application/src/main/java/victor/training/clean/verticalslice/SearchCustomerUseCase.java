@@ -5,14 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.lang.String.join;
 
@@ -27,7 +25,7 @@ public class SearchCustomerUseCase {
   public static class SearchCustomerRequest { // JSON
     String name;
     String email;
-    Long siteId;
+    Long countryId;
   }
   @Value
   public static class SearchCustomerResponse { // JSON
@@ -56,9 +54,9 @@ public class SearchCustomerUseCase {
       params.put("email", criteria.email);
     }
 
-    if (criteria.siteId != null) {
-      jpqlParts.add("c.site.id = :siteId");
-      params.put("siteId", criteria.siteId);
+    if (criteria.countryId != null) {
+      jpqlParts.add("c.country.id = :countryId");
+      params.put("countryId", criteria.countryId);
     }
 
     String whereCriteria = join(" AND ", jpqlParts);

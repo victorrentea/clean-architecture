@@ -55,6 +55,11 @@
             <artifactId>h2</artifactId>
             <version>2.1.210</version>
         </dependency>
+        <dependency>
+            <!-- For distributed tracing of requests (printed after log level) -->
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.openapitools</groupId>
@@ -93,7 +98,11 @@
             <artifactId>archunit-junit4</artifactId>
             <version>1.0.0</version>
         </dependency>
-
+        <dependency>
+            <!--Generate Criteria API metamodel in target/generated-sources/annotations-->
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
