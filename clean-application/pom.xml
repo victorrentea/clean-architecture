@@ -98,11 +98,6 @@
             <artifactId>archunit-junit4</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <!--Generate Criteria API metamodel in target/generated-sources/annotations-->
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
