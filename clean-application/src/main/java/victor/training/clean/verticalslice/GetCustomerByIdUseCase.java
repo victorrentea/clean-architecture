@@ -39,7 +39,7 @@ public class GetCustomerByIdUseCase {
               .id(customer.getId())
               .name(customer.getName())
               .email(customer.getEmail())
-              .siteId(customer.getSite().getId())
+              .siteId(customer.getCountry().getId())
               .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
               .build();
   }

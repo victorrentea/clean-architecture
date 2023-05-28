@@ -1,13 +1,9 @@
 package victor.training.clean.application.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import victor.training.clean.domain.model.Customer;
-
-import javax.validation.constraints.Size;
-import java.time.format.DateTimeFormatter;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -22,7 +18,7 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
 
   String email; // *
 
-  Long siteId; // *
+  Long countryId; // *
 
   String creationDateStr; // GET (server-side assigned)
 
@@ -36,7 +32,7 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
     id = customer.getId();
     name = customer.getName();
     email = customer.getEmail();
-    siteId = customer.getSite().getId();
+    countryId = customer.getCountry().getId();
     creationDateStr = customer.getCreationDate().format(ofPattern("yyyy-MM-dd"));
     gold = customer.isGoldMember();
     goldMemberRemovalReason = customer.getGoldMemberRemovalReason();

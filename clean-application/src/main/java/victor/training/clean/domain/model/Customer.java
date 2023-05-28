@@ -28,13 +28,13 @@ public class Customer {
   private String shippingAddressCity;
   private String shippingAddressStreet;
   private Integer shippingAddressZipCode;
+  @ManyToOne
+  private Country country;
 
   private LocalDate creationDate;
   private boolean goldMember;
   private String goldMemberRemovalReason;
 
-  @ManyToOne
-  private Site site;
   private String legalEntityCode;
   private boolean discountedVat;
 

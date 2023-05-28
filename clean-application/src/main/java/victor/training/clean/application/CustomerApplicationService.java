@@ -2,15 +2,11 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.CleanException;
 import victor.training.clean.common.ApplicationService;
-import victor.training.clean.domain.model.AnafResult;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.*;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.domain.model.Site;
 import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.infra.AnafClient;
 import victor.training.clean.infra.EmailSender;
@@ -44,7 +40,7 @@ public class CustomerApplicationService {
             .id(customer.getId())
             .name(customer.getName())
             .email(customer.getEmail())
-            .siteId(customer.getSite().getId())
+            .countryId(customer.getCountry().getId())
             .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
             .gold(customer.isGoldMember())
             .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
@@ -59,7 +55,7 @@ public class CustomerApplicationService {
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
         customer.setCreationDate(LocalDate.now());
-        customer.setSite(new Site().setId(dto.getSiteId()));
+        customer.setCountry(new Country().setId(dto.getCountryId()));
         customer.setLegalEntityCode(dto.getLegalEntityCode());
 
         // input validation
@@ -109,7 +105,7 @@ public class CustomerApplicationService {
         // CRUD part
         customer.setName(dto.getName());
         customer.setEmail(dto.getEmail());
-        customer.setSite(new Site().setId(dto.getSiteId()));
+        customer.setCountry(new Country().setId(dto.getCountryId()));
 
         if (!customer.isGoldMember() && dto.isGold()) {
             // enable gold member status

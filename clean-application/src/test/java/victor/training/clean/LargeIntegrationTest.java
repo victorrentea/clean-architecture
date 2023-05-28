@@ -11,13 +11,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Site;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerDto.CustomerDtoBuilder;
+import victor.training.clean.domain.repo.CountryRepo;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.repo.SiteRepo;
+import victor.training.clean.verticalslice.CountryRestRepo;
 
 import java.time.format.DateTimeFormatter;
 
@@ -42,22 +43,22 @@ public class LargeIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private SiteRepo siteRepo;
+    private CountryRepo countryRepo;
     @Autowired
     private CustomerRepo customerRepo;
     @MockBean
     private EmailSender emailSender;
 
-    private Site site;
+    private Country country;
     private CustomerDtoBuilder requestDto;
 
     @BeforeEach
     public final void before() {
-        site = siteRepo.save(new Site());
+        country = countryRepo.save(new Country());
         requestDto = CustomerDto.builder()
                 .email(CUSTOMER_EMAIL)
                 .name("::name::")
-                .siteId(site.getId());
+                .countryId(country.getId());
     }
 
     @Test
@@ -69,7 +70,7 @@ public class LargeIntegrationTest {
         Customer customer = customerRepo.findAll().get(0);
         assertThat(customer.getName()).isEqualTo("::name::");
         assertThat(customer.getEmail()).isEqualTo(CUSTOMER_EMAIL);
-        assertThat(customer.getSite().getId()).isEqualTo(site.getId());
+        assertThat(customer.getCountry().getId()).isEqualTo(country.getId());
         verify(emailSender).sendEmail(argThat(email -> email.getTo().equals(CUSTOMER_EMAIL)));
 
 
@@ -78,7 +79,7 @@ public class LargeIntegrationTest {
         assertThat(responseDto.getId()).isEqualTo(customer.getId());
         assertThat(responseDto.getName()).isEqualTo("::name::");
         assertThat(responseDto.getEmail()).isEqualTo(CUSTOMER_EMAIL);
-        assertThat(responseDto.getSiteId()).isEqualTo(site.getId());
+        assertThat(responseDto.getCountryId()).isEqualTo(country.getId());
         assertThat(responseDto.getCreationDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         search("ame", 1);
