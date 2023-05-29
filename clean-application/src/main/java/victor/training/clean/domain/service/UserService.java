@@ -4,27 +4,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.LdapUser;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
+import victor.training.clean.infra.LdapClient;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-  private final LdapApi ldapApi;
+
+  private LdapClient ldapClient;
 
   public void importUserFromLdap(String targetUsername) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
+    LdapUser ldapUser = ldapClient.find(targetUsername);
 
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Expected single user to match username " + targetUsername + ", got: " + dtoList);
-    }
-
-    LdapUserDto dto = dtoList.get(0);
-
-    complexLogic(fromUserLdapDto(dto));
+    complexLogic(ldapUser);
   }
 
   private void complexLogic(LdapUser ldapUser) { // ⚠️ many useless fields
@@ -60,14 +52,6 @@ public class UserService {
 
   public void checkNewUser(String email) {
     log.debug("Check this user is not already in my system  " + email);
-  }
-
-  private LdapUser fromUserLdapDto(LdapUserDto dto) {
-    return new LdapUser(
-        dto.getUid() == null ? "anonymous" : dto.getUid(),
-        dto.getFname() + " " + dto.getLname().toUpperCase(),
-        dto.getWorkEmail()
-    );
   }
 
 }
