@@ -3,13 +3,14 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.client.ExternalUserProvider;
 import victor.training.clean.domain.model.User;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-  private final LdapUserClientInterface ldapUserClient;
+  private final ExternalUserProvider ldapUserClient;
 
   public void importUserFromLdap(String targetUsername) {
     User user = ldapUserClient.fetchByUsername(targetUsername);

@@ -1,12 +1,9 @@
 package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.LdapUserClientInterface;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.client.ExternalUserProvider;
 
 import java.util.List;
 
@@ -14,7 +11,7 @@ import java.util.List;
 //@Component
 @RequiredArgsConstructor
 @Adapter
-public class LdapUserClient implements LdapUserClientInterface {
+public class LdapUserClient implements ExternalUserProvider {
   private final LdapApi ldapApi;
 
   @Override

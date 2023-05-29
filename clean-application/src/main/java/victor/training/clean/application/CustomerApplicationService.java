@@ -12,7 +12,7 @@ import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.infra.AnafClient;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
-import victor.training.clean.domain.service.EmailSenderInterface;
+import victor.training.clean.domain.client.NotificationService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
 @ApplicationService // custom annotation refining the classic @Service
 public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
-    private final EmailSenderInterface emailSender;
+    private final NotificationService emailSender;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
     private final AnafClient anafClient;
