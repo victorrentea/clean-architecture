@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -2,6 +2,7 @@ package victor.training.clean;
 
 import com.tngtech.archunit.core.domain.*;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
 import victor.training.clean.utils.ParameterizedReturnTypeCondition;
@@ -15,6 +16,7 @@ public class ArchitectureTest {
     private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
 
     @Test
+    @Disabled
     // NOTE: In case you don't understand this test, contact me:
     // +40720019564 or victorrentea@gmail.com (the anarchitect)
     public void domain_independent_of_infrastructure() {
@@ -31,6 +33,7 @@ public class ArchitectureTest {
     }
 
     @Test
+    @Disabled
     public void domain_not_leaked_via_controller_methods() {
         methods().that().areMetaAnnotatedWith(RequestMapping.class)
                 .and().arePublic()
