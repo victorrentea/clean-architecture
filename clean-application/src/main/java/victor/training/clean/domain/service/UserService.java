@@ -4,26 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-    private final LdapApi ldapApi;
+
+    private final UserLdapAdapter userLdapAdapter;
 
     public void importUserFromLdap(String targetUsername) {
-        List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
-
-        if (dtoList.size() != 1) {
-            throw new IllegalArgumentException("Expected single user to match username " + targetUsername + ", got: " + dtoList);
-        }
-
-        LdapUserDto dto = dtoList.get(0);
-        complexLogic(createUserFromDto(dto));
+        complexLogic(userLdapAdapter.getUserByUsername(targetUsername));
     }
 
     private void complexLogic(User user) {
@@ -40,16 +30,6 @@ public class UserService {
         }
     }
 
-    private static User createUserFromDto(LdapUserDto dto) {
-        String userName = dto.getUid() != null ? dto.getUid().toLowerCase() : "anonymous";
-        String workEmail = dto.getWorkEmail() != null ? dto.getWorkEmail().toLowerCase() : null;
-        String lastName = dto.getLname() != null ? dto.getLname().toUpperCase() : "";
-        String fullName = dto.getFname() + " " + lastName;
-        return User.builder()
-                .userName(userName)
-                .workEmail(workEmail)
-                .fullName(fullName).build();
-    }
 
     private void sendMailTo(String emailContact) { // don't change this <- imagine it's library code
         //... implementation left out
