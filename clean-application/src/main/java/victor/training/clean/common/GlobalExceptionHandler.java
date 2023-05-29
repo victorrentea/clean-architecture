@@ -28,12 +28,6 @@ import static org.springframework.http.ResponseEntity.*;
 public class GlobalExceptionHandler {
    private final MessageSource messageSource;
 
-   @ResponseStatus(NOT_FOUND)
-   @ExceptionHandler(NoSuchElementException.class)
-   public String handleGeneralException() {
-      return "Not found";
-   }
-
    @ExceptionHandler(CleanException.class)
    public ResponseEntity<String> onCleanException(HttpServletRequest request, CleanException cleanException) {
       String userMessage = translateError(cleanException, cleanException.getErrorCode(), cleanException.getParameters(), request);

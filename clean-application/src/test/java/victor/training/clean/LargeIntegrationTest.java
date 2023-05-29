@@ -60,6 +60,12 @@ public class LargeIntegrationTest {
                 .name("::name::")
                 .countryId(country.getId());
     }
+    @Test
+    void findById_returns404_ifNotFound() throws Exception {
+        mockMvc.perform(get("/customer/{id}", 99999)
+            .accept(APPLICATION_JSON)
+        ).andExpect(status().isNotFound());
+    }
 
     @Test
     void register_and_get_and_search() throws Exception {
@@ -120,7 +126,6 @@ public class LargeIntegrationTest {
         String responseString = mockMvc.perform(get("/customer/{id}", customerId)
                 .accept(APPLICATION_JSON)
         ).andReturn().getResponse().getContentAsString();
-        System.out.println("Got response string: " + responseString);
         CustomerDto dto = jackson.readValue(responseString, CustomerDto.class);
         return dto;
     }
