@@ -3,13 +3,13 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.client.EmailAdapter;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.InsurancePolicy;
 import victor.training.clean.domain.model.PolicyNotification;
 import victor.training.clean.domain.repo.InsurancePolicyRepo;
 import victor.training.clean.domain.repo.PolicyNotificationRepo;
-import victor.training.clean.infra.EmailSender;
 
 @Slf4j
 @Service
@@ -17,7 +17,7 @@ import victor.training.clean.infra.EmailSender;
 public class QuotationService {
    private final InsurancePolicyRepo insurancePolicyRepo;
    private final PolicyNotificationRepo policyNotificationRepo;
-   private final EmailSender emailSender;
+   private final EmailAdapter emailSender;
 
    public void customerDetailsChanged(Customer newCustomer) {
       InsurancePolicy currentPolicy = insurancePolicyRepo.findByCustomerId(newCustomer.getId());
