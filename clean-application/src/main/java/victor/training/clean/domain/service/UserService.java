@@ -45,17 +45,15 @@ public class UserService {
     return user;
   }
 
-  private void complexLogic(User user) { // ⚠️ many useless fields
+  private void complexLogic(User user) {
     user.getEmail().ifPresent(this::checkNewUser);
 
-    // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
     log.debug("Insert user in my database: " + user.getUsername());
 
     log.debug("More logic for " + user.getFullName() + " of id " + user.getUsername().toLowerCase());
 
     user.asEmailContact().ifPresent(this::sendMailTo);
 
-    // then later, again (⚠️ repeated logic):
     user.asEmailContact().ifPresent(this::sendMailTo);
   }
 
