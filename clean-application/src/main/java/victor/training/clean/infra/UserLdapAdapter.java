@@ -1,18 +1,17 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import victor.training.clean.domain.client.UserAdapter;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
 @Component
-public class UserLdapAdapter {
+public class UserLdapAdapter implements UserAdapter {
 
     private final LdapApi ldapApi;
 

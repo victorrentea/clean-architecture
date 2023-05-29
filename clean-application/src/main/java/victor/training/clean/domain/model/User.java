@@ -2,13 +2,11 @@ package victor.training.clean.domain.model;
 
 import lombok.Builder;
 import lombok.Data;
-import victor.training.clean.infra.LdapUserDto;
 
 import javax.persistence.Entity;
 import java.util.Optional;
 
 @Entity
-@Builder
 @Data
 public class User {
 

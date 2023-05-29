@@ -4,16 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.client.UserAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
 
-    private final UserLdapAdapter userLdapAdapter;
+    private final UserAdapter userAdapter;
 
     public void importUserFromLdap(String targetUsername) {
-        complexLogic(userLdapAdapter.getUserByUsername(targetUsername));
+        complexLogic(userAdapter.getUserByUsername(targetUsername));
     }
 
     private void complexLogic(User user) {
