@@ -45,4 +45,9 @@ public class Customer {
 //  public void save() {
 //    repo.save(this);
 //  }
+
+  // MVC
+  public String streetAddress() {
+    return shippingAddressStreet + " " + shippingAddressCity;// presentation concern
+  }
 }

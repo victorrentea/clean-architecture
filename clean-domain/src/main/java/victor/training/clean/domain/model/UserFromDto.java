@@ -6,7 +6,6 @@ import static java.util.Optional.ofNullable;
 
 // This is a Value Object = small, immutable, hash/eq on all fields, with no persistent identity
 public class UserFromDto {
-
   // private fields mapped to <=> JSON
   private String uid;
 

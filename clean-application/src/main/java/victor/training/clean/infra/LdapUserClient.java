@@ -1,9 +1,11 @@
 package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.client.RestTemplate;
 import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.domain.client.ExternalUserProvider;
+import victor.training.clean.domain.model.UserFromDto;
 
 import java.util.List;
 
@@ -22,6 +24,10 @@ class LdapUserClient implements ExternalUserProvider {
   public User fetchByUsername(String targetUsername) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
 
+
+//    RestTempla/**/te restTemplate;
+//    UserFromDto vo = restTemplate.getForObject("", args, UserFromDto.class);
+//    return vo;
     if (dtoList.size() != 1) {
       throw new IllegalArgumentException("Expected single user to match username " + targetUsername + ", got: " + dtoList);
     }
