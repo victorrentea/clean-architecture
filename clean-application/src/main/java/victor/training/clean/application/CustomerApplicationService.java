@@ -67,12 +67,6 @@ public class CustomerApplicationService {
         customer.setCreationDate(LocalDate.now());
         customer.setCountry(new Country().setId(dto.getCountryId()));
         customer.setLegalEntityCode(dto.getLegalEntityCode());
-
-        // input validation
-//        if (customer.getName().length() < 5) { // TODO other places to move this validation to?
-//            throw new IllegalArgumentException("The customer name is too short");
-//        }
-
         // business rule
         if (customerRepo.existsByEmail(customer.getEmail())) {
             throw new IllegalArgumentException("A customer with this email is already registered!");
@@ -94,8 +88,12 @@ public class CustomerApplicationService {
         }
         log.info("More Business Logic (imagine)");
         log.info("More Business Logic (imagine)");
+
         customerRepo.save(customer);
         sendWelcomeEmail(customer);
+        // vs emailsToSend.save(new EmailToSend()); + COMMIT , then = transaction outbox pattern
+        // a) scheduler polls for this
+        // b) debezium/kafka connect pulls this data out on a Kafka Topic
     }
     private String normalize(String s) {
         return s.toLowerCase().replace("\\s+", "");

@@ -15,6 +15,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
   Long id; // GET (from sequence in DB)
 
+//  @CustomerName
   @Size(min = 5) // yes OK earlier.
   String name; // *
 

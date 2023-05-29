@@ -48,6 +48,7 @@ public class Customer {
   @GeneratedValue
   private Long id;
   @Size(min = 5, message = "{customer-name-too-short}") // yes
+//  @CustomerEmail
   private String name;
   @Email
   private String email;
