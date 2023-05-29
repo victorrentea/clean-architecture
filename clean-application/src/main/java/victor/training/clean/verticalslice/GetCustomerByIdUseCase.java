@@ -1,5 +1,6 @@
 package victor.training.clean.verticalslice;
 
+import com.google.common.annotations.VisibleForTesting;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class GetCustomerByIdUseCase {
   @Builder
   @Value
   @AllArgsConstructor
+  @VisibleForTesting
   static class GetCustomerByIdResponse {
     Long id;
     String name;
