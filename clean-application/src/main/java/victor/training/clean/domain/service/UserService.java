@@ -8,6 +8,7 @@ import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -24,14 +25,24 @@ public class UserService {
 
     LdapUserDto dto = dtoList.get(0);
 
-    String username = dto.getUid();
-    if (username == null) {
-      username = "anonymous";
-    }
+//    String username = dto.getUid();
+//    if (username == null) {
+//      username = "anonymous";
+//    }
+
+//    String username = Optional.ofNullable(dto.getUid()).orElse("anonymous");
+
+    User user = fromDto(dto);
+    complexLogic(user);
+  }
+
+  private static User fromDto(LdapUserDto dto) {
+    String username = dto.getUid() != null ? dto.getUid() : "anonymous";
+
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
     String workEmail = dto.getWorkEmail() != null ? dto.getWorkEmail().toLowerCase():null;
     User user = new User(username, fullName, workEmail);
-    complexLogic(user);
+    return user;
   }
 
   private void complexLogic(User user) { // ⚠️ many useless fields
