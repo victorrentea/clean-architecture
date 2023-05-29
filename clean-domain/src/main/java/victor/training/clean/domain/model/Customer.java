@@ -69,6 +69,14 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public int getDiscountPercentage() {
+    int discountPercentage = 1;
+    if (goldMember) {
+      discountPercentage += 3;
+    }
+    return discountPercentage;
+  }
+
 //  public Customer(String name) {
 ////    if (name.length() < 5) {
 ////      throw new IllegalArgumentException();
