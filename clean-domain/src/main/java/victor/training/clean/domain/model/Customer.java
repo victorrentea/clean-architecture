@@ -3,6 +3,9 @@ package victor.training.clean.domain.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
@@ -44,14 +47,16 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 5, message = "{customer-name-too-short}") // yes
   private String name;
+  @Email
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
 //  private String shippingAddressCity;
 //  private String shippingAddressStreet;
 //  private Integer shippingAddressZipCode;
-  @Embedded
+  @Embedded // the fields inside this object are stored in the CUSTOMER table
   private Address shippingAddress;
 
   @ManyToOne
@@ -63,6 +68,15 @@ public class Customer {
 
   private String legalEntityCode;
   private boolean discountedVat;
+
+//  public Customer(String name) {
+////    if (name.length() < 5) {
+////      throw new IllegalArgumentException();
+////    }
+//    this.name = name;
+//    Validator.validate(this);
+//    throw new RuntimeException("Method not implemented");
+//  }
 
 
   // criminal act:

@@ -42,10 +42,7 @@ public class CustomerApplicationService {
 
         // Small domain logic operating on the state of a single Entity.
         // TODO Where can I move it? PS: it's repeating somewhere else
-        int discountPercentage = 1;
-        if (customer.isGoldMember()) {
-            discountPercentage += 3;
-        }
+        int discountPercentage = CustomerUtil.getDiscountPercentage(customer);
 
         // long & boring mapping logic TODO move somewhere else
         return CustomerDto.builder()
@@ -72,9 +69,9 @@ public class CustomerApplicationService {
         customer.setLegalEntityCode(dto.getLegalEntityCode());
 
         // input validation
-        if (customer.getName().length() < 5) { // TODO other places to move this validation to?
-            throw new IllegalArgumentException("The customer name is too short");
-        }
+//        if (customer.getName().length() < 5) { // TODO other places to move this validation to?
+//            throw new IllegalArgumentException("The customer name is too short");
+//        }
 
         // business rule
         if (customerRepo.existsByEmail(customer.getEmail())) {
@@ -143,10 +140,7 @@ public class CustomerApplicationService {
         email.setFrom("noreply@cleanapp.com");
         email.setTo(customer.getEmail());
         email.setSubject("Welcome to the Gold membership!");
-        int discountPercentage = 1;
-        if (customer.isGoldMember()) {
-            discountPercentage += 3;
-        }
+        int discountPercentage = CustomerUtil.getDiscountPercentage(customer);
         email.setBody("Here are your perks: ... Enjoy your special discount of " + discountPercentage + "%");
         emailSender.sendEmail(email);
     }
