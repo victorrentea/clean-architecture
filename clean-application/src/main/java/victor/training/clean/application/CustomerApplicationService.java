@@ -1,8 +1,13 @@
 package victor.training.clean.application;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
@@ -20,25 +25,33 @@ import victor.training.clean.domain.client.NotificationService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
+@RestController
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
-public class CustomerApplicationService {
+public class CustomerApplicationService implements CustomerApplicationServiceApi {
     private final CustomerRepo customerRepo;
     private final NotificationService emailSender;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
     private final AnafClient anafClient;
 
+    @Override
     public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
 
     public CustomerDto findById(long id) {
+//        Optional<Customer> opt = customerRepo.findById(id);
+//        if (opt.isEmpty()) return Optional.empty();
+
         Customer customer = customerRepo.findById(id).orElseThrow();
+
+//        customerRepo.findById(id).map(customer -> {})
 
         // Small domain logic operating on the state of a single Entity.
         // TODO Where can I move it? PS: it's repeating somewhere else
@@ -59,8 +72,9 @@ public class CustomerApplicationService {
             .build();
     }
 
+    @Override
     @Transactional
-    public void register(CustomerDto dto) { // TODO use separate DTOs for POST vs GET
+    public void register(CustomerDto dto) {
         Customer customer = new Customer();
         customer.setEmail(dto.getEmail());
         customer.setName(dto.getName());
