@@ -38,19 +38,4 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
-  public String getLegalEntityCode() {
-    return legalEntityCode;
-  }
-
-  public void setLegalEntityCode(String legalEntityCode) {
-    this.legalEntityCode = legalEntityCode;
-  }
-
-  public void setDiscountedVat(boolean discountedVat) {
-    this.discountedVat = discountedVat;
-  }
-
-  public boolean isDiscountedVat() {
-    return discountedVat;
-  }
 }

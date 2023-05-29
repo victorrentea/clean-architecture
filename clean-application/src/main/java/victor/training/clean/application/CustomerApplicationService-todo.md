@@ -22,14 +22,13 @@
 3. De-clutter `CustomerApplicationService.findById` from
    - The bit of reusable business logic (**it repeats!**)
    - The boring mapping code
-4. Pragmatic Validation: customer.name.length has to have minimum 5 characters
+4. Pragmatic Validation: customer.name.length has to have minimum 5 characters 
    - Use annotation @Size(min = 5) instead of the `if` (remove it)
    - Check the `LargeIntegrationTest`
    - Set a custom message for the validation failure + check it in the LargeIntegrationTest
      - Hint: add to annotation `, message = "{customer-name-too-short}"` to use a message defined in src/main/resources/messages.properties
      - Check the error message in the test
 5. Shrink the `CustomerApplicationService.register`
-   - Push Mapping somewhere else
+   - Push Mapping logic somewhere else
    - Push Domain Logic to lower-level Domain Services in victor.training.clean.domain.service
    - Make sure that the test passes: `victor.training.clean.ArchitectureTest#domain_independent_of_application`
-   - What to do with sending emails?
