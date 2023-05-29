@@ -11,8 +11,12 @@ import java.util.List;
 //@Component
 @RequiredArgsConstructor
 @Adapter
-public class LdapUserClient implements ExternalUserProvider {
+class LdapUserClient implements ExternalUserProvider {
   private final LdapApi ldapApi;
+
+//  public LdapUserDto method() {
+//
+//  }
 
   @Override
   public User fetchByUsername(String targetUsername) {

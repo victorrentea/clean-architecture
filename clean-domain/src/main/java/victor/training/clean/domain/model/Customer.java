@@ -1,7 +1,6 @@
 package victor.training.clean.domain.model;
 
 import lombok.Data;
-import org.threeten.bp.jdk8.Jdk8Methods;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +10,7 @@ import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
 
+//@Configurable // dont !! allows injection of @Autowired into hibernatet entity DONT!!
 @Entity
 @Data // TODO remove:
 // Avoid lombok @Entity on ORM Domain @Entity
@@ -38,4 +38,11 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+
+  // criminal act:
+//  @Autowired
+//  CustomerRepo repo;
+//  public void save() {
+//    repo.save(this);
+//  }
 }

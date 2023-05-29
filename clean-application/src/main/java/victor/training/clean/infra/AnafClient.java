@@ -1,7 +1,6 @@
 package victor.training.clean.infra;
 
 import org.springframework.stereotype.Component;
-import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.AnafResult;
 
 @Component
