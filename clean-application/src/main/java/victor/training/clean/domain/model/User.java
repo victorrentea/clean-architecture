@@ -11,11 +11,11 @@ import java.util.Optional;
 @Data
 public class User {
 
-    String userName;
+    private String userName;
 
-    String fullName;
+    private String fullName;
 
-    String workEmail;
+    private String workEmail;
 
     public Optional<String> getWorkEmail() {
         return Optional.of(workEmail);
