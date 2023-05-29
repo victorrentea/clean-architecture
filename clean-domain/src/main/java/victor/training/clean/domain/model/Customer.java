@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static java.util.Objects.requireNonNull;
 @Embeddable // effectively immutable Value Object stored in a Domain @Entity
@@ -87,6 +88,22 @@ public class Customer {
 //    throw new RuntimeException("Method not implemented");
 //  }
 
+
+  // Domain (entity or service) cannot know of the API (my, external)
+//  private CustomerDto fromDto(int discountPercentage) {
+//    return CustomerDto.builder()
+//        .id(customer.getId())
+//        .name(customer.getName())
+//        .email(customer.getEmail())
+//        .countryId(customer.getCountry().getId())
+//        .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+//        .gold(customer.isGoldMember())
+//        .discountPercentage(discountPercentage)
+//        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
+//        .legalEntityCode(customer.getLegalEntityCode())
+//        .discountedVat(customer.isDiscountedVat())
+//        .build();
+//  }
 
   // criminal act:
 //  @Autowired

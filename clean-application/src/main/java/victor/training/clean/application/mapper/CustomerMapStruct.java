@@ -10,4 +10,11 @@ public interface CustomerMapStruct {
     @Mapping(target = "creationDateStr", source = "creationDate", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "countryId", source = "country.id")
     CustomerDto toDto(Customer customer);
+
+    // @Mapping(target = "creationDateStr", source = "creationDate", dateFormat = "yyyy-MM-dd")
+    //    @Mapping(target = "countryId", source = "country.id")
+    //    GetCustomerByIdResponse to(Customer customer);
+    //    @Mapping(target = "creationDateStr", source = "creationDate", dateFormat = "yyyy-MM-dd")
+    //    @Mapping(target = "countryId", source = "country.id")
+    //    GetCustomerDetailsByIdResponse toDto(Customer customer);
 }

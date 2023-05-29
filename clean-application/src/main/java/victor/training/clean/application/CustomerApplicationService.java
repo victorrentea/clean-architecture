@@ -18,8 +18,6 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.domain.client.NotificationService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -45,32 +43,19 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
         Customer customer = customerRepo.findById(id).orElseThrow();
         // Small domain logic operating on the state of a single Entity.
         // TODO Where can I move it? PS: it's repeating somewhere else
-        int discountPercentage = customer.getDiscountPercentage();
 
         // long & boring mapping logic TODO move somewhere else
-        return CustomerDto.builder()
-            .id(customer.getId())
-            .name(customer.getName())
-            .email(customer.getEmail())
-            .countryId(customer.getCountry().getId())
-            .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-            .gold(customer.isGoldMember())
-            .discountPercentage(discountPercentage)
-            .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-            .legalEntityCode(customer.getLegalEntityCode())
-            .discountedVat(customer.isDiscountedVat())
-            .build();
+        return new CustomerDto(customer);
+        // 1) manual mapper eg CustomerMapper
+        // 2) MapStruct (bad habbit?)
+        // 3) ❤️
     }
 
     @Override
     @Transactional
     public void register(CustomerDto dto) {
-        Customer customer = new Customer();
-        customer.setEmail(dto.getEmail());
-        customer.setName(dto.getName());
-        customer.setCreationDate(LocalDate.now());
-        customer.setCountry(new Country().setId(dto.getCountryId()));
-        customer.setLegalEntityCode(dto.getLegalEntityCode());
+        Customer customer = dto.asEntity();
+
         // business rule
         if (customerRepo.existsByEmail(customer.getEmail())) {
             throw new IllegalArgumentException("A customer with this email is already registered!");
@@ -99,6 +84,7 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
         // a) scheduler polls for this
         // b) debezium/kafka connect pulls this data out on a Kafka Topic
     }
+
     private String normalize(String s) {
         return s.toLowerCase().replace("\\s+", "");
     }
