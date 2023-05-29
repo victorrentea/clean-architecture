@@ -55,11 +55,6 @@
             <artifactId>h2</artifactId>
             <version>2.1.210</version>
         </dependency>
-        <dependency>
-            <!-- For distributed tracing of requests (printed after log level) -->
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.openapitools</groupId>

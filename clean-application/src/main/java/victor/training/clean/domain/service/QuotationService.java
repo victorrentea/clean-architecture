@@ -22,7 +22,7 @@ public class QuotationService {
    public void customerDetailsChanged(Customer newCustomer) {
       InsurancePolicy currentPolicy = insurancePolicyRepo.findByCustomerId(newCustomer.getId());
       if (newCustomer.getCountry().getId() != currentPolicy.getCountry().getId()) {
-         // Imagine: 💭 calculations to see if the policy has to be updated
+         // Imagine calculations to see if the policy has to be updated
          sendReevaluatePolicy(newCustomer, "Country changed");
          policyNotificationRepo.save(new PolicyNotification()
              .setTitle("Policy update requested due to country changed")
