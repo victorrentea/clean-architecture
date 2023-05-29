@@ -2,13 +2,36 @@ package victor.training.clean.domain.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
+@Embeddable // effectively immutable Value Object stored in a Domain @Entity
+class Address {
+  private String city;
+  private String street;
+  private Integer zipCode;
+
+  protected Address() {} // for Hibernate only
+
+  Address(String city, String street, Integer zipCode) {
+    this.city = city;
+    this.street = street;
+    this.zipCode = zipCode;
+  }
+
+  public String getStreet() {
+    return street;
+  }
+
+  public String getCity() {
+    return city;
+  }
+
+  public Integer getZipCode() {
+    return zipCode;
+  }
+}
 
 //@Configurable // dont !! allows injection of @Autowired into hibernatet entity DONT!!
 @Entity
@@ -25,9 +48,12 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private Integer shippingAddressZipCode;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private Integer shippingAddressZipCode;
+  @Embedded
+  private Address shippingAddress;
+
   @ManyToOne
   private Country country;
 
@@ -47,7 +73,7 @@ public class Customer {
 //  }
 
   // MVC
-  public String streetAddress() {
-    return shippingAddressStreet + " " + shippingAddressCity;// presentation concern
-  }
+//  public String streetAddress() {
+//    return shippingAddressStreet + " " + shippingAddressCity;// presentation concern
+//  }
 }

@@ -17,8 +17,6 @@ public class UserService {
     user.getEmail().ifPresent(this::checkNewUser);
 
 
-    LdapUserDto dto; // will not compile
-
     log.debug("Insert user in my database: " + user.getUsername());
 
     log.debug("More logic for " + user.getFullName() + " of id " + user.getUsername().toLowerCase());
