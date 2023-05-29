@@ -16,9 +16,8 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerDto.CustomerDtoBuilder;
 import victor.training.clean.domain.repo.CountryRepo;
-import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.verticalslice.CountryRestRepo;
+import victor.training.clean.domain.service.EmailSenderInterface;
 
 import java.time.format.DateTimeFormatter;
 
@@ -47,7 +46,7 @@ public class LargeIntegrationTest {
     @Autowired
     private CustomerRepo customerRepo;
     @MockBean
-    private EmailSender emailSender;
+    private EmailSenderInterface emailSender;
 
     private Country country;
     private CustomerDtoBuilder requestDto;

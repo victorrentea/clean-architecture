@@ -1,9 +1,10 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.LdapUserClientInterface;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
@@ -13,9 +14,10 @@ import java.util.List;
 //@Component
 @RequiredArgsConstructor
 @Adapter
-public class LdapUserClient {
+public class LdapUserClient implements LdapUserClientInterface {
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchByUsername(String targetUsername) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
 
@@ -24,8 +26,7 @@ public class LdapUserClient {
     }
     LdapUserDto dto = dtoList.get(0);
 
-    User user = fromDto(dto);
-    return user;
+    return fromDto(dto);
   }
 
   private static User fromDto(LdapUserDto dto) {

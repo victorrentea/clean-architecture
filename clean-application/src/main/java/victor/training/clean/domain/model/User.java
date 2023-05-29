@@ -1,5 +1,8 @@
 package victor.training.clean.domain.model;
 
+import lombok.Builder;
+import lombok.Value;
+
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;

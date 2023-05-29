@@ -2,8 +2,6 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.*;
@@ -12,9 +10,9 @@ import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.infra.AnafClient;
-import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
+import victor.training.clean.domain.service.EmailSenderInterface;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +25,7 @@ import static java.util.Objects.requireNonNull;
 @ApplicationService // custom annotation refining the classic @Service
 public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
-    private final EmailSender emailSender;
+    private final EmailSenderInterface emailSender;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
     private final AnafClient anafClient;
