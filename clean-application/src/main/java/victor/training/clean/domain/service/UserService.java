@@ -4,39 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
-import java.util.Optional;
+import victor.training.clean.infra.LdapApiClient;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-  private final LdapApi ldapApi;
+  private final LdapApiClient ldapApiClient;
 
   public void importUserFromLdap(String targetUsername) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Expected single user to match username " + targetUsername + ", got: " + dtoList);
-    }
-
-    LdapUserDto dto = dtoList.get(0);
-
-    User user = fromDto(dto);
-    complexLogic(user);
-  }
-
-  private User fromDto(LdapUserDto dto) {
-    String userName = Optional.ofNullable(dto.getUid()).orElse("anonymous");
-    String email = dto.getWorkEmail();
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
-    return new User(userName, email, fullName);
-  }
-
-  private void complexLogic(User user) { // ⚠️ many useless fields
+    User user = ldapApiClient.findByUserName(targetUsername);
+    // ⚠️ many useless fields
     if (user.getEmail() != null) { // ⚠️ NPE in other unguarded places?
       checkNewUser(user.getEmail().toLowerCase());
     }
@@ -51,6 +29,7 @@ public class UserService {
     // then later, again (⚠️ repeated logic):
     sendMailTo(user.getEmailContact());
   }
+
 
   private void sendMailTo(String emailContact) { // don't change this <- imagine it's library code
     //... implementation left out
