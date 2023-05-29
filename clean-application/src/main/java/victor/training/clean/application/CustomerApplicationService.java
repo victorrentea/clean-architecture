@@ -150,7 +150,7 @@ public class CustomerApplicationService {
         emailSender.sendEmail(email);
     }
     private void auditGoldMemberRemoval(Customer customer, String reason) {
-        // stuff...
+        // [imagine]
         System.out.println("Kafka.send ( {name:" + customer.getName() + ", reason:" + reason + "} )");
     }
 }
