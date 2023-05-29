@@ -2,10 +2,11 @@ package victor.training.clean.infra;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
+import victor.training.clean.adapter.LdapAdapter;
 import victor.training.clean.domain.model.LdapUser;
 
 @Component
-public class LdapClient {
+public class LdapClient implements LdapAdapter {
 
   private final LdapApi ldapApi;
 

@@ -3,18 +3,18 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.adapter.LdapAdapter;
 import victor.training.clean.domain.model.LdapUser;
-import victor.training.clean.infra.LdapClient;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
 
-  private LdapClient ldapClient;
+  private LdapAdapter ldapAdapter;
 
   public void importUserFromLdap(String targetUsername) {
-    LdapUser ldapUser = ldapClient.find(targetUsername);
+    LdapUser ldapUser = ldapAdapter.find(targetUsername);
 
     complexLogic(ldapUser);
   }
