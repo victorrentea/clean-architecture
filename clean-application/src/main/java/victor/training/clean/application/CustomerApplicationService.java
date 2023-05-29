@@ -1,13 +1,9 @@
 package victor.training.clean.application;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
@@ -25,7 +21,6 @@ import victor.training.clean.domain.client.NotificationService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -45,14 +40,9 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
         return customerSearchRepo.search(searchCriteria);
     }
 
+    @Override
     public CustomerDto findById(long id) {
-//        Optional<Customer> opt = customerRepo.findById(id);
-//        if (opt.isEmpty()) return Optional.empty();
-
         Customer customer = customerRepo.findById(id).orElseThrow();
-
-//        customerRepo.findById(id).map(customer -> {})
-
         // Small domain logic operating on the state of a single Entity.
         // TODO Where can I move it? PS: it's repeating somewhere else
         int discountPercentage = customer.getDiscountPercentage();
@@ -113,8 +103,10 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
         return s.toLowerCase().replace("\\s+", "");
     }
 
+    @Override
     @Transactional
-    public void update(long id, CustomerDto dto) { // TODO move from CRUD-based API to fine-grained Task-based Commands
+    public void update(long id, CustomerDto dto) {
+//    public void update(long id, CustomerDto dto) { // TODO move from CRUD-based API to fine-grained Task-based Commands
         Customer customer = customerRepo.findById(id).orElseThrow();
         // CRUD part
         customer.setName(dto.getName());
