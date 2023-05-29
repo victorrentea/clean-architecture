@@ -41,7 +41,6 @@ class UserServiceTest {
             .contains("Contact: John DOE <jdoe@corp.com>");
   }
   @Test
-  @Disabled("throws NPE. Why !?")
   void missingEmail(CapturedOutput capturedOutput) {
     userService.importUserFromLdap("noemail");
 

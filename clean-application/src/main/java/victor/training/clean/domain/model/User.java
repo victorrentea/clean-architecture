@@ -1,6 +1,8 @@
 package victor.training.clean.domain.model;
 
 
+import java.util.Optional;
+
 public class User {
     public User(String userName, String email, String fullName) {
         this.userName = userName;
@@ -12,16 +14,16 @@ public class User {
     private final String email;
     private final String fullName;
 
-    public String getEmailContact() {
-      return fullName + " <" + email.toLowerCase() + ">";
+    public Optional<String> getEmailContact() {
+      return getEmail().map(e -> fullName + " <" + e + ">");
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public String getEmail() {
-        return email;
+    public Optional <String> getEmail() {
+        return Optional.ofNullable(email).map(String::toLowerCase);
     }
 
     public String getFullName() {

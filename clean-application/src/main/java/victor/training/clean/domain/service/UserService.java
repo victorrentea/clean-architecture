@@ -4,32 +4,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApiClient;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-  private final LdapApiClient ldapApiClient;
+  private final UserGateway userGateway;
 
   public void importUserFromLdap(String targetUsername) {
-    User user = ldapApiClient.findByUserName(targetUsername);
-    // ⚠️ many useless fields
-    if (user.getEmail() != null) { // ⚠️ NPE in other unguarded places?
-      checkNewUser(user.getEmail().toLowerCase());
-    }
+    User user = userGateway.findByUserName(targetUsername);
 
-    // ⚠️ 'uid' <- ugly attribute name; I'd prefer to see 'username', my domain term
+    user.getEmail().ifPresent(this::checkNewUser);
+
     log.debug("Insert user in my database: " + user.getUserName());
-
     log.debug("More logic for " + user.getFullName() + " of id " + user.getUserName().toLowerCase());
 
-    sendMailTo(user.getEmailContact());
-
-    // then later, again (⚠️ repeated logic):
-    sendMailTo(user.getEmailContact());
+    user.getEmailContact().ifPresent(this::sendMailTo);
+    user.getEmailContact().ifPresent(this::sendMailTo);
   }
-
 
   private void sendMailTo(String emailContact) { // don't change this <- imagine it's library code
     //... implementation left out
