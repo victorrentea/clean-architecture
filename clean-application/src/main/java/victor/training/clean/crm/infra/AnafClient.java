@@ -1,4 +1,4 @@
-package victor.training.clean.infra;
+package victor.training.clean.crm.infra;
 
 import org.springframework.stereotype.Component;
 import victor.training.clean.insurance.client.LegalEntityProvider;

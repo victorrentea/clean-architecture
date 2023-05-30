@@ -5,12 +5,14 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import victor.training.clean.crm.aplication.NotificationService;
+import victor.training.clean.crm.api.event.CustomerRegisteredEvent;
+import victor.training.clean.notification.domain.NotificationService;
 import victor.training.clean.insurance.client.LegalEntityProvider;
 import victor.training.clean.insurance.domain.repo.Country;
 import victor.training.clean.crm.domain.model.Customer;
@@ -27,7 +29,6 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 @RequiredArgsConstructor
 @Slf4j
 public class RegisterCustomerUseCase {
-  private final NotificationService notificationService;
   private final LegalEntityProvider legalEntityProvider;
   private final CustomerRepo customerRepo;
 
@@ -79,8 +80,10 @@ public class RegisterCustomerUseCase {
     log.info("More Business Logic (imagine)");
     log.info("More Business Logic (imagine)");
     customerRepo.save(customer);
-    notificationService.sendWelcomeEmail(customer);
+    eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId(), customer.getName(), customer.getEmail()));
+//    notificationService.sendWelcomeEmail(customer);
   }
+  private final ApplicationEventPublisher eventPublisher;
 
   private String normalize(String s) {
     return s.toLowerCase().replace("\\s+", "");

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.crm.aplication.CustomerDto;
-import victor.training.clean.crm.aplication.NotificationService;
+import victor.training.clean.notification.domain.NotificationService;
 import victor.training.clean.insurance.domain.repo.Country;
 import victor.training.clean.crm.domain.model.Customer;
 import victor.training.clean.crm.domain.repo.CustomerRepo;
