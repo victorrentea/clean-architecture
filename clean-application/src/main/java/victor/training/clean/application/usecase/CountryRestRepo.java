@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean.application.usecase;
 
 import lombok.*;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
