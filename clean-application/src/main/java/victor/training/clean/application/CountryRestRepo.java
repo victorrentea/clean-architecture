@@ -1,4 +1,4 @@
-package victor.training.clean.verticalslice;
+package victor.training.clean.application;
 
 import lombok.*;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -10,7 +10,6 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import victor.training.clean.domain.model.Country;
 

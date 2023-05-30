@@ -1,21 +1,29 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.domain.client.LegalEntityProvider;
-import victor.training.clean.domain.model.LegalEntity;
 import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.LegalEntity;
 import victor.training.clean.domain.repo.CustomerRepo;
 
-@Slf4j
-@Service
+@RestController
 @RequiredArgsConstructor
-public class RegisterCustomerService { //
+@Slf4j
+public class RegisterCustomerUseCase {
+  private final NotificationService notificationService;
   private final LegalEntityProvider legalEntityProvider;
   private final CustomerRepo customerRepo;
 
-  public void register(Customer customer) {
+  @Transactional
+  @PostMapping("customer")
+  public void register(@RequestBody @Validated CustomerDto dto) {
+    Customer customer = dto.asEntity();
     // business rule
     if (customerRepo.existsByEmail(customer.getEmail())) {
       throw new IllegalArgumentException("A customer with this email is already registered!");
@@ -38,11 +46,11 @@ public class RegisterCustomerService { //
     log.info("More Business Logic (imagine)");
     log.info("More Business Logic (imagine)");
     customerRepo.save(customer);
+    notificationService.sendWelcomeEmail(customer);
   }
 
   private String normalize(String s) {
     return s.toLowerCase().replace("\\s+", "");
   }
-
 
 }

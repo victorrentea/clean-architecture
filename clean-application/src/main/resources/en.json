@@ -1,0 +1,7 @@
+{"error":{
+  "GENERAL": "Oups �\_(?)_/�",
+
+error.DUPLICATED_CUSTOMER_EMAIL.message=A customer with this email is already registered!
+error.DUPLICATED_CUSTOMER_EMAIL.code=400
+
+customer-name-too-short=The customer name is too short

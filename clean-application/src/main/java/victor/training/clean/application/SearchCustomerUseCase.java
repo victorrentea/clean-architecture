@@ -1,4 +1,4 @@
-package victor.training.clean.verticalslice;
+package victor.training.clean.application;
 
 import brave.http.HttpServerResponse;
 import com.google.common.annotations.VisibleForTesting;
@@ -48,7 +48,7 @@ public class SearchCustomerUseCase {
 //  }
   @PostMapping("customer/search")
     public List<SearchCustomerResult> search(@RequestBody SearchCustomerCriteria criteria) {
-    String jpql = "SELECT new victor.training.clean.verticalslice.SearchCustomerUseCase$SearchCustomerResult(c.id, c.name)" +
+    String jpql = "SELECT new victor.training.clean.application.SearchCustomerUseCase$SearchCustomerResult(c.id, c.name)" +
                   " FROM Customer c " +
                   " WHERE ";
     List<String> jpqlParts = new ArrayList<>();
