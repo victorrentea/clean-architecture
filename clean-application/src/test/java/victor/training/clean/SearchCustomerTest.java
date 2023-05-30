@@ -11,10 +11,10 @@
 //import org.springframework.test.web.servlet.MockMvc;
 //import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 //import org.springframework.transaction.annotation.Transactional;
-//import victor.training.clean.domain.model.Country;
-//import victor.training.clean.domain.model.Customer;
-//import victor.training.clean.domain.repo.CountryRepo;
-//import victor.training.clean.domain.repo.CustomerRepo;
+//import victor.training.clean.insurance.domain.repo.Country;
+//import victor.training.clean.crm.domain.model.Customer;
+//import victor.training.clean.insurance.domain.repo.CountryRepo;
+//import victor.training.clean.crm.domain.repo.CustomerRepo;
 //
 //import java.util.List;
 //

@@ -1,8 +1,8 @@
 package victor.training.clean.infra;
 
 import org.springframework.stereotype.Component;
-import victor.training.clean.domain.client.LegalEntityProvider;
-import victor.training.clean.domain.model.LegalEntity;
+import victor.training.clean.insurance.client.LegalEntityProvider;
+import victor.training.clean.crm.domain.model.LegalEntity;
 
 @Component
 public class AnafClient implements LegalEntityProvider {

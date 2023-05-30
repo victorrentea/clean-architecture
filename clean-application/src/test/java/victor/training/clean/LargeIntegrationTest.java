@@ -11,12 +11,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.domain.model.Country;
-import victor.training.clean.domain.model.Customer;
+import victor.training.clean.insurance.domain.repo.Country;
+import victor.training.clean.crm.domain.model.Customer;
 import victor.training.clean.application.CustomerDto;
 import victor.training.clean.application.CustomerDto.CustomerDtoBuilder;
-import victor.training.clean.domain.repo.CountryRepo;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.insurance.domain.repo.CountryRepo;
+import victor.training.clean.crm.domain.repo.CustomerRepo;
 import victor.training.clean.infra.EmailSender;
 
 import java.time.format.DateTimeFormatter;

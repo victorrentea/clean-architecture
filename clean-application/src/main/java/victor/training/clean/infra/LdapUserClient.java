@@ -1,11 +1,9 @@
 package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.client.RestTemplate;
 import victor.training.clean.common.Adapter;
-import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.client.ExternalUserProvider;
-import victor.training.clean.domain.model.UserFromDto;
+import victor.training.clean.insurance.domain.model.User;
+import victor.training.clean.insurance.client.ExternalUserProvider;
 
 import java.util.List;
 
