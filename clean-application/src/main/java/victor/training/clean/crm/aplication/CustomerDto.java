@@ -3,7 +3,7 @@ package victor.training.clean.crm.aplication;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
-import victor.training.clean.insurance.domain.repo.Country;
+import victor.training.clean.crm.domain.model.Country;
 import victor.training.clean.crm.domain.model.Customer;
 
 import javax.validation.constraints.Email;

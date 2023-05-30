@@ -1,4 +1,4 @@
-package victor.training.clean.insurance.domain.repo;
+package victor.training.clean.crm.domain.model;
 
 import lombok.Data;
 

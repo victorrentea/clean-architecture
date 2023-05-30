@@ -1,7 +1,6 @@
 package victor.training.clean.crm.domain.model;
 
 import lombok.Data;
-import victor.training.clean.insurance.domain.repo.Country;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

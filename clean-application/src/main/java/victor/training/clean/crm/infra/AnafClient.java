@@ -1,7 +1,7 @@
 package victor.training.clean.crm.infra;
 
 import org.springframework.stereotype.Component;
-import victor.training.clean.insurance.client.LegalEntityProvider;
+import victor.training.clean.crm.domain.service.LegalEntityProvider;
 import victor.training.clean.crm.domain.model.LegalEntity;
 
 @Component

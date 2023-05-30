@@ -2,14 +2,15 @@ package victor.training.clean.crm.aplication.usecase;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import victor.training.clean.crm.api.event.CustomerUpgradedToGoldEvent;
 import victor.training.clean.crm.aplication.CustomerDto;
-import victor.training.clean.notification.domain.NotificationService;
-import victor.training.clean.insurance.domain.repo.Country;
+import victor.training.clean.crm.domain.model.Country;
 import victor.training.clean.crm.domain.model.Customer;
 import victor.training.clean.crm.domain.repo.CustomerRepo;
 import victor.training.clean.insurance.domain.service.QuotationService;
@@ -21,8 +22,9 @@ import static java.util.Objects.requireNonNull;
 @RestController
 public class UpdateCustomerUseCase {
   private final CustomerRepo customerRepo;
-  private final NotificationService notificationService;
+//  private final NotificationService notificationService;
   private final QuotationService quotationService;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional
   @PutMapping("customer/{id}")
@@ -36,7 +38,8 @@ public class UpdateCustomerUseCase {
     if (!customer.isGoldMember() && dto.isGold()) {
       // enable gold member status
       customer.setGoldMember(true);
-      notificationService.sendGoldBenefitsEmail(customer);
+//      notificationService.sendGoldBenefitsEmail(customer);
+      eventPublisher.publishEvent(new CustomerUpgradedToGoldEvent(customer.getId()));
     }
 
     if (customer.isGoldMember() && !dto.isGold()) {

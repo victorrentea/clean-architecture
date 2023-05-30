@@ -1,4 +1,4 @@
-package victor.training.clean.infra;
+package victor.training.clean.crm.infra;
 
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;

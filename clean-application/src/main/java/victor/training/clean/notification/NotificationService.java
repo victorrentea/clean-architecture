@@ -1,20 +1,20 @@
-package victor.training.clean.notification.domain;
+package victor.training.clean.notification;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
+import victor.training.clean.crm.api.CrmApi;
 import victor.training.clean.crm.api.event.CustomerRegisteredEvent;
+import victor.training.clean.crm.api.event.CustomerUpgradedToGoldEvent;
 import victor.training.clean.crm.domain.model.Customer;
 import victor.training.clean.crm.domain.model.Email;
-import victor.training.clean.infra.EmailSender;
+import victor.training.clean.insurance.api.event.PolicyRequiresReevalutionEvent;
 
 @RequiredArgsConstructor
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
+  private final CrmApi crmApi;
 //  private final CrmApi crmApi;
 
 //  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -31,22 +31,25 @@ public class NotificationService {
     emailSender.sendEmail(email);
   }
 
-  public void sendGoldBenefitsEmail(Customer customer) {
+  @EventListener
+  public void sendGoldBenefitsEmail(CustomerUpgradedToGoldEvent event) {
+    var customer = crmApi.getCustomerById(event.customerId());
     Email email = new Email();
     email.setFrom("noreply@cleanapp.com");
-    email.setTo(customer.getEmail());
+    email.setTo(customer.email());
     email.setSubject("Welcome to the Gold membership!");
-    int discountPercentage = customer.getDiscountPercentage();
+    int discountPercentage = customer.discountPercentage();
     email.setBody("Here are your perks: ... Enjoy your special discount of " + discountPercentage + "%");
     emailSender.sendEmail(email);
   }
 
-  public void sendReevaluatePolicy(Customer customer, String reason) {
+  @EventListener
+  public void sendReevaluatePolicy(PolicyRequiresReevalutionEvent event) {
     Email email = new Email();
     email.setFrom("noreply@cleanapp.com");
     email.setTo("reps@cleanapp.com");
-    email.setSubject("Customer " + customer.getName() + " policy has to be re-evaluated");
-    email.setBody("Please review the policy due to : " + reason);
+    email.setSubject("Customer " + event.customerName() + " policy has to be re-evaluated");
+    email.setBody("Please review the policy due to : " + event.customerName());
       emailSender.sendEmail(email);
   }
 

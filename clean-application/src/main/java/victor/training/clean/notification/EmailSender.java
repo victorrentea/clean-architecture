@@ -1,4 +1,4 @@
-package victor.training.clean.infra;
+package victor.training.clean.notification;
 
 import org.springframework.stereotype.Service;
 import victor.training.clean.crm.domain.model.Email;

@@ -11,7 +11,7 @@ import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import victor.training.clean.insurance.domain.repo.Country;
+import victor.training.clean.crm.domain.model.Country;
 
 import java.util.List;
 
