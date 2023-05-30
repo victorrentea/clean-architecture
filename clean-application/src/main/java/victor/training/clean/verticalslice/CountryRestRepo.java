@@ -10,6 +10,7 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import victor.training.clean.domain.model.Country;
 
@@ -17,6 +18,9 @@ import java.util.List;
 
 // Brutal example of vertical slicing to enable flexible architecture per use-case: here- the lack of it :)
 @RepositoryRestResource
+// exposes all CRUD+ search operations via REST = end of civilation.
+// you are exposing the DB
+//@Secured("ADMIN")
 public interface CountryRestRepo extends PagingAndSortingRepository<Country, Long> {
     List<Country> findByName(@Param("name") String name);
 }
