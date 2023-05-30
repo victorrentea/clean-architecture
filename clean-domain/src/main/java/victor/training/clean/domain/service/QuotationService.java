@@ -16,7 +16,7 @@ import victor.training.clean.domain.repo.PolicyNotificationRepo;
 public class QuotationService {
    private final InsurancePolicyRepo insurancePolicyRepo;
    private final PolicyNotificationRepo policyNotificationRepo;
-   private final victor.training.clean.infra.EmailSender emailSender;
+//   private final EmailSender emailSender;
 
    public void customerDetailsChanged(Customer newCustomer) {
       InsurancePolicy currentPolicy = insurancePolicyRepo.findByCustomerId(newCustomer.getId());
@@ -36,7 +36,7 @@ public class QuotationService {
       email.setTo("reps@cleanapp.com");
       email.setSubject("Customer " + customer.getName() + " policy has to be re-evaluated");
       email.setBody("Please review the policy due to : " + reason);
-      emailSender.sendEmail(email);
+//      emailSender.sendEmail(email);
    }
 
    public void printPolicy(long policyId) {
