@@ -30,6 +30,10 @@ public class QuotationService {
       }
    }
 
+   public void createPolicy(String customerName) {
+      // TODO saya check the customer name is unique when creating an insurance policy:
+      //  there must be no 2 policies for the same name;
+   }
    private void sendReevaluatePolicy(Customer customer, String reason) {
       Email email = new Email();
       email.setFrom("noreply@cleanapp.com");
