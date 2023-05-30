@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean.application.usecase;
 
 import com.google.common.annotations.VisibleForTesting;
 import lombok.Builder;
