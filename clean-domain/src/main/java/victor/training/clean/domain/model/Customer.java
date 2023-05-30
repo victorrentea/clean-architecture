@@ -54,6 +54,7 @@ public class Customer {
   @Email
   private String email;
 
+
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
 //  private String shippingAddressCity;
 //  private String shippingAddressStreet;
@@ -79,7 +80,24 @@ public class Customer {
     return discountPercentage;
   }
 
-//  public Customer(String name) {
+
+//  enum Status {DRAFT, ACTIVE, INACTIVE}
+//
+//  Status status = Status.DRAFT;
+//  String activatedBy;
+//
+//  public void activate(String user) {
+//    if (status != Status.DRAFT) {
+//      throw new IllegalStateException();
+//    }
+//    status = Status.ACTIVE;
+//    activatedBy = user;
+//  }
+//  public Customer setStatus(Status status) {
+//    this.status = status;
+//    return this;
+//  }
+  //  public Customer(String name) {
 ////    if (name.length() < 5) {
 ////      throw new IllegalArgumentException();
 ////    }

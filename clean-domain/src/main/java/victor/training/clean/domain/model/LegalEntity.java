@@ -1,10 +1,10 @@
 package victor.training.clean.domain.model;
 
-public class AnafResult {
+public class LegalEntity {
   private final String name;
   private final boolean isVatPayer;
 
-  public AnafResult(String name, boolean isVatPayer) {
+  public LegalEntity(String name, boolean isVatPayer) {
     this.name = name;
     this.isVatPayer = isVatPayer;
   }

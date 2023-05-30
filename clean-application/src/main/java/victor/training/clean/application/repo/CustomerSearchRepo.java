@@ -19,7 +19,7 @@ import static java.lang.String.join;
 public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
-   public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
+   public List<CustomerSearchResult> search(CustomerSearchCriteria criteria/*, extraInputFromDomain*/) {
       String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";
@@ -31,6 +31,10 @@ public class CustomerSearchRepo {
          jpqlParts.add("UPPER(c.name) LIKE UPPER('%' || :name || '%')");
          params.put("name", criteria.getName());
       }
+
+//      if (criteria.isIncludeSoftDeleted() != null) {
+//         jpqlParts.add("c.status != 'DELETED'");
+//      }
 
       if (criteria.getEmail() != null) {
          jpqlParts.add("UPPER(c.email) = UPPER(:email)");

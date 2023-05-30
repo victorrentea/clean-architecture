@@ -9,15 +9,13 @@ import victor.training.clean.common.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.service.QuotationService;
-import victor.training.clean.infra.AnafClient;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
-import victor.training.clean.domain.client.NotificationService;
+import victor.training.clean.domain.service.RegisterCustomerService;
+import victor.training.clean.infra.EmailSender;
 
 import java.util.List;
 
@@ -30,19 +28,25 @@ import static java.util.Objects.requireNonNull;
 //public class CustomerApplicationService implements CustomerApplicationServiceApi {
 public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
-    private final NotificationService emailSender;
+    private final EmailSender emailSender;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
-    private final AnafClient anafClient;
+    private final RegisterCustomerService registerCustomerService;
+    private final victor.training.clean.application.NotificationService notificationService;
 
     @PostMapping("customer/search")
     public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-        return customerSearchRepo.search(searchCriteria);
+//        extraInput = domainService.call()
+        return customerSearchRepo.search(searchCriteria/*, extraInput*/);
     }
 
     @GetMapping("customer/{id}")
     public CustomerDto findById(@PathVariable long id) {
+        // option 1: AppService -> Repo (
         Customer customer = customerRepo.findById(id).orElseThrow();
+
+        // option 2 : AppService->DomainService->Repo
+
         // Small domain logic operating on the state of a single Entity.
         // TODO Where can I move it? PS: it's repeating somewhere else
 
@@ -57,41 +61,14 @@ public class CustomerApplicationService {
     @PostMapping("customer")
     public void register(@RequestBody @Validated CustomerDto dto) {
         Customer customer = dto.asEntity();
-
-        // business rule
-        if (customerRepo.existsByEmail(customer.getEmail())) {
-            throw new IllegalArgumentException("A customer with this email is already registered!");
-            // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-        }
-
-        // enrichment from external API in 'application' layer
-        if (customer.getLegalEntityCode() != null) {
-            if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
-                throw new IllegalArgumentException("Company already registered");
-            }
-            AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
-            if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))){
-                throw new IllegalArgumentException("Legal Entity not found!");
-            }
-            if (anafResult.isVatPayer()) {
-                customer.setDiscountedVat(true);
-            }
-        }
-        log.info("More Business Logic (imagine)");
-        log.info("More Business Logic (imagine)");
-
-        customerRepo.save(customer);
-        sendWelcomeEmail(customer);
-        // vs emailsToSend.save(new EmailToSend()); + COMMIT , then = transaction outbox pattern
-        // a) scheduler polls for this
-        // b) debezium/kafka connect pulls this data out on a Kafka Topic
+        registerCustomerService.register(customer);
+        notificationService.sendWelcomeEmail(customer);
     }
 
-    private String normalize(String s) {
-        return s.toLowerCase().replace("\\s+", "");
-    }
 
-    @Transactional
+
+
+@Transactional
     @PutMapping("customer/{id}")
     public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
         Customer customer = customerRepo.findById(id).orElseThrow();
@@ -103,7 +80,7 @@ public class CustomerApplicationService {
         if (!customer.isGoldMember() && dto.isGold()) {
             // enable gold member status
             customer.setGoldMember(true);
-            sendGoldBenefitsEmail(customer);
+            notificationService.sendGoldBenefitsEmail(customer);
         }
 
         if (customer.isGoldMember() && !dto.isGold()) {
@@ -117,24 +94,7 @@ public class CustomerApplicationService {
         quotationService.customerDetailsChanged(customer);
     }
 
-    private void sendWelcomeEmail(Customer customer) {
-        Email email = new Email();
-        email.setFrom("noreply@cleanapp.com");
-        email.setTo(customer.getEmail());
-        email.setSubject("Account created for");
-        email.setBody("Welcome to our world, "+ customer.getName()+". You'll like it! Sincerely, Team");
-        emailSender.sendEmail(email);
-    }
 
-    private void sendGoldBenefitsEmail(Customer customer) {
-        Email email = new Email();
-        email.setFrom("noreply@cleanapp.com");
-        email.setTo(customer.getEmail());
-        email.setSubject("Welcome to the Gold membership!");
-        int discountPercentage = customer.getDiscountPercentage();
-        email.setBody("Here are your perks: ... Enjoy your special discount of " + discountPercentage + "%");
-        emailSender.sendEmail(email);
-    }
     private void auditGoldMemberRemoval(Customer customer, String reason) {
         // [imagine]
         System.out.println("Kafka.send ( {name:" + customer.getName() + ", reason:" + reason + "} )");
