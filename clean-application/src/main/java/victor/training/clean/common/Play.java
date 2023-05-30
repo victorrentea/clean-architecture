@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean.common;
 
 import java.util.ArrayList;
 import java.util.Collections;

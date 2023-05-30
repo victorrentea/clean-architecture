@@ -19,9 +19,9 @@
    - [optional] To remove annotations from your ApplicationService:
      - Extract an interface from it (Refactor>Extract Interface)
      - Remove the annotations from the ApplicationService (they are 'inherited' from the implemented interface)
-3. De-clutter `CustomerApplicationService.findById` from
-   - The bit of reusable business logic (**it repeats!**)
-   - The boring mapping code
+3. De-clutter `CustomerApplicationService.findById`:
+   - Move the bit of reusable business logic somewhere else (hint: **it repeats!**)
+   - Move the boring mapping code somewhere else. Where ?!
 4. Pragmatic Validation: customer.name.length has to have minimum 5 characters 
    - Use annotation @Size(min = 5) instead of the `if` (remove it)
    - Check the `LargeIntegrationTest`
