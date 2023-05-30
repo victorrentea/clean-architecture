@@ -17,8 +17,10 @@ public class InsurancePolicy {
    @GeneratedValue
    private Long id;
 
-   @ManyToOne
-   private Customer customer;
+//   @ManyToOne
+//   private Customer customer;
+
+   private Long customerId; // BUT! preserve the FK while still in a monolithical DB
 
    @ManyToOne
    private Country country;

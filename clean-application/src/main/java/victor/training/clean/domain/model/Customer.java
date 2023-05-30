@@ -10,32 +10,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static java.util.Objects.requireNonNull;
-@Embeddable // effectively immutable Value Object stored in a Domain @Entity
-class Address {
-  private String city;
-  private String street;
-  private Integer zipCode;
-
-  protected Address() {} // for Hibernate only
-
-  Address(String city, String street, Integer zipCode) {
-    this.city = city;
-    this.street = street;
-    this.zipCode = zipCode;
-  }
-
-  public String getStreet() {
-    return street;
-  }
-
-  public String getCity() {
-    return city;
-  }
-
-  public Integer getZipCode() {
-    return zipCode;
-  }
-}
 
 //@Configurable // dont !! allows injection of @Autowired into hibernatet entity DONT!!
 @Entity
