@@ -3,6 +3,7 @@ package victor.training.clean.application;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
@@ -26,20 +27,21 @@ import static java.util.Objects.requireNonNull;
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
-public class CustomerApplicationService implements CustomerApplicationServiceApi {
+//public class CustomerApplicationService implements CustomerApplicationServiceApi {
+public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
     private final NotificationService emailSender;
     private final CustomerSearchRepo customerSearchRepo;
     private final QuotationService quotationService;
     private final AnafClient anafClient;
 
-    @Override
-    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+    @PostMapping("customer/search")
+    public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
 
-    @Override
-    public CustomerDto findById(long id) {
+    @GetMapping("customer/{id}")
+    public CustomerDto findById(@PathVariable long id) {
         Customer customer = customerRepo.findById(id).orElseThrow();
         // Small domain logic operating on the state of a single Entity.
         // TODO Where can I move it? PS: it's repeating somewhere else
@@ -51,9 +53,9 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
         // 3) ❤️
     }
 
-    @Override
     @Transactional
-    public void register(CustomerDto dto) {
+    @PostMapping("customer")
+    public void register(@RequestBody @Validated CustomerDto dto) {
         Customer customer = dto.asEntity();
 
         // business rule
@@ -89,10 +91,9 @@ public class CustomerApplicationService implements CustomerApplicationServiceApi
         return s.toLowerCase().replace("\\s+", "");
     }
 
-    @Override
     @Transactional
-    public void update(long id, CustomerDto dto) {
-//    public void update(long id, CustomerDto dto) { // TODO move from CRUD-based API to fine-grained Task-based Commands
+    @PutMapping("customer/{id}")
+    public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
         Customer customer = customerRepo.findById(id).orElseThrow();
         // CRUD part
         customer.setName(dto.getName());

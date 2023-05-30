@@ -1,4 +1,4 @@
-package victor.training.clean.application.dto;
+package victor.training.clean.common;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
