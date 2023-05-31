@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+import victor.training.clean.application.dto.SearchCustomerResponse;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.application.dto.CustomerDto;
@@ -18,9 +19,9 @@ import victor.training.clean.application.dto.CustomerDto.CustomerDtoBuilder;
 import victor.training.clean.domain.repo.CountryRepo;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.verticalslice.CountryRestRepo;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,27 +51,23 @@ public class LargeIntegrationTest {
     private EmailSender emailSender;
 
     private Country country;
-    private CustomerDtoBuilder requestDto;
 
     @BeforeEach
     public final void before() {
         country = countryRepo.save(new Country());
-        requestDto = CustomerDto.builder()
-                .email(CUSTOMER_EMAIL)
-                .name("::name::")
-                .countryId(country.getId());
     }
-    @Test
-    void findById_returns404_ifNotFound() throws Exception {
-        mockMvc.perform(get("/customer/{id}", 99999)
-            .accept(APPLICATION_JSON)
-        ).andExpect(status().isNotFound());
+
+    private CustomerDtoBuilder registerRequest() {
+        return CustomerDto.builder()
+            .email(CUSTOMER_EMAIL)
+            .name("::name::")
+            .countryId(country.getId());
     }
 
     @Test
     void register_and_get_and_search() throws Exception {
 
-        register(requestDto.build()).andExpect(status().isOk());
+        register(registerRequest()).andExpect(status().isOk());
 
         assertThat(customerRepo.findAll()).hasSize(1);
         Customer customer = customerRepo.findAll().get(0);
@@ -88,45 +85,54 @@ public class LargeIntegrationTest {
         assertThat(responseDto.getCountryId()).isEqualTo(country.getId());
         assertThat(responseDto.getCreationDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
-        search("ame", 1);
+        assertThat(search("ame")).hasSize(1);
+    }
+
+    @Test
+    void get_returns404_ifNotFound() throws Exception {
+        mockMvc.perform(get("/customer/{id}", 99999)
+            .accept(APPLICATION_JSON)
+        ).andExpect(status().isNotFound());
     }
 
     @Test
     void nameTooShortThrows() throws Exception {
-        requestDto.name("1");
-
-        register(requestDto.build()).andExpect(status().isInternalServerError());
+        register(registerRequest().name("1")).andExpect(status().isInternalServerError());
     }
 
     @Test
-    void existingEmailFails() throws Exception {
-        customerRepo.save(new Customer().setEmail(CUSTOMER_EMAIL));
+    void twoCustomerWithSameEmail() throws Exception {
+        register(registerRequest().email(CUSTOMER_EMAIL))
+            .andExpect(status().isOk());
 
-        register(requestDto.build())
-                .andExpect(status().isInternalServerError())
+        register(registerRequest().email(CUSTOMER_EMAIL))
+            .andExpect(status().isInternalServerError())
         //          .andExpect(status().is4xxClientError())
         //          .andExpect(content().string("Customer email is already registered"))
         ;
     }
 
-    private ResultActions register(CustomerDto requestDto) throws Exception {
+    private ResultActions register(CustomerDtoBuilder requestDto) throws Exception {
         return mockMvc.perform(post("/customer")
                 .contentType(APPLICATION_JSON)
                 .content(jackson.writeValueAsString(requestDto))
         );
     }
-    private void search(String name, int expectedNumberOfResults) throws Exception {
-        mockMvc.perform(post("/customer/search")
+    private List<SearchCustomerResponse> search(String name) throws Exception {
+        String responseJson = mockMvc.perform(post("/customer/search")
                 .contentType(APPLICATION_JSON)
                 .content(String.format("{\"name\": \"%s\"}\n", name)))
-        .andExpect(jsonPath("$", hasSize(expectedNumberOfResults)));
+            .andExpect(status().is2xxSuccessful())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+        return List.of(jackson.readValue(responseJson, SearchCustomerResponse[].class)); // trick to unmarshall a collection<obj>
     }
 
     private CustomerDto getCustomer(long customerId) throws Exception {
         String responseString = mockMvc.perform(get("/customer/{id}", customerId)
                 .accept(APPLICATION_JSON)
         ).andReturn().getResponse().getContentAsString();
-        CustomerDto dto = jackson.readValue(responseString, CustomerDto.class);
-        return dto;
+        return jackson.readValue(responseString, CustomerDto.class);
     }
 }

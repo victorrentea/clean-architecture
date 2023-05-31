@@ -27,7 +27,7 @@ public class OpenAPIDidNotChangeTest {
   MockMvc mockMvc;
   ObjectMapper jackson = new ObjectMapper();
 
-  @Value("classpath:/my-openapi.json") // extracted from deploy
+  @Value("classpath:/my-existing-openapi.json") // extracted from deploy
   Resource myExpectedOpenAPI;
 
   @Test

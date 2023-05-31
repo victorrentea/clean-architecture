@@ -2,14 +2,12 @@ package victor.training.clean.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.*;
 import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.application.dto.CustomerSearchCriteria;
-import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.application.dto.SearchCustomerCriteria;
+import victor.training.clean.application.dto.SearchCustomerResponse;
 import victor.training.clean.domain.service.QuotationService;
 import victor.training.clean.infra.AnafClient;
 import victor.training.clean.infra.EmailSender;
@@ -32,7 +30,7 @@ public class CustomerApplicationService {
     private final QuotationService quotationService;
     private final AnafClient anafClient;
 
-    public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+    public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
         return customerSearchRepo.search(searchCriteria);
     }
 

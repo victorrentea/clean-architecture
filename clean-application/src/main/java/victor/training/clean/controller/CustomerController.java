@@ -7,8 +7,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.application.CustomerApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.application.dto.CustomerSearchCriteria;
-import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.application.dto.SearchCustomerCriteria;
+import victor.training.clean.application.dto.SearchCustomerResponse;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -30,7 +30,7 @@ public class CustomerController {
 
    @Operation(description = "Search Customer")
    @PostMapping("customer/search")
-   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
+   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
       return customerApplicationService.search(searchCriteria);
    }
 
