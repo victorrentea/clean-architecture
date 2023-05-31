@@ -31,7 +31,6 @@ public class OpenAPIDidNotChangeTest {
   Resource myExpectedOpenAPI;
 
   @Test
-  @Disabled
   void my_contract_did_not_change() throws Exception {
     String actualOpenAPIJson = prettifyJsonString(
             mockMvc.perform(get("/v3/api-docs"))

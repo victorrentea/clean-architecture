@@ -2,8 +2,10 @@ package victor.training.clean.crm.infra;
 
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;
-import victor.training.clean.insurance.domain.model.User;
-import victor.training.clean.insurance.client.ExternalUserProvider;
+import victor.training.clean.crm.infra.ldap.LdapApi;
+import victor.training.clean.crm.infra.ldap.LdapUserDto;
+import victor.training.clean.crm.domain.model.User;
+import victor.training.clean.crm.domain.service.ExternalUserProvider;
 
 import java.util.List;
 

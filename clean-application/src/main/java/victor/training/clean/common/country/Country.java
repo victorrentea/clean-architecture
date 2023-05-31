@@ -1,4 +1,4 @@
-package victor.training.clean.crm.domain.model;
+package victor.training.clean.common.country;
 
 import lombok.Data;
 

@@ -28,7 +28,7 @@ public class SearchCustomerUseCase {
   @Value // @see lombok.config that allows Jackson to unmarshall via constructor into this class
   @Builder // used in tests
   @VisibleForTesting
-  static class SearchCustomerCriteria {
+  public static class SearchCustomerCriteria {
     @Schema(description = "Part of the name, case-insensitive")
     String name;
     String email;
@@ -36,7 +36,7 @@ public class SearchCustomerUseCase {
   }
 
   @Value
-  static class SearchCustomerResult {
+  public static class SearchCustomerResult {
     long id;
     String name;
   }
@@ -48,7 +48,7 @@ public class SearchCustomerUseCase {
 //  }
   @PostMapping("customer/search")
     public List<SearchCustomerResult> search(@RequestBody SearchCustomerCriteria criteria) {
-    String jpql = "SELECT new victor.training.clean.application.usecase.SearchCustomerUseCase$SearchCustomerResult(c.id, c.name)" +
+    String jpql = "SELECT new victor.training.clean.crm.aplication.usecase.SearchCustomerUseCase$SearchCustomerResult(c.id, c.name)" +
                   " FROM Customer c " +
                   " WHERE ";
     List<String> jpqlParts = new ArrayList<>();
@@ -66,7 +66,7 @@ public class SearchCustomerUseCase {
     }
 
     if (criteria.getCountryId() != null) {
-      jpqlParts.add("c.country.id = :countryId");
+      jpqlParts.add("c.countryId = :countryId");
       params.put("countryId", criteria.getCountryId());
     }
 

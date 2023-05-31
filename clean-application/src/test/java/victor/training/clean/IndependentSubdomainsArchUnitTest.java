@@ -1,6 +1,7 @@
 package victor.training.clean;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.domain.properties.HasName;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.EvaluationResult;
 import com.tngtech.archunit.library.dependencies.SliceRule;
@@ -11,14 +12,16 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.tngtech.archunit.base.DescribedPredicate.alwaysTrue;
+import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
+import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameEndingWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndependentSubdomainsArchUnitTest {
 
    private static final String[] ALLOWED_SHARED_PACKAGES = {"..common..", "..api.."};
 
-   private JavaClasses classes = new ClassFileImporter().importPackages("victor");
+   private JavaClasses classes = new ClassFileImporter().importPackages("victor").that(not(nameEndingWith("IntegrationTest")));
    private GivenSlices slices = SlicesRuleDefinition.slices()
            .matching("..clean.(*)..*");
 

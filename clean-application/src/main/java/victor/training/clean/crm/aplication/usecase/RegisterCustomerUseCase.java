@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.crm.api.event.CustomerRegisteredEvent;
 import victor.training.clean.crm.domain.service.LegalEntityProvider;
-import victor.training.clean.crm.domain.model.Country;
+import victor.training.clean.common.country.Country;
 import victor.training.clean.crm.domain.model.Customer;
 import victor.training.clean.crm.domain.model.LegalEntity;
 import victor.training.clean.crm.domain.repo.CustomerRepo;
@@ -44,11 +44,11 @@ public class RegisterCustomerUseCase {
 
     public Customer asEntity() {
       Customer customer = new Customer();
-      customer.setEmail(getEmail());
-      customer.setName(getName());
+      customer.setEmail(email);
+      customer.setName(name);
       customer.setCreationDate(LocalDate.now());
-      customer.setCountry(new Country().setId(getCountryId()));
-      customer.setLegalEntityCode(getLegalEntityCode());
+      customer.setCountryId(countryId);
+      customer.setLegalEntityCode(legalEntityCode);
       return customer;
     }
   }
@@ -79,7 +79,7 @@ public class RegisterCustomerUseCase {
     log.info("More Business Logic (imagine)");
     log.info("More Business Logic (imagine)");
     customerRepo.save(customer);
-    eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId(), customer.getName(), customer.getEmail()));
+    eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId(), customer.getEmail(), customer.getEmail()));
 //    notificationService.sendWelcomeEmail(customer);
   }
   private final ApplicationEventPublisher eventPublisher;

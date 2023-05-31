@@ -1,6 +1,7 @@
 package victor.training.clean.crm.domain.model;
 
 import lombok.Data;
+import victor.training.clean.common.country.Country;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -34,8 +35,7 @@ public class Customer {
   @Embedded // the fields inside this object are stored in the CUSTOMER table
   private Address shippingAddress;
 
-  @ManyToOne
-  private Country country;
+  private Long countryId;
 
   private LocalDate creationDate;
   private boolean goldMember;

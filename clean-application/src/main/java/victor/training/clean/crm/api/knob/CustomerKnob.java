@@ -4,5 +4,6 @@ package victor.training.clean.crm.api.knob;
 public record CustomerKnob(long id,
                            String name,
                            String email,
+                           Long countryId,
                            int discountPercentage) {
 }

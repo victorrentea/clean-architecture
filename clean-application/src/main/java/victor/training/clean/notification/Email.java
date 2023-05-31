@@ -1,4 +1,4 @@
-package victor.training.clean.crm.domain.model;
+package victor.training.clean.notification;
 
 import lombok.Data;
 

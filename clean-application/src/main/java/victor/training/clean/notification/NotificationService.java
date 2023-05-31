@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.crm.api.CrmApi;
 import victor.training.clean.crm.api.event.CustomerRegisteredEvent;
 import victor.training.clean.crm.api.event.CustomerUpgradedToGoldEvent;
-import victor.training.clean.crm.domain.model.Customer;
-import victor.training.clean.crm.domain.model.Email;
 import victor.training.clean.insurance.api.event.PolicyRequiresReevalutionEvent;
 
 @RequiredArgsConstructor

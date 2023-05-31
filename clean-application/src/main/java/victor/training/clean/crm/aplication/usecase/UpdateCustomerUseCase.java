@@ -1,6 +1,9 @@
 package victor.training.clean.crm.aplication.usecase;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,12 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import victor.training.clean.crm.api.event.CustomerDetailsChangedEvent;
 import victor.training.clean.crm.api.event.CustomerUpgradedToGoldEvent;
-import victor.training.clean.crm.aplication.CustomerDto;
-import victor.training.clean.crm.domain.model.Country;
 import victor.training.clean.crm.domain.model.Customer;
 import victor.training.clean.crm.domain.repo.CustomerRepo;
-import victor.training.clean.insurance.domain.service.QuotationService;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
 import static java.util.Objects.requireNonNull;
 
@@ -23,17 +27,35 @@ import static java.util.Objects.requireNonNull;
 public class UpdateCustomerUseCase {
   private final CustomerRepo customerRepo;
 //  private final NotificationService notificationService;
-  private final QuotationService quotationService;
   private final ApplicationEventPublisher eventPublisher;
+
+
+  @Builder
+  @Value
+  @AllArgsConstructor
+  static class UpdateCustomerRequest { // Dto used to both QUERY and COMMAND use-cases ?
+    @Size(min = 5) // yes OK earlier.
+    String name; // *
+
+    @Email
+    String email; // *
+
+    Long countryId; // *
+
+    boolean gold; // GET & PUT
+    String goldMemberRemovalReason; // GET & PUT if gold=true->false
+
+    String legalEntityCode; // *
+  }
 
   @Transactional
   @PutMapping("customer/{id}")
-  public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
+  public void update(@PathVariable long id, @RequestBody UpdateCustomerRequest dto) {
     Customer customer = customerRepo.findById(id).orElseThrow();
     // CRUD part
     customer.setName(dto.getName());
     customer.setEmail(dto.getEmail());
-    customer.setCountry(new Country().setId(dto.getCountryId()));
+    customer.setCountryId(dto.getCountryId());
 
     if (!customer.isGoldMember() && dto.isGold()) {
       // enable gold member status
@@ -50,7 +72,7 @@ public class UpdateCustomerUseCase {
     }
 
     customerRepo.save(customer); // not actually required within a @Transactional method if using ORM(JPA/Hibernate)
-    quotationService.customerDetailsChanged(customer);
+    eventPublisher.publishEvent(new CustomerDetailsChangedEvent(customer.getId()));
   }
 
   private void auditGoldMemberRemoval(Customer customer, String reason) {

@@ -2,8 +2,7 @@ package victor.training.clean.insurance.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import victor.training.clean.crm.domain.model.Customer;
-import victor.training.clean.crm.domain.model.Country;
+import victor.training.clean.common.country.Country;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,8 +25,8 @@ public class InsurancePolicy {
 
    private String customerName; // duplicate data OK for business
 
-   @ManyToOne
-   private Country country;
+//   @ManyToOne
+   private Long countryId;
 
    private BigDecimal valueInEur;
 

@@ -33,7 +33,7 @@ public class GetCustomerByIdUseCase {
   @Builder
   @Value
   @VisibleForTesting // = slices should not call eachother
-  static class GetCustomerByIdResponse {
+  public static class GetCustomerByIdResponse {
     Long id;
     String name;
     String email;
@@ -62,7 +62,7 @@ public class GetCustomerByIdUseCase {
         .id(customer.getId())
         .name(customer.getName())
         .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
+        .countryId(customer.getCountryId())
         .creationDateStr(customer.getCreationDate().format(ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
         .discountPercentage(customer.getDiscountPercentage())
