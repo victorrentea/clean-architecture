@@ -1,13 +1,13 @@
 package victor.training.clean.infra;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Email;
 
-// We pretend this is an external API we have to use
+@Slf4j
 @Service
 public class EmailSender {
-	
    public void sendEmail(Email email) {
-		// implementation goes here
+      log.info("Sending email: " + email);
    }
 }

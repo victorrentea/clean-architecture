@@ -14,14 +14,14 @@ import victor.training.clean.infra.EmailSender;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class QuotationService {
+public class InsuranceService {
    private final InsurancePolicyRepo insurancePolicyRepo;
    private final PolicyNotificationRepo policyNotificationRepo;
    private final EmailSender emailSender;
 
    public void customerDetailsChanged(Customer newCustomer) {
       InsurancePolicy currentPolicy = insurancePolicyRepo.findByCustomerId(newCustomer.getId());
-      if (newCustomer.getCountry().getId() != currentPolicy.getCountry().getId()) {
+      if (newCustomer.getCountry().getId() != currentPolicy.getCountryId()) {
          // Imagine calculations to see if the policy has to be updated
          sendReevaluatePolicy(newCustomer, "Country changed");
          policyNotificationRepo.save(new PolicyNotification()
@@ -32,11 +32,12 @@ public class QuotationService {
    }
 
    private void sendReevaluatePolicy(Customer customer, String reason) {
-      Email email = new Email();
-      email.setFrom("noreply@cleanapp.com");
-      email.setTo("reps@cleanapp.com");
-      email.setSubject("Customer " + customer.getName() + " policy has to be re-evaluated");
-      email.setBody("Please review the policy due to : " + reason);
+      Email email = Email.builder()
+          .from("noreply@cleanapp.com")
+          .to("reps@cleanapp.com")
+          .subject("Customer " + customer.getName() + " policy has to be re-evaluated")
+          .body("Please review the policy due to : " + reason)
+          .build();
       emailSender.sendEmail(email);
    }
 

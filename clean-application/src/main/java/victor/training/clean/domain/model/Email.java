@@ -1,11 +1,14 @@
 package victor.training.clean.domain.model;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
+@Builder
 public class Email {
-	private String to;
-	private String from;
-	private String subject;
-	private String body;
+	String to;
+	String from;
+	String subject;
+	String body;
 }

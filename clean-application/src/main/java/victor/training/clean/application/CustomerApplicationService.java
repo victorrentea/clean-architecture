@@ -8,7 +8,7 @@ import victor.training.clean.domain.model.*;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
-import victor.training.clean.domain.service.QuotationService;
+import victor.training.clean.domain.service.InsuranceService;
 import victor.training.clean.infra.AnafClient;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
@@ -27,7 +27,7 @@ public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
     private final EmailSender emailSender;
     private final CustomerSearchRepo customerSearchRepo;
-    private final QuotationService quotationService;
+    private final InsuranceService insuranceService;
     private final AnafClient anafClient;
 
     public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
@@ -102,7 +102,7 @@ public class CustomerApplicationService {
     }
 
     @Transactional
-    public void update(long id, CustomerDto dto) { // TODO move from CRUD-based API to fine-grained Task-based Commands
+    public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
         Customer customer = customerRepo.findById(id).orElseThrow();
         // CRUD part
         customer.setName(dto.getName());
@@ -119,36 +119,39 @@ public class CustomerApplicationService {
             // remove gold member status
             customer.setGoldMember(false);
             customer.setGoldMemberRemovalReason(requireNonNull(dto.getGoldMemberRemovalReason()));
-            auditGoldMemberRemoval(customer, dto.getGoldMemberRemovalReason());
+            auditRemovedGoldMember(customer.getName(), dto.getGoldMemberRemovalReason());
         }
 
         customerRepo.save(customer); // not actually required within a @Transactional method if using ORM(JPA/Hibernate)
-        quotationService.customerDetailsChanged(customer);
+        insuranceService.customerDetailsChanged(customer);
     }
 
     private void sendWelcomeEmail(Customer customer) {
-        Email email = new Email();
-        email.setFrom("noreply@cleanapp.com");
-        email.setTo(customer.getEmail());
-        email.setSubject("Account created for");
-        email.setBody("Welcome to our world, "+ customer.getName()+". You'll like it! Sincerely, Team");
+        Email email = Email.builder()
+            .from("noreply@cleanapp.com")
+            .to(customer.getEmail())
+            .subject("Account created for")
+            .body("Welcome to our world, " + customer.getName() + ". You'll like it! Sincerely, Team")
+            .build();
         emailSender.sendEmail(email);
     }
 
     private void sendGoldBenefitsEmail(Customer customer) {
-        Email email = new Email();
-        email.setFrom("noreply@cleanapp.com");
-        email.setTo(customer.getEmail());
-        email.setSubject("Welcome to the Gold membership!");
+        // repeated business rule! 😱
         int discountPercentage = 1;
         if (customer.isGoldMember()) {
             discountPercentage += 3;
         }
-        email.setBody("Here are your perks: ... Enjoy your special discount of " + discountPercentage + "%");
+        Email email = Email.builder()
+            .from("noreply@cleanapp.com")
+            .to(customer.getEmail())
+            .subject("Welcome to the Gold membership!")
+            .body("Here are your perks: ... Enjoy your special discount of " + discountPercentage + "%")
+            .build();
         emailSender.sendEmail(email);
     }
-    private void auditGoldMemberRemoval(Customer customer, String reason) {
-        // [imagine]
-        System.out.println("Kafka.send ( {name:" + customer.getName() + ", reason:" + reason + "} )");
+
+    private void auditRemovedGoldMember(String customerName, String reason) {
+        log.info("Kafka.send ( {name:" + customerName + ", reason:" + reason + "} )");
     }
 }

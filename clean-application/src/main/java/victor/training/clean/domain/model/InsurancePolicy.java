@@ -20,8 +20,7 @@ public class InsurancePolicy {
    @ManyToOne
    private Customer customer;
 
-   @ManyToOne
-   private Country country;
+   private Long countryId;
 
    private BigDecimal valueInEur;
 

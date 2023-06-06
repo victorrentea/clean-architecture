@@ -28,6 +28,7 @@ import static org.springframework.http.ResponseEntity.*;
 public class GlobalExceptionHandler {
    private final MessageSource messageSource;
 
+   // my custom exception: translate error code enum to HTTP status and human-readable message via messages.properties (+i18n)
    @ExceptionHandler(CleanException.class)
    public ResponseEntity<String> onCleanException(HttpServletRequest request, CleanException cleanException) {
       String userMessage = translateError(cleanException, cleanException.getErrorCode(), cleanException.getParameters(), request);
@@ -36,6 +37,7 @@ public class GlobalExceptionHandler {
       return status(httpStatusCode).body(userMessage);
    }
 
+   // @Validated errors
    @ResponseStatus(INTERNAL_SERVER_ERROR)
    @ExceptionHandler(MethodArgumentNotValidException.class)
    public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
@@ -44,6 +46,7 @@ public class GlobalExceptionHandler {
       return response;
    }
 
+   // any other uncaught exception
    @ExceptionHandler(Exception.class)
    public ResponseEntity<String> onAnyException(HttpServletRequest request, Exception exception) {
       String userMessage = translateError(exception, ErrorCode.GENERAL, null, request);
