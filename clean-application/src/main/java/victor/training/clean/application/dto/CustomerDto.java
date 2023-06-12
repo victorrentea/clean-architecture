@@ -3,7 +3,6 @@ package victor.training.clean.application.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
-import victor.training.clean.domain.model.Customer;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 

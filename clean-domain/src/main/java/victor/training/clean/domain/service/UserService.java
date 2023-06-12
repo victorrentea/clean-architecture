@@ -13,13 +13,6 @@ public class UserService {
 
   public void importUserFromLdap(String targetUsername) {
     User user = userProvider.getUserByUsername(targetUsername);
-
-    complexLogic(user);
-  }
-
-
-
-  private void complexLogic(User user) {
     user.getEmail().ifPresent(this::checkNewUser);
 
     log.debug("More logic for " + user.getFullName() + " of id " + user.getUsername().toLowerCase()); // ⚠️ 'uid' <- ugly; Users have a 'username' in my domain

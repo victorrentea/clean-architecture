@@ -1,16 +1,11 @@
 package victor.training.clean.domain.model;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
-import static lombok.AccessLevel.NONE;
 
 
 @Entity

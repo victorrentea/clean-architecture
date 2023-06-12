@@ -2,11 +2,8 @@ package victor.training.clean.infra;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.domain.service.UserProvider;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
 
