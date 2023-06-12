@@ -21,7 +21,8 @@ public class CustomerSearchRepo {
 
    public List<SearchCustomerResponse> search(SearchCustomerCriteria criteria) {
       String jpql = "SELECT new victor.training.clean.application.dto.SearchCustomerResponse(c.id, c.name)" +
-                    " FROM Customer c " +
+//      String jpql = "SELECT c" +
+                    " FROM Customer c  " +
                     " WHERE ";
       List<String> jpqlParts = new ArrayList<>();
       jpqlParts.add("1=1"); // alternatives: Criteria API ± Spring Specifications or Query DSL

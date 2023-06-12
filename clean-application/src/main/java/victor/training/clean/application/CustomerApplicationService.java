@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import victor.training.clean.application.dto.RegisterCustomerRequest;
 import victor.training.clean.application.mapper.CustomerMapper;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
@@ -53,7 +54,7 @@ public class CustomerApplicationService {
 
     @Transactional
     @PostMapping("customer")
-    public void register(@RequestBody @Validated CustomerDto dto) {
+    public void register(@RequestBody @Validated RegisterCustomerRequest dto) {
         Customer customer = CustomerMapper.asEntity(dto);
         registerCustomerService.register(customer);
         sendWelcomeEmail(customer);
