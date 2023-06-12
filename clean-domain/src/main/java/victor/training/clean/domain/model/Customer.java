@@ -1,6 +1,7 @@
 package victor.training.clean.domain.model;
 
 import lombok.Data;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class Customer {
   @GeneratedValue
   private Long id;
   private String name;
+  @JsonIgnore // presentation concern
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
