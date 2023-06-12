@@ -1,4 +1,5 @@
-1. Use Domain Objects in core logic
+1. Inspect `UserService` class
+2. Use Domain Objects in core logic
    - create a new dedicated data structure and map LdapUserDto to it
    - how to name the new class?
    - in what package to place it? what kind of structure is it: infra, domain, repo, dto ?
