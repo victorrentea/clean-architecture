@@ -18,14 +18,9 @@ import java.util.NoSuchElementException;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @GetMapping("customer/{id}")
-   public ResponseEntity<CustomerDto> findById(@PathVariable long id) {
-      try {
-         return ResponseEntity.ok(customerApplicationService.findById(id));
-      } catch (NoSuchElementException e) {
-         // TODO return 404 from a global exception handler
-         return ResponseEntity.notFound().build();
-      }
+   @PostMapping("customer")
+   public void register(@RequestBody @Validated CustomerDto dto) {
+      customerApplicationService.register(dto);
    }
 
    @Operation(description = "Search Customer")
@@ -34,20 +29,39 @@ public class CustomerController {
       return customerApplicationService.search(searchCriteria);
    }
 
-   @PostMapping("customer")
-   public void register(@RequestBody @Validated CustomerDto dto) {
-      customerApplicationService.register(dto);
+   @GetMapping("customer/{id}")
+   public CustomerDto findById(@PathVariable long id) {
+      return customerApplicationService.findById(id);
    }
 
+   //<editor-fold desc="GET returning ResponseEntity for 404 👎">
+//   @GetMapping("customer/{id}")
+//   public ResponseEntity<CustomerDto> findById(@PathVariable long id) {
+//      try {
+//         return ResponseEntity.ok(customerApplicationService.findById(id));
+//      } catch (NoSuchElementException e) {
+//         // TODO return 404 from a global @ExceptionHandler
+//         return ResponseEntity.notFound().build();
+//      }
+//   }
+   //</editor-fold>
+
    @PutMapping("customer/{id}")
-   public ResponseEntity<Void> update(@PathVariable long id, @RequestBody CustomerDto dto) {
-      try {
-         customerApplicationService.update(id, dto);
-         return ResponseEntity.ok().build();
-      } catch (NoSuchElementException e) {
-         // TODO return 404 from a global exception handler
-         return ResponseEntity.notFound().build();
-      }
+   public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
+      customerApplicationService.update(id, dto);
    }
+
+   //<editor-fold desc="PUT returning ResponseEntity for 404 👎">
+   //   @PutMapping("customer/{id}")
+//   public ResponseEntity<Void> update(@PathVariable long id, @RequestBody CustomerDto dto) {
+//      try {
+//         customerApplicationService.update(id, dto);
+//         return ResponseEntity.ok().build();
+//      } catch (NoSuchElementException e) {
+//         // TODO return 404 from a global @ExceptionHandler
+//         return ResponseEntity.notFound().build();
+//      }
+//   }
+   //</editor-fold>
 }
 

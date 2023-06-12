@@ -14,12 +14,11 @@ import java.util.List;
 public class UserService {
   private final LdapApi ldapApi;
 
-  public void importUserFromLdap(String targetUsername) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
+  public void importUserFromLdap(String userId) {
+    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(Long.valueOf(userId), null, null);
 
     if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Expected single user to match username "
-                                         + targetUsername + ", got: " + dtoList);
+      throw new IllegalArgumentException("Search for uid='"+ userId + "' returned too many results: " + dtoList);
     }
 
     LdapUserDto dto = dtoList.get(0);
@@ -38,7 +37,7 @@ public class UserService {
     fixUser(dto); // ⚠️ temporal coupling with the next line
 
     // ⚠️ 'uid' <- ugly name: in my domain a User has a 'username'
-    log.debug("More logic for " + fullName + " of id " + dto.getUid());
+    log.debug("More logic for " + fullName + " of id " + dto.getUname());
 
     // avoid calling this if the user has no email
     sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
@@ -47,9 +46,13 @@ public class UserService {
     sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
   }
 
+  public void f1() {
+
+  }
+
   private void fixUser(LdapUserDto dto) {
-    if (dto.getUid() == null) {
-      dto.setUid("anonymous"); // ⚠️ dirty hack
+    if (dto.getUname() == null) {
+      dto.setUname("anonymous"); // ⚠️ dirty hack
     }
   }
 

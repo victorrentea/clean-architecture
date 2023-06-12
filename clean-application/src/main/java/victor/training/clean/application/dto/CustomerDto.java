@@ -42,6 +42,9 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
 //    goldMemberRemovalReason = customer.getGoldMemberRemovalReason();
 //    legalEntityCode = customer.getLegalEntityCode();
 //    discountedVat = customer.isDiscountedVat();
+//    shippingAddressStreet = ?
+//    shippingAddressCity = ?
+//    shippingAddressZipCode = ?
 //    discountPercentage = ?
 //  }
 }

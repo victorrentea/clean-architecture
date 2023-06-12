@@ -26,6 +26,12 @@ paths:
       produces:
       - "*/*"
       parameters:
+      - name: "uid"
+        in: "query"
+        description: "username"
+        required: false
+        type: "integer"
+        format: int64
       - name: "fName"
         in: "query"
         description: "fName"
@@ -34,11 +40,6 @@ paths:
       - name: "lName"
         in: "query"
         description: "lName"
-        required: false
-        type: "string"
-      - name: "username"
-        in: "query"
-        description: "username"
         required: false
         type: "string"
       responses:
@@ -58,26 +59,33 @@ definitions:
   LdapUser:
     type: "object"
     properties:
+      uid:
+        type: "integer"
+        format: int64
+      uname:
+        type: "string"
+      fname:
+        type: "string"
+      lname:
+        type: "string"
       creationDate:
         type: "string"
       departmentId:
         type: "string"
+      countryId:
+        type: "string"
+      birthDate:
+        type: "string"
       emailAddresses:
         type: "array"
         items:
-          $ref: "#/definitions/LdapUserPhone"
-      fname:
-        type: "string"
+          $ref: "#/definitions/LdapUserEmail"
       language:
-        type: "string"
-      lname:
-        type: "string"
-      uid:
         type: "string"
       workEmail:
         type: "string"
     title: "LdapUser"
-  LdapUserPhone:
+  LdapUserEmail:
     type: "object"
     properties:
       type:

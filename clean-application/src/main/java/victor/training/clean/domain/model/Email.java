@@ -8,6 +8,7 @@ import lombok.Value;
 @Builder
 public class Email {
 	String to;
+	String cc;
 	String from;
 	String subject;
 	String body;
