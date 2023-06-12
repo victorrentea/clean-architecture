@@ -35,7 +35,7 @@ public class UserService {
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
 
     fixUser(dto); // ⚠️ temporal coupling with the next line
-    log.debug("More logic for " + fullName + " of id " + dto.getUid()); // ⚠️ 'uid' <- ugly; Users have a 'username' in my domain
+    log.debug("More logic for " + fullName + " of id " + dto.getUid().toLowerCase()); // ⚠️ 'uid' <- ugly; Users have a 'username' in my domain
 
     sendMailTo(fullName + " <" + dto.getWorkEmail() + ">"); // should this run if the user has no email ?
 

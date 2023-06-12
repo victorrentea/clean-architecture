@@ -19,6 +19,7 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
+//@ScaryEntity
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
@@ -38,10 +39,7 @@ public class CustomerApplicationService {
 
         // Several lines of domain logic operating on the state of a single Entity
         // TODO Where can I move it? PS: it's repeating somewhere else
-        int discountPercentage = 1;
-        if (customer.isGoldMember()) {
-            discountPercentage += 3;
-        }
+        int discountPercentage = customer.getDiscountPercentage();
 
         // long & boring mapping logic TODO move somewhere else
         return CustomerDto.builder()
@@ -52,9 +50,9 @@ public class CustomerApplicationService {
             .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
             .gold(customer.isGoldMember())
 
-            .shippingAddressStreet(customer.getShippingAddressStreet())
-            .shippingAddressCity(customer.getShippingAddressCity())
-            .shippingAddressZipCode(customer.getShippingAddressZipCode())
+            .shippingAddressStreet(customer.getShippingAddress().getStreet())
+            .shippingAddressCity(customer.getShippingAddress().getCity())
+            .shippingAddressZipCode(customer.getShippingAddress().getZipCode())
 
             .discountPercentage(discountPercentage)
             .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
@@ -142,10 +140,7 @@ public class CustomerApplicationService {
 
     private void sendGoldBenefitsEmail(Customer customer) {
         // repeated business rule! 😱
-        int discountPercentage = 1;
-        if (customer.isGoldMember()) {
-            discountPercentage += 3;
-        }
+        int discountPercentage = customer.getDiscountPercentage();
         Email email = Email.builder()
             .from("noreply@cleanapp.com")
             .to(customer.getEmail())

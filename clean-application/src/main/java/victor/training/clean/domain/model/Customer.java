@@ -1,15 +1,17 @@
 package victor.training.clean.domain.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
-import org.threeten.bp.jdk8.Jdk8Methods;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
+import static lombok.AccessLevel.NONE;
+
 
 @Entity
 @Data // TODO remove:
@@ -25,9 +27,9 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private Integer shippingAddressZipCode;
+  @Embedded
+  private ShippingAddress shippingAddress = new ShippingAddress();
+
   @ManyToOne
   private Country country;
 
@@ -38,4 +40,31 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  // 5-10 linii de logica de biz (nu de formatari/parsari)
+  // care depinde DOAR de starea entitatii asteia
+  public int getDiscountPercentage() {
+    int discountPercentage = 1;
+    if (goldMember) {
+      discountPercentage += 3;
+    }
+    return discountPercentage;
+  }
+
+
+
+
+//  enum Status {
+//    DRAFT,ACTIVE,DELETED
+//  }
+//  @Setter(NONE)
+//  private Status status = Status.DRAFT;
+//  @Setter(NONE)
+//  private String deletedBy; // userur
+//  public void delete(String user) {
+//    if (status != Status.ACTIVE) {
+//      throw new IllegalStateException();
+//    }
+//    status = Status.DELETED;
+//    deletedBy = requireNonNull(user);
+//  }
 }
