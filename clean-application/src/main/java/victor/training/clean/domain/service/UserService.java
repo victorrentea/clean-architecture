@@ -18,7 +18,8 @@ public class UserService {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
 
     if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Expected single user to match username " + targetUsername + ", got: " + dtoList);
+      throw new IllegalArgumentException("Expected single user to match username "
+                                         + targetUsername + ", got: " + dtoList);
     }
 
     LdapUserDto dto = dtoList.get(0);
@@ -31,21 +32,24 @@ public class UserService {
       checkNewUser(dto.getWorkEmail());
     }
 
-    // ⚠️ data mapping mixed with my core domain logic (imagine)
+    // ⚠️ data mapping mixed with my core domain logic
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
 
     fixUser(dto); // ⚠️ temporal coupling with the next line
-    log.debug("More logic for " + fullName + " of id " + dto.getUid()); // ⚠️ 'uid' <- ugly; Users have a 'username' in my domain
 
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">"); // should this run if the user has no email ?
+    // ⚠️ 'uid' <- ugly name: in my domain a User has a 'username'
+    log.debug("More logic for " + fullName + " of id " + dto.getUid());
 
-    // then later, again (⚠️ repeated logic):
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
+    // avoid calling this if the user has no email
+    sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
+
+    // ⚠️ the same logic repeats later
+    sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
   }
 
   private void fixUser(LdapUserDto dto) {
     if (dto.getUid() == null) {
-      dto.setUid("anonymous"); // ⚠️ mutability risks
+      dto.setUid("anonymous"); // ⚠️ dirty hack
     }
   }
 
