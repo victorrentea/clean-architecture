@@ -5,18 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import victor.training.clean.CleanException;
-import victor.training.clean.CleanException.ErrorCode;
+import victor.training.clean.domain.CleanException;
+import victor.training.clean.domain.CleanException.ErrorCode;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;

@@ -1,4 +1,4 @@
-package victor.training.clean;
+package victor.training.clean.domain;
 
 public class CleanException extends RuntimeException {
    public enum ErrorCode {

@@ -19,6 +19,10 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
 
   Long countryId; // *
 
+  String shippingAddressCity; // GET (updated via dedicated endpoint)
+  String shippingAddressStreet; // GET (updated via dedicated endpoint)
+  Integer shippingAddressZipCode; // GET (updated via dedicated endpoint)
+
   String creationDateStr; // GET (server-side assigned)
 
   boolean gold; // GET & PUT

@@ -15,8 +15,8 @@ import victor.training.clean.domain.model.Country;
 
 import java.util.List;
 
-// Brutal example of vertical slicing to enable flexible architecture per use-case: here- the lack of it :)
-@RepositoryRestResource
+// Brutal: expose CRUD directly from the DB - example of how VSA enables different architecture per use-case
+@RepositoryRestResource // generally avoid ⚠️
 public interface CountryRestRepo extends PagingAndSortingRepository<Country, Long> {
     List<Country> findByName(@Param("name") String name);
 }
@@ -39,3 +39,5 @@ class InitialCountries {
         countryRestRepo.save(new Country("France", "FR"));
     }
 }
+
+

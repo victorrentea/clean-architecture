@@ -20,15 +20,15 @@
      - Extract an interface from it (Refactor>Extract Interface)
      - Remove the annotations from the ApplicationService (they are 'inherited' from the implemented interface)
 3. De-clutter `CustomerApplicationService.findById` from
-   - The bit of reusable business logic (**it repeats!**)
-   - The boring mapping code
+   - The bit of **repeated** business logic
+   - The mapping boilerplate code
 4. Pragmatic Validation: customer.name.length has to have minimum 5 characters 
-   - Use annotation @Size(min = 5) instead of the `if` (remove it)
+   - Replace the `if` with a @Size(min = 5) annotation on the field
    - Check the `LargeIntegrationTest`
    - Set a custom message for the validation failure + check it in the LargeIntegrationTest
      - Hint: add to annotation `, message = "{customer-name-too-short}"` to use a message defined in src/main/resources/messages.properties
      - Check the error message in the test
 5. Shrink the `CustomerApplicationService.register`
-   - Push Mapping logic somewhere else
-   - Push Domain Logic to lower-level Domain Services in victor.training.clean.domain.service
+   - Move Mapping logic out
+   - Move Domain logic to lower-level Domain Services in victor.training.clean.domain.service
    - Make sure that the test passes: `victor.training.clean.ArchitectureTest#domain_independent_of_application`

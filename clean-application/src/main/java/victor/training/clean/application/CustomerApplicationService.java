@@ -8,7 +8,6 @@ import victor.training.clean.domain.model.*;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
-import victor.training.clean.domain.service.InsuranceService;
 import victor.training.clean.infra.AnafClient;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
@@ -37,7 +36,7 @@ public class CustomerApplicationService {
     public CustomerDto findById(long id) {
         Customer customer = customerRepo.findById(id).orElseThrow();
 
-        // Small domain logic operating on the state of a single Entity.
+        // Several lines of domain logic operating on the state of a single Entity
         // TODO Where can I move it? PS: it's repeating somewhere else
         int discountPercentage = 1;
         if (customer.isGoldMember()) {
@@ -52,6 +51,11 @@ public class CustomerApplicationService {
             .countryId(customer.getCountry().getId())
             .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
             .gold(customer.isGoldMember())
+
+            .shippingAddressStreet(customer.getShippingAddressStreet())
+            .shippingAddressCity(customer.getShippingAddressCity())
+            .shippingAddressZipCode(customer.getShippingAddressZipCode())
+
             .discountPercentage(discountPercentage)
             .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
             .legalEntityCode(customer.getLegalEntityCode())
@@ -122,7 +126,7 @@ public class CustomerApplicationService {
             auditRemovedGoldMember(customer.getName(), dto.getGoldMemberRemovalReason());
         }
 
-        customerRepo.save(customer); // not actually required within a @Transactional method if using ORM(JPA/Hibernate)
+        customerRepo.save(customer); // not required within a @Transactional method if using ORM(JPA/Hibernate)
         insuranceService.customerDetailsChanged(customer);
     }
 
