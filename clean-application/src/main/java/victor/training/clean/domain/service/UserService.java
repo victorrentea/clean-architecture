@@ -3,6 +3,7 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
@@ -22,32 +23,23 @@ public class UserService {
     }
 
     LdapUserDto dto = dtoList.get(0);
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+    User user = new User(dto.getUid(), dto.getWorkEmail(), fullName);
 
-    complexLogic(dto);
+    complexLogic(user);
   }
 
-  private void complexLogic(LdapUserDto dto) { // ⚠️ many extra useless fields
-    if (dto.getWorkEmail() != null) { // ⚠️ NPE in other unguarded places?
-      checkNewUser(dto.getWorkEmail());
-    }
+  private void complexLogic(User user) {
+    user.getEmail().ifPresent(this::checkNewUser);
 
-    // ⚠️ data mapping mixed with my core domain logic (imagine)
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+    log.debug("More logic for " + user.getFullName() + " of id " + user.getUsername().toLowerCase()); // ⚠️ 'uid' <- ugly; Users have a 'username' in my domain
 
-    fixUser(dto); // ⚠️ temporal coupling with the next line
-    log.debug("More logic for " + fullName + " of id " + dto.getUid().toLowerCase()); // ⚠️ 'uid' <- ugly; Users have a 'username' in my domain
-
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">"); // should this run if the user has no email ?
+    user.getEmailContact().ifPresent(this::sendMailTo);
 
     // then later, again (⚠️ repeated logic):
-    sendMailTo(fullName + " <" + dto.getWorkEmail() + ">");
+    user.getEmailContact().ifPresent(this::sendMailTo);
   }
 
-  private void fixUser(LdapUserDto dto) {
-    if (dto.getUid() == null) {
-      dto.setUid("anonymous"); // ⚠️ mutability risks
-    }
-  }
 
   private void sendMailTo(String emailContact) { // don't change this <- imagine it's library code
     //... implementation left out
