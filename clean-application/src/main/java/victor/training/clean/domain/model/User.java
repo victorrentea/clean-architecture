@@ -1,5 +1,6 @@
 package victor.training.clean.domain.model;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 

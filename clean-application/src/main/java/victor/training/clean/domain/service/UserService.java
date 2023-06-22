@@ -4,36 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
+import victor.training.clean.infra.LdapApiClient;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService {
-  private final LdapApi ldapApi;
+  private final LdapApiClient ldapApiClient;
 
   public void importUserFromLdap(String targetUsername) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
+    User user = ldapApiClient.loadUserByUsername(targetUsername);
 
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Expected single user to match username "
-                                         + targetUsername + ", got: " + dtoList);
-    }
-
-    LdapUserDto dto = dtoList.get(0);
-
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // Victor RENTEA
-    String username = dto.getUid() != null ? dto.getUid() : "anonymous";
-
-    User user = new User(username, dto.getWorkEmail(), fullName);
-
-    complexLogic(user);
-  }
-
-  private void complexLogic(User user) {
     user.getEmail().ifPresent(e->checkNewUser(e));
 
     log.debug("More logic for " + user.getFullName() + " of id " + user.getUsername());
@@ -43,6 +24,7 @@ public class UserService {
 
     user.asEmailContact().ifPresent(c->sendMailTo(c));
   }
+
 
   //  private void normalize(User dto) {
 //    if (dto.getUid() == null) {
