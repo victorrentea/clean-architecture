@@ -33,21 +33,25 @@ public class UserService {
     }
 
     // ⚠️ data mapping mixed with my core domain logic
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // Victor RENTEA
 
-    fixUser(dto); // ⚠️ temporal coupling with the next line
+    normalize(dto); // ⚠️ temporal coupling with the next line
 
     // ⚠️ 'uid' <- ugly name: in my domain a User has a 'username'
     log.debug("More logic for " + fullName + " of id " + dto.getUid());
 
     // avoid calling this if the user has no email
-    sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
+    sendMailTo(asEmailContact(dto, fullName));
 
     // ⚠️ the same logic repeats later
-    sendMailTo(fullName + " <" + dto.getWorkEmail().toLowerCase() + ">");
+    sendMailTo(asEmailContact(dto, fullName));
   }
 
-  private void fixUser(LdapUserDto dto) {
+  private static String asEmailContact(LdapUserDto dto, String fullName) {
+    return fullName + " <" + dto.getWorkEmail().toLowerCase() + ">";
+  }
+
+  private void normalize(LdapUserDto dto) {
     if (dto.getUid() == null) {
       dto.setUid("anonymous"); // ⚠️ dirty hack
     }

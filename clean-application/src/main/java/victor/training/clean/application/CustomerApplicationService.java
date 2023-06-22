@@ -33,15 +33,16 @@ public class CustomerApplicationService {
         return customerSearchRepo.search(searchCriteria);
     }
 
+    // DTO = API model, leaga Bounded Contexte diferite (app)
+            // daca le schibi, te cauta clientii cu sapa
+    //   parte din OpenAPI/swagger
+    // vs VO care traiesc doar in Domain
     public CustomerDto findById(long id) {
         Customer customer = customerRepo.findById(id).orElseThrow();
 
         // Several lines of domain logic operating on the state of a single Entity
         // TODO Where can I move it? PS: it's repeating somewhere else
-        int discountPercentage = 1;
-        if (customer.isGoldMember()) {
-            discountPercentage += 3;
-        }
+        int discountPercentage = customer.getDiscountPercentage();
 
         // long & boring mapping logic TODO move somewhere else
         return CustomerDto.builder()
@@ -52,9 +53,10 @@ public class CustomerApplicationService {
             .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
             .gold(customer.isGoldMember())
 
-            .shippingAddressStreet(customer.getShippingAddressStreet())
-            .shippingAddressCity(customer.getShippingAddressCity())
-            .shippingAddressZipCode(customer.getShippingAddressZipCode())
+            // MAGIC:
+            .shippingAddressStreet(customer.getShippingAddress().getStreet())
+            .shippingAddressCity(customer.getShippingAddress().getCity())
+            .shippingAddressZipCode(customer.getShippingAddress().getZipCode())
 
             .discountPercentage(discountPercentage)
             .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
@@ -142,10 +144,7 @@ public class CustomerApplicationService {
 
     private void sendGoldBenefitsEmail(Customer customer) {
         // repeated business rule! 😱
-        int discountPercentage = 1;
-        if (customer.isGoldMember()) {
-            discountPercentage += 3;
-        }
+        int discountPercentage = customer.getDiscountPercentage();
         Email email = Email.builder()
             .from("noreply@cleanapp.com")
             .to(customer.getEmail())
