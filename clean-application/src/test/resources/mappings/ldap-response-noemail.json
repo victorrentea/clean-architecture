@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/ldap/user?username=NOEMAIL"
+    "url": "/ldap/user?un=NOEMAIL"
   },
   "response": {
     "status": 200,
@@ -9,7 +9,7 @@
       {
         "fname": "John",
         "lname": "Doe",
-        "uid": "jdoe",
+        "un": "jdoe",
         "departmentId": "2"
       }
     ],

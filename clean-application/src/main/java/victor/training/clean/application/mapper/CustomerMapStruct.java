@@ -7,7 +7,7 @@ import victor.training.clean.application.dto.CustomerDto;
 
 @Mapper(componentModel = "spring")
 public interface CustomerMapStruct {
-    @Mapping(target = "creationDateStr", source = "creationDate", dateFormat = "yyyy-MM-dd")
+    @Mapping(target = "createdDateStr", source = "createdDate", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "countryId", source = "country.id")
     CustomerDto toDto(Customer customer);
 }

@@ -4,11 +4,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Value
 @Builder
 public class Email {
 	String to;
-	String cc;
+	List<String> cc = new ArrayList<>();
 	String from;
 	String subject;
 	String body;

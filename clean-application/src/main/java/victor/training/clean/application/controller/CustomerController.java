@@ -1,14 +1,14 @@
-package victor.training.clean.controller;
+package victor.training.clean.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import victor.training.clean.application.CustomerApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.application.service.CustomerApplicationService;
 
 import java.util.List;
 import java.util.NoSuchElementException;

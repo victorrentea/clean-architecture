@@ -1,7 +1,6 @@
 package victor.training.clean.domain.model;
 
 import lombok.Data;
-import org.threeten.bp.jdk8.Jdk8Methods;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +30,8 @@ public class Customer {
   @ManyToOne
   private Country country;
 
-  private LocalDate creationDate;
+  private LocalDate createdDate;
+  private String createdByUsername;
   private boolean goldMember;
   private String goldMemberRemovalReason;
 

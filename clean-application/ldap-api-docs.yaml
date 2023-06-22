@@ -26,11 +26,11 @@ paths:
       produces:
       - "*/*"
       parameters:
-      - name: "uid"
+      - name: "un"
         in: "query"
-        description: "username"
+        description: "user name"
         required: false
-        type: "integer"
+        type: "string"
         format: int64
       - name: "fName"
         in: "query"
@@ -62,7 +62,7 @@ definitions:
       uid:
         type: "integer"
         format: int64
-      uname:
+      un:
         type: "string"
       fname:
         type: "string"

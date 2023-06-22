@@ -1,4 +1,4 @@
-package victor.training.clean.application.repo;
+package victor.training.clean.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

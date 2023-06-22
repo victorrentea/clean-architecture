@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/ldap/user?un=FULL"
+    "url": "/ldap/user?un=NOUID"
   },
   "response": {
     "status": 200,
@@ -9,8 +9,8 @@
       {
         "fname": "John",
         "lname": "Doe",
-        "workEmail": "jdoe@cleanApp.com",
-        "un": "jdoe",
+        "workEmail": "jDoe@corp.com",
+        "un": "s183",
         "departmentId": "2"
       }
     ],

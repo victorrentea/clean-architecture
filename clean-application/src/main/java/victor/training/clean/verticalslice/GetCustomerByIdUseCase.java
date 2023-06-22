@@ -7,12 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
-import javax.validation.constraints.Size;
 import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
@@ -42,7 +39,7 @@ public class GetCustomerByIdUseCase {
               .name(customer.getName())
               .email(customer.getEmail())
               .siteId(customer.getCountry().getId())
-              .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+              .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
               .build();
   }
 }

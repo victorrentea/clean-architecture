@@ -3,7 +3,6 @@ package victor.training.clean.application.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
-import victor.training.clean.domain.model.Customer;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -23,7 +22,7 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
   String shippingAddressStreet; // GET (updated via dedicated endpoint)
   Integer shippingAddressZipCode; // GET (updated via dedicated endpoint)
 
-  String creationDateStr; // GET (server-side assigned)
+  String createdDateStr; // GET (server-side assigned)
 
   boolean gold; // GET & PUT
   String goldMemberRemovalReason; // GET & PUT if gold=true->false

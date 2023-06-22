@@ -1,4 +1,4 @@
-package victor.training.clean.application;
+package victor.training.clean.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,15 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
-import victor.training.clean.application.repo.CustomerSearchRepo;
+import victor.training.clean.application.service.CustomerSearchRepo;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
-import victor.training.clean.infra.EmailSender;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +26,7 @@ import static java.util.Objects.requireNonNull;
 @ApplicationService // custom annotation refining the classic @Service
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
-  private final EmailSender emailSender;
+  private final NotificationService notificationService;
   private final CustomerSearchRepo customerSearchRepo;
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
@@ -46,13 +45,13 @@ public class CustomerApplicationService {
       discountPercentage += 3;
     }
 
-    // long & boring mapping logic TODO move somewhere else
+    // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
-        .creationDateStr(customer.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
         .shippingAddressStreet(customer.getShippingAddressStreet())
@@ -71,12 +70,12 @@ public class CustomerApplicationService {
     Customer customer = new Customer();
     customer.setEmail(dto.getEmail());
     customer.setName(dto.getName());
-    customer.setCreationDate(LocalDate.now());
+    customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.getCountryId()));
     customer.setLegalEntityCode(dto.getLegalEntityCode());
 
-    // input validation
-    if (customer.getName().length() < 5) { // TODO other places to move this validation to?
+    // request payload validation
+    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
       throw new IllegalArgumentException("The customer name is too short");
     }
 
@@ -102,7 +101,7 @@ public class CustomerApplicationService {
     log.info("More Business Logic (imagine)");
     log.info("More Business Logic (imagine)");
     customerRepo.save(customer);
-    sendWelcomeEmail(customer);
+    notificationService.sendWelcomeEmail(customer, "1"); // userId from JWT token via SecuritContext
   }
 
   private String normalize(String s) {
@@ -120,7 +119,7 @@ public class CustomerApplicationService {
     if (!customer.isGoldMember() && dto.isGold()) {
       // enable gold member status
       customer.setGoldMember(true);
-      sendGoldBenefitsEmail(customer);
+      notificationService.sendGoldBenefitsEmail(customer, "1"); // userId from JWT token via SecuritContext
     }
 
     if (customer.isGoldMember() && !dto.isGold()) {
@@ -134,32 +133,6 @@ public class CustomerApplicationService {
     insuranceService.customerDetailsChanged(customer);
   }
 
-  private void sendWelcomeEmail(Customer customer) {
-    Email email = Email.builder()
-        .from("noreply@cleanapp.com")
-        .to(customer.getEmail())
-        .subject("Account created for")
-        .body("Hi " + customer.getName() + ",\nWelcome to our clean app!\nSincerely, Team")
-        .build();
-    emailSender.sendEmail(email);
-  }
-
-  private void sendGoldBenefitsEmail(Customer customer) {
-    // repeated business rule! 😱
-    int discountPercentage = 1;
-    if (customer.isGoldMember()) {
-      discountPercentage += 3;
-    }
-    Email email = Email.builder()
-        .from("noreply@cleanapp.com")
-        .to(customer.getEmail())
-        .subject("Welcome to our Gold membership!")
-        .body("Here are your perks:\n" +
-              "- A special discount of " + discountPercentage + "%\n" +
-              "...")
-        .build();
-    emailSender.sendEmail(email);
-  }
 
   private void auditRemovedGoldMember(String customerName, String reason) {
     log.info("Kafka.send ( {name:" + customerName + ", reason:" + reason + "} )");
