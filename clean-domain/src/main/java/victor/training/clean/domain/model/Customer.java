@@ -1,6 +1,7 @@
 package victor.training.clean.domain.model;
 
 import lombok.Data;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -87,7 +88,7 @@ class FullName {
 //    return id;
 //  }
 //}
-@Entity
+@Entity // ok pe domain
 @Data // TODO remove:
 // Avoid lombok @Entity on ORM Domain @Entity
 // 1) hashCode on @Id [ORM]
@@ -120,6 +121,7 @@ public class Customer {
   @ManyToOne
   private Country country;
 
+//  @JsonIgnore// NOT ok in domain
   private LocalDate creationDate;
 //  private Status status;
   private boolean goldMember;
@@ -144,6 +146,10 @@ public class Customer {
     }
     return discountPercentage;
   }
+
+//  public victor.training.clean.application.dto.CustomerDto toResponse() {
+//    // nu compileaza. Alternativ, ArchUnit ar fi crapat
+//  }
 
 //  public void method() {
 //    return String.format("%s %d %d %.4f") // doamne fereste - e presentation logica
