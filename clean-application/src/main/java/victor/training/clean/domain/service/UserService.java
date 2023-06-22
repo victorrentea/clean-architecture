@@ -3,6 +3,7 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
@@ -24,38 +25,30 @@ public class UserService {
 
     LdapUserDto dto = dtoList.get(0);
 
-    complexLogic(dto);
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // Victor RENTEA
+    String username = dto.getUid() != null ? dto.getUid() : "anonymous";
+
+    User user = new User(username, dto.getWorkEmail(), fullName);
+
+    complexLogic(user);
   }
 
-  private void complexLogic(LdapUserDto dto) { // ⚠️ many extra useless fields
-    if (dto.getWorkEmail() != null) { // ⚠️ NPE in other unguarded places?
-      checkNewUser(dto.getWorkEmail());
-    }
+  private void complexLogic(User user) {
+    user.getEmail().ifPresent(e->checkNewUser(e));
 
-    // ⚠️ data mapping mixed with my core domain logic
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase(); // Victor RENTEA
-
-    normalize(dto); // ⚠️ temporal coupling with the next line
-
-    // ⚠️ 'uid' <- ugly name: in my domain a User has a 'username'
-    log.debug("More logic for " + fullName + " of id " + dto.getUid());
+    log.debug("More logic for " + user.getFullName() + " of id " + user.getUsername());
 
     // avoid calling this if the user has no email
-    sendMailTo(asEmailContact(dto, fullName));
+    user.asEmailContact().ifPresent(c->sendMailTo(c));
 
-    // ⚠️ the same logic repeats later
-    sendMailTo(asEmailContact(dto, fullName));
+    user.asEmailContact().ifPresent(c->sendMailTo(c));
   }
 
-  private static String asEmailContact(LdapUserDto dto, String fullName) {
-    return fullName + " <" + dto.getWorkEmail().toLowerCase() + ">";
-  }
-
-  private void normalize(LdapUserDto dto) {
-    if (dto.getUid() == null) {
-      dto.setUid("anonymous"); // ⚠️ dirty hack
-    }
-  }
+  //  private void normalize(User dto) {
+//    if (dto.getUid() == null) {
+//      dto.setUid("anonymous"); // ⚠️ dirty hack
+//    }
+//  }
 
   private void sendMailTo(String emailContact) { // don't change this <- imagine it's library code
     //... implementation left out
