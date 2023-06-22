@@ -13,6 +13,7 @@ public class UserService {
 
   public void importUserFromLdap(String targetUsername) {
     User user = userProvider.loadUserByUsername(targetUsername);
+//    victor.training.clean.infra.LdapUserDto dto;
 
     user.getEmail().ifPresent(e->checkNewUser(e));
 
