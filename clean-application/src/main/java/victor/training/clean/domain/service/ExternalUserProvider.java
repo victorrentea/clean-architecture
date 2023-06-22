@@ -2,6 +2,6 @@ package victor.training.clean.domain.service;
 
 import victor.training.clean.domain.model.User;
 
-public interface LdapApiClientInterface {
+public interface ExternalUserProvider {
   User loadUserByUsername(String targetUsername);
 }

@@ -3,13 +3,13 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.LdapApiClientInterface;
+import victor.training.clean.domain.service.ExternalUserProvider;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Adapter
-public class LdapApiClient implements LdapApiClientInterface {
+public class LdapApiClient implements ExternalUserProvider {
   private final LdapApi ldapApi;
 
 

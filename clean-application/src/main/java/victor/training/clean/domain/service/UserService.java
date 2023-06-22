@@ -9,10 +9,10 @@ import victor.training.clean.domain.model.User;
 @Slf4j
 @Service
 public class UserService {
-  private final LdapApiClientInterface ldapApiClient;
+  private final ExternalUserProvider userProvider;
 
   public void importUserFromLdap(String targetUsername) {
-    User user = ldapApiClient.loadUserByUsername(targetUsername);
+    User user = userProvider.loadUserByUsername(targetUsername);
 
     user.getEmail().ifPresent(e->checkNewUser(e));
 
