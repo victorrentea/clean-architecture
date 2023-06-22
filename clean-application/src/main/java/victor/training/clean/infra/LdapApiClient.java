@@ -3,15 +3,17 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.LdapApiClientInterface;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Adapter
-public class LdapApiClient {
+public class LdapApiClient implements LdapApiClientInterface {
   private final LdapApi ldapApi;
 
 
+  @Override
   public User loadUserByUsername(String targetUsername) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(null, null, targetUsername.toUpperCase());
 
