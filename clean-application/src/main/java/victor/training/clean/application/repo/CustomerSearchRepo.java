@@ -19,6 +19,11 @@ import static java.lang.String.join;
 public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
+   // Daca si din domain vrei sa o folosesti searchul asta:
+   // 1) o refactorezi sa scoti Entitati de Domain in loc de DTO din DB si transformi search criteria in VO din Domain. muti repo in domain
+   // 2) iti faci alt search method in repo de domain daca cauti dupa 1-3 criterii fixe mereu.⭐️
+
+   // Use-case optimized query - cheating : scot din DB direct DTO
    public List<SearchCustomerResponse> search(SearchCustomerCriteria criteria) {
       String jpql = "SELECT new victor.training.clean.application.dto.SearchCustomerResponse(c.id, c.name)" +
                     " FROM Customer c " +

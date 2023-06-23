@@ -4,7 +4,6 @@ import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.Time;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +12,12 @@ import victor.training.clean.domain.model.*;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.domain.service.RegisterCustomerService;
-import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
+import victor.training.clean.domain.service.EmailService;
+import victor.training.clean.infra.EmailSenderInternalSmtp;
 
 import java.util.List;
 
@@ -27,13 +28,15 @@ import static java.util.Objects.requireNonNull;
 @ApplicationService // custom annotation refining the classic @Service
 public class CustomerApplicationService {
     private final CustomerRepo customerRepo;
-    private final EmailSender emailSender;
+    private final EmailService emailSender;
     private final CustomerSearchRepo customerSearchRepo;
-    private final InsuranceService insuranceService;
+    private final InsuranceApplicationService insuranceService;
     private final RegisterCustomerService customerService;
+    private final NotificationService notificationService;
+//    EmailSenderInternalSmtp
 
     // SCOPUL unui ApplicationService este sa orchestreze use-caseurile functionand ca un Facade
-    // un Facade design pattern prin def isi ia multa cuplare cu altii
+    // un Facade design pattern prin def isi ia multa cuplare cu altii ca sa-i scuteasca pe altii sa stie de fratii lor
 
     // De obicei in Applicaton service gasesti mai multe use-caseuri
     // ALTERNATIVA : Vertical Slice Architecture (VSA) : 1 endpoint / clasa
@@ -65,20 +68,8 @@ public class CustomerApplicationService {
     @PostMapping("customer")
     public void register(@RequestBody @Validated CustomerDto dto) {
         Customer customer = dto.toEntity();
-//        adLimitService.checkCustomerLimitReacahed();
         customerService.register(customer);
-//        kafka.sendPlayEvent()
-        sendWelcomeEmail(customer);
-    }
-
-    private void sendWelcomeEmail(Customer customer) {
-        Email email = Email.builder()
-            .from("noreply@cleanapp.com")
-            .to(customer.getEmail())
-            .subject("Account created for")
-            .body("Welcome to our world, " + customer.getName() + ". You'll like it! Sincerely, Team")
-            .build();
-        emailSender.sendEmail(email);
+        notificationService.sendWelcomeEmail(customer);
     }
 
     @Transactional

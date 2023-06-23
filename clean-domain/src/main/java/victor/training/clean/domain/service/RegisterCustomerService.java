@@ -17,6 +17,7 @@ public class RegisterCustomerService { // verb/action not noun (OOP)
 
   public void register(Customer customer) {
     // business rule
+//    search(criteria.setName(customer.getName()))
     if (customerRepo.existsByEmail(customer.getEmail())) {
       throw new IllegalArgumentException("A customer with this email is already registered!");
       // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
