@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.common.ApplicationService;
-import victor.training.clean.domain.model.*;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
@@ -17,7 +16,6 @@ import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.application.repo.CustomerSearchRepo;
 import victor.training.clean.domain.service.EmailService;
-import victor.training.clean.infra.EmailSenderInternalSmtp;
 
 import java.util.List;
 

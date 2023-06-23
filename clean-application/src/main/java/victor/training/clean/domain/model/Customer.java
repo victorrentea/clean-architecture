@@ -1,16 +1,14 @@
 package victor.training.clean.domain.model;
 
 import lombok.Data;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
-import java.util.Objects;
 
-  class CompanyShippingAddress { // nu 5 ??
+class CompanyShippingAddress { // nu 5 ??
   // - pt ca e posibil sa devina f diferite cu timp
   // - lizibilitate (sa nu alerg prin 3 fisiere dupa campuri)
   // - vreau sa cuplez intre ele Customer cu Company ?
