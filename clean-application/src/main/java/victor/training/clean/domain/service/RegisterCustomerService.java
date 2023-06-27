@@ -3,8 +3,8 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.model.AnafResult;
-import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.customer.AnafResult;
+import victor.training.clean.domain.model.customer.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
 @Slf4j // Lombok, dovada ca Java e naspa, motivul pt care java inca e tolerat

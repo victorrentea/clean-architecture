@@ -5,7 +5,7 @@
 //import org.springframework.http.ResponseEntity;
 //import org.springframework.web.bind.annotation.*;
 //import victor.training.clean.application.dto.CustomerDto;
-//import victor.training.clean.domain.model.Customer;
+//import victor.training.clean.domain.model.customer.Customer;
 //import victor.training.clean.domain.repo.CustomerRepo;
 //
 ////@RestController

@@ -1,6 +1,7 @@
-package victor.training.clean.domain.model;
+package victor.training.clean.domain.model.insurance;
 
 import lombok.Data;
+import victor.training.clean.domain.model.insurance.InsurancePolicy;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

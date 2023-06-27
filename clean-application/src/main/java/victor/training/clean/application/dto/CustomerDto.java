@@ -3,8 +3,8 @@ package victor.training.clean.application.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
-import victor.training.clean.domain.model.Country;
-import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.customer.Country;
+import victor.training.clean.domain.model.customer.Customer;
 
 import javax.validation.constraints.Size;
 import java.time.LocalDate;

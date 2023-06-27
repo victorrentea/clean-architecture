@@ -13,8 +13,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.application.dto.SearchCustomerCriteria.SearchCustomerCriteriaBuilder;
 import victor.training.clean.application.dto.SearchCustomerResponse;
-import victor.training.clean.domain.model.Country;
-import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.customer.Country;
+import victor.training.clean.domain.model.customer.Customer;
 import victor.training.clean.domain.repo.CountryRepo;
 import victor.training.clean.domain.repo.CustomerRepo;
 

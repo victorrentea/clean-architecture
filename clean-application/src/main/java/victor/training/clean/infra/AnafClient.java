@@ -2,7 +2,7 @@ package victor.training.clean.infra;
 
 import io.micrometer.core.annotation.Timed;
 import org.springframework.stereotype.Component;
-import victor.training.clean.domain.model.AnafResult;
+import victor.training.clean.domain.model.customer.AnafResult;
 import victor.training.clean.domain.service.AnafClientInterface;
 
 @Component
