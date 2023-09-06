@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import victor.training.clean.application.dto.CreateCustomerRequest;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
@@ -30,7 +31,7 @@ public class CustomerApplicationService {
   private final NotificationService notificationService;
   private final CustomerSearchRepo customerSearchRepo;
   private final InsuranceService insuranceService;
-  private final IAnafClient anafClient;
+  private final RegisterCustomerService registerCustomerService;
 
   @Operation(description = "Search Customer")
   @PostMapping("customer/search")
@@ -54,7 +55,7 @@ public class CustomerApplicationService {
 
   @Transactional
   @PostMapping("customer")
-  public void register(@RequestBody @Validated CustomerDto dto) {
+  public void register(@RequestBody @Validated CreateCustomerRequest dto) {
     Customer customer = dto.toEntity(); // or mapper
     // Facade design pattern orchestrates the use-case
     // provides a high-level view of the STEPS of this UC
@@ -63,33 +64,43 @@ public class CustomerApplicationService {
     notificationService.sendWelcomeEmail(customer, "1"); // userId from JWT token via SecuritContext
   }
 
-  private final RegisterCustomerService registerCustomerService;
 
 
   @Transactional
+  @PutMapping("customer/{id}/gold/activate")
+  public void setGold(@PathVariable long id) {
+    Customer old = customerRepo.findById(id).orElseThrow();
+    if (old.isGoldMember()) {
+      throw new IllegalStateException("Already gold");
+    }
+    // enable gold member status
+    old.setGoldMember(true);
+    notificationService.sendGoldBenefitsEmail(old, "1"); // userId from JWT token via SecuritContext
+  }
+  @Transactional
   @PutMapping("customer/{id}")
-  public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
-    Customer customer = customerRepo.findById(id).orElseThrow();
+  public void update(@PathVariable long id, @RequestBody @Validated CustomerDto dto) {
+    Customer old = customerRepo.findById(id).orElseThrow();
     // CRUD part
-    customer.setName(dto.getName());
-    customer.setEmail(dto.getEmail());
-    customer.setCountry(new Country().setId(dto.getCountryId()));
+    old.setName(dto.getName());
+    old.setEmail(dto.getEmail());
+    old.setCountry(new Country().setId(dto.getCountryId()));
 
-    if (!customer.isGoldMember() && dto.isGold()) {
+    if (!old.isGoldMember() && dto.isGold()) {
       // enable gold member status
-      customer.setGoldMember(true);
-      notificationService.sendGoldBenefitsEmail(customer, "1"); // userId from JWT token via SecuritContext
+      old.setGoldMember(true);
+      notificationService.sendGoldBenefitsEmail(old, "1"); // userId from JWT token via SecuritContext
     }
 
-    if (customer.isGoldMember() && !dto.isGold()) {
+    if (old.isGoldMember() && !dto.isGold()) {
       // remove gold member status
-      customer.setGoldMember(false);
-      customer.setGoldMemberRemovalReason(requireNonNull(dto.getGoldMemberRemovalReason()));
-      auditRemovedGoldMember(customer.getName(), dto.getGoldMemberRemovalReason());
+      old.setGoldMember(false);
+      old.setGoldMemberRemovalReason(requireNonNull(dto.getGoldMemberRemovalReason()));
+      auditRemovedGoldMember(old.getName(), dto.getGoldMemberRemovalReason());
     }
 
-    customerRepo.save(customer); // not required within a @Transactional method if using ORM(JPA/Hibernate)
-    insuranceService.customerDetailsChanged(customer);
+    customerRepo.save(old); // not required within a @Transactional method if using ORM(JPA/Hibernate)
+    insuranceService.customerDetailsChanged(old);
   }
 
 
