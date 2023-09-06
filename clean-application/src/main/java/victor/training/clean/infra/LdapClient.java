@@ -3,8 +3,7 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.ILdapClient;
 
 import java.util.List;
 
@@ -13,10 +12,11 @@ import java.util.List;
 //     also includes mapping (sometimes can be extracted in a seaparate "Mapper" class)
 @RequiredArgsConstructor
 @Component
-public class LdapClient {
+public class LdapClient implements ILdapClient {
   private final LdapApi ldapApi;
 
   // the public api of the adapter does not LEAK external concepts (eg LdapUserDto). Only uses my domain objects!!! (or primitives)
+  @Override
   public User loadUserFromLdap(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
