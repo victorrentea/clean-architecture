@@ -2,16 +2,12 @@ package victor.training.clean.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
+import victor.training.clean.infra.LdapClient;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -24,9 +20,6 @@ public class NotificationService {
     // ⚠️ external DTO directly used inside my core logic
     //  TODO convert it into a new dedicated class - a Value Object (VO)
     User user = ldapClient.loadUserFromLdap(userId);
-
-    // todo transform from LdapUserDto to User and use User below this line ------
-
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
