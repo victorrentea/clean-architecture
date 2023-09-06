@@ -14,9 +14,10 @@ import static lombok.AccessLevel.NONE;
 @Entity
 @Data // TODO remove:
 // Avoid lombok @Entity on ORM Domain @Entity
-// 1) hashCode on @Id [ORM]
+// 1) hashCode on @Id [ORM]> avoid on @Entity
 // 2) toString lazy-loading collections [ORM]
-// 3) setters for everything = lack of encapsulation
+// 3) setters for everything = lack of encapsulation = highschool
+// instead: use only @Getter
 public class Customer {
   @Id
   @GeneratedValue
@@ -34,6 +35,9 @@ public class Customer {
   @ManyToOne
   private Country country;
 
+
+
+//  private UserAction{User,Date} activation;
   @Setter(NONE)
   private LocalDate activateDate;
   @Setter(NONE)
