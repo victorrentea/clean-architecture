@@ -16,16 +16,13 @@ import java.util.List;
 public class LdapClient {
   private final LdapApi ldapApi;
 
-  // under this line, behold: SHIT !!! ------------------------------
-
   public User loadUserFromLdap(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
       throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
     }
-    User user = convert(dtoList.get(0));
-    return user;
+    return convert(dtoList.get(0));
   }
 
   private static User convert(LdapUserDto userDto) {
