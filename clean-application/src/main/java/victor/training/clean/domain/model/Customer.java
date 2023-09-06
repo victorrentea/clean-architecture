@@ -1,14 +1,15 @@
 package victor.training.clean.domain.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
+import static lombok.AccessLevel.NONE;
 
 @Entity
 @Data // TODO remove:
@@ -32,6 +33,17 @@ public class Customer {
 //  private Integer shippingAddressZipCode;
   @ManyToOne
   private Country country;
+
+  @Setter(NONE)
+  private LocalDate activateDate;
+  @Setter(NONE)
+  private String activateByUsername;
+
+  // mutator guarding the Biz rule: when activated, a Customer has date and author.
+  public void activate(String user) {
+    activateDate = LocalDate.now();
+    activateByUsername = user;
+  }
 
   private LocalDate createdDate;
   private String createdByUsername;
