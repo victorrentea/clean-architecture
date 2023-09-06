@@ -16,6 +16,7 @@ import java.util.List;
 public class LdapClient {
   private final LdapApi ldapApi;
 
+  // the public api of the adapter does not LEAK external concepts (eg LdapUserDto). Only uses my domain objects!!! (or primitives)
   public User loadUserFromLdap(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
