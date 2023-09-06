@@ -12,12 +12,14 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapClient ldapClient;
+  private final ExternalUserProvider userProvider; // "Leaking ABSTRACTION" - PR review comment from an architect with a fine nose
+  // abstraction = hide details
+  // why do I have to know here that the users are coming from LDAP ?!
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used inside my core logic
     //  TODO convert it into a new dedicated class - a Value Object (VO)
-    User user = ldapClient.loadUserFromLdap(userId);
+    User user = userProvider.loadUserFromLdap(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -40,7 +42,7 @@ public class NotificationService {
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    User user = ldapClient.loadUserFromLdap(userId);
+    User user = userProvider.loadUserFromLdap(userId);
 
     int discountPercentage = customer.getDiscountPercentage();
 
