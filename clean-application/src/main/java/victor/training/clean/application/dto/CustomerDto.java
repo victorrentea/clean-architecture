@@ -3,7 +3,10 @@ package victor.training.clean.application.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+
+import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -47,5 +50,15 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
     shippingAddressCity = customer.getShippingAddress().getCity();
     shippingAddressZipCode = customer.getShippingAddress().getZipCode();
     discountPercentage = customer.getDiscountPercentage();
+  }
+
+  public Customer toEntity() {
+    Customer customer = new Customer();
+    customer.setEmail(getEmail());
+    customer.setName(getName());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(getCountryId()));
+    customer.setLegalEntityCode(getLegalEntityCode());
+    return customer;
   }
 }

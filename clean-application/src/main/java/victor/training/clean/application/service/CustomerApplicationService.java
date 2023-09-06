@@ -10,16 +10,13 @@ import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
 import victor.training.clean.common.ApplicationService;
-import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.ShippingAddress;
 import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.infra.AnafClient;
+import victor.training.clean.domain.service.IAnafClient;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -33,7 +30,7 @@ public class CustomerApplicationService {
   private final NotificationService notificationService;
   private final CustomerSearchRepo customerSearchRepo;
   private final InsuranceService insuranceService;
-  private final AnafClient anafClient;
+  private final IAnafClient anafClient;
 
   @Operation(description = "Search Customer")
   @PostMapping("customer/search")
@@ -58,41 +55,16 @@ public class CustomerApplicationService {
   @Transactional
   @PostMapping("customer")
   public void register(@RequestBody @Validated CustomerDto dto) {
-    Customer customer = new Customer();
-    customer.setEmail(dto.getEmail());
-    customer.setName(dto.getName());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.getCountryId()));
-    customer.setLegalEntityCode(dto.getLegalEntityCode());
+    Customer customer = dto.toEntity(); // or mapper
+    // Facade design pattern orchestrates the use-case
+    // provides a high-level view of the STEPS of this UC
+    registerCustomerService.register(customer);
 
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode() != null) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
     notificationService.sendWelcomeEmail(customer, "1"); // userId from JWT token via SecuritContext
   }
 
-  private String normalize(String s) {
-    return s.toLowerCase().replace("\\s+", "");
-  }
+  private final RegisterCustomerService registerCustomerService;
+
 
   @Transactional
   @PutMapping("customer/{id}")
