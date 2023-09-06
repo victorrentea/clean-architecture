@@ -11,8 +11,8 @@ import victor.training.clean.domain.model.User;
 @Slf4j
 @Service
 public class NotificationService {
-  private final IEmailSender emailSender;
-  private final ILdapClient ldapClient;
+  private final EmailSender emailSender;
+  private final LdapClient ldapClient;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used inside my core logic
