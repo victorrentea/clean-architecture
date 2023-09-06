@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
@@ -23,6 +24,7 @@ public class Customer {
   @GeneratedValue
   private Long id;
   @NotNull // auto-validated by hibernate at INSERT/UPDATE (repo.save, auto-flush changes) + on DTOs also
+  @Size(min = 5)
   private String name;
   private String email;
 

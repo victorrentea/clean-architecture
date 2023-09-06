@@ -3,6 +3,8 @@ package victor.training.clean.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
@@ -35,7 +37,8 @@ public class CustomerApplicationService {
     return customerSearchRepo.search(searchCriteria);
   }
 
-  public CustomerDto findById(long id) {
+  @GetMapping("customer/{id}")
+  public CustomerDto findById(@PathVariable long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
     // Several lines of domain logic operating on the state of a single Entity
@@ -70,10 +73,10 @@ public class CustomerApplicationService {
     customer.setCountry(new Country().setId(dto.getCountryId()));
     customer.setLegalEntityCode(dto.getLegalEntityCode());
 
-    // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
+//    // request payload validation
+//    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
+//      throw new IllegalArgumentException("The customer name is too short");
+//    }
 
     // business rule/validation
     if (customerRepo.existsByEmail(customer.getEmail())) {
