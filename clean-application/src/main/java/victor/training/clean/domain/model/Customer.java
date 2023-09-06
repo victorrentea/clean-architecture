@@ -1,11 +1,11 @@
 package victor.training.clean.domain.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
@@ -20,13 +20,16 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @NotNull // auto-validated by hibernate at INSERT/UPDATE (repo.save, auto-flush changes) + on DTOs also
   private String name;
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private Integer shippingAddressZipCode;
+  @Embedded
+  private ShippingAddress shippingAddress; // NO CHANGE TO DB schema was caused.
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private Integer shippingAddressZipCode;
   @ManyToOne
   private Country country;
 
@@ -38,4 +41,11 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public int getDiscountPercentage() {
+    int discountPercentage = 1;
+    if (goldMember) {
+      discountPercentage += 3;
+    }
+    return discountPercentage;
+  }
 }

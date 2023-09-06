@@ -16,6 +16,7 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
 
   String email; // *
 
+
   Long countryId; // *
 
   String shippingAddressCity; // GET (updated via dedicated endpoint)

@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
-import victor.training.clean.application.service.CustomerSearchRepo;
 import victor.training.clean.common.ApplicationService;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
@@ -40,10 +39,6 @@ public class CustomerApplicationService {
 
     // Several lines of domain logic operating on the state of a single Entity
     // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = 1;
-    if (customer.isGoldMember()) {
-      discountPercentage += 3;
-    }
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -54,11 +49,11 @@ public class CustomerApplicationService {
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZipCode(customer.getShippingAddressZipCode())
+        .shippingAddressStreet(customer.getShippingAddress().getStreet())
+        .shippingAddressCity(customer.getShippingAddress().getCity())
+        .shippingAddressZipCode(customer.getShippingAddress().getZipCode())
 
-        .discountPercentage(discountPercentage)
+        .discountPercentage(customer.getDiscountPercentage())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
