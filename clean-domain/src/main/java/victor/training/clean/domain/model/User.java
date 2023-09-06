@@ -5,6 +5,7 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
+// VALUE OBJECT
 public class User {
   private final String username;
   private final String fullName;
