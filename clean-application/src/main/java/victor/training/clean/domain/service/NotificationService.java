@@ -47,22 +47,6 @@ public class NotificationService {
     customer.setCreatedByUsername(user.getUsername());
   }
 
-  private static User convert(LdapUserDto userDto) {
-    String fullName = userDto.getFname() + " " + userDto.getLname().toUpperCase();
-    String username = userDto.getUn();
-    if (username.startsWith("s")) username = "system";
-    return new User(username, fullName, userDto.getWorkEmail());
-  }
-
-  private User loadUserFromLdap(String userId) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
-    }
-    User user = convert(dtoList.get(0));
-    return user;
-  }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
     User user = loadUserFromLdap(userId);
@@ -86,5 +70,23 @@ public class NotificationService {
     emailSender.sendEmail(email);
   }
 
+
+// under this line, behold: SHIT !!!
+  private static User convert(LdapUserDto userDto) {
+    String fullName = userDto.getFname() + " " + userDto.getLname().toUpperCase();
+    String username = userDto.getUn();
+    if (username.startsWith("s")) username = "system";
+    return new User(username, fullName, userDto.getWorkEmail());
+  }
+
+  private User loadUserFromLdap(String userId) {
+    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
+
+    if (dtoList.size() != 1) {
+      throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
+    }
+    User user = convert(dtoList.get(0));
+    return user;
+  }
 
 }
