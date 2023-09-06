@@ -2,6 +2,7 @@ package victor.training.clean.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
@@ -17,12 +18,12 @@ import java.util.List;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final LdapClient ldapClient;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used inside my core logic
     //  TODO convert it into a new dedicated class - a Value Object (VO)
-    User user = loadUserFromLdap(userId);
+    User user = ldapClient.loadUserFromLdap(userId);
 
     // todo transform from LdapUserDto to User and use User below this line ------
 
@@ -32,13 +33,13 @@ public class NotificationService {
         .to(customer.getEmail())
         .subject("Welcome!")
         .body("Dear " + customer.getName() + ", Welcome to our clean app!\n" +
-              "Sincerely, " + user.getFullName())
+            "Sincerely, " + user.getFullName())
         .build();
 
     boolean addToCC = user.hasInternalEmail();
 
     if (addToCC) {
-        email.getCc().add(user.getEmail().get());
+      email.getCc().add(user.getEmail().get());
     }
 
     emailSender.sendEmail(email);
@@ -47,9 +48,8 @@ public class NotificationService {
     customer.setCreatedByUsername(user.getUsername());
   }
 
-
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    User user = loadUserFromLdap(userId);
+    User user = ldapClient.loadUserFromLdap(userId);
 
     int discountPercentage = customer.getDiscountPercentage();
 
@@ -58,7 +58,7 @@ public class NotificationService {
         .to(customer.getEmail())
         .subject("Welcome to our Gold membership!")
         .body("Please enjoy a special discount of " + discountPercentage + "%\n" +
-              "Yours sincerely, " + user.getFullName())
+            "Yours sincerely, " + user.getFullName())
         .build();
 
     boolean addToCC = user.hasInternalEmail();
@@ -69,24 +69,4 @@ public class NotificationService {
 
     emailSender.sendEmail(email);
   }
-
-
-// under this line, behold: SHIT !!!
-  private static User convert(LdapUserDto userDto) {
-    String fullName = userDto.getFname() + " " + userDto.getLname().toUpperCase();
-    String username = userDto.getUn();
-    if (username.startsWith("s")) username = "system";
-    return new User(username, fullName, userDto.getWorkEmail());
-  }
-
-  private User loadUserFromLdap(String userId) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
-    }
-    User user = convert(dtoList.get(0));
-    return user;
-  }
-
 }
