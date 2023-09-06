@@ -68,4 +68,8 @@ public class Customer {
     }
     return discountPercentage;
   }
+
+  // we are polluting the domain with 'presentation' concerns
+//  public victor.training.clean.application.dto.CustomerDto toDto() {
+//  }
 }

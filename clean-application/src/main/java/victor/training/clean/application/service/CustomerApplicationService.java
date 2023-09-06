@@ -38,7 +38,8 @@ public class CustomerApplicationService {
   @Operation(description = "Search Customer")
   @PostMapping("customer/search")
   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
-    return customerSearchRepo.search(searchCriteria);
+    return customerSearchRepo.search(searchCriteria); // "Relaxed Layered Architecture" :
+    // we are allowed to SKIP layers if we go in the same direction
   }
 
   @GetMapping("customer/{id}")
@@ -47,25 +48,11 @@ public class CustomerApplicationService {
 
     // Several lines of domain logic operating on the state of a single Entity
     // TODO Where can I move it? PS: it's repeating somewhere else
-//    customer.setShippingAddress(new ShippingAddress("Bucharest", "Dristorului", 1241));
-    // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddress().getStreet())
-        .shippingAddressCity(customer.getShippingAddress().getCity())
-        .shippingAddressZipCode(customer.getShippingAddress().getZipCode())
+//    #1 return customerMapper.toDto(customer);
+    return new CustomerDto(customer); // #2 it is OK to have DTO depending on Entity, but NOT Entity -> Dto
 
-        .discountPercentage(customer.getDiscountPercentage())
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+//    CustomerDto dto = customer.toDto(); WRONG!
   }
 
   @Transactional
