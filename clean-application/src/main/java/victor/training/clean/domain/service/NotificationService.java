@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
@@ -21,55 +22,50 @@ public class NotificationService {
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used inside my core logic
     //  TODO convert it into a new dedicated class - a Value Object (VO)
-    LdapUserDto userDto = loadUserFromLdap(userId);
+    User user = loadUserFromLdap(userId);
 
-    // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
-    String fullName = userDto.getFname() + " " + userDto.getLname().toUpperCase();
+    // todo transform from LdapUserDto to User and use User below this line ------
+
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
         .body("Dear " + customer.getName() + ", Welcome to our clean app!\n" +
-              "Sincerely, " + fullName)
+              "Sincerely, " + user.getFullName())
         .build();
 
+    boolean addToCC = user.hasInternalEmail();
 
-    // ⚠️ Null check can be forgotten in other places; TODO return Optional<> from the getter
-    if (userDto.getWorkEmail() != null) {
-      // ⚠️ the same logic repeats later TODO extract method in the new VO class
-      if (userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
-        email.getCc().add(userDto.getWorkEmail());
-      }
+    if (addToCC) {
+        email.getCc().add(user.getEmail().get());
     }
 
     emailSender.sendEmail(email);
 
-    // ⚠️ TEMPORAL COUPLING: tests fail if you swap the next 2 lines TODO use immutable VO
-    normalize(userDto);
-
     // ⚠️ 'un' ?!! <- in my domain a User has a 'username' TODO use domain names in VO
-    customer.setCreatedByUsername(userDto.getUn());
+    customer.setCreatedByUsername(user.getUsername());
   }
 
-  private LdapUserDto loadUserFromLdap(String userId) {
+  private static User convert(LdapUserDto userDto) {
+    String fullName = userDto.getFname() + " " + userDto.getLname().toUpperCase();
+    String username = userDto.getUn();
+    if (username.startsWith("s")) username = "system";
+    return new User(username, fullName, userDto.getWorkEmail());
+  }
+
+  private User loadUserFromLdap(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
       throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
     }
-
-    return dtoList.get(0);
-  }
-
-  private void normalize(LdapUserDto dto) {
-    if (dto.getUn().startsWith("s")) {// eg s12051 - a system user
-      dto.setUn("system"); // ⚠️ dirty hack
-    }
+    User user = convert(dtoList.get(0));
+    return user;
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    LdapUserDto userDto = loadUserFromLdap(userId);
+    User user = loadUserFromLdap(userId);
 
     int discountPercentage = customer.getDiscountPercentage();
 
@@ -78,16 +74,17 @@ public class NotificationService {
         .to(customer.getEmail())
         .subject("Welcome to our Gold membership!")
         .body("Please enjoy a special discount of " + discountPercentage + "%\n" +
-              "Yours sincerely, " + userDto.getFname() + " " + userDto.getLname().toUpperCase())
+              "Yours sincerely, " + user.getFullName())
         .build();
 
-    if (userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
-      email.getCc().add(userDto.getWorkEmail());
+    boolean addToCC = user.hasInternalEmail();
+
+    if (addToCC) {
+      email.getCc().add(user.getEmail().get());
     }
 
     emailSender.sendEmail(email);
   }
-
 
 
 }

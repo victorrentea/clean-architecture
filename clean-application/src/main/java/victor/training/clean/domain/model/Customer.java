@@ -35,6 +35,8 @@ public class Customer {
   @ManyToOne
   private Country country;
 
+//  @OneToMany
+//  private List<Employee> responsibles;
 
 
 //  private UserAction{User,Date} activation;
