@@ -10,6 +10,15 @@ import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
+
+record User(String username, String name, Optional<String> email) {
+  public static final String MY_DOMAIN = "cleanapp.com";
+
+  public boolean isInternalEmail() { // ubiquituous language. biz can understand this 😇
+    return email.map(e -> e.toLowerCase().endsWith("@" + MY_DOMAIN)).orElse(false);
+  }
+}
 
 @RequiredArgsConstructor
 @Slf4j
@@ -21,35 +30,38 @@ public class NotificationService {
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used inside my core logic
     //  TODO convert it into a new dedicated class - a Value Object (VO)
-    LdapUserDto userDto = loadUserFromLdap(userId);
-
-    // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
-    String fullName = userDto.getFname() + " " + userDto.getLname().toUpperCase();
+    User user = loadUserFromLdap________2(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
         .body("Dear " + customer.getName() + ", Welcome to our clean app!\n" +
-              "Sincerely, " + fullName)
+              "Sincerely, " + user.name())
         .build();
 
 
     // ⚠️ Null check can be forgotten in other places; TODO return Optional<> from the getter
-    if (userDto.getWorkEmail() != null) {
+    if (user.email().isEmpty()) {
       // ⚠️ the same logic repeats later TODO extract method in the new VO class
-      if (userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
-        email.getCc().add(userDto.getWorkEmail());
+      if (user.isInternalEmail()) {
+        email.getCc().add(user.email().orElseThrow());
       }
     }
 
     emailSender.sendEmail(email);
 
-    // ⚠️ TEMPORAL COUPLING: tests fail if you swap the next 2 lines TODO use immutable VO
-    normalize(userDto);
+    customer.setCreatedByUsername(user.username());
+  }
 
-    // ⚠️ 'un' ?!! <- in my domain a User has a 'username' TODO use domain names in VO
-    customer.setCreatedByUsername(userDto.getUn());
+  private User loadUserFromLdap________2(String userId) {
+    LdapUserDto dto = loadUserFromLdap(userId);
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+    if (dto.getUn().startsWith("s")) {// eg s12051 - a system user
+      dto.setUn("system"); // ⚠️ dirty hack
+    }
+    User user = new User(dto.getUn(), fullName, Optional.ofNullable(dto.getWorkEmail()));
+    return user;
   }
 
   private LdapUserDto loadUserFromLdap(String userId) {
@@ -62,10 +74,8 @@ public class NotificationService {
     return dtoList.get(0);
   }
 
-  private void normalize(LdapUserDto dto) {
-    if (dto.getUn().startsWith("s")) {// eg s12051 - a system user
-      dto.setUn("system"); // ⚠️ dirty hack
-    }
+  private void normalize(User dto) {
+
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
@@ -90,7 +100,6 @@ public class NotificationService {
 
     emailSender.sendEmail(email);
   }
-
 
 
 }
