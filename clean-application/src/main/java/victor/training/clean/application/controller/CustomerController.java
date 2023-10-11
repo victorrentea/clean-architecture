@@ -18,10 +18,10 @@ import java.util.NoSuchElementException;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @PostMapping("customer")
-   public void register(@RequestBody @Validated CustomerDto dto) {
-      customerApplicationService.register(dto);
-   }
+//   @PostMapping("customer")
+//   public void register(@RequestBody @Validated CustomerDto dto) {
+//      customerApplicationService.register(dto);
+//   }
 
    @Operation(description = "Search Customer")
    @PostMapping("customer/search")
@@ -29,10 +29,10 @@ public class CustomerController {
       return customerApplicationService.search(searchCriteria);
    }
 
-   @GetMapping("customer/{id}")
-   public CustomerDto findById(@PathVariable long id) {
-      return customerApplicationService.findById(id);
-   }
+//   @GetMapping("customer/{id}")
+//   public CustomerDto findById(@PathVariable long id) {
+//      return customerApplicationService.findById(id);
+//   }
 
    //<editor-fold desc="GET returning ResponseEntity for 404 👎">
 //   @GetMapping("customer/{id}")

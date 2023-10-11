@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
@@ -20,6 +22,8 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 5)
+  @NotNull
   private String name;
   private String email;
 
@@ -38,4 +42,11 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public int getDiscountPercentage() {
+    int discountPercentage = 1;
+    if (isGoldMember()) {
+      discountPercentage += 3;
+    }
+    return discountPercentage;
+  }
 }

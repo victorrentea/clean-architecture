@@ -5,7 +5,8 @@ import victor.training.clean.common.Adapter;
 import victor.training.clean.domain.model.AnafResult;
 
 @Component
-public class AnafClient {
+public class AnafClient implements FiscalAuthority {
+  @Override
   public AnafResult query(String legalEntityCode) {
     // Imagine Dragons here
     // Adapter that calls the ANAF endpoint and maps their result into a Domain Model object

@@ -1,5 +1,9 @@
 package victor.training.clean.infra;
 
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -11,14 +15,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Adapter
-public class LdapApiClient implements UserProvider {
+@Slf4j
+@RequiredArgsConstructor
+public final class LdapApiClient implements UserProvider {
   private final LdapApi ldapApi;
 
-  public LdapApiClient(LdapApi ldapApi) {
-    this.ldapApi = ldapApi;
-  }
 
   @Override
+  @Timed
   public User retrieveUser(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
