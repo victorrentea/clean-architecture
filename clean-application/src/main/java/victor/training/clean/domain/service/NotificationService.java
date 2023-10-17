@@ -21,24 +21,24 @@ public class NotificationService {
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used inside my core logic
     //  TODO convert it into a new dedicated class - a Value Object (VO)
-    LdapUserDto userDto = loadUserFromLdap(userId);
+//    LdapUserDto userDto = loadUserFromLdap(userId);
+    User userDto = loadUserFromLdap(userId);
 
     // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
-    String fullName = userDto.getFname() + " " + userDto.getLname().toUpperCase();
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
         .body("Dear " + customer.getName() + ", Welcome to our clean app!\n" +
-              "Sincerely, " + fullName)
+              "Sincerely, " + userDto.getFullName())
         .build();
 
 
     // ⚠️ Null check can be forgotten in other places; TODO return Optional<> from the getter
     if (userDto.getWorkEmail() != null) {
       // ⚠️ the same logic repeats later TODO extract method in the new VO class
-      if (userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
+      if (isaBoolean(userDto)) {
         email.getCc().add(userDto.getWorkEmail());
       }
     }
@@ -52,14 +52,25 @@ public class NotificationService {
     customer.setCreatedByUsername(userDto.getUn());
   }
 
-  private LdapUserDto loadUserFromLdap(String userId) {
+  private boolean isaBoolean(LdapUserDto userDto) {
+    return userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com");
+  }
+
+  private User loadUserFromLdap(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
       throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
     }
 
-    return dtoList.get(0);
+    // al apiului pe care-l chem
+    LdapUserDto dto = dtoList.get(0);
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+
+    // al meu
+    User user = new User(dto.getUn(), fullName, dto.getWorkEmail());
+
+    return user;
   }
 
   private void normalize(LdapUserDto dto) {
@@ -84,7 +95,7 @@ public class NotificationService {
               "Yours sincerely, " + userDto.getFname() + " " + userDto.getLname().toUpperCase())
         .build();
 
-    if (userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
+    if (isaBoolean(userDto)) {
       email.getCc().add(userDto.getWorkEmail());
     }
 

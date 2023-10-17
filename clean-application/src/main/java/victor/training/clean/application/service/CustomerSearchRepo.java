@@ -20,6 +20,7 @@ public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
    public List<SearchCustomerResponse> search(SearchCustomerCriteria criteria) {
+      // pt performanta e ok sa aduci din SQL direct Dto apoi -> JSON pe response
       String jpql = "SELECT new victor.training.clean.application.dto.SearchCustomerResponse(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";
