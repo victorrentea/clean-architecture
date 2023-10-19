@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/customer/{id}": {
+    "/customers/{id}": {
       "get": {
         "tags": [
           "customer-controller"
@@ -100,7 +100,7 @@
         }
       }
     },
-    "/customer": {
+    "/customers": {
       "post": {
         "tags": [
           "customer-controller"
@@ -136,7 +136,7 @@
         }
       }
     },
-    "/customer/search": {
+    "/customers/search": {
       "post": {
         "tags": [
           "customer-controller"

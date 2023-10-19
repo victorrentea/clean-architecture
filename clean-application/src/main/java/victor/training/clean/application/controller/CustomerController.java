@@ -18,24 +18,24 @@ import java.util.NoSuchElementException;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @PostMapping("customer")
+   @PostMapping("customers")
    public void register(@RequestBody @Validated CustomerDto dto) {
       customerApplicationService.register(dto);
    }
 
    @Operation(description = "Search Customer")
-   @PostMapping("customer/search")
+   @PostMapping("customers/search")
    public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
       return customerApplicationService.search(searchCriteria);
    }
 
-   @GetMapping("customer/{id}")
+   @GetMapping("customers/{id}")
    public CustomerDto findById(@PathVariable long id) {
       return customerApplicationService.findById(id);
    }
 
    //<editor-fold desc="GET returning ResponseEntity for 404 👎">
-//   @GetMapping("customer/{id}")
+//   @GetMapping("customers/{id}")
 //   public ResponseEntity<CustomerDto> findById(@PathVariable long id) {
 //      try {
 //         return ResponseEntity.ok(customerApplicationService.findById(id));
@@ -46,13 +46,13 @@ public class CustomerController {
 //   }
    //</editor-fold>
 
-   @PutMapping("customer/{id}")
+   @PutMapping("customers/{id}")
    public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
       customerApplicationService.update(id, dto);
    }
 
    //<editor-fold desc="PUT returning ResponseEntity for 404 👎">
-   //   @PutMapping("customer/{id}")
+   //   @PutMapping("customers/{id}")
 //   public ResponseEntity<Void> update(@PathVariable long id, @RequestBody CustomerDto dto) {
 //      try {
 //         customerApplicationService.update(id, dto);
