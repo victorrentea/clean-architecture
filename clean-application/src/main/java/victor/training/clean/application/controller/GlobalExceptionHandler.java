@@ -1,4 +1,4 @@
-package victor.training.clean.common;
+package victor.training.clean.application.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

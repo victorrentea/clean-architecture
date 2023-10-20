@@ -1,4 +1,4 @@
-package victor.training.clean.common;
+package victor.training.clean.application.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +12,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target(TYPE)
 @Service
-public @interface ApplicationService {
+public @interface DomainService {
 
 }

@@ -1,4 +1,4 @@
-package victor.training.clean.common;
+package victor.training.clean.infra;
 
 import org.springframework.stereotype.Component;
 

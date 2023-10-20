@@ -1,4 +1,4 @@
-package victor.training.clean.common;
+package victor.training.clean.application.spring;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,7 +39,7 @@ public class LoggingAspect {
 			jackson.enable(SerializationFeature.INDENT_OUTPUT);
 		}
 	}
-	@Around("@within(victor.training.clean.common.ApplicationService))")
+	@Around("@within(victor.training.clean.application.ApplicationService))")
 	public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
 		logBefore(joinPoint);
 		long t0 = System.currentTimeMillis();
