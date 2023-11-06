@@ -10,8 +10,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletOutputStream;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.ServletOutputStream;
 import java.io.InputStream;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

@@ -3,6 +3,7 @@ package victor.training.clean.verticalslice;
 import lombok.*;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -17,7 +18,7 @@ import java.util.List;
 
 // Brutal: expose CRUD directly from the DB - example of how VSA enables different architecture per use-case
 @RepositoryRestResource // generally avoid ⚠️
-public interface CountryRestRepo extends PagingAndSortingRepository<Country, Long> {
+public interface CountryRestRepo extends PagingAndSortingRepository<Country, Long>, JpaRepository<Country, Long> {
     List<Country> findByName(@Param("name") String name);
 }
 

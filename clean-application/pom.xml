@@ -88,11 +88,7 @@
             <version>3.9.1</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.tngtech.archunit</groupId>
-            <artifactId>archunit-junit4</artifactId>
-            <version>1.1.0</version>
-        </dependency>
+
         <dependency>
             <groupId>org.openapitools.openapidiff</groupId>
             <artifactId>openapi-diff-maven</artifactId>

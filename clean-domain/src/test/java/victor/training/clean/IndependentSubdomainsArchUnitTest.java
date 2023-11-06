@@ -6,7 +6,7 @@ import com.tngtech.archunit.lang.EvaluationResult;
 import com.tngtech.archunit.library.dependencies.SliceRule;
 import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition;
 import com.tngtech.archunit.library.dependencies.syntax.GivenSlices;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
