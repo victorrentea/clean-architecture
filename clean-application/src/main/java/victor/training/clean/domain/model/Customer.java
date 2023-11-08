@@ -12,11 +12,7 @@ import java.time.LocalDate;
 import static java.util.Objects.requireNonNull;
 
 @Entity
-@Data // TODO remove:
-// Avoid lombok @Entity on ORM Domain @Entity
-// 1) hashCode on @Id [ORM]
-// 2) toString lazy-loading collections [ORM]
-// 3) setters for everything = lack of encapsulation
+@Data // BAD because: 1) hashCode on @Id, 2) toString could trigger lazy-loading, 3) all setters = lack of encapsulation
 public class Customer {
   @Id
   @GeneratedValue
