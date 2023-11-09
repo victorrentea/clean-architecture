@@ -18,16 +18,16 @@ import java.util.NoSuchElementException;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @PostMapping("customers")
-   public void register(@RequestBody @Validated CustomerDto dto) {
-      customerApplicationService.register(dto);
-   }
+//   @PostMapping("customers")
+//   public void register(@RequestBody @Validated CustomerDto dto) {
+//      customerApplicationService.register(dto);
+//   }
 
-   @Operation(description = "Search Customer")
-   @PostMapping("customers/search")
-   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
-      return customerApplicationService.search(searchCriteria);
-   }
+//   @Operation(description = "Search Customer, a fost odata ca-n povesti, a fost ca niciodata , o fata mandra ca-n povesti")
+//   @PostMapping("customers/search")
+//   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
+//      return customerApplicationService.search(searchCriteria);
+//   }
 
    @GetMapping("customers/{id}")
    public CustomerDto findById(@PathVariable long id) {

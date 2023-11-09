@@ -3,6 +3,7 @@ package victor.training.clean.application.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
+import victor.training.clean.domain.model.Customer;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -31,21 +32,21 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
   String legalEntityCode; // *
   boolean discountedVat; // GET (server-side fetched)
 
-//  public CustomerDto(Customer customer) {
-//    id = customer.getId();
-//    name = customer.getName();
-//    email = customer.getEmail();
-//    countryId = customer.getCountry().getId();
-//    creationDateStr = customer.getCreationDate().format(ofPattern("yyyy-MM-dd"));
-//    gold = customer.isGoldMember();
-//    goldMemberRemovalReason = customer.getGoldMemberRemovalReason();
-//    legalEntityCode = customer.getLegalEntityCode();
-//    discountedVat = customer.isDiscountedVat();
-//    shippingAddressStreet = ?
-//    shippingAddressCity = ?
-//    shippingAddressZipCode = ?
-//    discountPercentage = ?
-//  }
+  public CustomerDto(Customer customer) {
+    id = customer.getId();
+    name = customer.getName();
+    email = customer.getEmail();
+    countryId = customer.getCountry().getId();
+    createdDateStr = customer.getCreatedDate().format(ofPattern("yyyy-MM-dd"));
+    gold = customer.isGoldMember();
+    goldMemberRemovalReason = customer.getGoldMemberRemovalReason();
+    legalEntityCode = customer.getLegalEntityCode();
+    discountedVat = customer.isDiscountedVat();
+    shippingAddressStreet = customer.getShippingAddress().getStreet();
+    shippingAddressCity = customer.getShippingAddress().getCity();
+    shippingAddressZipCode =  customer.getShippingAddress().getZipCode();
+    discountPercentage =  customer.getDiscountPercentage();
+  }
 
   public String getServus() {
     return "Salut";

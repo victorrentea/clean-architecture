@@ -1,8 +1,13 @@
 package victor.training.clean.application.service;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
@@ -22,47 +27,36 @@ import static java.util.Objects.requireNonNull;
 
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
-@ApplicationService // custom annotation refining the classic @Service
+//@ApplicationService // custom annotation refining the classic @Service
+@RestController
 public class CustomerApplicationService {
+
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
   private final CustomerSearchRepo customerSearchRepo;
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
 
-  public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
+  @Operation(description = "Search Customer, a fost odata ca-n povesti, a fost ca niciodata , o fata mandra ca-n povesti")
+  @PostMapping("customers/search")
+  public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
     return customerSearchRepo.search(searchCriteria);
   }
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
-
-    // Several lines of domain logic operating on the state of a single Entity
-    // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = customer.getDiscountPercentage();
-
     // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressStreet(customer.getShippingAddress().getStreet())
-        .shippingAddressCity(customer.getShippingAddress().getCity())
-        .shippingAddressZipCode(customer.getShippingAddress().getZipCode())
-
-        .discountPercentage(discountPercentage)
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+    // - NU Domain Service caci e cuplat la Dto
+    // - o clasa Mapper in care indesi logica asta boring
+    // - MapStruct
+    //- NU customer.toDto(); // datorita dependency rule
+    return new CustomerDto(customer);
   }
 
   @Transactional
-  public void register(CustomerDto dto) {
+  @PostMapping("customers")
+  public void register(@RequestBody @Validated CustomerDto dto) {
+
     Customer customer = new Customer(dto.getName());
     customer.setEmail(dto.getEmail());
 //    customer.setName(dto.getName());

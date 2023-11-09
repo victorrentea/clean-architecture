@@ -70,6 +70,10 @@ public class Customer {
     return discountPercentage;
   }
 
+//  public victor.training.clean.application.dto.CustomerDto toDto() {
+  //  ar cupla sf. entitatea de Domain la ceva marunt, un DTO de-al meu
+//  }
+
 
   enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED

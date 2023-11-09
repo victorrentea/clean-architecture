@@ -15,6 +15,7 @@ import victor.training.clean.domain.CleanException.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
@@ -33,6 +34,12 @@ public class GlobalExceptionHandler {
       String httpStatusCodeStr = messageSource.getMessage("error." + cleanException.getErrorCode() + ".code", null, "500", Locale.ENGLISH);
       int httpStatusCode = Integer.parseInt(httpStatusCodeStr);
       return status(httpStatusCode).body(userMessage);
+   }
+
+   @ResponseStatus(NOT_FOUND)// instead of try/catch
+   @ExceptionHandler(NoSuchElementException.class)
+   public String onJavaxValidationException() {
+      return "Nu-i!";
    }
 
    // @Validated errors
