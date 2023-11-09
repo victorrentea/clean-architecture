@@ -7,8 +7,8 @@ import lombok.Value;
 import java.util.ArrayList;
 import java.util.List;
 
-@Value
 @Builder
+@Value
 public class Email {
 	String to;
 	List<String> cc = new ArrayList<>();

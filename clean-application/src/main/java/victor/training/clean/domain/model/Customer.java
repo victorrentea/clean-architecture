@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import static java.util.Objects.requireNonNull;
 
 @Entity
-@Data // BAD because: 1) hashCode on @Id, 2) toString could trigger lazy-loading, 3) all setters = lack of encapsulation
+@Data // BAD because: 1) hashCode on @Id, 2) toString can trigger lazy-loading, 3) all setters = no encapsulation
 public class Customer {
   @Id
   @GeneratedValue
@@ -24,6 +24,7 @@ public class Customer {
   private String shippingAddressCity;
   private String shippingAddressStreet;
   private Integer shippingAddressZipCode;
+
   @ManyToOne
   private Country country;
 
