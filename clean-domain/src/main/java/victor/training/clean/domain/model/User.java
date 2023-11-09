@@ -1,6 +1,5 @@
 package victor.training.clean.domain.model;
 
-import org.checkerframework.checker.nullness.Opt;
 
 import java.util.Optional;
 
