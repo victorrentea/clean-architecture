@@ -6,16 +6,14 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApiAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 // ATENTIE: intram (cu respect) in cod de domeniu - asta tre sa fie cel mai curat din aplicatie
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final LdapApiAdapter adapter;
+  private final IEmailSender emailSender;
+  private final ILdapApiAdapter adapter;
   //1) acum pot @MockBean/@Mock in @Test pe Adapter
   //2) inainte trebuie WireMock.stubFor(JSON de-al lor care sa-mi dea mie ce-mi trebuie)
 
