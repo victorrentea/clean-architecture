@@ -58,6 +58,8 @@ paths:
 definitions:
   LdapUser:
     type: "object"
+    required:
+      - un
     properties:
       uid:
         type: "integer"
