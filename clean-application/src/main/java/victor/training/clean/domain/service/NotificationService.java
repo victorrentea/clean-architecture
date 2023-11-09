@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.infra.LdapUserDto;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -22,6 +23,8 @@ public class NotificationService {
     // ⚠️ external DTO directly used inside my core logic
     //  TODO convert it into a new dedicated class - a Value Object (VO)
     User user = userProvider.fetchUser(userId);
+//    LdapUserDto dto = new LdapUserDto();
+//    System.out.println(dto.getFname());
 
     // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
     String fullName = user.fullName();
