@@ -46,4 +46,8 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
 //    shippingAddressZipCode = ?
 //    discountPercentage = ?
 //  }
+
+  public String getServus() {
+    return "Salut";
+  }
 }

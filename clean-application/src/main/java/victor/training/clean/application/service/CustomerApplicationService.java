@@ -3,7 +3,6 @@ package victor.training.clean.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.application.CustomerHelper;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
@@ -40,7 +39,7 @@ public class CustomerApplicationService {
 
     // Several lines of domain logic operating on the state of a single Entity
     // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = CustomerHelper.getDiscountPercentage(customer);
+    int discountPercentage = customer.getDiscountPercentage();
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -51,9 +50,9 @@ public class CustomerApplicationService {
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZipCode(customer.getShippingAddressZipCode())
+        .shippingAddressStreet(customer.getShippingAddress().getStreet())
+        .shippingAddressCity(customer.getShippingAddress().getCity())
+        .shippingAddressZipCode(customer.getShippingAddress().getZipCode())
 
         .discountPercentage(discountPercentage)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
@@ -64,9 +63,9 @@ public class CustomerApplicationService {
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = new Customer();
+    Customer customer = new Customer(dto.getName());
     customer.setEmail(dto.getEmail());
-    customer.setName(dto.getName());
+//    customer.setName(dto.getName());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.getCountryId()));
     customer.setLegalEntityCode(dto.getLegalEntityCode());

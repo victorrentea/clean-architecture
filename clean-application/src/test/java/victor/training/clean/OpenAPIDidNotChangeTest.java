@@ -32,14 +32,15 @@ public class OpenAPIDidNotChangeTest {
   MockMvc mockMvc;
   ObjectMapper jackson = new ObjectMapper();
 
-  @Value("classpath:/my-existing-openapi.json") // extracted from deploy
+  @Value("classpath:/my-existing-openapi.json") // extracted from last deploy (yesterday)
   Resource myExpectedOpenAPI;
 
   @Test
   void my_contract_did_not_change() throws Exception {
+    // extracted by swagger from your @RestController&co annotations
     String actualOpenAPIJson = prettifyJsonString(
-            mockMvc.perform(get("/v3/api-docs"))
-                    .andReturn().getResponse().getContentAsString());
+            mockMvc.perform(get("/v3/api-docs")).andReturn().getResponse()
+                .getContentAsString());
 
     String expectedOpenAPIJson = prettifyJsonString(
             IOUtils.toString(myExpectedOpenAPI.getInputStream())

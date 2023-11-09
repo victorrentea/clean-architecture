@@ -44,8 +44,7 @@ public class SearchCustomerTest {
     assertThat(customerRepo.findAll()).isEmpty();
     Country country = countryRepo.save(new Country());
     countryId = country.getId();
-    customerRepo.save(new Customer()
-        .setName("John")
+    customerRepo.save(new Customer("John")
         .setEmail("a@B.com")
         .setCountry(country));
 
