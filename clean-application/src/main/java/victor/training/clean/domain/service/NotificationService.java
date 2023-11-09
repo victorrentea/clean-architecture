@@ -12,8 +12,8 @@ import victor.training.clean.domain.model.User;
 @Service
 // ATENTIE: intram (cu respect) in cod de domeniu - asta tre sa fie cel mai curat din aplicatie
 public class NotificationService {
-  private final IEmailSender emailSender;
-  private final ILdapApiAdapter adapter;
+  private final EmailSender emailSender;
+  private final UserProvider userProvider;
   //1) acum pot @MockBean/@Mock in @Test pe Adapter
   //2) inainte trebuie WireMock.stubFor(JSON de-al lor care sa-mi dea mie ce-mi trebuie)
 
@@ -21,7 +21,7 @@ public class NotificationService {
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used inside my core logic
     //  TODO convert it into a new dedicated class - a Value Object (VO)
-    User user = adapter.loadUserFromLdap(userId);
+    User user = userProvider.fetchUser(userId);
 
     // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
     String fullName = user.fullName();
@@ -59,7 +59,7 @@ public class NotificationService {
 //  }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    User user = adapter.loadUserFromLdap(userId);
+    User user = userProvider.fetchUser(userId);
 
     int discountPercentage = customer.getDiscountPercentage();
 

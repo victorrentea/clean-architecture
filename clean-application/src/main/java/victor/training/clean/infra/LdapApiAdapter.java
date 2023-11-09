@@ -2,7 +2,7 @@ package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.ILdapApiAdapter;
+import victor.training.clean.domain.service.UserProvider;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,11 +10,11 @@ import java.util.Optional;
 //@Component
 @Adapter
 @RequiredArgsConstructor
-public class LdapApiAdapter implements ILdapApiAdapter {
+public class LdapApiAdapter implements UserProvider {
   private final LdapApi ldapApi;
 
   @Override
-  public User loadUserFromLdap(String userId) {
+  public User fetchUser(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
