@@ -7,11 +7,7 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
-import java.util.Optional;
+import victor.training.clean.infra.LdapApiAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -19,12 +15,15 @@ import java.util.Optional;
 // ATENTIE: intram (cu respect) in cod de domeniu - asta tre sa fie cel mai curat din aplicatie
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final LdapApiAdapter adapter;
+  //1) acum pot @MockBean/@Mock in @Test pe Adapter
+  //2) inainte trebuie WireMock.stubFor(JSON de-al lor care sa-mi dea mie ce-mi trebuie)
+
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used inside my core logic
     //  TODO convert it into a new dedicated class - a Value Object (VO)
-    User user = loadUserFromLdap(userId);
+    User user = adapter.loadUserFromLdap(userId);
 
     // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
     String fullName = user.fullName();
@@ -53,28 +52,7 @@ public class NotificationService {
     customer.setCreatedByUsername(user.username());
   }
 
-  private User loadUserFromLdap(String userId) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
-    }
-
-    LdapUserDto dto = dtoList.get(0);
-
-    String username = dto.getUn();
-    if (username.startsWith("s")) {// eg s12051 - a system user
-      username= "system"; // ⚠️ dirty hack
-    }
-//    if (dto.getWorkEmail() == null) {
-//      throw new IllegalArgumentException();
-//    }
-    return new User(
-        username,
-        dto.getFname() + " " + dto.getLname().toUpperCase(),
-        Optional.ofNullable(dto.getWorkEmail()
-        ));
-  }
 
 //  private void normalize(User dto) {
 //    if (dto.getUn().startsWith("s")) {// eg s12051 - a system user
@@ -83,7 +61,7 @@ public class NotificationService {
 //  }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    User user = loadUserFromLdap(userId);
+    User user = adapter.loadUserFromLdap(userId);
 
     int discountPercentage = customer.getDiscountPercentage();
 
