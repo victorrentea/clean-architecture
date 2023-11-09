@@ -9,24 +9,6 @@ import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
 
-//(imuutable❤️)
-//record in Hib 6.2
-@Embeddable
-@Getter
-class ShippingAddress {
-  private String city;
-  private String street;
-  private Integer zipCode;
-
-  protected ShippingAddress() {} // for Hibernate only
-
-  public ShippingAddress(String city, String street, Integer zipCode) {
-    this.city = city;
-    this.street = street;
-    this.zipCode = zipCode;
-  }
-}
-
 @Entity
 @Data // BAD because:
 // 1) hashCode on @Id,
