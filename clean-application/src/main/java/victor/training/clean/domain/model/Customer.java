@@ -30,10 +30,16 @@ public class Customer {
 
   private LocalDate createdDate;
   private String createdByUsername;
+
   private boolean goldMember;
   private String goldMemberRemovalReason;
 
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public enum Status {
+    DRAFT, VALIDATED, ACTIVE, DELETED
+  }
+  private Status status;
+  private String validatedBy;
 }
