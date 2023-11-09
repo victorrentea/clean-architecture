@@ -1,9 +1,14 @@
 package victor.training.clean.application.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+
+import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -13,6 +18,8 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
   Long id; // GET (from sequence in DB)
 
+  @NotNull
+  @Size(min = 5)
   String name; // *
 
   String email; // *
@@ -50,5 +57,14 @@ public class CustomerDto { // Dto used to both QUERY and COMMAND use-cases ?
 
   public String getServus() {
     return "Salut";
+  }
+
+  public Customer toEntity() {
+    Customer customer = new Customer(getName());
+    customer.setEmail(getEmail());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(getCountryId()));
+    customer.setLegalEntityCode(getLegalEntityCode());
+    return customer;
   }
 }

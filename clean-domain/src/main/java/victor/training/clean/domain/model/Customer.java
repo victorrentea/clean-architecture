@@ -23,7 +23,7 @@ public class Customer {
   @GeneratedValue
   private Long id;
   @NotNull
-  @Size(min = 2)
+  @Size(min = 5)
   private String name;
   private String email;
 
