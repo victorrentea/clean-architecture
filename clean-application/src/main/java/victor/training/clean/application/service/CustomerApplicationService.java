@@ -16,6 +16,7 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.domain.service.NotificationService;
+import victor.training.clean.infra.AnafClient;
 
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class CustomerApplicationService {
   @Operation(description = "Search Customer, a fost odata ca-n povesti, a fost ca niciodata , o fata mandra ca-n povesti")
   @PostMapping("customers/search")
   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
+    // Use-case optimized query
     return customerSearchRepo.search(searchCriteria);
   }
 
