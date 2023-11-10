@@ -1,4 +1,4 @@
-package victor.training.clean.domain.model;
+package victor.training.clean.domain.entity;
 
 import java.util.Optional;
 

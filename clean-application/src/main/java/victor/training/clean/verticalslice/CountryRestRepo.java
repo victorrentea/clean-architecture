@@ -12,7 +12,7 @@ import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import victor.training.clean.domain.model.Country;
+import victor.training.clean.application.entity.Country;
 
 import java.util.List;
 
