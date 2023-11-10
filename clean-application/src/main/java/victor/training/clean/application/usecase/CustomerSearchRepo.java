@@ -27,6 +27,9 @@ public class CustomerSearchRepo {
       jpqlParts.add("1=1"); // alternatives: Criteria API ± Spring Specifications or Query DSL
       Map<String, Object> params = new HashMap<>();
 
+      if (criteria.getIsGold()) {
+         jpqlParts.add("c.goldMember = true");
+      }
       if (criteria.getName() != null) {
          jpqlParts.add("UPPER(c.name) LIKE UPPER('%' || :name || '%')");
          params.put("name", criteria.getName());
