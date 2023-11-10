@@ -23,7 +23,7 @@ import static java.util.Objects.requireNonNull;
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 //@ApplicationService // custom annotation refining the classic @Service
 @RestController
-public class CustomerUseCase {
+public class CustomerApplicationService {
 
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
@@ -31,7 +31,9 @@ public class CustomerUseCase {
   private final InsuranceService insuranceService;
 
 
-  public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
+  @Operation(description = "Search Customer, a fost odata ca-n povesti, a fost ca niciodata , o fata mandra ca-n povesti")
+  @PostMapping("customers/search")
+  public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
     return customerSearchRepo.search(searchCriteria);
   }
 
@@ -46,7 +48,8 @@ public class CustomerUseCase {
   }
 
   @Transactional
-  public void register(CustomerDto dto) {
+  @PostMapping("customers")
+  public void register(@RequestBody @Validated CustomerDto dto) {
     Customer customer = dto.toEntity();
     // request payload validation - poate fi facuta pe DTO singur
 //    AnafResult anafResult = legalEntityProvider.query(customer.getLegalEntityCode());
@@ -54,6 +57,7 @@ public class CustomerUseCase {
     notificationService.sendWelcomeEmail(customer, "1"); // userId from JWT token via SecuritContext
   }
   private final RegisterCustomerService registerCustomerService;
+
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
@@ -79,6 +83,7 @@ public class CustomerUseCase {
     customerRepo.save(customer); // not required within a @Transactional method if using ORM(JPA/Hibernate)
     insuranceService.customerDetailsChanged(customer);
   }
+
 
   private void auditRemovedGoldMember(String customerName, String reason) {
     log.info("Kafka.send ( {name:" + customerName + ", reason:" + reason + "} )");

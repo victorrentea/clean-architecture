@@ -1,7 +1,7 @@
-package victor.training.clean.application.port;
+package victor.training.clean.application.usecase;
 
 import victor.training.clean.application.entity.Email;
 
-public interface EmailSenderPort {
+public interface EmailSender {
   void sendEmail(Email email);
 }
