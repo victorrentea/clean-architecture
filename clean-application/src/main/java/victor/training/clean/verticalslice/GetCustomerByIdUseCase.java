@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import victor.training.clean.application.entity.Customer;
-import victor.training.clean.application.repo.CustomerRepo;
+import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.repo.CustomerRepo;
 
 import java.time.format.DateTimeFormatter;
 
