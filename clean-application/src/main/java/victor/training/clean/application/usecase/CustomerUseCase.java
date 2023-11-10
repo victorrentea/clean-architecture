@@ -30,7 +30,6 @@ public class CustomerUseCase {
   private final CustomerSearchRepo customerSearchRepo;
   private final InsuranceService insuranceService;
 
-
   public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
     return customerSearchRepo.search(searchCriteria);
   }
