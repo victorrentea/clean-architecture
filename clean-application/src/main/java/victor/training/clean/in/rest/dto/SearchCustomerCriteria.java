@@ -11,6 +11,5 @@ public class SearchCustomerCriteria {
    @Schema(description = "Part of the name, case-insensitive")
    String name;
    String email;
-   Boolean isGold;
    Long countryId;
 }
