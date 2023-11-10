@@ -27,19 +27,19 @@ public class CustomerSearchRepo {
       jpqlParts.add("1=1"); // alternatives: Criteria API ± Spring Specifications or Query DSL
       Map<String, Object> params = new HashMap<>();
 
-      if (criteria.getName() != null) {
+      if (criteria.name() != null) {
          jpqlParts.add("UPPER(c.name) LIKE UPPER('%' || :name || '%')");
-         params.put("name", criteria.getName());
+         params.put("name", criteria.name());
       }
 
-      if (criteria.getEmail() != null) {
+      if (criteria.email() != null) {
          jpqlParts.add("UPPER(c.email) = UPPER(:email)");
-         params.put("email", criteria.getEmail());
+         params.put("email", criteria.email());
       }
 
-      if (criteria.getCountryId() != null) {
+      if (criteria.countryId() != null) {
          jpqlParts.add("c.country.id = :countryId");
-         params.put("countryId", criteria.getCountryId());
+         params.put("countryId", criteria.countryId());
       }
 
       String whereCriteria = join(" AND ", jpqlParts);

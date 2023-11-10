@@ -104,13 +104,14 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>6.2.0</version>
+                <version>6.3.0</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
+                            <!-- Generate client stubs based on consumed contract -->
                             <inputSpec>clean-application/ldap-api-docs.yaml</inputSpec>
                             <generatorName>java</generatorName>
                             <library>resttemplate</library>
@@ -120,6 +121,8 @@
                             <generateModelTests>false</generateModelTests>
                             <modelNameSuffix>Dto</modelNameSuffix>
                             <configOptions>
+                                <useJakartaEe>true</useJakartaEe>
+                                <jakarta>true</jakarta>
                                 <openApiNullable>false</openApiNullable>
                             </configOptions>
                         </configuration>

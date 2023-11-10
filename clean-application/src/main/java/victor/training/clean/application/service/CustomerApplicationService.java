@@ -67,11 +67,11 @@ public class CustomerApplicationService {
   @Transactional
   public void register(CustomerDto dto) {
     Customer customer = new Customer();
-    customer.setEmail(dto.getEmail());
-    customer.setName(dto.getName());
+    customer.setEmail(dto.email());
+    customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.getCountryId()));
-    customer.setLegalEntityCode(dto.getLegalEntityCode());
+    customer.setCountry(new Country().setId(dto.countryId()));
+    customer.setLegalEntityCode(dto.legalEntityCode());
 
     // request payload validation
     if (customer.getName().length() < 5) { // TODO alternatives to implement this?
@@ -111,21 +111,21 @@ public class CustomerApplicationService {
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
     Customer customer = customerRepo.findById(id).orElseThrow();
     // CRUD part
-    customer.setName(dto.getName());
-    customer.setEmail(dto.getEmail());
-    customer.setCountry(new Country().setId(dto.getCountryId()));
+    customer.setName(dto.name());
+    customer.setEmail(dto.email());
+    customer.setCountry(new Country().setId(dto.countryId()));
 
-    if (!customer.isGoldMember() && dto.isGold()) {
+    if (!customer.isGoldMember() && dto.gold()) {
       // enable gold member status
       customer.setGoldMember(true);
       notificationService.sendGoldBenefitsEmail(customer, "1"); // userId from JWT token via SecuritContext
     }
 
-    if (customer.isGoldMember() && !dto.isGold()) {
+    if (customer.isGoldMember() && !dto.gold()) {
       // remove gold member status
       customer.setGoldMember(false);
-      customer.setGoldMemberRemovalReason(requireNonNull(dto.getGoldMemberRemovalReason()));
-      auditRemovedGoldMember(customer.getName(), dto.getGoldMemberRemovalReason());
+      customer.setGoldMemberRemovalReason(requireNonNull(dto.goldMemberRemovalReason()));
+      auditRemovedGoldMember(customer.getName(), dto.goldMemberRemovalReason());
     }
 
     customerRepo.save(customer); // not required within a @Transactional method if using ORM(JPA/Hibernate)
