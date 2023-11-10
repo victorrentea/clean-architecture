@@ -1,4 +1,4 @@
-package victor.training.clean.vsa;
+package victor.training.clean.verticalslice;
 
 import lombok.*;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
