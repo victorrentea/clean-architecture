@@ -2,7 +2,7 @@ package victor.training.clean.out.ldap;
 
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.application.entity.User;
-import victor.training.clean.application.usecase.UserProvider;
+import victor.training.clean.application.port.UserProviderPort;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 import victor.training.clean.out.Adapter;
@@ -13,7 +13,7 @@ import java.util.Optional;
 //@Component
 @Adapter
 @RequiredArgsConstructor
-public class LdapApiAdapter implements UserProvider {
+public class LdapApiAdapter implements UserProviderPort {
   private final LdapApi ldapApi;
 
   @Override

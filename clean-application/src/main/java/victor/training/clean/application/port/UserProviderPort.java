@@ -1,7 +1,7 @@
-package victor.training.clean.application.usecase;
+package victor.training.clean.application.port;
 
 import victor.training.clean.application.entity.User;
 
-public interface UserProvider {
+public interface UserProviderPort {
   User fetchUser(String userId);
 }

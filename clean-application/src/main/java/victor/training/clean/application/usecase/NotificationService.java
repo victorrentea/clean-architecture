@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.application.entity.Customer;
 import victor.training.clean.application.entity.Email;
 import victor.training.clean.application.entity.User;
+import victor.training.clean.application.port.EmailSenderPort;
+import victor.training.clean.application.port.UserProviderPort;
 //import victor.training.clean.infra.LdapUserDto;
 
 @RequiredArgsConstructor
@@ -13,8 +15,8 @@ import victor.training.clean.application.entity.User;
 @Service
 // ATENTIE: intram (cu respect) in cod de domeniu - asta tre sa fie cel mai curat din aplicatie
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final UserProvider userProvider;
+  private final EmailSenderPort emailSender;
+  private final UserProviderPort userProvider;
   //1) acum pot @MockBean/@Mock in @Test pe Adapter
   //2) inainte trebuie WireMock.stubFor(JSON de-al lor care sa-mi dea mie ce-mi trebuie)
 

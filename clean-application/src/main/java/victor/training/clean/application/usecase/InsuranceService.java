@@ -7,6 +7,7 @@ import victor.training.clean.application.entity.Customer;
 import victor.training.clean.application.entity.Email;
 import victor.training.clean.application.entity.InsurancePolicy;
 import victor.training.clean.application.entity.PolicyNotification;
+import victor.training.clean.application.port.EmailSenderPort;
 import victor.training.clean.application.repo.InsurancePolicyRepo;
 import victor.training.clean.application.repo.PolicyNotificationRepo;
 
@@ -16,7 +17,7 @@ import victor.training.clean.application.repo.PolicyNotificationRepo;
 public class InsuranceService {
    private final InsurancePolicyRepo insurancePolicyRepo;
    private final PolicyNotificationRepo policyNotificationRepo;
-   private final EmailSender emailSender;
+   private final EmailSenderPort emailSender;
 
    public void customerDetailsChanged(Customer newCustomer) {
       InsurancePolicy currentPolicy = insurancePolicyRepo.findByCustomerId(newCustomer.getId());

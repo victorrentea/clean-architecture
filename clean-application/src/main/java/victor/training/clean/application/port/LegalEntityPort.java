@@ -1,7 +1,7 @@
-package victor.training.clean.application.usecase;
+package victor.training.clean.application.port;
 
 import victor.training.clean.application.entity.AnafResult;
 
-public interface LegalEntityProvider {
+public interface LegalEntityPort {
   public AnafResult query(String legalEntityCode);
 }

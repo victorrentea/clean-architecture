@@ -23,7 +23,7 @@ import static java.util.Objects.requireNonNull;
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 //@ApplicationService // custom annotation refining the classic @Service
 @RestController
-public class CustomerApplicationService {
+public class CustomerUseCase {
 
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
@@ -31,9 +31,7 @@ public class CustomerApplicationService {
   private final InsuranceService insuranceService;
 
 
-  @Operation(description = "Search Customer, a fost odata ca-n povesti, a fost ca niciodata , o fata mandra ca-n povesti")
-  @PostMapping("customers/search")
-  public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
+  public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
     return customerSearchRepo.search(searchCriteria);
   }
 
@@ -48,8 +46,7 @@ public class CustomerApplicationService {
   }
 
   @Transactional
-  @PostMapping("customers")
-  public void register(@RequestBody @Validated CustomerDto dto) {
+  public void register(CustomerDto dto) {
     Customer customer = dto.toEntity();
     // request payload validation - poate fi facuta pe DTO singur
 //    AnafResult anafResult = legalEntityProvider.query(customer.getLegalEntityCode());
@@ -57,7 +54,6 @@ public class CustomerApplicationService {
     notificationService.sendWelcomeEmail(customer, "1"); // userId from JWT token via SecuritContext
   }
   private final RegisterCustomerService registerCustomerService;
-
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
@@ -83,7 +79,6 @@ public class CustomerApplicationService {
     customerRepo.save(customer); // not required within a @Transactional method if using ORM(JPA/Hibernate)
     insuranceService.customerDetailsChanged(customer);
   }
-
 
   private void auditRemovedGoldMember(String customerName, String reason) {
     log.info("Kafka.send ( {name:" + customerName + ", reason:" + reason + "} )");

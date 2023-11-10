@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.application.entity.AnafResult;
 import victor.training.clean.application.entity.Customer;
 import victor.training.clean.application.repo.CustomerRepo;
+import victor.training.clean.application.port.LegalEntityPort;
 
 @Service
 @RequiredArgsConstructor
@@ -13,7 +14,7 @@ import victor.training.clean.application.repo.CustomerRepo;
 public class RegisterCustomerService {
   // verb nu substantiv, pt ca e mai precis numele => clasa va ramane mai mica
   private final CustomerRepo customerRepo;
-  private final LegalEntityProvider legalEntityProvider;
+  private final LegalEntityPort legalEntityProvider;
 
   public void register(Customer customer) {
     // business rule
