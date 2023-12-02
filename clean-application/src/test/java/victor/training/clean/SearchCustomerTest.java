@@ -80,7 +80,7 @@ public class SearchCustomerTest {
 
   private List<SearchCustomerResponse> searchAPI(SearchCustomerCriteriaBuilder searchCriteria) throws Exception {
     String requestJson = jackson.writeValueAsString(searchCriteria.build());
-    String responseJson = mockMvc.perform(post("/customer/search")
+    String responseJson = mockMvc.perform(post("/customers/search")
                     .contentType("application/json")
                     .content(requestJson))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
