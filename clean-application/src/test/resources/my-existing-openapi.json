@@ -32,7 +32,7 @@
           "500": {
             "description": "Internal Server Error",
             "content": {
-              "*/*": {
+              "application/hal+json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -45,7 +45,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/hal+json": {
                 "schema": {
                   "$ref": "#/components/schemas/CustomerDto"
                 }
@@ -84,7 +84,7 @@
           "500": {
             "description": "Internal Server Error",
             "content": {
-              "*/*": {
+              "application/hal+json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -120,7 +120,7 @@
           "500": {
             "description": "Internal Server Error",
             "content": {
-              "*/*": {
+              "application/hal+json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -157,7 +157,7 @@
           "500": {
             "description": "Internal Server Error",
             "content": {
-              "*/*": {
+              "application/hal+json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -170,7 +170,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/hal+json": {
                 "schema": {
                   "type": "array",
                   "items": {

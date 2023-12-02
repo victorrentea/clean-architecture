@@ -16,7 +16,7 @@ import java.util.Map;
 import static java.lang.String.join;
 
 @RequiredArgsConstructor
-@RestController
+//@RestController
 public class SearchCustomerUseCase {
   private final EntityManager entityManager;
 

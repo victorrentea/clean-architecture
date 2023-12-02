@@ -17,7 +17,7 @@ import victor.training.clean.domain.model.Country;
 import java.util.List;
 
 // Brutal: expose CRUD directly from the DB - example of how VSA enables different architecture per use-case
-@RepositoryRestResource // generally avoid ⚠️
+//@RepositoryRestResource // generally avoid ⚠️
 public interface CountryRestRepo extends PagingAndSortingRepository<Country, Long>, JpaRepository<Country, Long> {
     List<Country> findByName(@Param("name") String name);
 }

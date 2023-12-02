@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @ActiveProfiles("db-mem")
 @AutoConfigureMockMvc
-@Disabled
 public class OpenAPIDidNotChangeTest {
   @Autowired
   MockMvc mockMvc;
