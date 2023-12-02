@@ -100,7 +100,7 @@ public class CustomerApplicationService {
     log.info("More Business Logic (imagine)");
     log.info("More Business Logic (imagine)");
     customerRepo.save(customer);
-    notificationService.sendWelcomeEmail(customer, "1"); // userId from JWT token via SecuritContext
+    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
   private String normalize(String s) {

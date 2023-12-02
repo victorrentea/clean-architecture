@@ -15,6 +15,7 @@ import victor.training.clean.domain.CleanException.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
@@ -42,6 +43,11 @@ public class GlobalExceptionHandler {
       List<String> response = e.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
       log.error("Validation failed. Returning: " + response, e);
       return response;
+   }
+   @ResponseStatus(NOT_FOUND)
+   @ExceptionHandler(NoSuchElementException.class)
+   public String onNoSuchElementException(NoSuchElementException e) {
+      return "Not Found!";
    }
 
    // any other uncaught exception
