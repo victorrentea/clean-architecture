@@ -115,7 +115,7 @@ public class LargeIntegrationTest {
     private ResultActions register(CustomerDtoBuilder requestDto) throws Exception {
         return mockMvc.perform(post("/customer")
                 .contentType(APPLICATION_JSON)
-                .content(jackson.writeValueAsString(requestDto))
+                .content(jackson.writeValueAsString(requestDto.build()))
         );
     }
     private List<SearchCustomerResponse> search(String name) throws Exception {

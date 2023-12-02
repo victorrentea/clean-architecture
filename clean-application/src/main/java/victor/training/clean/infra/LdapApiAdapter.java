@@ -14,6 +14,8 @@ public class LdapApiAdapter implements UserProvider {
   private final LdapApi ldapApi;
 
   @Override
+  // the API of this method talks in MY TERMS,
+  // uses only my data structures (Immutables, record)
   public User fetchUser(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
@@ -24,6 +26,7 @@ public class LdapApiAdapter implements UserProvider {
     LdapUserDto dto = dtoList.get(0);
 
     String username = dto.getUn();
+
     if (username.startsWith("s")) {// eg s12051 - a system user
       username= "system"; // ⚠️ dirty hack
     }

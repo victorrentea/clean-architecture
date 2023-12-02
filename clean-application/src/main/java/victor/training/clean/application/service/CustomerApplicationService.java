@@ -55,8 +55,6 @@ public class CustomerApplicationService {
   @PostMapping("customers")
   public void register(@RequestBody @Validated CustomerDto dto) {
     Customer customer = dto.toEntity();
-    // request payload validation - poate fi facuta pe DTO singur
-//    AnafResult anafResult = legalEntityProvider.query(customer.getLegalEntityCode());
     registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "1"); // userId from JWT token via SecuritContext
   }
