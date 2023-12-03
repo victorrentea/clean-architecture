@@ -10,9 +10,11 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
+import static victor.training.clean.domain.model.Customer.Status.ACTIVE;
+import static victor.training.clean.domain.model.Customer.Status.VALIDATED;
 
 @Entity
-@Data // BAD because: 1) hashCode on @Id, 2) toString can trigger lazy-loading, 3) all setters = no encapsulation
+@Data // BAD: 1) hashCode uses @Id, 2) toString can trigger lazy-loading, 3) setters for all fields = no encapsulation
 public class Customer {
   @Id
   @GeneratedValue
@@ -41,5 +43,19 @@ public class Customer {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
   private Status status;
-  private String validatedBy;
+  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 }
+
+//region Code in the project might [not] follow the rule
+//class CodeFollowingTheRule {
+//  public void ok(Customer draftCustomer) {
+//    draftCustomer.setStatus(VALIDATED);
+//    draftCustomer.setValidatedBy("currentUser"); // from token/session
+//  }
+//}
+//class CodeBreakingTheRule {
+//  public void farAway(Customer draftCustomer) {
+//    draftCustomer.setStatus(ACTIVE);
+//  }
+//}
+//endregion
