@@ -3,6 +3,9 @@ package victor.training.clean.domain.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import lombok.NonNull;
@@ -27,7 +30,12 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 5)
+  @NotNull // add NOT NULL in DB just in case HEHEHEHE
+  // of a careless Fri night datafix by your 2ndlevel support.
+  // o against your own bugs.
   private String name;
+  @Email
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?

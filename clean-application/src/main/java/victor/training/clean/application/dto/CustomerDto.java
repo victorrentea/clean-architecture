@@ -1,6 +1,9 @@
 package victor.training.clean.application.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
@@ -16,7 +19,10 @@ public record CustomerDto(
     Long id, // GET only (server-assigned)
 
     @Schema(description = "this actually is the name!")
+    @Size(min = 5)// SHOCK 90% of developers don't know that NULL is ok vs @Size(min=5)
+    @NotNull
     String names,
+    @Email
     String email,
     Long countryId,
 
