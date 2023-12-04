@@ -8,7 +8,7 @@ import org.springframework.context.event.EventListener;
 import victor.training.clean.ApiClient;
 
 @Configuration
-public class ConfigureApiClient {
+public class ApiClientConfig {
   @Autowired
   private ApiClient apiClient;
   @Value("${ldap.client.base.url}")
