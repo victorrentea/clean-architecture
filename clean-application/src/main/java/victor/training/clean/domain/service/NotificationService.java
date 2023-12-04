@@ -19,9 +19,8 @@ public class NotificationService {
   private final LdapApi ldapApi;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
-    // ⚠️ external DTO directly used inside my core logic
-    //  TODO convert it into a new dedicated class - a Value Object (VO)
-    LdapUserDto userDto = loadUserFromLdap(userId);
+    // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
+    LdapUserDto userDto = fetchUserDetailsFromLdap(userId);
 
     // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
     String fullName = userDto.getFname() + " " + userDto.getLname().toUpperCase();
@@ -52,7 +51,7 @@ public class NotificationService {
     customer.setCreatedByUsername(userDto.getUn());
   }
 
-  private LdapUserDto loadUserFromLdap(String userId) {
+  private LdapUserDto fetchUserDetailsFromLdap(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
@@ -63,13 +62,13 @@ public class NotificationService {
   }
 
   private void normalize(LdapUserDto dto) {
-    if (dto.getUn().startsWith("s")) {// eg s12051 - a system user
+    if (dto.getUn().startsWith("s")) {// eg 's12051' is a system user
       dto.setUn("system"); // ⚠️ dirty hack
     }
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    LdapUserDto userDto = loadUserFromLdap(userId);
+    LdapUserDto userDto = fetchUserDetailsFromLdap(userId);
 
     int discountPercentage = 1;
     if (customer.isGoldMember()) {

@@ -16,6 +16,8 @@ import victor.training.clean.domain.model.Country;
 
 import java.util.List;
 
+import static org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy.RepositoryDetectionStrategies.ANNOTATED;
+
 // Brutal: expose CRUD directly from the DB - example of how VSA enables different architecture per use-case
 //@RepositoryRestResource // generally avoid ⚠️
 public interface CountryRestRepo extends PagingAndSortingRepository<Country, Long>, JpaRepository<Country, Long> {
@@ -23,9 +25,9 @@ public interface CountryRestRepo extends PagingAndSortingRepository<Country, Lon
 }
 
 @Component
-class DontAutoExposeRestRepos implements RepositoryRestConfigurer {
+class RepositoryRestConfig implements RepositoryRestConfigurer {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-        config.setRepositoryDetectionStrategy(RepositoryDetectionStrategy.RepositoryDetectionStrategies.ANNOTATED);
+        config.setRepositoryDetectionStrategy(ANNOTATED);
         // config.setExposeRepositoryMethodsByDefault(false);
     }
 }
