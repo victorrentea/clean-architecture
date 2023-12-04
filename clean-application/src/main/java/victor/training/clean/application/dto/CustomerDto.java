@@ -1,6 +1,5 @@
 package victor.training.clean.application.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -11,7 +10,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (server-assigned)
 
-    String name,
+    String names,
     String email,
     Long countryId,
 
@@ -31,7 +30,7 @@ public record CustomerDto(
   public CustomerDto fromEntity(Customer customer) {
     return CustomerDto.builder()
         .id(customer.getId())
-        .name(customer.getName())
+        .names(customer.getName())
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
@@ -39,9 +38,13 @@ public record CustomerDto(
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZipCode(customer.getShippingAddressZipCode())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZipCode(customer.getShippingAddress().zipCode())
+
+//        .shippingAddressStreet(customer.getShippingAddressStreet())
+//        .shippingAddressCity(customer.getShippingAddressCity())
+//        .shippingAddressZipCode(customer.getShippingAddressZipCode())
         .discountPercentage(0)
         .build(); // TOD)O
   }

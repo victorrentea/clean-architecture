@@ -47,7 +47,7 @@ public class SearchCustomerUseCase {
     Map<String, Object> params = new HashMap<>();
 
     if (criteria.name != null) {
-      jpqlParts.add("UPPER(c.name) LIKE UPPER('%' || :name || '%')");
+      jpqlParts.add("UPPER(c.names) LIKE UPPER('%' || :names || '%')");
       params.put("name", criteria.name);
     }
 

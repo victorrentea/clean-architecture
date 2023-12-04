@@ -47,15 +47,19 @@ public class CustomerApplicationService {
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
-        .name(customer.getName())
+        .names(customer.getName())
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZipCode(customer.getShippingAddressZipCode())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZipCode(customer.getShippingAddress().zipCode())
+
+//        .shippingAddressStreet(customer.getShippingAddressStreet())
+//        .shippingAddressCity(customer.getShippingAddressCity())
+//        .shippingAddressZipCode(customer.getShippingAddressZipCode())
 
         .discountPercentage(discountPercentage)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
@@ -68,14 +72,14 @@ public class CustomerApplicationService {
   public void register(CustomerDto dto) {
     Customer customer = new Customer();
     customer.setEmail(dto.email());
-    customer.setName(dto.name());
+    customer.setName(dto.names());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());
 
     // request payload validation
     if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
+      throw new IllegalArgumentException("The customer names is too short");
     }
 
     // business rule/validation
@@ -111,7 +115,7 @@ public class CustomerApplicationService {
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
     Customer customer = customerRepo.findById(id).orElseThrow();
     // CRUD part
-    customer.setName(dto.name());
+    customer.setName(dto.names());
     customer.setEmail(dto.email());
     customer.setCountry(new Country().setId(dto.countryId()));
 
@@ -134,6 +138,6 @@ public class CustomerApplicationService {
 
 
   private void auditRemovedGoldMember(String customerName, String reason) {
-    log.info("Kafka.send ( {name:" + customerName + ", reason:" + reason + "} )");
+    log.info("Kafka.send ( {names:" + customerName + ", reason:" + reason + "} )");
   }
 }
