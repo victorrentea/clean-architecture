@@ -18,8 +18,6 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -41,42 +39,19 @@ public class CustomerApplicationService {
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
-
     // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .names(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressZipCode(customer.getShippingAddress().zipCode())
-
-//        .shippingAddressStreet(customer.getShippingAddressStreet())
-//        .shippingAddressCity(customer.getShippingAddressCity())
-//        .shippingAddressZipCode(customer.getShippingAddressZipCode())
-
-        .discountPercentage(customer.getDiscountPercentage())
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+    // - orika
+    // - manual written mapper
+    // - static method in CustomerDto.fromEntity(entity)
+//    return customer.toDto(); // BAD : couples the Domain to the Dto
+    return CustomerDto.fromEntity(customer);
   }
 
   @Transactional
   @PostMapping("customers")
   // @Secured(ADMIN)
   public void register(@RequestBody @Validated CustomerDto dto) {
-//    HttpServletRequest httpRequest; OMG STOP
-    Customer customer = new Customer();
-    customer.setEmail(dto.email());
-    customer.setName(dto.names());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
+    Customer customer = dto.asEntity();
 
     // request payload validation
     if (customer.getName().length() < 5) { // TODO alternatives to implement this?

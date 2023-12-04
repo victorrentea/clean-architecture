@@ -2,7 +2,11 @@ package victor.training.clean.application.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -29,25 +33,34 @@ public record CustomerDto(
     String legalEntityCode,
     Boolean discountedVat // GET only (server-side fetched)
 ) {
-  public CustomerDto fromEntity(Customer customer) {
-    return CustomerDto.builder()
+
+  public static CustomerDto fromEntity(Customer customer) {
+    return builder()
         .id(customer.getId())
         .names(customer.getName())
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
+
         .shippingAddressCity(customer.getShippingAddress().city())
         .shippingAddressStreet(customer.getShippingAddress().street())
         .shippingAddressZipCode(customer.getShippingAddress().zipCode())
 
-//        .shippingAddressStreet(customer.getShippingAddressStreet())
-//        .shippingAddressCity(customer.getShippingAddressCity())
-//        .shippingAddressZipCode(customer.getShippingAddressZipCode())
-        .discountPercentage(0)
-        .build(); // TOD)O
+        .discountPercentage(customer.getDiscountPercentage())
+        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
+        .legalEntityCode(customer.getLegalEntityCode())
+        .discountedVat(customer.isDiscountedVat())
+        .build();
+  }
+
+  public  Customer asEntity() {
+    Customer customer = new Customer();
+    customer.setEmail(email());
+    customer.setName(names());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(countryId()));
+    customer.setLegalEntityCode(legalEntityCode());
+    return customer;
   }
 }
