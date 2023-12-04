@@ -5,70 +5,74 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
-@Service
+@Service // imagine this is core logic
 public class NotificationService {
   private final EmailSender emailSender;
   private final LdapApi ldapApi;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
-    LdapUserDto userDto = fetchUserDetailsFromLdap(userId);
-
-    // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
-    String fullName = userDto.getFname() + " " + userDto.getLname().toUpperCase();
+    User user = fetchUserDetailsFromLdap(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
         .body("Dear " + customer.getName() + ", Welcome to our clean app!\n" +
-              "Sincerely, " + fullName)
+              "Sincerely, " + user.fullName())
         .build();
 
 
     // ⚠️ Null check can be forgotten in other places; TODO return Optional<> from the getter
-    if (userDto.getWorkEmail() != null) {
+    if (user.email().isPresent()) {
       // ⚠️ the same logic repeats later TODO extract method in the new VO class
-      if (userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
-        email.getCc().add(userDto.getWorkEmail());
+      if (user.email().get().toLowerCase().endsWith("@cleanapp.com")) {
+        email.getCc().add(user.email().get());
       }
     }
 
     emailSender.sendEmail(email);
 
-    // ⚠️ TEMPORAL COUPLING: tests fail if you swap the next 2 lines TODO use immutable VO
-    normalize(userDto);
 
-    // ⚠️ 'un' ?!! <- in my domain a User has a 'username' TODO use domain names in VO
-    customer.setCreatedByUsername(userDto.getUn());
+    customer.setCreatedByUsername(user.username());
   }
 
-  private LdapUserDto fetchUserDetailsFromLdap(String userId) {
+  private User fetchUserDetailsFromLdap(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
       throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
     }
 
-    return dtoList.get(0);
+    // mapping logic ----
+    LdapUserDto dto = dtoList.get(0);
+    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
+    String username = dto.getUn();
+    if (username.startsWith("s")) {// eg 's12051' is a system user
+      username = "system"; // ⚠️ dirty hack
+    }
+//    String email = dto.getWorkEmail() != null ? dto.getWorkEmail() : "";
+    User user = new User(username, fullName, Optional.ofNullable(dto.getWorkEmail()));
+    // DO I allow in my app to receive a User with a null workemail?
+    // NO=> throw here!
+    // YES=> default to "" (A) = Null Object Pattern (GoF)
+    // YES=> wrap it into an Optional<> (B) < 90% choose this
+    return user;
   }
 
-  private void normalize(LdapUserDto dto) {
-    if (dto.getUn().startsWith("s")) {// eg 's12051' is a system user
-      dto.setUn("system"); // ⚠️ dirty hack
-    }
-  }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    LdapUserDto userDto = fetchUserDetailsFromLdap(userId);
+    User userDto = fetchUserDetailsFromLdap(userId);
 
     int discountPercentage = 1;
     if (customer.isGoldMember()) {
@@ -80,12 +84,13 @@ public class NotificationService {
         .to(customer.getEmail())
         .subject("Welcome to our Gold membership!")
         .body("Please enjoy a special discount of " + discountPercentage + "%\n" +
-              "Yours sincerely, " + userDto.getFname() + " " + userDto.getLname().toUpperCase())
+              "Yours sincerely, " + userDto.fullName())
         .build();
 
-    if (userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
-      email.getCc().add(userDto.getWorkEmail());
-    }
+    if (userDto.email().isPresent())
+      if (userDto.email().get().toLowerCase().endsWith("@cleanapp.com")) {
+        email.getCc().add(userDto.email().get());
+      }
 
     emailSender.sendEmail(email);
   }
