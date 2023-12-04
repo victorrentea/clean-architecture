@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.infra.AnafClient;
 
 @Service
 @Slf4j
@@ -15,7 +14,7 @@ import victor.training.clean.infra.AnafClient;
 public class RegisterCustomerService { // do you see the name of this class
   // is not a 'thing' but an 'action'. ofc. it's a stateless piece of logic.
   private final CustomerRepo customerRepo;
-  private final AnafClient anafClient;
+  private final FiscalDetailsProvider fiscalDetailsProvider;
 
   public void register(Customer customer) {
     // business rule
@@ -28,7 +27,7 @@ public class RegisterCustomerService { // do you see the name of this class
       if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
         throw new IllegalArgumentException("Company already registered");
       }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
+      AnafResult anafResult = fiscalDetailsProvider.query(customer.getLegalEntityCode());
       if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
         throw new IllegalArgumentException("Legal Entity not found!");
       }
