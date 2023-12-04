@@ -6,18 +6,17 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service // imagine this is core logic
 public class NotificationService {
   private final EmailSender emailSender;
-  private final ILdapUserApiClient ldapUserApiClient;
+  private final UserProvider userProvider;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
-    User user = ldapUserApiClient.fetchUserDetailsFromLdap(userId);
+    User user = userProvider.fetchUser(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -43,7 +42,7 @@ public class NotificationService {
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    User userDto = ldapUserApiClient.fetchUserDetailsFromLdap(userId);
+    User userDto = userProvider.fetchUser(userId);
 
     int discountPercentage = 1;
     if (customer.isGoldMember()) {
