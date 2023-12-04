@@ -3,6 +3,10 @@ package victor.training.clean.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
@@ -20,6 +24,7 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
+@RestController
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
@@ -36,13 +41,6 @@ public class CustomerApplicationService {
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
-
-    // Several lines of domain logic operating on the state of a single Entity
-    // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = 1;
-    if (customer.isGoldMember()) {
-      discountPercentage += 3;
-    }
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -61,7 +59,7 @@ public class CustomerApplicationService {
 //        .shippingAddressCity(customer.getShippingAddressCity())
 //        .shippingAddressZipCode(customer.getShippingAddressZipCode())
 
-        .discountPercentage(discountPercentage)
+        .discountPercentage(customer.getDiscountPercentage())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
@@ -69,7 +67,10 @@ public class CustomerApplicationService {
   }
 
   @Transactional
-  public void register(CustomerDto dto) {
+  @PostMapping("customers")
+  // @Secured(ADMIN)
+  public void register(@RequestBody @Validated CustomerDto dto) {
+//    HttpServletRequest httpRequest; OMG STOP
     Customer customer = new Customer();
     customer.setEmail(dto.email());
     customer.setName(dto.names());

@@ -20,6 +20,7 @@ import static org.springframework.data.rest.core.mapping.RepositoryDetectionStra
 
 // Brutal: expose CRUD directly from the DB - example of how VSA enables different architecture per use-case
 //@RepositoryRestResource // generally avoid ⚠️
+// comnsider injecting the list of countries as a .yaml CONFIG !!!!
 public interface CountryRestRepo extends PagingAndSortingRepository<Country, Long>, JpaRepository<Country, Long> {
     List<Country> findByName(@Param("names") String name);
 }

@@ -1,5 +1,6 @@
 package victor.training.clean.application.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -10,6 +11,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (server-assigned)
 
+    @Schema(description = "this actually is the name!")
     String names,
     String email,
     Long countryId,

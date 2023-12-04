@@ -17,9 +17,11 @@ public class ArchitectureTest {
         .importPackages("victor.training");
 
     @Test
-    @Disabled
+//    @Disabled
     // NOTE: In case you don't understand this test, contact me:
     // +40720019564 or victorrentea@gmail.com (the anarchitect)
+    // or call a friend.
+    // "BUS FACTOR" = how likely is that if I got hit by the bus, the project is in deep SH*T
     public void domain_independent_of_infrastructure() {
         // https://ArchUnit.org
         noClasses().that().resideInAPackage("..domain..")

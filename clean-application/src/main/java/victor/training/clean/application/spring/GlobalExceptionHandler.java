@@ -49,6 +49,11 @@ public class GlobalExceptionHandler {
    public String onNoSuchElementException(NoSuchElementException e) {
       return "Not Found!";
    }
+   @ResponseStatus(BAD_REQUEST) // 400 Bad Request
+   @ExceptionHandler(IllegalArgumentException.class)
+   public String onIllegalArgumentException(NoSuchElementException e) {
+      return "Not Found!";
+   }
 
    // any other uncaught exception
    @ExceptionHandler(Exception.class)

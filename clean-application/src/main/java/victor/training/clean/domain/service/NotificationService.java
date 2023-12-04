@@ -44,16 +44,11 @@ public class NotificationService {
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
     User userDto = userProvider.fetchUser(userId);
 
-    int discountPercentage = 1;
-    if (customer.isGoldMember()) {
-      discountPercentage += 3;
-    }
-
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome to our Gold membership!")
-        .body("Please enjoy a special discount of " + discountPercentage + "%\n" +
+        .body("Please enjoy a special discount of " + customer.getDiscountPercentage() + "%\n" +
               "Yours sincerely, " + userDto.fullName())
         .build();
 

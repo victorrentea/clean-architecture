@@ -18,10 +18,10 @@ import java.util.NoSuchElementException;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @PostMapping("customers")
-   public void register(@RequestBody @Validated CustomerDto dto) {
-      customerApplicationService.register(dto);
-   }
+//   @PostMapping("customers")
+//   public void register(@RequestBody @Validated CustomerDto dto) {
+//      customerApplicationService.register(dto);
+//   }
 
    @Operation(description = "Search Customer")
    @PostMapping("customers/search")

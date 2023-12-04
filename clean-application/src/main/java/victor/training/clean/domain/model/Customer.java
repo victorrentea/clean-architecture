@@ -67,6 +67,14 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public int getDiscountPercentage() {
+    int discountPercentage = 1;
+    if (isGoldMember()) {
+      discountPercentage += 3;
+    }
+    return discountPercentage;
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
