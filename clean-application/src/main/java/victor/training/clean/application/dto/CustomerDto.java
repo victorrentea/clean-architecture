@@ -1,6 +1,5 @@
 package victor.training.clean.application.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -17,7 +16,7 @@ public record CustomerDto(
 
     String shippingAddressCity, // GET only (updated via dedicated endpoint)
     String shippingAddressStreet, // GET only (updated via dedicated endpoint)
-    Integer shippingAddressZipCode, // GET only (updated via dedicated endpoint)
+    String shippingAddressZip, // GET only (updated via dedicated endpoint)
 
     String createdDateStr, // GET only (server-assigned)
 
@@ -41,8 +40,8 @@ public record CustomerDto(
         .discountedVat(customer.isDiscountedVat())
         .shippingAddressStreet(customer.getShippingAddressStreet())
         .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZipCode(customer.getShippingAddressZipCode())
-        .discountPercentage(0)
-        .build(); // TOD)O
+        .shippingAddressZip(customer.getShippingAddressZip())
+        .discountPercentage(0) // TODO
+        .build();
   }
 }

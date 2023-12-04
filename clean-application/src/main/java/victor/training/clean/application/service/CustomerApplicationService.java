@@ -55,7 +55,7 @@ public class CustomerApplicationService {
 
         .shippingAddressStreet(customer.getShippingAddressStreet())
         .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZipCode(customer.getShippingAddressZipCode())
+        .shippingAddressZip(customer.getShippingAddressZip())
 
         .discountPercentage(discountPercentage)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())

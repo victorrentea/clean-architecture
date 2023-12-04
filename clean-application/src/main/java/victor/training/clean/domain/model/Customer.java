@@ -1,6 +1,5 @@
 package victor.training.clean.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import jakarta.persistence.Entity;
@@ -10,11 +9,9 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
-import static victor.training.clean.domain.model.Customer.Status.ACTIVE;
-import static victor.training.clean.domain.model.Customer.Status.VALIDATED;
 
 @Entity
-@Data // BAD: 1) hashCode uses @Id, 2) toString can trigger lazy-loading, 3) setters for all fields = no encapsulation
+@Data // BAD: 1) hashCode uses @Id, 2) toString can trigger ORM lazy-loading, 3) setters for all fields = no encapsulation
 public class Customer {
   @Id
   @GeneratedValue
@@ -25,7 +22,7 @@ public class Customer {
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
   private String shippingAddressCity;
   private String shippingAddressStreet;
-  private Integer shippingAddressZipCode;
+  private String shippingAddressZip;
 
   @ManyToOne
   private Country country;
