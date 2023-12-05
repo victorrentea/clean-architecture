@@ -42,6 +42,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -94,6 +104,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK"
           }
@@ -126,6 +146,16 @@
                   "items": {
                     "type": "string"
                   }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -163,6 +193,16 @@
                   "items": {
                     "type": "string"
                   }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -209,9 +249,8 @@
           "shippingAddressStreet": {
             "type": "string"
           },
-          "shippingAddressZipCode": {
-            "type": "integer",
-            "format": "int32"
+          "shippingAddressZip": {
+            "type": "string"
           },
           "createdDateStr": {
             "type": "string"
