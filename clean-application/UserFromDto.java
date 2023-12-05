@@ -17,7 +17,7 @@ public class UserFromDto {
   private String workEmail;
   // private String creationDate; // not mapped from JSON (others 4 skipped to)
 
-  // Using my domain names (ubiquitous language)
+  // Using my domain name (ubiquitous language)
   public String getUsername() {
     return uid;
   }

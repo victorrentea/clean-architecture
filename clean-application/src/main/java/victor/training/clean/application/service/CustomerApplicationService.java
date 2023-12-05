@@ -59,7 +59,7 @@ public class CustomerApplicationService {
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
     Customer customer = customerRepo.findById(id).orElseThrow();
     // CRUD part
-    customer.setName(dto.names());
+    customer.setName(dto.name());
     customer.setEmail(dto.email());
     customer.setCountry(new Country().setId(dto.countryId()));
 
@@ -82,6 +82,6 @@ public class CustomerApplicationService {
 
 
   private void auditRemovedGoldMember(String customerName, String reason) {
-    log.info("Kafka.send ( {names:" + customerName + ", reason:" + reason + "} )");
+    log.info("Kafka.send ( {name:" + customerName + ", reason:" + reason + "} )");
   }
 }

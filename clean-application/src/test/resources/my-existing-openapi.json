@@ -42,6 +42,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -94,6 +104,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK"
           }
@@ -103,7 +123,7 @@
     "/customers": {
       "post": {
         "tags": [
-          "customer-controller"
+          "customer-application-service"
         ],
         "operationId": "register",
         "requestBody": {
@@ -126,6 +146,16 @@
                   "items": {
                     "type": "string"
                   }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -167,6 +197,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -187,6 +227,9 @@
   "components": {
     "schemas": {
       "CustomerDto": {
+        "required": [
+          "name"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -194,7 +237,10 @@
             "format": "int64"
           },
           "name": {
-            "type": "string"
+            "maxLength": 2147483647,
+            "minLength": 5,
+            "type": "string",
+            "description": "this actually is the name!"
           },
           "email": {
             "type": "string"

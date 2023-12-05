@@ -28,7 +28,7 @@ paths:
       parameters:
       - name: "un"
         in: "query"
-        description: "user names"
+        description: "user name"
         required: false
         type: "string"
         format: int64

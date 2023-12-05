@@ -45,7 +45,7 @@ public class SearchCustomerTest {
     Country country = countryRepo.save(new Country());
     countryId = country.getId();
     customerRepo.save(new Customer()
-        .setName("John")
+        .setName("Johna")
         .setEmail("a@B.com")
         .setCountry(country));
 

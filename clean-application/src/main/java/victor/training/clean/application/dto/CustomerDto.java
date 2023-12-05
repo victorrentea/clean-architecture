@@ -9,7 +9,6 @@ import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -21,7 +20,7 @@ public record CustomerDto(
     @Schema(description = "this actually is the name!")
     @Size(min = 5)// SHOCK 90% of developers don't know that NULL is ok vs @Size(min=5)
     @NotNull
-    String names,
+    String name,
     @Email
     String email,
     Long countryId,
@@ -43,7 +42,7 @@ public record CustomerDto(
   public static CustomerDto fromEntity(Customer customer) {
     return builder()
         .id(customer.getId())
-        .names(customer.getName())
+        .name(customer.getName())
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
@@ -63,7 +62,7 @@ public record CustomerDto(
   public  Customer asEntity() {
     Customer customer = new Customer();
     customer.setEmail(email());
-    customer.setName(names());
+    customer.setName(name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(countryId()));
     customer.setLegalEntityCode(legalEntityCode());

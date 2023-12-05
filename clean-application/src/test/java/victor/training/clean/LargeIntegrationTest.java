@@ -62,7 +62,7 @@ public class LargeIntegrationTest {
     private CustomerDtoBuilder registerRequest() {
         return CustomerDto.builder()
             .email(CUSTOMER_EMAIL)
-            .names("::names::")
+            .name("::name::")
             .countryId(country.getId());
     }
 
@@ -73,7 +73,7 @@ public class LargeIntegrationTest {
 
         assertThat(customerRepo.findAll()).hasSize(1);
         Customer customer = customerRepo.findAll().get(0);
-        assertThat(customer.getName()).isEqualTo("::names::");
+        assertThat(customer.getName()).isEqualTo("::name::");
         assertThat(customer.getEmail()).isEqualTo(CUSTOMER_EMAIL);
         assertThat(customer.getCountry().getId()).isEqualTo(country.getId());
         verify(emailSender).sendEmail(argThat(email -> email.getTo().equals(CUSTOMER_EMAIL)));
@@ -82,7 +82,7 @@ public class LargeIntegrationTest {
         CustomerDto responseDto = getCustomer(customer.getId());
 
         assertThat(responseDto.id()).isEqualTo(customer.getId());
-        assertThat(responseDto.names()).isEqualTo("::names::");
+        assertThat(responseDto.name()).isEqualTo("::name::");
         assertThat(responseDto.email()).isEqualTo(CUSTOMER_EMAIL);
         assertThat(responseDto.countryId()).isEqualTo(country.getId());
         assertThat(responseDto.createdDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
@@ -99,7 +99,7 @@ public class LargeIntegrationTest {
 
     @Test
     void nameTooShortThrows() throws Exception {
-        register(registerRequest().names("1")).andExpect(status().isInternalServerError());
+        register(registerRequest().name("1")).andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class LargeIntegrationTest {
     private List<SearchCustomerResponse> search(String name) throws Exception {
         String responseJson = mockMvc.perform(post("/customers/search")
                 .contentType(APPLICATION_JSON)
-                .content(String.format("{\"names\": \"%s\"}\n", name)))
+                .content(String.format("{\"name\": \"%s\"}\n", name)))
             .andExpect(status().is2xxSuccessful())
             .andReturn()
             .getResponse()

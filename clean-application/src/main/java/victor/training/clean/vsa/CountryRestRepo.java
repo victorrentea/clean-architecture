@@ -22,7 +22,7 @@ import static org.springframework.data.rest.core.mapping.RepositoryDetectionStra
 //@RepositoryRestResource // generally avoid ⚠️
 // comnsider injecting the list of countries as a .yaml CONFIG !!!!
 public interface CountryRestRepo extends PagingAndSortingRepository<Country, Long>, JpaRepository<Country, Long> {
-    List<Country> findByName(@Param("names") String name);
+    List<Country> findByName(@Param("name") String name);
 }
 
 @Component

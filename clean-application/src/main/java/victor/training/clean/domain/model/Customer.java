@@ -54,7 +54,7 @@ public class Customer {
   //    for my ORM users: use @Embeddable:
   // - effort
   @Embedded
-  private ShippingAddress shippingAddress;
+  private ShippingAddress shippingAddress = new ShippingAddress(null, null, null);
 
   // also, methods in Customer can guard the consistency of a collection of children
 //  private List<String> phoneNumbers = new ArrayList<>();

@@ -28,7 +28,7 @@ public class CustomerSearchRepo {
       Map<String, Object> params = new HashMap<>();
 
       if (criteria.name() != null) {
-         jpqlParts.add("UPPER(c.names) LIKE UPPER('%' || :names || '%')");
+         jpqlParts.add("UPPER(c.name) LIKE UPPER('%' || :name || '%')");
          params.put("name", criteria.name());
       }
 
@@ -60,12 +60,12 @@ public class CustomerSearchRepo {
 //      CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 //      CriteriaQuery<CustomerSearchResult> criteriaQuery = cb.createQuery(CustomerSearchResult.class);
 //      Root<Customer> root = criteriaQuery.from(Customer.class);
-//      criteriaQuery.select(cb.construct(CustomerSearchResult.class, root.get(Customer_.id), root.get(Customer_.names)));
+//      criteriaQuery.select(cb.construct(CustomerSearchResult.class, root.get(Customer_.id), root.get(Customer_.name)));
 //      List<Predicate> predicates = new ArrayList<>();
 //      predicates.add(cb.isTrue(cb.literal(true)));
 //
 //      if (criteria.getName() != null) {
-//         predicates.add(cb.like(cb.upper(root.get(Customer_.names)), cb.upper(cb.literal("%" + criteria.getName() + "%"))));
+//         predicates.add(cb.like(cb.upper(root.get(Customer_.name)), cb.upper(cb.literal("%" + criteria.getName() + "%"))));
 //      }
 //
 //      if (criteria.getEmail() != null) {
