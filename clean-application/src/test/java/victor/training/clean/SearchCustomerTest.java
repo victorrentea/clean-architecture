@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.application.dto.SearchCustomerCriteria.SearchCustomerCriteriaBuilder;
-import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.application.dto.SearchCustomerResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CountryRepo;
@@ -78,7 +78,7 @@ public class SearchCustomerTest {
     assertThat(searchAPI(criteriaWith().countryId(-1L))).isEmpty();
   }
 
-  private List<SearchCustomerResponse> searchAPI(SearchCustomerCriteriaBuilder searchCriteria) throws Exception {
+  private List<SearchCustomerResult> searchAPI(SearchCustomerCriteriaBuilder searchCriteria) throws Exception {
     String requestJson = jackson.writeValueAsString(searchCriteria.build());
     String responseJson = mockMvc.perform(post("/customers/search")
                     .contentType("application/json")

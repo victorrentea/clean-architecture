@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
 //      return "Not Found!";
 //   }
 
-   // any other uncaught exception
+   // any other uncaught exception // @ExceptionMapper(Exception)
    @ExceptionHandler(Exception.class)
    public ResponseEntity<String> onAnyException(HttpServletRequest request, Exception exception) {
       String userMessage = translateError(exception, ErrorCode.GENERAL, null, request);

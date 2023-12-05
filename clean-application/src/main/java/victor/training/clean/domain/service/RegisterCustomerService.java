@@ -18,7 +18,11 @@ public class RegisterCustomerService { // do you see the name of this class
 
   public void register(Customer customer) {
     // business rule
+    log.info("Creating new customer : {}", customer.getName());
+
     if (customerRepo.existsByEmail(customer.getEmail())) {
+//      log.error(//); bad practice. instead, add all details to thrown exception
+//      log.error("A customer with this {} already registered!", customer.getEmail());
       throw new IllegalArgumentException("A customer with this email is already registered!");
     }
 

@@ -10,6 +10,7 @@ public record SearchCustomerCriteria(
    @Schema(description = "Part of the name, case-insensitive")
    String name,
    String email,
+   String phone,
    Long countryId
 ) {
 }

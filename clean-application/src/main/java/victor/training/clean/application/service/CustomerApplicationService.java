@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
-import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.application.dto.SearchCustomerResult;
 import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
@@ -33,7 +33,15 @@ public class CustomerApplicationService {
   private final RegisterCustomerService registerCustomerService;
 
 
-  public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
+  public List<SearchCustomerResult> search(SearchCustomerCriteria searchCriteria) {
+//    List<SearchCustomerResponse> customers = elasticSearch.search(searchCriteria);
+
+    // don't bring in FULL entities for search
+//    List<Customer> customers = customerRepo.search(searchCriteria);
+
+    // only bring required info at search
+//    List<SearchCustomerResult> customers = customerRepo.search(searchCriteria);
+//    return customers;//.stream().map(SearchCustomerResponse::fromEntity);
     return customerSearchRepo.search(searchCriteria);
   }
 
@@ -50,6 +58,8 @@ public class CustomerApplicationService {
   @PostMapping("customers")
   // @Secured(ADMIN)
   public void register(@RequestBody @Valid CustomerDto dto) {
+    // 10k feet birds eyes view of the story,
+    // apply SLAb for those 20% complex problems
     Customer customer = dto.asEntity();
     registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext

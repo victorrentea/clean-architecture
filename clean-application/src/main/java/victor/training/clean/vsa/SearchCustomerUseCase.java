@@ -16,9 +16,9 @@ import java.util.Map;
 import static java.lang.String.join;
 
 @RequiredArgsConstructor
-//@RestController
+@RestController // @Resource
 public class SearchCustomerUseCase {
-  private final EntityManager entityManager;
+  private final EntityManager entityManager; // dsl
 
   @VisibleForTesting // only @Tests are allowed to use this
   record SearchCustomerRequest(

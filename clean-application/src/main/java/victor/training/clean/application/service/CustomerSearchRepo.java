@@ -3,7 +3,7 @@ package victor.training.clean.application.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
-import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.application.dto.SearchCustomerResult;
 
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ import static java.lang.String.join;
 public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
-   public List<SearchCustomerResponse> search(SearchCustomerCriteria criteria) {
-      String jpql = "SELECT new victor.training.clean.application.dto.SearchCustomerResponse(c.id, c.name)" +
+   public List<SearchCustomerResult> search(SearchCustomerCriteria criteria) {
+      String jpql = "SELECT new victor.training.clean.application.dto.SearchCustomerResult(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";
       List<String> jpqlParts = new ArrayList<>();
@@ -43,7 +43,7 @@ public class CustomerSearchRepo {
       }
 
       String whereCriteria = join(" AND ", jpqlParts);
-      var query = entityManager.createQuery(jpql + whereCriteria, SearchCustomerResponse.class);
+      var query = entityManager.createQuery(jpql + whereCriteria, SearchCustomerResult.class);
       for (String paramName : params.keySet()) {
          query.setParameter(paramName, params.get(paramName));
       }

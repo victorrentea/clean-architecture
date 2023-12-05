@@ -2,16 +2,13 @@ package victor.training.clean.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
-import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.application.dto.SearchCustomerResult;
 import victor.training.clean.application.service.CustomerApplicationService;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +22,7 @@ public class CustomerController {
 
    @Operation(description = "Search Customer")
    @PostMapping("customers/search")
-   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
+   public List<SearchCustomerResult> search(@RequestBody SearchCustomerCriteria searchCriteria) {
       return customerApplicationService.search(searchCriteria);
    }
 
