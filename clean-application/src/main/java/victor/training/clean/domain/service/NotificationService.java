@@ -20,10 +20,10 @@ public class NotificationService {
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
-    LdapUserDto userDto = fetchUserDetailsFromLdap(userId);
+    LdapUserDto ldapUserDto = fetchUserDetailsFromLdap(userId);
 
     // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
-    String fullName = userDto.getFname() + " " + userDto.getLname().toUpperCase();
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -35,20 +35,20 @@ public class NotificationService {
 
 
     // ⚠️ Null check can be forgotten in other places; TODO return Optional<> from the getter
-    if (userDto.getWorkEmail() != null) {
+    if (ldapUserDto.getWorkEmail() != null) {
       // ⚠️ the same logic repeats later TODO extract method in the new VO class
-      if (userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
-        email.getCc().add(userDto.getWorkEmail());
+      if (ldapUserDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
+        email.getCc().add(ldapUserDto.getWorkEmail());
       }
     }
 
     emailSender.sendEmail(email);
 
     // ⚠️ TEMPORAL COUPLING: tests fail if you swap the next 2 lines TODO use immutable VO
-    normalize(userDto);
+    normalize(ldapUserDto);
 
     // ⚠️ 'un' ?!! <- in my domain a User has a 'username' TODO use domain names in VO
-    customer.setCreatedByUsername(userDto.getUn());
+    customer.setCreatedByUsername(ldapUserDto.getUsername());
   }
 
   private LdapUserDto fetchUserDetailsFromLdap(String userId) {
@@ -62,7 +62,7 @@ public class NotificationService {
   }
 
   private void normalize(LdapUserDto dto) {
-    if (dto.getUn().startsWith("s")) {// eg 's12051' is a system user
+    if (dto.getUsername().startsWith("s")) {// eg 's12051' is a system user
       dto.setUn("system"); // ⚠️ dirty hack
     }
   }
