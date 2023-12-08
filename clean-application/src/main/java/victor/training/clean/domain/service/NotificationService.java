@@ -48,7 +48,7 @@ public class NotificationService {
     normalize(ldapUserDto);
 
     // ⚠️ 'un' ?!! <- in my domain a User has a 'username' TODO use domain names in VO
-    customer.setCreatedByUsername(ldapUserDto.getUsername());
+    customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 
   private LdapUserDto fetchUserDetailsFromLdap(String userId) {
@@ -62,7 +62,7 @@ public class NotificationService {
   }
 
   private void normalize(LdapUserDto dto) {
-    if (dto.getUsername().startsWith("s")) {// eg 's12051' is a system user
+    if (dto.getUn().startsWith("s")) {// eg 's12051' is a system user
       dto.setUn("system"); // ⚠️ dirty hack
     }
   }
