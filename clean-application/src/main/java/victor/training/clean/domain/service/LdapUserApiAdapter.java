@@ -14,7 +14,6 @@ import java.util.Optional;
 public class LdapUserApiAdapter {
   private final LdapApi ldapApi;
 
-
   // infra gargabe
   public User fetchUserDetailsFromLdap(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
