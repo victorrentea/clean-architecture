@@ -3,6 +3,7 @@ package victor.training.clean.domain.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -35,6 +36,7 @@ public class Customer {
   @GeneratedValue
   private Long id;
   @Setter(AccessLevel.NONE)
+  @Size(min = 5)
   private String name;
   private String email;
 

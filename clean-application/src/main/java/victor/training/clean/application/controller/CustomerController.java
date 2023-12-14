@@ -18,16 +18,17 @@ import java.util.NoSuchElementException;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @PostMapping("customers")
-   public void register(@RequestBody @Validated CustomerDto dto) {
-      customerApplicationService.register(dto);
-   }
+//   @PostMapping("customers")
+//   public void register(@RequestBody @Validated CustomerDto dto) {
+//      customerApplicationService.register(dto);
+//   }
 
-   @Operation(description = "Search Customer; For example:...") // move Swagger/OpenAPi docs on an interface that you implement
-   @PostMapping("customers/search")
-   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
-      return customerApplicationService.search(searchCriteria);
-   }
+//   @Operation(description = "Search Customer; For example:...") // move Swagger/OpenAPi docs on an interface that you implement
+//   @PostMapping("customers/search")
+//   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
+//      return customerApplicationService.search(searchCriteria);
+   // toDto
+//   }
 
    @GetMapping("customers/{id}")
    public CustomerDto findById(@PathVariable long id) {

@@ -1,8 +1,13 @@
 package victor.training.clean.application.service;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
@@ -14,6 +19,7 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -23,6 +29,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
+@RestController
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
@@ -30,9 +37,14 @@ public class CustomerApplicationService {
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
 
-  public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
+  @Operation(description = "Search Customer; For example:...")
+  // move Swagger/OpenAPi docs on an interface that you implement
+  @PostMapping("customers/search")
+  public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
     return customerSearchRepo.search(searchCriteria);
   }
+  // IMPOSSIBLE if you expose the same usecase from a MQ (Kafka) consumer? Grpc endpoint? SOAP? GraphQL? WebSockets?
+  // Volatile: if you need to change the contract you toucj the service
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
@@ -63,17 +75,19 @@ public class CustomerApplicationService {
   }
 
   @Transactional
-  public void register(CustomerDto dto) {
+  @PostMapping("customers")
+  public void register(@RequestBody @Validated CustomerDto dto) {
+    // validation has two types:
+    // 1. request payload validation/sanitize/ranges/sizes/XSS/whitelisting that you can apply on the DTO alone
+        // returns 404 STATUS CODE
+    // 2. business rule
+
     Customer customer = new Customer(dto.name());
     customer.setEmail(dto.email());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());
 
-    // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
 
     // business rule/validation
     if (customerRepo.existsByEmail(customer.getEmail())) {

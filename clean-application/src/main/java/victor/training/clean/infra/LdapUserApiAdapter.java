@@ -13,7 +13,6 @@ import java.util.Optional;
 public class LdapUserApiAdapter implements UserClient {
   private final LdapApi ldapApi;
 
-
   // infra gargabe
   @Override
   public User fetchUser(String userId) {

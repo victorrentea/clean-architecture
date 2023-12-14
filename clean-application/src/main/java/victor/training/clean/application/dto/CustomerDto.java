@@ -1,8 +1,8 @@
 package victor.training.clean.application.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -11,8 +11,15 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 // Dto used to both QUERY and COMMAND use-cases ?
 public record CustomerDto(
     Long id, // GET only (server-assigned)
+//    @Min(18)
+//    int age, // designing for the future can lead to over-engineering. YAGNI!
 
+//    Country country,
+    @NotBlank
+    @Size(min = 5)
     String name,
+//    @UniqueEmail custom jakarta validation annotaitons injected with a repo !!! DON'T DO IT.
+    // don't hit networ from custom validation annotations
     @Email // 200 characets regex
     @NotNull
     String email,
