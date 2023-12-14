@@ -18,11 +18,10 @@ import java.util.Optional;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
-
+private final LdapUserApiAdapter ldapUserApiAdapter;
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
-    User ldapUserDto = fetchUserDetailsFromLdap(userId);
+    User ldapUserDto = ldapUserApiAdapter.fetchUserDetailsFromLdap(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -48,29 +47,10 @@ public class NotificationService {
     customer.setCreatedByUsername(ldapUserDto.username());
   }
 
-  private User fetchUserDetailsFromLdap(String userId) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
-    }
-
-
-    String un = dtoList.get(0).getUn();
-    if (un.startsWith("s")) {// eg 's12051' is a system user
-      un="system"; // ⚠️ dirty hack 21:00 Fri
-   }
-
-
-    String fullName = dtoList.get(0).getFname() + " " + dtoList.get(0).getLname();
-    User user = new User(un,
-        fullName,
-        Optional.ofNullable(dtoList.get(0).getWorkEmail()));
-    return  user;
-  }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    User userDto = fetchUserDetailsFromLdap(userId);
+    User userDto = ldapUserApiAdapter.fetchUserDetailsFromLdap(userId);
 
     int discountPercentage = customer.getDiscountPercentage();
 
