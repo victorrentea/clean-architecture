@@ -48,4 +48,5 @@ public record CustomerDto(
         .discountPercentage(0) // TODO
         .build();
   }
+
 }

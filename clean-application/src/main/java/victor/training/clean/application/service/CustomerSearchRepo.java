@@ -19,7 +19,12 @@ import static java.lang.String.join;
 public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
+   // DDD: use-case optimized query pattern
+
+   // PANIC : you are using a dto from "driving" side in repo aka "driven" side ???
    public List<SearchCustomerResponse> search(SearchCustomerCriteria criteria) {
+//      String jpql = "SELECT c" +
+      // @Subselect, Spring Projections
       String jpql = "SELECT new victor.training.clean.application.dto.SearchCustomerResponse(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";
