@@ -1,15 +1,10 @@
 package victor.training.clean.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.infra.LdapApi;
 
 import java.time.LocalDate;
 import java.util.List;
