@@ -69,7 +69,6 @@ public class NotificationService {
     return  user;
   }
 
-
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
     User userDto = fetchUserDetailsFromLdap(userId);
 
@@ -91,7 +90,5 @@ public class NotificationService {
 
     emailSender.sendEmail(email);
   }
-
-
 
 }
