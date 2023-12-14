@@ -6,15 +6,14 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapUserApiAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
-private final LdapUserApiAdapter ldapUserApiAdapter;
+  private final IEmailSender emailSender;
+  private final ILdapUserApiAdapter ldapUserApiAdapter;
+
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
     User ldapUserDto = ldapUserApiAdapter.fetchUserDetailsFromLdap(userId);
@@ -42,7 +41,6 @@ private final LdapUserApiAdapter ldapUserApiAdapter;
     // ⚠️ 'un' ?!! <- in my domain a User has a 'username' TODO use domain names in VO
     customer.setCreatedByUsername(ldapUserDto.username());
   }
-
 
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
