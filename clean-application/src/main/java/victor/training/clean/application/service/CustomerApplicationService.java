@@ -39,10 +39,7 @@ public class CustomerApplicationService {
 
     // Several lines of domain logic operating on the state of a single Entity
     // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = 1;
-    if (customer.isGoldMember()) {
-      discountPercentage += 3;
-    }
+    int discountPercentage = customer.getDiscountPercentage();
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -53,9 +50,10 @@ public class CustomerApplicationService {
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+
 
         .discountPercentage(discountPercentage)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
@@ -66,9 +64,8 @@ public class CustomerApplicationService {
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = new Customer();
+    Customer customer = new Customer(dto.name());
     customer.setEmail(dto.email());
-    customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());
@@ -111,7 +108,7 @@ public class CustomerApplicationService {
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
     Customer customer = customerRepo.findById(id).orElseThrow();
     // CRUD part
-    customer.setName(dto.name());
+//    customer.setName(dto.name());
     customer.setEmail(dto.email());
     customer.setCountry(new Country().setId(dto.countryId()));
 

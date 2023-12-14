@@ -38,9 +38,9 @@ public record CustomerDto(
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressZip(customer.getShippingAddress().zip())
         .discountPercentage(0) // TODO
         .build();
   }
