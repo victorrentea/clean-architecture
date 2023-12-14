@@ -12,11 +12,11 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
-  private final ILdapUserApiAdapter ldapUserApiAdapter;
+  private final UserClient ldapUserApiAdapter;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
-    User ldapUserDto = ldapUserApiAdapter.fetchUserDetailsFromLdap(userId);
+    User ldapUserDto = ldapUserApiAdapter.fetchUser(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -44,7 +44,7 @@ public class NotificationService {
 
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    User userDto = ldapUserApiAdapter.fetchUserDetailsFromLdap(userId);
+    User userDto = ldapUserApiAdapter.fetchUser(userId);
 
     int discountPercentage = customer.getDiscountPercentage();
 

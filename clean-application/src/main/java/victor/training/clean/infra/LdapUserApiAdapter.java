@@ -3,20 +3,20 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.ILdapUserApiAdapter;
+import victor.training.clean.domain.service.UserClient;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class LdapUserApiAdapter implements ILdapUserApiAdapter {
+public class LdapUserApiAdapter implements UserClient {
   private final LdapApi ldapApi;
 
 
   // infra gargabe
   @Override
-  public User fetchUserDetailsFromLdap(String userId) {
+  public User fetchUser(String userId) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
