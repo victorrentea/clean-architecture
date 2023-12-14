@@ -224,9 +224,10 @@
       }
     }
   },
-  "components": {
-    "schemas": {
-      "CustomerDto": {
+  "components" : {
+    "schemas" : {
+      "CustomerDto" : {
+        "required" : [ "email" ],
         "type": "object",
         "properties": {
           "id": {

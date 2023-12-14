@@ -1,5 +1,7 @@
 package victor.training.clean.application.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -11,6 +13,8 @@ public record CustomerDto(
     Long id, // GET only (server-assigned)
 
     String name,
+    @Email // 200 characets regex
+    @NotNull
     String email,
     Long countryId,
 

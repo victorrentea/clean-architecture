@@ -23,7 +23,7 @@ public class CustomerController {
       customerApplicationService.register(dto);
    }
 
-   @Operation(description = "Search Customer")
+   @Operation(description = "Search Customer; For example:...") // move Swagger/OpenAPi docs on an interface that you implement
    @PostMapping("customers/search")
    public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
       return customerApplicationService.search(searchCriteria);
