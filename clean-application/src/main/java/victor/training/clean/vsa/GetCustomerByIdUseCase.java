@@ -14,7 +14,7 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
-//@RestController
+@RestController
 public class GetCustomerByIdUseCase {
   private final CustomerRepo customerRepo;
 
@@ -30,7 +30,7 @@ public class GetCustomerByIdUseCase {
   }
 
   @GetMapping("customer/{id}/vsa")
-  public GetCustomerByIdResponse findById(@PathVariable long id) {
+  public GetCustomerByIdResponse execute(@PathVariable long id) {
       Customer customer = customerRepo.findById(id).orElseThrow();
       return GetCustomerByIdResponse.builder()
               .id(customer.getId())

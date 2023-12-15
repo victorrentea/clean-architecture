@@ -25,6 +25,14 @@ public class ArchitectureTest {
                 .check(allProjectClasses);
     }
 
+    // write an archunit rule that stops application package from depenmding on infra package
+//    @Test
+//public void application_independent_of_infrastructure() {
+//        noClasses().that().resideInAPackage("..application..")
+//                .should().dependOnClassesThat().resideInAPackage("..infra..")
+//                .check(allProjectClasses);
+//    }
+
     @Test
     public void domain_independent_of_application() {
         noClasses().that().resideInAPackage("..domain..")

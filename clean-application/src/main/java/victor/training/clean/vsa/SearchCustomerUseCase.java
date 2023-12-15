@@ -16,7 +16,7 @@ import java.util.Map;
 import static java.lang.String.join;
 
 @RequiredArgsConstructor
-//@RestController
+@RestController
 public class SearchCustomerUseCase {
   private final EntityManager entityManager;
 
@@ -31,7 +31,8 @@ public class SearchCustomerUseCase {
   @VisibleForTesting
   record SearchCustomerResponse(
       long id,
-      String name
+      String name,
+      String email
       // TODO also return 'email' => only this file is impacted
   ) {
   }
@@ -39,7 +40,7 @@ public class SearchCustomerUseCase {
   @Operation(description = "Customer Search Poem")
   @PostMapping("customer/search-vsa")
   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerRequest criteria) {
-    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$SearchCustomerResponse(c.id, c.name)" +
+    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$SearchCustomerResponse(c.id, c.name, c.email)" +
                   " FROM Customer c " +
                   " WHERE ";
     List<String> jpqlParts = new ArrayList<>();
@@ -69,3 +70,4 @@ public class SearchCustomerUseCase {
     return query.getResultList();
   }
 }
+// split a class out if grows big.

@@ -23,8 +23,15 @@ public class CustomerSearchRepo {
 
    // PANIC : you are using a dto from "driving" side in repo aka "driven" side ???
    public List<SearchCustomerResponse> search(SearchCustomerCriteria criteria) {
-//      String jpql = "SELECT c" +
+
+      // using a DTO in the API in a very deep driven DB Adapter
+      // Implementing DDD calls this "Use-Case Optimized Query" pattern = CQRS at DB access level
+      // !!!!! !ONLY READS!!!!!!!!!!!
+      // it IS cheating. but it's cheating for a very good reason: performance
+
+//      String jpql = "SELECT c" + = brings  all fields from Customer (waste of network, mem, cpu)
       // @Subselect, Spring Projections
+      // Vlad Mihalcea - "do this always when searching in DB"
       String jpql = "SELECT new victor.training.clean.application.dto.SearchCustomerResponse(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";

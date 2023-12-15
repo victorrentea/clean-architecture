@@ -17,6 +17,7 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.domain.service.RegisterCustomerService;
+import victor.training.clean.infra.AnafClient;
 import victor.training.clean.infra.FiscalDetailsProvider;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class CustomerApplicationService {
   private final NotificationService notificationService;
   private final CustomerSearchRepo customerSearchRepo;
   private final InsuranceService insuranceService;
-  private final FiscalDetailsProvider anafClient;
+  private final AnafClient anafClient;
 
   @Operation(description = "Search Customer; For example:...")
   // move Swagger/OpenAPi docs on an interface that you implement
