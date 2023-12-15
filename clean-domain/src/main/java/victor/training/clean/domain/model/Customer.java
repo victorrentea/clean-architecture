@@ -13,7 +13,8 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 // SHOCK: my domain model maps via JPA/ORM/Doctrine to DB schema, like 95% of Java teams do today
-@Entity
+@Entity // >80% of teams use JPA/Hibernate/Doctrine
+// JPA + DOMAIN MODE = 💖💖💖💖💖💖
 @Data // Lombok BAD on Domain Model:
 // 1) hashCode uses @Id,
 // 2) toString can trigger ORM lazy-loading,
@@ -102,6 +103,11 @@ public class Customer {
     }
     status = Status.DELETED;
   }
+
+
+//  public victor.training.clean.application.dto.CustomerDto toDto() {
+//     shit coming up.....
+//  }
 }
 
 //region Code in the project might [not] follow the rule

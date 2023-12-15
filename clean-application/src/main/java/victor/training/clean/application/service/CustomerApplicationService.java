@@ -8,20 +8,17 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import victor.training.clean.application.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
-import victor.training.clean.application.ApplicationService;
-import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.infra.AnafClient;
+import victor.training.clean.domain.service.RegisterCustomerService;
+import victor.training.clean.infra.FiscalDetailsProvider;
 
-import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -35,7 +32,7 @@ public class CustomerApplicationService {
   private final NotificationService notificationService;
   private final CustomerSearchRepo customerSearchRepo;
   private final InsuranceService insuranceService;
-  private final AnafClient anafClient;
+  private final FiscalDetailsProvider anafClient;
 
   @Operation(description = "Search Customer; For example:...")
   // move Swagger/OpenAPi docs on an interface that you implement
@@ -51,26 +48,13 @@ public class CustomerApplicationService {
 
     // Several lines of domain logic operating on the state of a single Entity
     // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = customer.getDiscountPercentage();
 
     // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-
-        .discountPercentage(discountPercentage)
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
+    return CustomerDto.fromEntity(customer)
+//        .countryId()//more/..
+        // @ciprian: If I customise the DTO outside the DTO, will this be a pitfall for juniors?
+        // introduces heterogeneity in the design (eg via an .adr + pairing)
+        // a more homogenous solution -> a dedicated "mapper" class
         .build();
   }
 
@@ -79,44 +63,16 @@ public class CustomerApplicationService {
   public void register(@RequestBody @Validated CustomerDto dto) {
     // validation has two types:
     // 1. request payload validation/sanitize/ranges/sizes/XSS/whitelisting that you can apply on the DTO alone
-        // returns 404 STATUS CODE
+    // returns 404 STATUS CODE
     // 2. business rule
+    Customer customer = dto.toEntity(); // abuse of DTO: used in two endpoints > go CQRS
 
-    Customer customer = new Customer(dto.name());
-    customer.setEmail(dto.email());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
-
-
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode() != null) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
+    registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
-  private String normalize(String s) {
-    return s.toLowerCase().replace("\\s+", "");
-  }
+  private final RegisterCustomerService registerCustomerService;
+
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
@@ -143,8 +99,9 @@ public class CustomerApplicationService {
     insuranceService.customerDetailsChanged(customer);
   }
 
-
   private void auditRemovedGoldMember(String customerName, String reason) {
     log.info("Kafka.send ( {name:" + customerName + ", reason:" + reason + "} )");
   }
+
+
 }
