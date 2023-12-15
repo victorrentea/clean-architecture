@@ -11,7 +11,10 @@ import victor.training.clean.infra.FiscalDetailsProvider;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RegisterCustomerService {
+// class CustomerRegistrator // noun
+
+// class RegisterCustomer //verb
+public class RegisterCustomerService { // verb
 private final CustomerRepo customerRepo;
 private final FiscalDetailsProvider fiscalDetailsProvider;
   public void register(Customer customer) {
