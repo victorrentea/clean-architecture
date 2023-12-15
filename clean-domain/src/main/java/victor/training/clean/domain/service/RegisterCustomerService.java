@@ -15,6 +15,8 @@ import victor.training.clean.infra.FiscalDetailsProvider;
 
 // class RegisterCustomer //verb
 public class RegisterCustomerService { // verb
+  // Domain services are failures to put logic in the model
+  // . Reasons: requires infrastructure, requires external API, requires a lot of data from the DB
 private final CustomerRepo customerRepo;
 private final FiscalDetailsProvider fiscalDetailsProvider;
   public void register(Customer customer) {
