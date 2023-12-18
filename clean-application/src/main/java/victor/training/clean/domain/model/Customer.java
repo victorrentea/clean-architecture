@@ -16,7 +16,7 @@ record ShippingAddress(String city, String street, String zip) {
     requireNonNull(street);
     requireNonNull(zip);
   }
-}
+// level2: ask: do I really have a single Customer? or should I break the entire @Entity: CustomerContactDetails, CustoemrShippingDetails, CustomerBillingDetails
 @Entity
 @Data // BAD: 1) hashCode uses @Id, 2) toString can trigger ORM lazy-loading, 3) setters for all fields = no encapsulation
 public class Customer {
