@@ -1,15 +1,22 @@
 package victor.training.clean.domain.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
 
+// Value Object = small, immutable object that is used as a field in an Entity
+// which brings more meaning to the DATA
+@Embeddable // capture the concept of a ShippingAddress you are currently using in you req/PO/testes/FE.....
+record ShippingAddress(String city, String street, String zip) {
+  public ShippingAddress {
+    requireNonNull(city);
+    requireNonNull(street);
+    requireNonNull(zip);
+  }
+}
 @Entity
 @Data // BAD: 1) hashCode uses @Id, 2) toString can trigger ORM lazy-loading, 3) setters for all fields = no encapsulation
 public class Customer {
@@ -20,9 +27,11 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+  @Embedded // the fields of ShippingAddress will be columns in the Customer table
+  private ShippingAddress shippingAddress;
 
   @ManyToOne
   private Country country;
