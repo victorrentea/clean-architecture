@@ -1,7 +1,11 @@
 package victor.training.clean.application.dto;
 
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+
+import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -10,6 +14,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (server-assigned)
 
+    @Size(min=5)
     String name,
     String email,
     Long countryId,
@@ -38,10 +43,21 @@ public record CustomerDto(
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
-        .discountPercentage(0) // TODO
+
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+        .discountPercentage(customer.getDiscountPercentage())
         .build();
+  }
+
+  public Customer toEntity() {
+    Customer customer = new Customer();
+    customer.setEmail(email());
+    customer.setName(name());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(countryId()));
+    customer.setLegalEntityCode(legalEntityCode());
+    return customer;
   }
 }

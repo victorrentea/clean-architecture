@@ -70,16 +70,11 @@ public class NotificationService {
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
     LdapUserDto userDto = fetchUserDetailsFromLdap(userId);
 
-    int discountPercentage = 1;
-    if (customer.isGoldMember()) {
-      discountPercentage += 3;
-    }
-
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome to our Gold membership!")
-        .body("Please enjoy a special discount of " + discountPercentage + "%\n" +
+        .body("Please enjoy a special discount of " + customer.getDiscountPercentage() + "%\n" +
               "Yours sincerely, " + userDto.getFname() + " " + userDto.getLname().toUpperCase())
         .build();
 

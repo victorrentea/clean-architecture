@@ -12,9 +12,9 @@ import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.AnafClient;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -39,10 +39,7 @@ public class CustomerApplicationService {
 
     // Several lines of domain logic operating on the state of a single Entity
     // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = 1;
-    if (customer.isGoldMember()) {
-      discountPercentage += 3;
-    }
+    // CustomerUtil / CustomerHelper -> gets forgotten
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -53,11 +50,14 @@ public class CustomerApplicationService {
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+//        .shippingAddressStreet(customer.getShippingAddressStreet())
+//        .shippingAddressCity(customer.getShippingAddressCity())
+//        .shippingAddressZip(customer.getShippingAddressZip())
 
-        .discountPercentage(discountPercentage)
+        .discountPercentage(customer.getDiscountPercentage())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
@@ -66,46 +66,11 @@ public class CustomerApplicationService {
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = new Customer();
-    customer.setEmail(dto.email());
-    customer.setName(dto.name());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
-
-    // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
-
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode() != null) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
+    Customer customer = dto.toEntity();
+    registerCustomerService. register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
-
-  private String normalize(String s) {
-    return s.toLowerCase().replace("\\s+", "");
-  }
+  private final RegisterCustomerService registerCustomerService;
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
