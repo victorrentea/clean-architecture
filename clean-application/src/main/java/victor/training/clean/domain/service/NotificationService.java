@@ -12,10 +12,11 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
-  private final ILdapAdapter ldapAdapter;
+  private final ExternalUserProvider externalUserProvider;
+
 
   public void sendWelcomeEmail(Customer customer, String userId) {
-    User user = ldapAdapter.fetchUser(userId);
+    User user = externalUserProvider.fetchUser(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -44,7 +45,7 @@ public class NotificationService {
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    User user = ldapAdapter.fetchUser(userId);
+    User user = externalUserProvider.fetchUser(userId);
 
     int discountPercentage = customer.discountPercentage();
 

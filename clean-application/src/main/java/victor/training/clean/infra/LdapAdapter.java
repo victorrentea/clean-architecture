@@ -2,13 +2,13 @@ package victor.training.clean.infra;
 
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.ILdapAdapter;
+import victor.training.clean.domain.service.ExternalUserProvider;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LdapAdapter implements ILdapAdapter {
+public class LdapAdapter implements ExternalUserProvider {
   private final LdapApi ldapApi;
 
   public LdapAdapter(LdapApi ldapApi) {
