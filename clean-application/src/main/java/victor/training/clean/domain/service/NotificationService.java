@@ -6,19 +6,13 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final LdapAdapter ldapAdapter;
+  private final IEmailSender emailSender;
+  private final ILdapAdapter ldapAdapter;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     User user = ldapAdapter.fetchUser(userId);

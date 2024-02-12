@@ -1,22 +1,21 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.ILdapAdapter;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LdapAdapter {
+public class LdapAdapter implements ILdapAdapter {
   private final LdapApi ldapApi;
 
   public LdapAdapter(LdapApi ldapApi) {
     this.ldapApi = ldapApi;
   }
 
+  @Override
   public User fetchUser(String userId) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserDetailsFromLdap(userId);
