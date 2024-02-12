@@ -49,6 +49,7 @@ public class NotificationService {
     customer.setCreatedByUsername(user.username());
   }
 
+
   private User fetchUser(String userId) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserDetailsFromLdap(userId);
