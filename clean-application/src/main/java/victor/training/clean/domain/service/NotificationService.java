@@ -21,8 +21,7 @@ public class NotificationService {
   private final LdapApi ldapApi;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
-    User user = foo(userId);
-
+    User user = fetchUser(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -50,7 +49,7 @@ public class NotificationService {
     customer.setCreatedByUsername(user.username());
   }
 
-  private User foo(String userId) {
+  private User fetchUser(String userId) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserDetailsFromLdap(userId);
     // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
@@ -78,7 +77,7 @@ public class NotificationService {
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    User user = foo(userId);
+    User user = fetchUser(userId);
 
     int discountPercentage = customer.discountPercentage();
 
