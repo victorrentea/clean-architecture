@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -19,36 +21,50 @@ public class NotificationService {
   private final LdapApi ldapApi;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
-    // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserDetailsFromLdap(userId);
+    User user = foo(userId);
 
-    // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
         .body("Dear " + customer.getName() + ", Welcome to our clean app!\n" +
-              "Sincerely, " + fullName)
+              "Sincerely, " + user.fullName())
         .build();
 
 
     // ⚠️ Null check can be forgotten in other places; TODO return Optional<> from the getter
-    if (ldapUserDto.getWorkEmail() != null) {
+    if (user.workEmail().isPresent()) {
       // ⚠️ the same logic repeats later TODO extract method in the new VO class
-      if (ldapUserDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
-        email.getCc().add(ldapUserDto.getWorkEmail());
+      if (user.isMyDomain()) {
+        email.getCc().add(user.workEmail().get());
       }
     }
 
     emailSender.sendEmail(email);
 
-    // ⚠️ TEMPORAL COUPLING: tests fail if you swap the next 2 lines TODO use immutable VO
-    normalize(ldapUserDto);
+//    // ⚠️ TEMPORAL COUPLING: tests fail if you swap the next 2 lines TODO use immutable VO
+//    normalize(user);
 
     // ⚠️ 'un' ?!! <- in my domain a User has a 'username' TODO use domain names in VO
-    customer.setCreatedByUsername(ldapUserDto.getUn());
+    customer.setCreatedByUsername(user.username());
+  }
+
+  private User foo(String userId) {
+    // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
+    LdapUserDto ldapUserDto = fetchUserDetailsFromLdap(userId);
+    // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    String username;
+    if (ldapUserDto.getUn().startsWith("s")) {// eg 's12051' is a system user
+      username = "system"; // ⚠️ dirty hack
+    } else {
+      username = ldapUserDto.getUn();
+    }
+    return new User(
+        username,
+        fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail()));
   }
 
   private LdapUserDto fetchUserDetailsFromLdap(String userId) {
@@ -61,14 +77,8 @@ public class NotificationService {
     return dtoList.get(0);
   }
 
-  private void normalize(LdapUserDto dto) {
-    if (dto.getUn().startsWith("s")) {// eg 's12051' is a system user
-      dto.setUn("system"); // ⚠️ dirty hack
-    }
-  }
-
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    LdapUserDto userDto = fetchUserDetailsFromLdap(userId);
+    User user = foo(userId);
 
     int discountPercentage = customer.discountPercentage();
 
@@ -77,16 +87,15 @@ public class NotificationService {
         .to(customer.getEmail())
         .subject("Welcome to our Gold membership!")
         .body("Please enjoy a special discount of " + discountPercentage + "%\n" +
-              "Yours sincerely, " + userDto.getFname() + " " + userDto.getLname().toUpperCase())
+              "Yours sincerely, " + user.fullName())
         .build();
 
-    if (userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
-      email.getCc().add(userDto.getWorkEmail());
-    }
+    user.workEmail()
+        .filter(workEmail -> user.isMyDomain())
+        .ifPresent(workEmail -> email.getCc().add(workEmail));
 
     emailSender.sendEmail(email);
   }
-
 
 
 }
