@@ -18,10 +18,10 @@ import java.util.Optional;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final LdapAdapter ldapAdapter;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
-    User user = fetchUser(userId);
+    User user = ldapAdapter.fetchUser(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -49,36 +49,8 @@ public class NotificationService {
     customer.setCreatedByUsername(user.username());
   }
 
-
-  private User fetchUser(String userId) {
-    // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserDetailsFromLdap(userId);
-    // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    String username;
-    if (ldapUserDto.getUn().startsWith("s")) {// eg 's12051' is a system user
-      username = "system"; // ⚠️ dirty hack
-    } else {
-      username = ldapUserDto.getUn();
-    }
-    return new User(
-        username,
-        fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail()));
-  }
-
-  private LdapUserDto fetchUserDetailsFromLdap(String userId) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
-    }
-
-    return dtoList.get(0);
-  }
-
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    User user = fetchUser(userId);
+    User user = ldapAdapter.fetchUser(userId);
 
     int discountPercentage = customer.discountPercentage();
 
