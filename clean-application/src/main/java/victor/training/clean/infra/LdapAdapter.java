@@ -7,7 +7,7 @@ import victor.training.clean.domain.service.ExternalUserProvider;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Service // auto-discovered by Spring
 public class LdapAdapter implements ExternalUserProvider {
   private final LdapApi ldapApi;
 

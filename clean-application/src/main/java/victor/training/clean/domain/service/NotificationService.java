@@ -12,8 +12,8 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
+//  @Named("ldapAdapter")
   private final ExternalUserProvider externalUserProvider;
-
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     User user = externalUserProvider.fetchUser(userId);
