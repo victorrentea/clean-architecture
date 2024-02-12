@@ -1,6 +1,7 @@
 package victor.training.clean.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,11 +19,15 @@ import java.util.NoSuchElementException;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @PostMapping("customers")
-   public void register(@RequestBody @Validated CustomerDto dto) {
-      customerApplicationService.register(dto);
-   }
+//   @PostMapping("customers")
+//   public void register(@RequestBody @Validated CustomerDto dto) {
+//      customerApplicationService.register(dto);
+//      // what else can we do here?
+//      // status codes. 403, 404, 400, 500 -> @ExceptionMapper: global exception handling: catches all exceptions and returns a response
+//      // http headers
+//   }
 
+//   @RolesAllowed()
    @Operation(description = "Search Customer")
    @PostMapping("customers/search")
    public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {

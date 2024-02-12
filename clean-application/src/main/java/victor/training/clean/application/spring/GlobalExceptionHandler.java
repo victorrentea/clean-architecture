@@ -23,7 +23,7 @@ import static org.springframework.http.ResponseEntity.*;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestControllerAdvice
+@RestControllerAdvice // jax-rs equivalent: @ExceptionMapper
 public class GlobalExceptionHandler {
    private final MessageSource messageSource;
 
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
    }
 
    // @Validated errors
-   @ResponseStatus(INTERNAL_SERVER_ERROR)
+   @ResponseStatus(BAD_REQUEST) // 400
    @ExceptionHandler(MethodArgumentNotValidException.class)
    public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
       List<String> response = e.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());

@@ -3,10 +3,13 @@ package victor.training.clean.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import victor.training.clean.application.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
-import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
@@ -23,7 +26,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
-public class CustomerApplicationService {
+public class CustomerApplicationService implements CustomerApplicationApi{
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
   private final CustomerSearchRepo customerSearchRepo;
@@ -65,7 +68,8 @@ public class CustomerApplicationService {
   }
 
   @Transactional
-  public void register(CustomerDto dto) {
+
+  public void register( CustomerDto dto) {
     Customer customer = new Customer();
     customer.setEmail(dto.email());
     customer.setName(dto.name());

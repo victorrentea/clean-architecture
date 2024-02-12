@@ -22,7 +22,7 @@ public class IndependentSubdomainsArchUnitTest {
 
    private JavaClasses classes = new ClassFileImporter().importPackages("victor");
    private GivenSlices slices = SlicesRuleDefinition.slices()
-           .matching("..clean.(*)..*");
+           .matching("..clean.(*)..");
 
    @Test
    public void independentSubdomains() {
@@ -35,7 +35,7 @@ public class IndependentSubdomainsArchUnitTest {
 
       // A: decoupling phase: progressively lower this number:
       assertThat(violations).hasSizeLessThanOrEqualTo(123); // <-- real life: starting point after moving classes around
-      assertThat(violations).hasSizeLessThanOrEqualTo(0); // goal, 6 mo from now
+      assertThat(violations).hasSizeLessThanOrEqualTo(0); // goal, 6 y from now
 
       // B: maintenance phase: fail test at any deviation
       // sliceRule.check(classes);
