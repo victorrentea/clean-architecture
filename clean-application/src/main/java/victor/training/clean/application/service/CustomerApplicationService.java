@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import victor.training.clean.application.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
@@ -15,10 +13,9 @@ import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.AnafClient;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -31,10 +28,11 @@ public class CustomerApplicationService implements CustomerApplicationApi{
   private final NotificationService notificationService;
   private final CustomerSearchRepo customerSearchRepo;
   private final InsuranceService insuranceService;
-  private final AnafClient anafClient;
+  private final RegisterCustomerService registerCustomerService;
 
   public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
-    return customerSearchRepo.search(searchCriteria);
+    // read (search) uses a different model than the one used for write (register, update) = the DTO model
+    return customerSearchRepo.search(searchCriteria); // very common pattern "Use-case optimized query"
   }
 
   public CustomerDto findById(long id) {
@@ -42,73 +40,26 @@ public class CustomerApplicationService implements CustomerApplicationApi{
 
     // Several lines of domain logic operating on the state of a single Entity
     // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = customer.discountPercentage();
+//    int discountPercentage = customer.discountPercentage();
 
     // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-//        .shippingAddressStreet(customer.getShippingAddressStreet())
-//        .shippingAddressCity(customer.getShippingAddressCity())
-//        .shippingAddressZip(customer.getShippingAddressZip())
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-        .discountPercentage(discountPercentage)
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+    return CustomerDto.fromEntity(customer); // ok < love: less stupid classes. less boilerplate. kill the mappers
+//    return new CustomerDto(customer); // ok
+//    return mapper.map(customer); // ok
+//    return customer.toDto(); // bad
   }
 
   @Transactional
-
-  public void register( CustomerDto dto) {
-    Customer customer = new Customer();
-    customer.setEmail(dto.email());
-    customer.setName(dto.name());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
-
+  public void register( @Validated CustomerDto dto) {
+    Customer customer = dto.toEntity();
+//    customerDtoValidationService.validate(dto);
     // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
+//    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
+//      throw new IllegalArgumentException("The customer name is too short");
+//    }
 
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode() != null) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
+    registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
-  }
-
-  private String normalize(String s) {
-    return s.toLowerCase().replace("\\s+", "");
   }
 
   @Transactional

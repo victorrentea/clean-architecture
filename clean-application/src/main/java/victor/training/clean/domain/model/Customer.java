@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import victor.training.clean.application.dto.CustomerDto;
 
 import java.time.LocalDate;
 
@@ -47,6 +48,11 @@ public class Customer {
     }
     return discountPercentage;
   }
+
+  // polluting the domain
+//  public CustomerDto toDto() {
+//    return
+//  }
 
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
