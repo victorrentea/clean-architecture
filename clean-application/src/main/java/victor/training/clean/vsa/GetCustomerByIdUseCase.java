@@ -27,8 +27,10 @@ public class GetCustomerByIdUseCase {
       String creationDateStr,
       boolean gold,
       String goldMemberRemovalReason) {
+
   }
 
+//  @Path
   @GetMapping("customer/{id}/vsa")
   public GetCustomerByIdResponse findById(@PathVariable long id) {
       Customer customer = customerRepo.findById(id).orElseThrow();

@@ -38,7 +38,7 @@ public class NotificationService {
     emailSender.sendEmail(email);
 
 //    // ⚠️ TEMPORAL COUPLING: tests fail if you swap the next 2 lines TODO use immutable VO
-//    normalize(user);
+//    removeSpaces(user);
 
     // ⚠️ 'un' ?!! <- in my domain a User has a 'username' TODO use domain names in VO
     customer.setCreatedByUsername(user.username());

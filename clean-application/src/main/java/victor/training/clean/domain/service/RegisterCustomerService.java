@@ -11,7 +11,7 @@ import victor.training.clean.infra.FiscalDetailsProvider;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class RegisterCustomerService {
+public class RegisterCustomerService extends Base {
   private final CustomerRepo customerRepo;
   private final FiscalDetailsProvider fiscalDetailsProvider;
 
@@ -28,7 +28,7 @@ public class RegisterCustomerService {
         throw new IllegalArgumentException("Company already registered");
       }
       AnafResult anafResult = fiscalDetailsProvider.query(customer.getLegalEntityCode());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
+      if (anafResult == null || !StringUtils.removeSpaces(customer.getName()).equals(StringUtils.removeSpaces(anafResult.getName()))) {
         throw new IllegalArgumentException("Legal Entity not found!");
       }
       if (anafResult.isVatPayer()) {
@@ -38,10 +38,6 @@ public class RegisterCustomerService {
     log.info("More Business Logic (imagine)");
     log.info("More Business Logic (imagine)");
     customerRepo.save(customer);
-  }
-
-  private String normalize(String s) {
-    return s.toLowerCase().replace("\\s+", "");
   }
 
 }
