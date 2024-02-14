@@ -30,6 +30,7 @@ public class GlobalExceptionHandler {
    // my custom exception: translate error code enum to HTTP status and human-readable message via messages.properties (+i18n)
    @ExceptionHandler(CleanException.class)
    public ResponseEntity<String> onCleanException(HttpServletRequest request, CleanException cleanException) {
+      log.error("CleanException occurred: " + cleanException.getErrorCode(), cleanException);
       String userMessage = translateError(cleanException, cleanException.getErrorCode(), cleanException.getParameters(), request);
       String httpStatusCodeStr = messageSource.getMessage("error." + cleanException.getErrorCode() + ".code", null, "500", Locale.ENGLISH);
       int httpStatusCode = Integer.parseInt(httpStatusCodeStr);
