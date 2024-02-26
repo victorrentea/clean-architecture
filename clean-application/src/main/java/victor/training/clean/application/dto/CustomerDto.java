@@ -1,5 +1,6 @@
 package victor.training.clean.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -12,7 +13,7 @@ public record CustomerDto(
 
     String name,
     String email,
-    Long countryId,
+    Long country,
 
     String shippingAddressCity, // GET only (updated via dedicated endpoint)
     String shippingAddressStreet, // GET only (updated via dedicated endpoint)
@@ -32,16 +33,20 @@ public record CustomerDto(
         .id(customer.getId())
         .name(customer.getName())
         .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
+        .country(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
-        .discountPercentage(0) // TODO
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+        .discountPercentage(customer.discountPercentage())
         .build();
+  }
+  @JsonIgnore
+  public String getFoo() {
+    return "foo";
   }
 }

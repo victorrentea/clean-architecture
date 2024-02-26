@@ -38,7 +38,7 @@ public class CustomerSearchRepo {
       }
 
       if (criteria.countryId() != null) {
-         jpqlParts.add("c.country.id = :countryId");
+         jpqlParts.add("c.country.id = :country");
          params.put("countryId", criteria.countryId());
       }
 

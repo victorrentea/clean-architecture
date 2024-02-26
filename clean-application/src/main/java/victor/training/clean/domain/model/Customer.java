@@ -1,5 +1,7 @@
 package victor.training.clean.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.LastModifiedBy;
 
@@ -26,6 +28,7 @@ public class Customer {
   @ManyToOne
   private Country country;
 
+//  @JsonFormat(pattern = "yyyy-MM-dd") // shit polluting the domain with presentation concenrs breaks MVC
   private LocalDate createdDate;
   private String createdByUsername;
 
@@ -168,7 +171,10 @@ public class Customer {
   }
 
   private Status status = Status.DRAFT;
+  @JsonIgnore
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later: HDD = Hope-Driven Development
+//  @JsonIgnore
+//  private String deletedBy; // ⚠ Always not-null when status = VALIDATED or later: HDD = Hope-Driven Development
 
   public void validate(String user) {
     // small constrainted mutation allows to reason about the state of the object in isolation.

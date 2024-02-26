@@ -2,7 +2,6 @@ package victor.training.clean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -64,7 +63,7 @@ public class LargeIntegrationTest {
         return CustomerDto.builder()
             .email(CUSTOMER_EMAIL)
             .name("::name::")
-            .countryId(country.getId());
+            .country(country.getId());
     }
 
     @Test
@@ -85,7 +84,7 @@ public class LargeIntegrationTest {
         assertThat(responseDto.id()).isEqualTo(customer.getId());
         assertThat(responseDto.name()).isEqualTo("::name::");
         assertThat(responseDto.email()).isEqualTo(CUSTOMER_EMAIL);
-        assertThat(responseDto.countryId()).isEqualTo(country.getId());
+        assertThat(responseDto.country()).isEqualTo(country.getId());
         assertThat(responseDto.createdDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         assertThat(search("ame")).hasSize(1);

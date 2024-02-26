@@ -45,13 +45,16 @@ public class CustomerApplicationService {
         .id(customer.getId())
         .name(customer.getName())
         .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
+        .country(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+//        .shippingAddressStreet(customer.getShippingAddressStreet())
+//        .shippingAddressCity(customer.getShippingAddressCity())
+//        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressZip(customer.getShippingAddress().zip())
 
         .discountPercentage(customer.discountPercentage())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
@@ -66,7 +69,7 @@ public class CustomerApplicationService {
     customer.setEmail(dto.email());
     customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
+    customer.setCountry(new Country().setId(dto.country()));
     customer.setLegalEntityCode(dto.legalEntityCode());
 
     // request payload validation
@@ -109,7 +112,7 @@ public class CustomerApplicationService {
     // CRUD part
     customer.setName(dto.name());
     customer.setEmail(dto.email());
-    customer.setCountry(new Country().setId(dto.countryId()));
+    customer.setCountry(new Country().setId(dto.country()));
 
     if (!customer.isGoldMember() && dto.gold()) {
       // enable gold member status
