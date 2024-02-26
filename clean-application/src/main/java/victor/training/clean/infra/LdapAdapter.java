@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.ILdapAdapter;
+import victor.training.clean.domain.service.UserLookupService;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-public class LdapAdapter implements ILdapAdapter {
+public class LdapAdapter implements UserLookupService {
     private final LdapApi ldapApi;
 
 

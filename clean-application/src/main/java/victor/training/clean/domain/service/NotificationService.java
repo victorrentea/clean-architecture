@@ -11,11 +11,11 @@ import victor.training.clean.domain.model.User;
 @Slf4j
 @Service
 public class NotificationService {
-  private final IEmailSender emailSender;
-  private final ILdapAdapter ldapAdapter;
+  private final EmailSender emailSender;
+  private final UserLookupService userLookupService;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
-    User user = ldapAdapter.lookupUser(userId);
+    User user = userLookupService.lookupUser(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
