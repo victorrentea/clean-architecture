@@ -7,11 +7,6 @@ import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
 
-// value object = immutable class with no identity (PK)
-@Embeddable
-record Address(String city, String street, String zip) {
-}
-
 @Entity
 @Data // BAD: 1) hashCode uses @Id, 2) toString can trigger ORM lazy-loading, 3) setters for all fields = no encapsulation
 public class Customer {
