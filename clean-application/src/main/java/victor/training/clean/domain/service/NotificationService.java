@@ -36,8 +36,6 @@ public class NotificationService {
     }
     User x = new User(username, fullName, Optional.ofNullable(ldapUserDto.getWorkEmail()));
 
-    // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
-
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
