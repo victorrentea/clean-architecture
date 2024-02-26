@@ -3,10 +3,8 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.ILdapAdapter;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +12,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-public class LdapAdapter {
+public class LdapAdapter implements ILdapAdapter {
     private final LdapApi ldapApi;
 
 
+  @Override
   public User lookupUser(String userId) { // BEWARE: NETWORK API CALL INVOLVED
     // ⚠️ external DTO directly used in my app
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null); // fName???
