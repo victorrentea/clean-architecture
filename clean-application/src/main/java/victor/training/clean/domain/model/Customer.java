@@ -16,10 +16,6 @@ public class Customer {
   private String name;
   private String email;
 
-  // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-//  private String shippingAddressCity;
-//  private String shippingAddressStreet;
-//  private String shippingAddressZip;
   @Embedded
   private Address shippingAddress;
 

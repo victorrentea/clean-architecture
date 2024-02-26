@@ -3,6 +3,7 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.application.service.CustomerHelper;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.infra.EmailSender;
@@ -70,12 +71,9 @@ public class NotificationService {
   public void sendGoldBenefitsEmail(Customer customer, String userId) {
     LdapUserDto userDto = fetchUserDetailsFromLdap(userId);
 
-    int discountPercentage = 1;
-    if (customer.isGoldMember()) {
-      discountPercentage += 3;
-    }
+    int discountPercentage = CustomerHelper.getDiscountPercentage(customer);
 
-    Email email = Email.builder()
+     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome to our Gold membership!")
