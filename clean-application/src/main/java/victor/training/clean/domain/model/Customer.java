@@ -1,14 +1,16 @@
 package victor.training.clean.domain.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
+
+// value object = immutable class with no identity (PK)
+@Embeddable
+record Address(String city, String street, String zip) {
+}
 
 @Entity
 @Data // BAD: 1) hashCode uses @Id, 2) toString can trigger ORM lazy-loading, 3) setters for all fields = no encapsulation
@@ -20,9 +22,11 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+  @Embedded
+  private Address shippingAddress;
 
   @ManyToOne
   private Country country;
