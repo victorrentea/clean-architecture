@@ -35,6 +35,7 @@ public class CustomerController {
 //      //2) compose a response from various modules = orchestration !! to read or write
 //      //3) @Secured("SEARCH_CUSTOMER") on service which is also called from a MessageListener @RunAs("ROLE_SEARCH_CUSTOMER")
 //      //4) if the same feature is used both via REST and MQ
+   // 5) fake reason: converting exceptions to status codes 400, 404, 500: @see GlobalExceptionHandler for the correct invisible solution
 //      return customerApplicationService.search(searchCriteria);
 //   }
 

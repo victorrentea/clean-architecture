@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @RestController // custom annotation refining the classic @Service
-public class CustomerApplicationService {
+public class CustomerApplicationService implements CustomerApplicationApi {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
   private final CustomerSearchRepo customerSearchRepo;
@@ -71,9 +71,9 @@ public class CustomerApplicationService {
         .build();
   }
 
+   @Override
    @Transactional
-   @PostMapping("customers")
-   public void register(@RequestBody @Validated CustomerDto dto) {
+   public void register(CustomerDto dto) {
 
     Customer customer = new Customer();
     customer.setEmail(dto.email());
