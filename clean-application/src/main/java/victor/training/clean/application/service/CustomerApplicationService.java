@@ -1,8 +1,13 @@
 package victor.training.clean.application.service;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
@@ -22,7 +27,7 @@ import static java.util.Objects.requireNonNull;
 
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
-@ApplicationService // custom annotation refining the classic @Service
+@RestController // custom annotation refining the classic @Service
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
@@ -30,7 +35,10 @@ public class CustomerApplicationService {
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
 
-  public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
+   @Operation(description = "Search Customer")
+   @PostMapping("customers/search")
+//   @KafkaListener(topics = "customer-search")
+   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
     return customerSearchRepo.search(searchCriteria);
   }
 
@@ -63,8 +71,10 @@ public class CustomerApplicationService {
         .build();
   }
 
-  @Transactional
-  public void register(CustomerDto dto) {
+   @Transactional
+   @PostMapping("customers")
+   public void register(@RequestBody @Validated CustomerDto dto) {
+
     Customer customer = new Customer();
     customer.setEmail(dto.email());
     customer.setName(dto.name());
