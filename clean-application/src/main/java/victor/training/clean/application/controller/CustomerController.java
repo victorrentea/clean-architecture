@@ -47,9 +47,19 @@ public class CustomerController {
    //</editor-fold>
 
    @PutMapping("customers/{id}")
+//   public void update(@PathVariable long id, @RequestBody UpdateCustomerRequest dto) {
    public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
       customerApplicationService.update(id, dto);
    }
+
+//   @PutMapping("customers/{id}/details")
+//   public void update(@PathVariable long id, @RequestBody UpdateCustomerDetailsRequest dto) {
+
+//   @PutMapping("customers/{id}/gold/enable")
+//   public void setGold(@PathVariable long id) {
+
+//   @PutMapping("customers/{id}/gold/disable")
+//   public void setNotGold(@PathVariable long id, @RequestBody String reason) {
 
    //<editor-fold desc="PUT returning ResponseEntity for 404 👎">
    //   @PutMapping("customers/{id}")

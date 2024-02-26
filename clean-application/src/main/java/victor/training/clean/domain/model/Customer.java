@@ -1,9 +1,7 @@
 package victor.training.clean.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -100,7 +98,7 @@ public class Customer {
     return this.status;
   }
 
-  public Optional<String> getValidatedBy() {
+  public Optional<String> validatedBy() {
     return Optional.ofNullable(this.validatedBy);
   }
 
@@ -163,7 +161,7 @@ public class Customer {
 
 
   public String toString() {
-    return "Customer(id=" + this.getId() + ", name=" + this.getName() + ", email=" + this.getEmail() + ", shippingAddress=" + this.getShippingAddress() + ", country=" + this.getCountry() + ", createdDate=" + this.getCreatedDate() + ", createdByUsername=" + this.getCreatedByUsername() + ", goldMember=" + this.isGoldMember() + ", goldMemberRemovalReason=" + this.getGoldMemberRemovalReason() + ", legalEntityCode=" + this.getLegalEntityCode() + ", discountedVat=" + this.isDiscountedVat() + ", status=" + this.getStatus() + ", validatedBy=" + this.getValidatedBy() + ")";
+    return "Customer(id=" + this.getId() + ", name=" + this.getName() + ", email=" + this.getEmail() + ", shippingAddress=" + this.getShippingAddress() + ", country=" + this.getCountry() + ", createdDate=" + this.getCreatedDate() + ", createdByUsername=" + this.getCreatedByUsername() + ", goldMember=" + this.isGoldMember() + ", goldMemberRemovalReason=" + this.getGoldMemberRemovalReason() + ", legalEntityCode=" + this.getLegalEntityCode() + ", discountedVat=" + this.isDiscountedVat() + ", status=" + this.getStatus() + ", validatedBy=" + this.validatedBy() + ")";
   }
 
   public enum Status {

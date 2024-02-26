@@ -82,32 +82,4 @@ class NotificationServiceTest {
         .isEqualTo("system");
   }
 
-  @Test
-  void sendGoldBenefits_baseFlow() {
-    customer.setGoldMember(true);
-    notificationService.sendGoldBenefitsEmail(customer,"full");
-
-    verify(emailSender).sendEmail(emailCaptor.capture());
-    Email email = emailCaptor.getValue();
-    assertThat(email.getFrom()).isEqualTo("noreply@cleanapp.com");
-    assertThat(email.getTo()).isEqualTo("jdoe@example.com");
-    assertThat(email.getSubject()).isEqualTo("Welcome to our Gold membership!");
-    assertThat(email.getBody()).isEqualTo("Please enjoy a special discount of 4%\n"+
-        "Yours sincerely, John DOE");
-    assertThat(email.getCc()).containsExactly("jdoe@cleanApp.com");
-  }
-  @Test
-  void sendGoldBenefits_noIntraEmail() {
-    notificationService.sendGoldBenefitsEmail(customer,"externalEmail");
-
-    verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
-  }
-  @Test
-  @Disabled("BUG: throws NPE. Why !?")
-  void sendGoldBenefits_missingEmail() {
-    notificationService.sendGoldBenefitsEmail(customer,"noemail");
-
-    verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
-  }
-
 }

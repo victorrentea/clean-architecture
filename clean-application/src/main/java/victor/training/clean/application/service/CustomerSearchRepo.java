@@ -19,6 +19,7 @@ import static java.lang.String.join;
 public class CustomerSearchRepo {
    private final EntityManager entityManager;
 
+
    public List<SearchCustomerResponse> search(SearchCustomerCriteria criteria) {
       String jpql = "SELECT new victor.training.clean.application.dto.SearchCustomerResponse(c.id, c.name)" +
                     " FROM Customer c " +
