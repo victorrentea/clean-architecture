@@ -2,8 +2,11 @@ package victor.training.clean.domain.model;
 
 //import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import lombok.NonNull;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -17,6 +20,8 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 5) // null is tolerated by size min=5
+  @NonNull
   private String name;
   private String email;
 
@@ -163,6 +168,24 @@ public class Customer {
   public String toString() {
     return "Customer(id=" + this.getId() + ", name=" + this.getName() + ", email=" + this.getEmail() + ", shippingAddress=" + this.getShippingAddress() + ", country=" + this.getCountry() + ", createdDate=" + this.getCreatedDate() + ", createdByUsername=" + this.getCreatedByUsername() + ", goldMember=" + this.isGoldMember() + ", goldMemberRemovalReason=" + this.getGoldMemberRemovalReason() + ", legalEntityCode=" + this.getLegalEntityCode() + ", discountedVat=" + this.isDiscountedVat() + ", status=" + this.getStatus() + ", validatedBy=" + this.validatedBy() + ")";
   }
+
+//  public victor.training.clean.application.dto.CustomerDto toDto() {
+//    CustomerDto.builder()
+//        .id(customer.getId())
+//        .name(customer.getName())
+//        .email(customer.getEmail())
+//        .country(customer.getCountry().getId())
+//        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+//        .gold(customer.isGoldMember())
+//        .shippingAddressStreet(customer.getShippingAddress().street())
+//        .shippingAddressCity(customer.getShippingAddress().city())
+//        .shippingAddressZip(customer.getShippingAddress().zip())
+//        .discountPercentage(customer.discountPercentage())
+//        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
+//        .legalEntityCode(customer.getLegalEntityCode())
+//        .discountedVat(customer.isDiscountedVat())
+//        .build()
+//  }
 
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
