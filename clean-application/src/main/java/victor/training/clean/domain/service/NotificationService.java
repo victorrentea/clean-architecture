@@ -21,6 +21,30 @@ public class NotificationService {
   private final LdapApi ldapApi;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
+    User user = lookupUser(userId);
+
+    Email email = Email.builder()
+        .from("noreply@cleanapp.com")
+        .to(customer.getEmail())
+        .subject("Welcome!")
+        .body("Dear " + customer.getName() + ", Welcome to our clean app!\n" +
+              "Sincerely, " + user.fullName())
+        .build();
+
+
+    if (user.email().isPresent()) {
+      // ⚠️ the same logic repeats later TODO extract method in the new VO class
+      if (user.hasInternalEmail()) {
+        email.getCc().add(user.email().get());
+      }
+    }
+
+    emailSender.sendEmail(email);
+
+    customer.setCreatedByUsername(user.username());
+  }
+
+  private User lookupUser(String userId) { // BEWARE: NETWORK API CALL INVOLVED
     // ⚠️ external DTO directly used in my app
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null); // fName???
 
@@ -31,30 +55,11 @@ public class NotificationService {
     LdapUserDto ldapUserDto = dtoList.get(0);
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
     String username = ldapUserDto.getUn();
-     if (username.startsWith("s")) {// eg 's12051' is a system user
-      username ="system"; // ⚠️ dirty hack
-    }
-    User x = new User(username, fullName, Optional.ofNullable(ldapUserDto.getWorkEmail()));
-
-    Email email = Email.builder()
-        .from("noreply@cleanapp.com")
-        .to(customer.getEmail())
-        .subject("Welcome!")
-        .body("Dear " + customer.getName() + ", Welcome to our clean app!\n" +
-              "Sincerely, " + x.fullName())
-        .build();
-
-
-    if (x.email().isPresent()) {
-      // ⚠️ the same logic repeats later TODO extract method in the new VO class
-      if (x.hasInternalEmail()) {
-        email.getCc().add(x.email().get());
-      }
-    }
-
-    emailSender.sendEmail(email);
-
-    customer.setCreatedByUsername(x.username());
+    if (username.startsWith("s")) {// eg 's12051' is a system user
+     username ="system"; // ⚠️ dirty hack
+   }
+    User user = new User(username, fullName, Optional.ofNullable(ldapUserDto.getWorkEmail()));
+    return user;
   }
 
 
