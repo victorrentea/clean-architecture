@@ -1,6 +1,6 @@
 package victor.training.clean.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -169,7 +169,7 @@ public class Customer {
   }
 
   private Status status = Status.DRAFT;
-  @JsonIgnore
+//  @JsonIgnore
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later: HDD = Hope-Driven Development
 //  @JsonIgnore
 //  private String deletedBy; // ⚠ Always not-null when status = VALIDATED or later: HDD = Hope-Driven Development
