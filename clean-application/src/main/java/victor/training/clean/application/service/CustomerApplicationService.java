@@ -13,11 +13,12 @@ import victor.training.clean.application.dto.SearchCustomerResponse;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.domain.service.FiscalDetailsProvider;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static java.util.Objects.requireNonNull;
 
@@ -27,7 +28,7 @@ import static java.util.Objects.requireNonNull;
 public class CustomerApplicationService implements CustomerApplicationApi {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
-  private final CustomerSearchRepo customerSearchRepo;
+  private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
   private final FiscalDetailsProvider anafClient;
 
@@ -35,7 +36,7 @@ public class CustomerApplicationService implements CustomerApplicationApi {
    @PostMapping("customers/search")
 //   @KafkaListener(topics = "customer-search")
    public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
-    return customerSearchRepo.search(searchCriteria);
+    return customerSearchQuery.search(searchCriteria);
   }
 
   public CustomerDto findById(long id) {
@@ -50,14 +51,33 @@ public class CustomerApplicationService implements CustomerApplicationApi {
   }
 
    @Override
-   @Transactional
+//   @Transactional
    public void register(CustomerDto dto) {
      Customer customer = dto.toEntity();
-     customerService.register(customer);
+     registerCustomerService.register(customer);
+     // Problem: if the register COMMITs but the email throws exception in HTTP response to client
      notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
-  }
 
-  private final CustomerService customerService;
+     // #1 catch and log the exception
+//     try {
+//       notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+//     } catch (Exception e) {
+//       // HATE
+//       log.error("Failed to send email to " + customer.getEmail(), e);
+//     }
+
+      // #2 send email asynchronously, similar to previous + no waiting for email to send
+     CompletableFuture.runAsync(()->notificationService.sendWelcomeEmail(customer, "FULL"));
+
+     // #3  👑Transactional outbox table in which to INSERT in the same transaction
+//     emailToSend.save(new EmailEntity(customer.getEmail(), "Welcome!", "Dear " + customer.getName() + ", Welcome to our clean app!"));
+     // Then a @Scheduled or a CDC (Debezium.io->Kafka) processes the row I've just inserted, and sends the email
+
+     // #4 send to Kafka : STILL RISKY: can also blow up due to Kafka broker being down
+//     kafkaSender.send(new EmailEvent(customer.getEmail(), "Welcome!", "Dear " + customer.getName() + ", Welcome to our clean app!")
+   }
+
+  private final RegisterCustomerService registerCustomerService;
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
