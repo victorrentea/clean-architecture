@@ -14,12 +14,17 @@ import java.util.Map;
 import static java.lang.String.join;
 
 
+// "Use-Case Optimized Query" pattern: SELECTing directly into DTOs sent out as JSONs.
+// ⚠️ DON'T change data in DB!
+// ⚠️ DON'T write heavy logic on the SELECTed DTOs!
+// For both points above, load and use the full Domain Model @Entity.
 @Repository
 @RequiredArgsConstructor
-public class CustomerSearchRepo {
+public class CustomerSearchQuery {
    private final EntityManager entityManager;
 
    public List<SearchCustomerResponse> search(SearchCustomerCriteria criteria) {
+      // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
       String jpql = "SELECT new victor.training.clean.application.dto.SearchCustomerResponse(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";

@@ -26,12 +26,12 @@ import static java.util.Objects.requireNonNull;
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
-  private final CustomerSearchRepo customerSearchRepo;
+  private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
 
   public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
-    return customerSearchRepo.search(searchCriteria);
+    return customerSearchQuery.search(searchCriteria);
   }
 
   public CustomerDto findById(long id) {
