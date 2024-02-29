@@ -19,6 +19,7 @@ public class NotificationService {
   private final EmailSender emailSender;
   private final UserAdapter userAdapter;
 
+
   public void sendWelcomeEmail(Customer customer, String userId) {
     User user = userAdapter.fetchUser(userId);
 
