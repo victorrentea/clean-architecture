@@ -10,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-import victor.training.clean.domain.service.IEmailSender;
+import victor.training.clean.domain.service.KafkaAvroAdapter;
 import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.DomainEvent73;
 import victor.training.clean.domain.service.NotificationService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,9 +31,9 @@ class NotificationServiceTest {
   ApiClient apiClient;
 
   @MockBean
-  IEmailSender emailSender;
+  KafkaAvroAdapter emailSender;
 
-  ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
+  ArgumentCaptor<DomainEvent73> emailCaptor = ArgumentCaptor.forClass(DomainEvent73.class);
 
   Customer customer = new Customer()
       .setName("Customer Name")
@@ -49,8 +49,8 @@ class NotificationServiceTest {
   void sendWelcomeEmail_baseFlow() {
     notificationService.sendWelcomeEmail(customer,"full");
 
-    verify(emailSender).sendEmail(emailCaptor.capture());
-    Email email = emailCaptor.getValue();
+    verify(emailSender).publishEvent(emailCaptor.capture());
+    DomainEvent73 email = emailCaptor.getValue();
     assertThat(email.getFrom()).isEqualTo("noreply@cleanapp.com");
     assertThat(email.getTo()).isEqualTo("jdoe@example.com");
     assertThat(email.getSubject()).isEqualTo("Welcome!");
@@ -64,13 +64,13 @@ class NotificationServiceTest {
   void sendWelcomeEmail_noWorkEmail() {
     notificationService.sendWelcomeEmail(customer,"noemail");
 
-    verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    verify(emailSender).publishEvent(argThat(email -> email.getCc().isEmpty()));
   }
   @Test
   void sendWelcomeEmail_noIntraEmail() {
     notificationService.sendWelcomeEmail(customer,"externalEmail");
 
-    verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    verify(emailSender).publishEvent(argThat(email -> email.getCc().isEmpty()));
   }
   @Test
   void sendWelcomeEmail_systemUser() {
@@ -85,8 +85,8 @@ class NotificationServiceTest {
     customer.setGoldMember(true);
 //    notificationService.sendGoldBenefitsEmail(customer,"full");
 
-    verify(emailSender).sendEmail(emailCaptor.capture());
-    Email email = emailCaptor.getValue();
+    verify(emailSender).publishEvent(emailCaptor.capture());
+    DomainEvent73 email = emailCaptor.getValue();
     assertThat(email.getFrom()).isEqualTo("noreply@cleanapp.com");
     assertThat(email.getTo()).isEqualTo("jdoe@example.com");
     assertThat(email.getSubject()).isEqualTo("Welcome to our Gold membership!");
@@ -98,14 +98,14 @@ class NotificationServiceTest {
   void sendGoldBenefits_noIntraEmail() {
 //    notificationService.sendGoldBenefitsEmail(customer,"externalEmail");
 
-    verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    verify(emailSender).publishEvent(argThat(email -> email.getCc().isEmpty()));
   }
   @Test
   @Disabled("BUG: throws NPE. Why !?")
   void sendGoldBenefits_missingEmail() {
 //    notificationService.sendGoldBenefitsEmail(customer,"noemail");
 
-    verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    verify(emailSender).publishEvent(argThat(email -> email.getCc().isEmpty()));
   }
 
 }
