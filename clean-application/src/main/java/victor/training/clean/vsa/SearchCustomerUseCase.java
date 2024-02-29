@@ -24,7 +24,8 @@ public class SearchCustomerUseCase {
   record SearchCustomerRequest(
       String name,
       String email,
-      Long countryId
+      Long countryId,
+      Boolean gold
   ) {
   }
 
@@ -41,7 +42,7 @@ public class SearchCustomerUseCase {
   public List<SearchCustomerResponse> search(@RequestBody SearchCustomerRequest criteria) {
     String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$SearchCustomerResponse(c.id, c.name)" +
                   " FROM Customer c " +
-                  " WHERE ";
+                  " WHERE  ";
     List<String> jpqlParts = new ArrayList<>();
     jpqlParts.add("1=1"); // alternatives: Criteria API ± Spring Specifications or Query DSL
     Map<String, Object> params = new HashMap<>();
@@ -54,6 +55,10 @@ public class SearchCustomerUseCase {
     if (criteria.email != null) {
       jpqlParts.add("UPPER(c.email) = UPPER(:email)");
       params.put("email", criteria.email);
+    }
+    if (criteria.gold != null) {
+      jpqlParts.add("c.gold = :gold");
+      params.put("gold", criteria.gold);
     }
 
     if (criteria.countryId != null) {

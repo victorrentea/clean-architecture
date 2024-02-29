@@ -14,7 +14,7 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
-//@RestController
+@RestController
 public class GetCustomerByIdUseCase {
   private final CustomerRepo customerRepo;
 
@@ -24,7 +24,6 @@ public class GetCustomerByIdUseCase {
       String name,
       String email,
       Long siteId,
-      String creationDateStr,
       boolean gold,
       String goldMemberRemovalReason) {
   }
@@ -37,7 +36,6 @@ public class GetCustomerByIdUseCase {
               .name(customer.getName())
               .email(customer.getEmail())
               .siteId(customer.getCountry().getId())
-              .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
               .build();
   }
 }

@@ -1,8 +1,12 @@
 package victor.training.clean.application.service;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.SearchCustomerCriteria;
 import victor.training.clean.application.dto.SearchCustomerResponse;
@@ -23,6 +27,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
+@RestController
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
@@ -30,7 +35,12 @@ public class CustomerApplicationService {
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
 
-  public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
+  @Operation(description = "Search Customer by name,rch Customer " +
+                           "by name,rch Customer by name,rch Customer " +
+                           "by name,rch Customer by name,rch Customer " +
+                           "by name,rch Customer by name,rch Customer by name,rch Customer by name,rch Customer by name,rch Customer by name,rch Customer by name,rch Customer by name, email, country etc.")
+  @PostMapping("customers/search")
+  public List<SearchCustomerResponse> search(@RequestBody SearchCustomerCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
   }
 
@@ -46,7 +56,11 @@ public class CustomerApplicationService {
     // 2) extension function
     // 3) CustomerUtil!!! NEVER in kt
 
-    // boilerplate mapping code TODO move somewhere else
+    // boilerplate mapping code TODO move somewhere els
+    //return new CustomerDto(customer); // ❤️
+    // return customer.toDto(); // illegal dep directiob
+    // return mapper.toDto(customer); // hate
+
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())
@@ -54,11 +68,6 @@ public class CustomerApplicationService {
         .countryId(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
-
-//        .shippingAddressStreet(customer.getShippingAddressStreet())
-//        .shippingAddressCity(customer.getShippingAddressCity())
-//        .shippingAddressZip(customer.getShippingAddressZip())
-
         .discountPercentage(discountPercentage)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
