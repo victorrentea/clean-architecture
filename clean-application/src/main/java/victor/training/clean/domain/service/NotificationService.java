@@ -12,7 +12,7 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
-  private final IUserAdapter adapter;
+  private final UserPort adapter;
 
 
   public void sendWelcomeEmail(Customer customer, String userId) {

@@ -3,13 +3,13 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.IUserAdapter;
+import victor.training.clean.domain.service.UserPort;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class UserAdapter implements IUserAdapter {
+public class UserLdapAdapter implements UserPort {
   private final LdapApi ldapApi;
   @Override
   public User fetchUser(String userId) {
