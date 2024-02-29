@@ -48,6 +48,11 @@ public class GlobalExceptionHandler {
    @ResponseStatus(NOT_FOUND)
    @ExceptionHandler(NoSuchElementException.class)
    public String onNoSuchElementException(NoSuchElementException e) {
+
+      return getString();
+   }
+
+   public String getString() {
       return "Not Found!";
    }
 

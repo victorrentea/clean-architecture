@@ -39,10 +39,12 @@ public class CustomerApplicationService {
 
     // Several lines of domain logic operating on the state of a single Entity
     // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = 1;
-    if (customer.isGoldMember()) {
-      discountPercentage += 3;
-    }
+    int discountPercentage = customer.discountPercentage();
+
+    // I could move this to:...
+    // 1) Customer
+    // 2) extension function
+    // 3) CustomerUtil!!! NEVER in kt
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -53,9 +55,9 @@ public class CustomerApplicationService {
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+//        .shippingAddressStreet(customer.getShippingAddressStreet())
+//        .shippingAddressCity(customer.getShippingAddressCity())
+//        .shippingAddressZip(customer.getShippingAddressZip())
 
         .discountPercentage(discountPercentage)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
@@ -118,7 +120,7 @@ public class CustomerApplicationService {
     if (!customer.isGoldMember() && dto.gold()) {
       // enable gold member status
       customer.setGoldMember(true);
-      notificationService.sendGoldBenefitsEmail(customer, "1"); // userId from JWT token via SecuritContext
+//      notificationService.sendGoldBenefitsEmail(customer, "1"); // userId from JWT token via SecuritContext
     }
 
     if (customer.isGoldMember() && !dto.gold()) {
