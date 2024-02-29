@@ -3,15 +3,15 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.IUserAdapter;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class UserAdapter {
+public class UserAdapter implements IUserAdapter {
   private final LdapApi ldapApi;
+  @Override
   public User fetchUser(String userId) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);

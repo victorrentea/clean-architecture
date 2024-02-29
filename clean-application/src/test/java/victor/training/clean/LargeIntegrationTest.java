@@ -2,7 +2,6 @@ package victor.training.clean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,12 +13,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.domain.service.IEmailSender;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerDto.CustomerDtoBuilder;
 import victor.training.clean.domain.repo.CountryRepo;
-import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 
 import java.time.format.DateTimeFormatter;
@@ -51,7 +50,7 @@ public class LargeIntegrationTest {
     @Autowired
     private CustomerRepo customerRepo;
     @MockBean
-    private EmailSender emailSender;
+    private IEmailSender emailSender;
 
     private Country country;
 
