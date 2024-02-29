@@ -14,6 +14,7 @@ public class NotificationService {
   private final KafkaAvroAdapter emailSender;
   private final UserPort adapter;
 
+//  private final victor.training.clean.infra.LdapApi a;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
     User user = adapter.fetchUser(userId);
