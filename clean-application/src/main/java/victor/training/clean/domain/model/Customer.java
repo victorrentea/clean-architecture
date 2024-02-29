@@ -11,7 +11,8 @@ import java.time.LocalDate;
 import static java.util.Objects.requireNonNull;
 
 @Entity
-@Data // BAD: 1) hashCode uses @Id, 2) toString can trigger ORM lazy-loading, 3) setters for all fields = no encapsulation
+@Data // avoid on ORM @Entity because:
+// 1) hashCode uses @Id⚠️ 2) toString triggers lazy-loading⚠️ 3) all setters = no encapsulation⚠️
 public class Customer {
   @Id
   @GeneratedValue
@@ -47,12 +48,12 @@ public class Customer {
 //class CodeFollowingTheRule {
 //  public void ok(Customer draftCustomer) {
 //    draftCustomer.setStatus(VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session
+//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
 //  }
 //}
 //class CodeBreakingTheRule {
 //  public void farAway(Customer draftCustomer) {
-//    draftCustomer.setStatus(ACTIVE);
+//    draftCustomer.setStatus(VALIDATED);
 //  }
 //}
 //endregion
