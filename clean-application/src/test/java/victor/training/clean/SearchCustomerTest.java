@@ -11,8 +11,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.application.dto.SearchCustomerCriteria.SearchCustomerCriteriaBuilder;
-import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.application.dto.CustomerSearchCriteria;
+import victor.training.clean.application.dto.CustomerSearchCriteria.CustomerSearchCriteriaBuilder;
+import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CountryRepo;
@@ -22,7 +23,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static victor.training.clean.application.dto.SearchCustomerCriteria.builder;
+import static victor.training.clean.application.dto.CustomerSearchCriteria.builder;
 
 @SpringBootTest
 @Transactional
@@ -50,7 +51,7 @@ public class SearchCustomerTest {
         .setCountry(country));
 
   }
-  private static SearchCustomerCriteriaBuilder criteriaWith() {
+  private static CustomerSearchCriteriaBuilder criteriaWith() {
     return builder();
   }
   @Test
@@ -78,7 +79,7 @@ public class SearchCustomerTest {
     assertThat(searchAPI(criteriaWith().countryId(-1L))).isEmpty();
   }
 
-  private List<SearchCustomerResponse> searchAPI(SearchCustomerCriteriaBuilder searchCriteria) throws Exception {
+  private List<CustomerSearchResult> searchAPI(CustomerSearchCriteriaBuilder searchCriteria) throws Exception {
     String requestJson = jackson.writeValueAsString(searchCriteria.build());
     String responseJson = mockMvc.perform(post("/customers/search")
                     .contentType("application/json")

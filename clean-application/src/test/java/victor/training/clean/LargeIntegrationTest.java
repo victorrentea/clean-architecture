@@ -2,7 +2,6 @@ package victor.training.clean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,7 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.application.dto.CustomerDto;
@@ -121,7 +120,7 @@ public class LargeIntegrationTest {
                 .content(jackson.writeValueAsString(requestDto.build()))
         );
     }
-    private List<SearchCustomerResponse> search(String name) throws Exception {
+    private List<CustomerSearchResult> search(String name) throws Exception {
         String responseJson = mockMvc.perform(post("/customers/search")
                 .contentType(APPLICATION_JSON)
                 .content(String.format("{\"name\": \"%s\"}\n", name)))
@@ -129,7 +128,7 @@ public class LargeIntegrationTest {
             .andReturn()
             .getResponse()
             .getContentAsString();
-        return List.of(jackson.readValue(responseJson, SearchCustomerResponse[].class)); // trick to unmarshall a collection<obj>
+        return List.of(jackson.readValue(responseJson, CustomerSearchResult[].class)); // trick to unmarshall a collection<obj>
     }
 
     private CustomerDto getCustomer(long customerId) throws Exception {

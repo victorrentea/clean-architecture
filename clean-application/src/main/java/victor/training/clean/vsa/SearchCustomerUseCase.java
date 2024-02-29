@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +20,7 @@ public class SearchCustomerUseCase {
   private final EntityManager entityManager;
 
   @VisibleForTesting // only @Tests are allowed to use this
-  record SearchCustomerRequest(
+  record CustomerSearchCriteria(
       String name,
       String email,
       Long countryId
@@ -29,7 +28,7 @@ public class SearchCustomerUseCase {
   }
 
   @VisibleForTesting
-  record SearchCustomerResponse(
+  record CustomerSearchResult(
       long id,
       String name
       // TODO also return 'email' => only this file is impacted
@@ -38,8 +37,8 @@ public class SearchCustomerUseCase {
 
   @Operation(description = "Customer Search Poem")
   @PostMapping("customer/search-vsa")
-  public List<SearchCustomerResponse> search(@RequestBody SearchCustomerRequest criteria) {
-    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$SearchCustomerResponse(c.id, c.name)" +
+  public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria criteria) {
+    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name)" +
                   " FROM Customer c " +
                   " WHERE ";
     List<String> jpqlParts = new ArrayList<>();
@@ -62,7 +61,7 @@ public class SearchCustomerUseCase {
     }
 
     String whereCriteria = join(" AND ", jpqlParts);
-    var query = entityManager.createQuery(jpql + whereCriteria, SearchCustomerResponse.class);
+    var query = entityManager.createQuery(jpql + whereCriteria, CustomerSearchResult.class);
     for (String paramName : params.keySet()) {
       query.setParameter(paramName, params.get(paramName));
     }

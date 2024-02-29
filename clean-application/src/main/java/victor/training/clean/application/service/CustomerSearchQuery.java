@@ -2,8 +2,8 @@ package victor.training.clean.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import victor.training.clean.application.dto.SearchCustomerCriteria;
-import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.application.dto.CustomerSearchCriteria;
+import victor.training.clean.application.dto.CustomerSearchResult;
 
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.join;
-
 
 // "Use-Case Optimized Query" pattern: SELECTing directly into DTOs sent out as JSONs.
 // ⚠️ DON'T change data in DB!
@@ -23,9 +22,9 @@ import static java.lang.String.join;
 public class CustomerSearchQuery {
    private final EntityManager entityManager;
 
-   public List<SearchCustomerResponse> search(SearchCustomerCriteria criteria) {
+   public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
-      String jpql = "SELECT new victor.training.clean.application.dto.SearchCustomerResponse(c.id, c.name)" +
+      String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";
       List<String> jpqlParts = new ArrayList<>();
@@ -48,7 +47,7 @@ public class CustomerSearchQuery {
       }
 
       String whereCriteria = join(" AND ", jpqlParts);
-      var query = entityManager.createQuery(jpql + whereCriteria, SearchCustomerResponse.class);
+      var query = entityManager.createQuery(jpql + whereCriteria, CustomerSearchResult.class);
       for (String paramName : params.keySet()) {
          query.setParameter(paramName, params.get(paramName));
       }

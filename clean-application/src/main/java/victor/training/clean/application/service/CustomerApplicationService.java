@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.application.dto.SearchCustomerCriteria;
-import victor.training.clean.application.dto.SearchCustomerResponse;
+import victor.training.clean.application.dto.CustomerSearchCriteria;
+import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
@@ -30,7 +30,7 @@ public class CustomerApplicationService {
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
 
-  public List<SearchCustomerResponse> search(SearchCustomerCriteria searchCriteria) {
+  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
   }
 
