@@ -18,10 +18,10 @@ import java.util.Optional;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final AnAdapter anAdapter;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
-    User user = fetchUserDetailsFromLdap(userId);
+    User user = anAdapter.fetchUserDetailsFromLdap(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -40,29 +40,5 @@ public class NotificationService {
 
     customer.setCreatedByUsername(user.username());
   }
-
-  private User fetchUserDetailsFromLdap(String userId) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
-    }
-
-    LdapUserDto dto = dtoList.get(0);
-
-    String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
-    String username = dto.getUn();
-    if (username.startsWith("s")) {// eg 's12051' is a system user
-      username = "system";
-    }
-
-    return new User(username, fullName, Optional.ofNullable(dto.getWorkEmail()));
-  }
-
-  private void normalize(LdapUserDto dto) {
-
-  }
-
-
 
 }
