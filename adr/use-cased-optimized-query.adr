@@ -1,0 +1,55 @@
+## Title
+Use-Case-Optimized-Queries can READ DTOs from database to optimize performance 
+
+## Status
+Accepted
+
+## Date
+2023-11-01
+
+## Context
+For operations that require reading only a small subset of the attributes and relations of a Domain Entity, such as search queries
+, it is inefficient to load the entire entity from the database.
+This is because the entire entity is loaded into memory, even though only a small subset of the data is required. 
+This can lead to performance issues, especially when the entity has a large number of attributes and relations.
+
+We are using JPA which makes it very easy to load the entire entity from the database.
+
+
+
+## Decision
+Query use-cases should be optimized to read only the required attributes and relations of a Domain Entity directly into the Data Transfer Objects (DTOs) 
+that are returned in the HTTP response.
+
+This can be achieved by writing a JQPL query that uses the `SELECT NEW` clause to directly fetch the required attributes into the DTO object, like in the following example:
+
+```java
+@Query("SELECT new com.example.dto.UserDTO(u.id, u.name) FROM User u WHERE u.name = :name")
+```
+
+The DTO must have a constructor taking all fields (eg a record).
+
+Alternatively, for objects containing more attributes, 
+[Spring Projections](https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html) 
+can be used
+```java
+@Query("SELECT u.id as id, u.name as name FROM User u WHERE u.name = :name")
+List<UserProjection> findByName(@Param("name") String name);
+```
+
+## Consequences
+Positive:
+- Improved performance by reading only the strictly required attributes from DB.
+- Less boilerplate mapping code involved, as the query fetches the attributes directly into the DTO object.
+
+Negative:
+- May lead to implementing business rules on DTOs rather than Domain Entities.
+- May lead developers to change data in DB directly using DTOs, not using the domain model, therefore bypassing any consistency protections that the domain model provides.
+
+## Compliance
+- Any search flow that only displays a small subset of the attributes should use this approach.
+
+## Notes
+- Author: John DOE
+- Changelog: 
+  - 0.1 initial proposed version
