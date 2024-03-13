@@ -18,9 +18,9 @@ public class NotificationService {
   private final EmailSender emailSender;
   private final LdapApi ldapApi;
 
-  public void sendWelcomeEmail(Customer customer, String userId) {
+  public void sendWelcomeEmail(Customer customer, String username) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserDetailsFromLdap(userId);
+    LdapUserDto ldapUserDto = fetchUserDetailsFromLdap(username);
 
     // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
