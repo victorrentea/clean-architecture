@@ -6,18 +6,16 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.AnAdapter;
-import victor.training.clean.infra.EmailSender;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final AnAdapter anAdapter;
+  private final IEmailSender emailSender;
+  private final UserProvider userProvider;
 
   public void sendWelcomeEmail(Customer customer, String userId) {
-    User user = anAdapter.fetchUserDetailsFromLdap(userId);
+    User user = userProvider.fetchUser(userId);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
