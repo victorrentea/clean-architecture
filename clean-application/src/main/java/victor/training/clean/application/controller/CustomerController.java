@@ -1,9 +1,11 @@
 package victor.training.clean.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
@@ -23,14 +25,18 @@ public class CustomerController {
 
    @Operation(description = "Search Customer")
    @PostMapping("customers/search")
-   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
+   public List<CustomerSearchResult> search(
+       HttpServletRequest httpServletRequest,
+//       @RequestHeader("X-User-Id") long userId,
+//       MultipartFile file,
+       @RequestBody CustomerSearchCriteria searchCriteria) {
       return customerApplicationService.search(searchCriteria);
    }
 
-   @GetMapping("customers/{id}")
-   public CustomerDto findById(@PathVariable long id) {
-      return customerApplicationService.findById(id);
-   }
+//   @GetMapping("customers/{id}")
+//   public CustomerDto findById(@PathVariable long id) {
+//      return customerApplicationService.findById(id);
+//   }
 
    //<editor-fold desc="GET returning ResponseEntity for 404 👎">
 //   @GetMapping("customers/{id}")
@@ -44,10 +50,10 @@ public class CustomerController {
 //   }
    //</editor-fold>
 
-   @PutMapping("customers/{id}")
-   public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
-      customerApplicationService.update(id, dto);
-   }
+//   @PutMapping("customers/{id}")
+//    public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
+//        customerApplicationService.update(id, dto);
+//    }
 
    //<editor-fold desc="PUT returning ResponseEntity for 404 👎">
    //   @PutMapping("customers/{id}")

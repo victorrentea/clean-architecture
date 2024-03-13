@@ -1,7 +1,10 @@
 package victor.training.clean.application.dto;
 
 import lombok.Builder;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+
+import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -43,5 +46,15 @@ public record CustomerDto(
         .shippingAddressZip(customer.getShippingAddressZip())
         .discountPercentage(0) // TODO
         .build();
+  }
+
+  public Customer asEntity() {
+    Customer customer = new Customer();
+    customer.setEmail(email());
+    customer.setName(name());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(countryId()));
+    customer.setLegalEntityCode(legalEntityCode());
+    return customer;
   }
 }
