@@ -1,11 +1,10 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.IUserLdapAdapter;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,11 +12,10 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-
 // I call an external ugly API,
 // but I expose a NICE api to my caller (the rest of my logic)
 // what desing pattern is this?
-public class UserLdapAdapter {
+public class UserLdapAdapter implements IUserLdapAdapter {
     private final LdapApi ldapApi;
 
   public User fetchUser(String username) {

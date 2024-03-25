@@ -6,14 +6,13 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
-private final UserLdapAdapter userLdapAdapter;
+  private final IEmailSender emailSender;
+  private final IUserLdapAdapter userLdapAdapter;
   public void sendWelcomeEmail(Customer customer, String username) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
     User user = userLdapAdapter.fetchUser(username);
