@@ -12,7 +12,7 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
-  private final IUserLdapAdapter userLdapAdapter;
+  private final UserService userLdapAdapter;
   public void sendWelcomeEmail(Customer customer, String username) {
     // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
     User user = userLdapAdapter.fetchUser(username);
