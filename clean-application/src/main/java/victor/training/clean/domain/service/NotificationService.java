@@ -18,11 +18,12 @@ public class NotificationService {
   private final EmailSender emailSender;
   private final LdapApi ldapApi;
 
-  public void sendWelcomeEmail(Customer customer, String username) {
-    // ⚠️ external DTO directly used in my app logic TODO convert it into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserDetailsFromLdap(username);
+  // Core application logic, my Zen garden 🧘☯
+  public void sendWelcomeEmail(Customer customer, String usernamePart) {
+    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
+    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
-    // ⚠️ data mapping mixed with my core domain logic TODO pull it earlier
+    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
     Email email = Email.builder()
@@ -34,41 +35,39 @@ public class NotificationService {
         .build();
 
 
-    // ⚠️ Null check can be forgotten in other places; TODO return Optional<> from the getter
+    // ⚠️ Unguarded nullable fields (causing NPE in other places) TODO return Optional<> from getter
     if (ldapUserDto.getWorkEmail() != null) {
-      // ⚠️ the same logic repeats later TODO extract method in the new VO class
-      if (ldapUserDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
-        email.getCc().add(ldapUserDto.getWorkEmail());
-      }
+      // ⚠️ Logic repeats in other places TODO push logic in my new class
+      email.getCc().add(fullName + " <" + ldapUserDto.getWorkEmail() + ">");
     }
 
     emailSender.sendEmail(email);
 
-    // ⚠️ TEMPORAL COUPLING: tests fail if you swap the next 2 lines TODO use immutable VO
+    // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
     normalize(ldapUserDto);
 
-    // ⚠️ 'un' ?!! <- in my domain a User has a 'username' TODO use domain names in VO
+    // ⚠️ 'un' = bad name TODO use my domain names ('username')
     customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 
-  private LdapUserDto fetchUserDetailsFromLdap(String userId) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(userId.toUpperCase(), null, null);
+  private LdapUserDto fetchUserFromLdap(String usernamePart) {
+    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for uid='" + userId + "' returned too many results: " + dtoList);
+      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
     }
 
     return dtoList.get(0);
   }
 
   private void normalize(LdapUserDto dto) {
-    if (dto.getUn().startsWith("s")) {// eg 's12051' is a system user
-      dto.setUn("system"); // ⚠️ dirty hack
+    if (dto.getUn().startsWith("s")) {
+      dto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
     }
   }
 
-  public void sendGoldBenefitsEmail(Customer customer, String userId) {
-    LdapUserDto userDto = fetchUserDetailsFromLdap(userId);
+  public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
+    LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
 
     int discountPercentage = 1;
     if (customer.isGoldMember()) {
@@ -80,16 +79,14 @@ public class NotificationService {
         .to(customer.getEmail())
         .subject("Welcome to our Gold membership!")
         .body("Please enjoy a special discount of " + discountPercentage + "%\n" +
-              "Yours sincerely, " + userDto.getFname() + " " + userDto.getLname().toUpperCase())
+              "Yours sincerely, " + userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase())
         .build();
 
-    if (userDto.getWorkEmail().toLowerCase().endsWith("@cleanapp.com")) {
-      email.getCc().add(userDto.getWorkEmail());
-    }
+    email.getCc().add(userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase()
+                      + " <" + userLdapDto.getWorkEmail() + ">");
 
     emailSender.sendEmail(email);
   }
-
 
 
 }

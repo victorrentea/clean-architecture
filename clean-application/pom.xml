@@ -66,15 +66,16 @@
             <version>2.2.0</version>
         </dependency>
         <dependency>
+            <!-- MapStruct:   -->
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.5.1.Final</version>
+            <version>1.5.5.Final</version>
         </dependency>
         <dependency>
             <!-- generate mapstruct code -->
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-            <version>1.5.1.Final</version>
+            <version>1.5.5.Final</version>
         </dependency>
         <!-- test -->
         <dependency>
