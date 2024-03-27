@@ -2,7 +2,10 @@ package victor.training.clean.application.dto;
 
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+
+import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -11,7 +14,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (server-assigned)
 
-    @Size(max=50)
+    @Size(min=5, max=50)
     String name,
     String emailAddress,
     Long countryId,
@@ -29,7 +32,7 @@ public record CustomerDto(
     String legalEntityCode,
     Boolean discountedVat // GET only (server-side fetched)
 ) {
-  public CustomerDto fromEntity(Customer customer) {
+  public static CustomerDto fromEntity(Customer customer) {
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())
@@ -45,5 +48,15 @@ public record CustomerDto(
         .shippingAddressZip(customer.getShippingAddressZip())
         .discountPercentage(0) // TODO
         .build();
+  }
+
+  public Customer toEntity() {
+    Customer customer = new Customer();
+    customer.setEmail(emailAddress());
+    customer.setName(name());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(countryId()));
+    customer.setLegalEntityCode(legalEntityCode());
+    return customer;
   }
 }

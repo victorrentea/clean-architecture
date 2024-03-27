@@ -12,15 +12,14 @@ import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.ApplicationService;
+import victor.training.clean.domain.IAnafClient;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.infra.AnafClient;
+import victor.training.clean.domain.service.RegisterCustomerService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -34,7 +33,7 @@ public class CustomerApplicationService {
   private final NotificationService notificationService;
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
-  private final AnafClient anafClient;
+  private final IAnafClient anafClient;
 
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
@@ -42,74 +41,22 @@ public class CustomerApplicationService {
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
-
-    // Several lines of domain logic operating on the state of a single Entity
-    // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = customer.getDiscountPercentage();
-
-    // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .emailAddress(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
-
-        .discountPercentage(discountPercentage)
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+    return CustomerDto.fromEntity(customer);
   }
 
+    // + less boiler code
+    // - couple the logic with the transport mechanism (ie 3 annotations)
   @Transactional
   @PostMapping("customers")
-//  @KafkaListener
   public void register(@RequestBody @Validated CustomerDto dto) {
-    // + less boiler code
     MDC.put("email", dto.emailAddress()); // OpenTelemetry "Baggage"
-    // - couple the logic with the transport mechanism (ie 3 annotations)
-    Customer customer = new Customer();
-    customer.setEmail(dto.emailAddress());
-    customer.setName(dto.name());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
+    Customer customer = dto.toEntity();
 
-    // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
-
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this emailAddress is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode() != null) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
+    registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
+
+  private final RegisterCustomerService registerCustomerService;
 
   private String normalize(String s) {
     return s.toLowerCase().replace("\\s+", "");
