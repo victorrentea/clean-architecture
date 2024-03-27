@@ -18,11 +18,11 @@ import java.util.Optional;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final UserFetcher userFetcher;
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = fetch(usernamePart);
+    User user = userFetcher.fetch(usernamePart);
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
@@ -41,46 +41,22 @@ public class NotificationService {
     customer.setCreatedByUsername(user.username());
   }
 
-  private User fetch(String usernamePart) {
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-    String username = ldapUserDto.getUn();
-    if (username.startsWith("s")) {
-      username = "system"; // ⚠️ dirty hack: replace any system user with 'system'
-    }
-    User user = new User(username, Optional.ofNullable(ldapUserDto.getWorkEmail()),
-        ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase());
-    return user;
-  }
 
-  private LdapUserDto fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    return dtoList.get(0);
-  }
-
-  private void normalize(LdapUserDto dto) {
-    if (dto.getUn().startsWith("s")) {
-      dto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-  }
 
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
+    User userLdapDto = userFetcher.fetch(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome to our Gold membership!")
         .body("Please enjoy a special discount of " + customer.getDiscountPercentage() + "%\n" +
-              "Yours sincerely, " + userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase())
+              "Yours sincerely, " + userLdapDto.fullName())
         .build();
 
-    email.getCc().add(userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase()
-                      + " <" + userLdapDto.getWorkEmail() + ">");
+    if (userLdapDto.email().isPresent()) {
+      email.getCc().add(userLdapDto.fullName() + " <" + userLdapDto.email().get() + ">");
+    }
 
     emailSender.sendEmail(email);
   }
