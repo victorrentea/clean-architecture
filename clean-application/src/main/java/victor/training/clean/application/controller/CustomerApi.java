@@ -2,7 +2,6 @@ package victor.training.clean.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
@@ -13,13 +12,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class CustomerController {
+public class CustomerApi {
    private final CustomerApplicationService customerApplicationService;
 
-   @PostMapping("customers")
-   public void register(@RequestBody @Validated CustomerDto dto) {
-      customerApplicationService.register(dto);
-   }
+//   @PostMapping("customers")
+//   public void register(@RequestBody @Validated CustomerDto dto) {
+//      customerApplicationService.register(dto);
+//   }
 
    @Operation(description = "Search Customer")
    @PostMapping("customers/search")
@@ -31,7 +30,6 @@ public class CustomerController {
    public CustomerDto findById(@PathVariable long id) {
       return customerApplicationService.findById(id);
    }
-
    //<editor-fold desc="GET returning ResponseEntity for 404 👎">
 //   @GetMapping("customers/{id}")
 //   public ResponseEntity<CustomerDto> findById(@PathVariable long id) {

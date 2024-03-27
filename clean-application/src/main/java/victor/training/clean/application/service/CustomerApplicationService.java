@@ -2,7 +2,12 @@ package victor.training.clean.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
@@ -23,6 +28,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
+@RestController
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
@@ -62,7 +68,12 @@ public class CustomerApplicationService {
   }
 
   @Transactional
-  public void register(CustomerDto dto) {
+  @PostMapping("customers")
+//  @KafkaListener
+  public void register(@RequestBody @Validated CustomerDto dto) {
+    // + less boiler code
+    MDC.put("email", dto.emailAddress()); // OpenTelemetry "Baggage"
+    // - couple the logic with the transport mechanism (ie 3 annotations)
     Customer customer = new Customer();
     customer.setEmail(dto.emailAddress());
     customer.setName(dto.name());
