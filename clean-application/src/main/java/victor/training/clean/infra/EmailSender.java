@@ -13,6 +13,6 @@ public class EmailSender {
       // - basic authentication with the mail server
       // - track emails sent and avoid spamming users
       // - more
-      log.info("Sending email: " + email);
+      log.info("Sending emailAddress: " + email);
    }
 }

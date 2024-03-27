@@ -1,5 +1,6 @@
 package victor.training.clean.application.dto;
 
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -10,8 +11,9 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (server-assigned)
 
+    @Size(max=50)
     String name,
-    String email,
+    String emailAddress,
     Long countryId,
 
     String shippingAddressCity, // GET only (updated via dedicated endpoint)
@@ -31,7 +33,7 @@ public record CustomerDto(
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())
-        .email(customer.getEmail())
+        .emailAddress(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
