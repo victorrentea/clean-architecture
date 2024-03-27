@@ -24,7 +24,9 @@ public class CustomerSearchQuery {
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
-      String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
+//      String jpql = "SELECT c" + // BAD -ask Vlad Mihalcea
+      String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name, c.country.name)" +
+//      String jpql = "SELECT c.id, c.name" +
                     " FROM Customer c " +
                     " WHERE ";
       List<String> jpqlParts = new ArrayList<>();
