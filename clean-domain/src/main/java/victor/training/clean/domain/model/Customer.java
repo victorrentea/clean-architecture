@@ -1,7 +1,7 @@
 package victor.training.clean.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.fasterxml.jackson.annotation.JsonFormat;
+//import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -43,12 +43,12 @@ public class Customer {
   @ManyToOne
   private Country country;
 
-  @JsonFormat(pattern = "yyyy-MM-dd")//
+//  @JsonFormat(pattern = "yyyy-MM-dd")//
   private LocalDate createdDate;
   private String createdByUsername;
 
   private boolean goldMember;
-  @JsonIgnore
+//  @JsonIgnore
   private String goldMemberRemovalReason;
 
 //  private String bannedByWhoPhonenumber;
