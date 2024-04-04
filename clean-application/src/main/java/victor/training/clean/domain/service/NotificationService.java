@@ -22,14 +22,7 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-    String username = ldapUserDto.getUn();
-    if (username.startsWith("s")) {
-      username = "system"; // ⚠️ dirty hack: replace any system user with 'system'
-    }
-    User user = new User(username,
-        ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase(),
-        Optional.ofNullable(customer.getEmail()));
+    User user = fetchUserFromLdap(customer, usernamePart);
     // infra. connection to the outside world 🌍 (corruption)
     //==---
     // good
@@ -51,6 +44,18 @@ public class NotificationService {
     emailSender.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
+  }
+
+  private User fetchUserFromLdap(Customer customer, String usernamePart) {
+    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
+    String username = ldapUserDto.getUn();
+    if (username.startsWith("s")) {
+      username = "system"; // ⚠️ dirty hack: replace any system user with 'system'
+    }
+    User user = new User(username,
+        ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase(),
+        Optional.ofNullable(customer.getEmail()));
+    return user;
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
