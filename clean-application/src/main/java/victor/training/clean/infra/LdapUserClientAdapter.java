@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.domain.service.IUserFetcherService;
+import victor.training.clean.domain.service.UserFetcherService;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserFetcherService implements IUserFetcherService {
+public class LdapUserClientAdapter implements UserFetcherService {
   private final LdapApi ldapApi;
 
   // SHIT in DOMAIN package
