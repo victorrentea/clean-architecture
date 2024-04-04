@@ -62,10 +62,11 @@ public class Customer {
   @Setter(AccessLevel.NONE)
   private Status status = DRAFT;
   @Setter(AccessLevel.NONE)
-  @JsonIgnore
+//  @JsonIgnore
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
-  @JsonFormat(pattern = "yyyy-MM-dd")
-private LocalDate validatedOn;
+//  @JsonFormat(pattern = "yyyy-MM-dd")
+  private LocalDate validatedOn;
+
 //  private String bannedByWhoAddress;
 //  public void setStatus(Status newStatus) {
 //    status = newStatus;
