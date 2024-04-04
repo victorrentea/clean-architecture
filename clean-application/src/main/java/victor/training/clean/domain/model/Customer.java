@@ -1,15 +1,15 @@
 package victor.training.clean.domain.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
 
+@Embeddable
+record ShippingAddress(String city, String street, String zip) {
+}
 @Entity
 @Data // avoid on ORM @Entity because:
 // 1) hashCode uses @Id⚠️ 2) toString triggers lazy-loading⚠️ 3) all setters = no encapsulation⚠️
@@ -21,9 +21,12 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+
+  @Embedded // The DB table structure will NOT change
+  private ShippingAddress shippingAddress; // the 3 columns remain in the CUSTOMER table
 
   @ManyToOne
   private Country country;
