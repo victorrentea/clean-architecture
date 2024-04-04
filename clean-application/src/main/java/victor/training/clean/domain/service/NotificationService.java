@@ -7,6 +7,7 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
+import victor.training.clean.infra.UserFetcherService;
 
 @RequiredArgsConstructor
 @Slf4j
