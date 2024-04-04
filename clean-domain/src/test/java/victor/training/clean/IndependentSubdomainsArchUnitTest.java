@@ -34,7 +34,7 @@ public class IndependentSubdomainsArchUnitTest {
       List<String> violations = sliceRule.evaluate(classes).getFailureReport().getDetails();
 
       // A: decoupling phase: progressively lower this number:
-      assertThat(violations).hasSizeLessThanOrEqualTo(123); // <-- real life: starting point after moving classes around
+      assertThat(violations).hasSizeLessThanOrEqualTo(50); // <-- real life: starting point after moving classes around
       assertThat(violations).hasSizeLessThanOrEqualTo(0); // goal, 6 mo from now
 
       // B: maintenance phase: fail test at any deviation

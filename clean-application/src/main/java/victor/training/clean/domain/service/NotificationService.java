@@ -6,15 +6,13 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.UserFetcherService;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final UserFetcherService userFetcherService;
+  private final IEmailSender emailSender;
+  private final IUserFetcherService userFetcherService;
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
