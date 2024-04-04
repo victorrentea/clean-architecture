@@ -49,6 +49,11 @@ public class CustomerController {
       customerApplicationService.update(id, dto);
    }
 
+   @PutMapping("customers/{id}/removeGold")
+   public void removeGold(long id, @RequestBody String reason) {
+      customerApplicationService.removeGold(id, reason);
+   }
+
    //<editor-fold desc="PUT returning ResponseEntity for 404 👎">
    //   @PutMapping("customers/{id}")
 //   public ResponseEntity<Void> update(@PathVariable long id, @RequestBody CustomerDto dto) {

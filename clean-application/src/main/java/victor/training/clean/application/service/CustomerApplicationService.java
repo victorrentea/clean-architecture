@@ -11,6 +11,7 @@ import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.repo.SupplierRepo;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
@@ -39,7 +40,7 @@ public class CustomerApplicationService {
 
     // Several lines of domain logic operating on the state of a single Entity
     // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = CustomerHelper_akaScrewOOP.getDiscountPercentage(customer);
+    int discountPercentage = customer.getDiscountPercentage();
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -50,9 +51,10 @@ public class CustomerApplicationService {
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+
 
         .discountPercentage(discountPercentage)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
@@ -61,13 +63,21 @@ public class CustomerApplicationService {
         .build();
   }
 
+  // Tell me a joke about cloud native apps:
+  // Why do cloud native apps always carry an umbrella?
+  // Because they can't handle a little server rain!
+
+  private final SupplierRepo supplierRepo;
   @Transactional
   public void register(CustomerDto dto) {
     Customer customer = new Customer();
     customer.setEmail(dto.email());
     customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
+    customer.setCountry(supplierRepo.findById(dto.countryId())
+        .orElseThrow(() -> new IllegalArgumentException("Country not found")));
+
+//    customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());
 
     // request payload validation
@@ -96,7 +106,11 @@ public class CustomerApplicationService {
     }
     log.info("More Business Logic (imagine)");
     log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
+    customerRepo.save(customer); // INSERT not here in DB but AFTER the end of the method
+//    kafka.send(..);
+//    email.send();
+//    api.call();
+//    rabbit.send(); ; activeMQ (JMS supporting JTA = 2PC)
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
@@ -132,5 +146,15 @@ public class CustomerApplicationService {
 
   private void auditRemovedGoldMember(String customerName, String reason) {
     log.info("Kafka.send ( {name:" + customerName + ", reason:" + reason + "} )");
+  }
+
+  public void removeGold(long id, String reason) {
+    Customer customer = customerRepo.findById(id).orElseThrow();
+    if (!customer.isGoldMember()) {
+      throw new IllegalArgumentException("Customer is not a Gold Member");
+    }
+    customer.setGoldMember(false);
+    customer.setGoldMemberRemovalReason(reason);
+    customerRepo.save(customer);
   }
 }

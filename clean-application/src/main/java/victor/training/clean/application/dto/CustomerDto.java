@@ -1,5 +1,8 @@
 package victor.training.clean.application.dto;
 
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -10,6 +13,8 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (server-assigned)
 
+    @NotNull
+        @Size(min = 3, max = 100)
     String name,
     String email,
     Long countryId,
@@ -27,6 +32,12 @@ public record CustomerDto(
     String legalEntityCode,
     Boolean discountedVat // GET only (server-side fetched)
 ) {
+  @AssertTrue
+  public boolean isAddressOk() {
+    return shippingAddressCity != null && shippingAddressStreet != null && shippingAddressZip != null
+         || shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;
+//     or write this if in the first layer of logic 💖
+  }
   public CustomerDto fromEntity(Customer customer) {
     return CustomerDto.builder()
         .id(customer.getId())
@@ -38,10 +49,10 @@ public record CustomerDto(
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
-        .discountPercentage(0) // TODO
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+        .discountPercentage(customer.getDiscountPercentage())
         .build();
   }
 }

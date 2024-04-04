@@ -1,18 +1,25 @@
 package victor.training.clean.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
+import static victor.training.clean.domain.model.Customer.Status.*;
 
-@Embeddable
-record ShippingAddress(String city, String street, String zip) {
-}
 @Entity
-@Data // avoid on ORM @Entity because:
-// 1) hashCode uses @Id⚠️ 2) toString triggers lazy-loading⚠️ 3) all setters = no encapsulation⚠️
+//@Data // avoid on ORM @Entity because:
+@Getter
+@Setter
+// 1) hashCode uses @Id⚠️
+// 2) toString prints everything + ORM can triggers lazy-loading⚠️
+// 3) all setters = no encapsulation⚠️
 public class Customer {
   @Id
   @GeneratedValue
@@ -37,26 +44,76 @@ public class Customer {
   private boolean goldMember;
   private String goldMemberRemovalReason;
 
+
   private String legalEntityCode;
   private boolean discountedVat;
+
+  public int getDiscountPercentage() {
+    int discountPercentage = 1;
+    if (goldMember) {
+      discountPercentage += 3;
+    }
+    return discountPercentage;
+  }
 
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
+  @Setter(AccessLevel.NONE)
+  private Status status = DRAFT;
+  @Setter(AccessLevel.NONE)
+  @JsonIgnore
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+  @JsonFormat(pattern = "yyyy-MM-dd")
+private LocalDate validatedOn;
+//  private String bannedByWhoAddress;
+//  public void setStatus(Status newStatus) {
+//    status = newStatus;
+//    if (newStatus == VALIDATED) {
+//      requireNonNull(validatedBy, "validatedBy must be set");
+//    }
+//  }
+
+  public Status status() {
+    return status;
+  }
+
+  // guarded mutators
+  public void validate(String validatedBy) {
+    if (status != DRAFT) {
+      throw new IllegalStateException("Can only validate DRAFT customers");
+    }
+    requireNonNull(validatedBy, "validatedBy must be set");
+    status = VALIDATED;
+    this.validatedBy = validatedBy;
+  }
+  public void activate() {
+    if (status != VALIDATED) {
+      throw new IllegalStateException("Can only activate VALIDATED customers");
+    }
+    status = Status.ACTIVE;
+  }
+  public void delete() {
+    if (status != ACTIVE) {
+      throw new IllegalStateException("Can only delete ACTIVE customers");
+    }
+    status = Status.DELETED;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class CodeFollowingTheRule {
-//  public void ok(Customer draftCustomer) {
+class CodeFollowingTheRule {
+  public void ok(Customer draftCustomer) {
 //    draftCustomer.setStatus(VALIDATED);
 //    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//}
-//class CodeBreakingTheRule {
-//  public void farAway(Customer draftCustomer) {
+    draftCustomer.validate("currentUser");
+  }
+}
+class CodeBreakingTheRule {
+  public void farAway(Customer draftCustomer) {
 //    draftCustomer.setStatus(VALIDATED);
-//  }
-//}
+//    draftCustomer.setValidatedBy(null);
+    draftCustomer.validate("null");
+  }
+}
 //endregion
