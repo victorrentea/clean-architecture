@@ -7,25 +7,17 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final UserFetcherService userFetcherService;
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = fetchUserFromLdap(customer, usernamePart);
-    // infra. connection to the outside world 🌍 (corruption)
-    //==---
-    // good
+    User user = userFetcherService.fetchUser(customer, usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -46,27 +38,7 @@ public class NotificationService {
     customer.setCreatedByUsername(user.username());
   }
 
-  private User fetchUserFromLdap(Customer customer, String usernamePart) {
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-    String username = ldapUserDto.getUn();
-    if (username.startsWith("s")) {
-      username = "system"; // ⚠️ dirty hack: replace any system user with 'system'
-    }
-    User user = new User(username,
-        ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase(),
-        Optional.ofNullable(customer.getEmail()));
-    return user;
-  }
 
-  private LdapUserDto fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    return dtoList.get(0);
-  }
 
 
 
