@@ -31,7 +31,7 @@ public class NotificationService {
         ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase(),
         Optional.ofNullable(customer.getEmail()));
     // infra. connection to the outside world 🌍 (corruption)
-//==---
+    //==---
     // good
 
     Email email = Email.builder()
