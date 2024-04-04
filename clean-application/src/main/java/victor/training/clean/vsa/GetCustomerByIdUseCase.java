@@ -19,11 +19,11 @@ public class GetCustomerByIdUseCase {
   private final CustomerRepo customerRepo;
 
   @Builder
+  @VisibleForTesting
   record GetCustomerByIdResponse(
       Long id,
       String name,
       String email,
-      Long siteId,
       String creationDateStr,
       boolean gold,
       String goldMemberRemovalReason) {
@@ -36,7 +36,6 @@ public class GetCustomerByIdUseCase {
               .id(customer.getId())
               .name(customer.getName())
               .email(customer.getEmail())
-              .siteId(customer.getCountry().getId())
               .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
               .build();
   }
