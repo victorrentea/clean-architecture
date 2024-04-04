@@ -16,6 +16,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserFetcherService {
   private final LdapApi ldapApi;
+
+  // SHIT in DOMAIN package
   public User fetchUser(Customer customer, String usernamePart) {
     LdapUserDto ldapUserDto = fetchUser(usernamePart);
     String username = ldapUserDto.getUn();
