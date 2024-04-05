@@ -2,21 +2,22 @@ package victor.training.clean.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.ApplicationService;
-import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.repo.SupplierRepo;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.infra.AnafClient;
+import victor.training.clean.domain.service.FiscalDetailsProvider;
+import victor.training.clean.domain.service.RegisterCustomerService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -29,7 +30,7 @@ public class CustomerApplicationService {
   private final NotificationService notificationService;
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
-  private final AnafClient anafClient;
+  private final FiscalDetailsProvider anafClient;
 
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
@@ -37,30 +38,10 @@ public class CustomerApplicationService {
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
-
-    // Several lines of domain logic operating on the state of a single Entity
-    // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = customer.getDiscountPercentage();
-
-    // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-
-        .discountPercentage(discountPercentage)
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+// a: mapstruct addiction
+//    var dto = customer.toDto(); // SO WRONG:  couples Domain Model to outside world
+    // b:
+    return CustomerDto.fromEntity(customer);
   }
 
   // Tell me a joke about cloud native apps:
@@ -68,54 +49,26 @@ public class CustomerApplicationService {
   // Because they can't handle a little server rain!
 
   private final SupplierRepo supplierRepo;
+  private final RegisterCustomerService registerCustomerService;
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = new Customer();
-    customer.setEmail(dto.email());
-    customer.setName(dto.name());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(supplierRepo.findById(dto.countryId())
-        .orElseThrow(() -> new IllegalArgumentException("Country not found")));
-
-//    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
-
-    // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
-
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode() != null) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer); // INSERT not here in DB but AFTER the end of the method
+    Customer customer = dto.toEntity();
+    registerCustomerService.register(customer);
 //    kafka.send(..);
 //    email.send();
 //    api.call();
 //    rabbit.send(); ; activeMQ (JMS supporting JTA = 2PC)
-//    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+    eventPublisher.publishEvent(new SendEmailAfterTransaction("FULL",customer));
   }
+  private final ApplicationEventPublisher eventPublisher;
 
-  private String normalize(String s) {
-    return s.toLowerCase().replace("\\s+", "");
+  record SendEmailAfterTransaction(String email, Customer customer) {}
+
+  // OR avoid Spring kung fu and move @Transactional one level below! DO THIS. i'm sorry to have shown you this:
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+  public void method(SendEmailAfterTransaction event) {
+    notificationService.sendWelcomeEmail(event.customer(), event.email()); // userId from JWT token via SecuritContext
+
   }
 
   @Transactional

@@ -26,6 +26,7 @@ public class CustomerSearchQuery {
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
 //      String jpql = "SELECT c " +
 //      String jpql = "SELECT c.* " +
+//      String jpql = "SELECT new victor.training.clean.domain.model.Customer(c.id, c.name)" +
       String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";
