@@ -1,5 +1,6 @@
 package victor.training.clean.application.dto;
 
+import jakarta.validation.constraints.AssertTrue;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -27,6 +28,14 @@ public record CustomerDto(
     String legalEntityCode,
     Boolean discountedVat // GET only (server-side fetched)
 ) {
+
+  @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
+  public boolean isShippingAddressValid() { // multi-field validation with javax annotations
+    return shippingAddressCity != null && shippingAddressStreet != null && shippingAddressZip != null
+         || shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;
+    //     or write this if in the first layer of logic 💖
+  }
+
   public CustomerDto fromEntity(Customer customer) {
     return CustomerDto.builder()
         .id(customer.getId())
