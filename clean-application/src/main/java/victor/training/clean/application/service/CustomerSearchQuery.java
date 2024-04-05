@@ -1,6 +1,7 @@
 package victor.training.clean.application.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
@@ -21,8 +22,13 @@ import static java.lang.String.join;
 @RequiredArgsConstructor
 public class CustomerSearchQuery {
    private final EntityManager entityManager;
-
+private final JdbcTemplate jdbcTemplate;
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
+
+      jdbcTemplate.query("SELECT * FROM customer WHERE ID = ?",
+          (rs, rowNum) ->
+              new CustomerSearchResult(rs.getInt("id"), rs.getString("name")),
+          "asdasd");
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
 //      String jpql = "SELECT c " +
 //      String jpql = "SELECT c.* " +
