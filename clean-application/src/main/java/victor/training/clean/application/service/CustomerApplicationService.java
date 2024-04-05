@@ -111,7 +111,7 @@ public class CustomerApplicationService {
 //    email.send();
 //    api.call();
 //    rabbit.send(); ; activeMQ (JMS supporting JTA = 2PC)
-    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+//    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
   private String normalize(String s) {

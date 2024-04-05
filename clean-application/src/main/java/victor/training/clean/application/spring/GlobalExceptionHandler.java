@@ -55,7 +55,8 @@ public class GlobalExceptionHandler {
    @ExceptionHandler(Exception.class)
    public ResponseEntity<String> onAnyException(HttpServletRequest request, Exception exception) {
       String userMessage = translateError(exception, ErrorCode.GENERAL, null, request);
-      return internalServerError().body(userMessage);
+//      return internalServerError().body(userMessage);
+      return internalServerError().body(exception.getMessage());// security risk !
    }
 
    private String translateError(Throwable throwable, ErrorCode errorCode, String[] parameters, HttpServletRequest request) {

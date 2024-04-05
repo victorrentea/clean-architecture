@@ -32,7 +32,7 @@ public record CustomerDto(
     String legalEntityCode,
     Boolean discountedVat // GET only (server-side fetched)
 ) {
-  @AssertTrue
+  @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
   public boolean isAddressOk() {
     return shippingAddressCity != null && shippingAddressStreet != null && shippingAddressZip != null
          || shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;
