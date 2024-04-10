@@ -41,6 +41,7 @@ public class CustomerApplicationService {
 // a: mapstruct addiction
 //    var dto = customer.toDto(); // SO WRONG:  couples Domain Model to outside world
     // b:
+//    var dto = mapper.entityToDto(customer);
     return CustomerDto.fromEntity(customer);
   }
 
