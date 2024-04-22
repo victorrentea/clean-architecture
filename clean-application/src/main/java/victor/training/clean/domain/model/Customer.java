@@ -1,7 +1,9 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
@@ -44,6 +46,7 @@ public class Customer {
   @ManyToOne
   private Country country;
 
+//  @Getter(AccessLevel.NONE) // bye-bye getter (in practice, not often I can do this)
   private LocalDate createdDate;
   private String createdByUsername;
 
@@ -52,6 +55,18 @@ public class Customer {
 
   private String legalEntityCode;
   private boolean discountedVat;
+
+  //
+
+  // it depends...
+  // - Does this responsibility BELONG to the customer? But if code is small (MVP) - KISS
+  public int getDiscountPercentage() {
+    int discountPercentage = 1;
+    if (goldMember) {
+      discountPercentage += 3;
+    }
+    return discountPercentage;
+  }
 
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED

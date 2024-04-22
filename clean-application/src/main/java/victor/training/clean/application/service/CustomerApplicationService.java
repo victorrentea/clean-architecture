@@ -39,10 +39,10 @@ public class CustomerApplicationService {
 
     // Several lines of domain logic operating on the state of a single Entity
     // TODO Where can I move it? PS: it's repeating somewhere else
-    int discountPercentage = 1;
-    if (customer.isGoldMember()) {
-      discountPercentage += 3;
-    }
+    // a) move it in a domain.service.DiscountService💖 (if small)
+    // -) CustomerHellper/Util.getDiscountPercentage(customer) < NEVER
+    // -) CustomerService🛑.getDiscountPercentage(customer) < NEVER too broad
+    int discountPercentage = customer.getDiscountPercentage();
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
