@@ -12,6 +12,7 @@ import static java.util.Objects.requireNonNull;
 @Entity // should I use ORM on Domain Model?
 
 // 👑 Sacred Domain Object
+
 @Data // is bad because
 // - blind @Getter, @Setter for all = no encapsulation
 // - @ToString on all fields -> might trigger Lazy-Loading
@@ -62,6 +63,12 @@ public class Customer {
   @Setter(AccessLevel.NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
+   // protected  to allow Hibernate to subclass to create proxies
+  protected Customer() { // for hibernate
+  }
+  public Customer(String name) {
+    this.name = requireNonNull(name);
+  }
   // it depends...
   // - Does this responsibility BELONG to the customer? But if code is small (MVP) - KISS
   public int getDiscountPercentage() {

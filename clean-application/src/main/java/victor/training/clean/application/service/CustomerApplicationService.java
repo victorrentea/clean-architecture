@@ -66,9 +66,8 @@ public class CustomerApplicationService {
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = new Customer();
+    Customer customer = new Customer(dto.name());
     customer.setEmail(dto.email());
-    customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());

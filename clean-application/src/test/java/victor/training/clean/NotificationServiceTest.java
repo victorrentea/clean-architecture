@@ -37,8 +37,7 @@ class NotificationServiceTest {
 
   ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
 
-  Customer customer = new Customer()
-      .setName("Customer Name")
+  Customer customer = new Customer("Customer Name")
       .setEmail("jdoe@example.com");
 
   @Autowired
