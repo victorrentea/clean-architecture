@@ -50,7 +50,8 @@ public class Customer {
 
   //  @Getter(AccessLevel.NONE) // bye-bye getter (in practice, not often I can do this)
   private LocalDate createdDate;
-  private String createdByUsername;
+  @Embedded
+  private Username createdByUsername;
 
   private boolean goldMember;
   @JsonIgnore

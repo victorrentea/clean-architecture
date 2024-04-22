@@ -5,11 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.model.Username;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,33 +31,44 @@ public class NotificationService {
       ldapUserDto.setWorkEmail(null);
     }
 
-    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
-    String fullName = ldapUserDto.getFname() + " " +
-                      ldapUserDto.getLname().toUpperCase();
+    String username = ldapUserDto.getUn();
+    if ("".equals(username)) {
+      username = null;
+    } else if (username != null) {
+      if (username.startsWith("s")) {
+        username="system";
+      }
+    }
+
+    User user = new User(
+        new Username(username),
+        ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase(),
+        Optional.ofNullable(ldapUserDto.getWorkEmail()));
+
+
+    // ---------------- below this line, there should be no sign of Ldap garbage
+
+
+
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
         .body("Dear " + customer.getName() + ", Welcome to our clean app!\n" +
-              "Sincerely, " + fullName)
+              "Sincerely, " + user.fullName())
         .build();
 
 
-    // ⚠️ Unguarded nullable fields (causing NPE in other places) TODO return Optional<> from getter
-    // TODO can I use ImmutableList in the Email class ? to make it deeply imutable and avoid ArrayList?
-    if (ldapUserDto.getWorkEmail() != null) {
+    if (user.email().isPresent()) {
       // ⚠️ Logic repeats in other places TODO push logic in my new class
-      email.getCc().add(fullName + " <" + ldapUserDto.getWorkEmail() + ">");
+      email.getCc().add(user.fullName() + " <" + user.email().get() + ">");
     }
 
     emailSender.sendEmail(email);
 
-    // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
-    normalize(ldapUserDto);
 
-    // ⚠️ 'un' = bad name TODO use my domain names ('username')
-    customer.setCreatedByUsername(ldapUserDto.getUn());
+    customer.setCreatedByUsername(user.username());
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {

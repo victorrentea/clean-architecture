@@ -11,7 +11,10 @@ import java.util.List;
 @Value
 public class Email {
 	String to;
-	List<String> cc = new ArrayList<>();
+	List<String> cc = new ArrayList<>(); // any variable I ever meet of type collection
+	// should never ever ever ever be nulkl.
+	// OR, i will do a in-person code review with the author
+	// tell Jackson/JPA to instantiate it with an empty collection
 	String from;
 	String subject;
 	String body;
