@@ -12,8 +12,8 @@ import victor.training.clean.domain.repo.CustomerRepo;
 public class CustomerLeakingController {
    private final CustomerRepo customerRepo;
 
-   @GetMapping("{id}")
-   public Customer findById(@PathVariable long id) {
+   @GetMapping("{id}") // REST API
+   public Customer findById(@PathVariable long id) { // DOMAIN MODEL
       return customerRepo.findById(id).orElseThrow();
    }
 

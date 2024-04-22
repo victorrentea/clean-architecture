@@ -1,5 +1,6 @@
 package victor.training.clean.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -52,7 +53,11 @@ public class Customer {
   private String createdByUsername;
 
   private boolean goldMember;
+  @JsonIgnore
   private String goldMemberRemovalReason;
+
+
+//  private String bannedByWhoPhoneNUmber;
 
   private String legalEntityCode;
   private boolean discountedVat;

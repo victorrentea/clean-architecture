@@ -22,8 +22,10 @@ import static java.lang.String.join;
 public class CustomerSearchQuery {
    private final EntityManager entityManager;
 
+   // Use-Case Optimized Query (in DDD) = coupling the repository implem with the API DTO!
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
+//      String jpql = "SELECT c " +
       String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";
