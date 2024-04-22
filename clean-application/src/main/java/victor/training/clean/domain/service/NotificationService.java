@@ -23,8 +23,14 @@ public class NotificationService {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
+    // is there any relevant domain difference between "" and null email ? NO: never see an "" in your core logic.
+    if (ldapUserDto.getWorkEmail()!=null && ldapUserDto.getWorkEmail().equals("")) {
+      ldapUserDto.setWorkEmail(null);
+    }
+
     // ⚠️ Data mapping mixed with core logic TODO pull it earlier
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    String fullName = ldapUserDto.getFname() + " " +
+                      ldapUserDto.getLname().toUpperCase();
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -36,6 +42,7 @@ public class NotificationService {
 
 
     // ⚠️ Unguarded nullable fields (causing NPE in other places) TODO return Optional<> from getter
+    // TODO can I use ImmutableList in the Email class ? to make it deeply imutable and avoid ArrayList?
     if (ldapUserDto.getWorkEmail() != null) {
       // ⚠️ Logic repeats in other places TODO push logic in my new class
       email.getCc().add(fullName + " <" + ldapUserDto.getWorkEmail() + ">");
@@ -66,28 +73,7 @@ public class NotificationService {
     }
   }
 
-  public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
 
-//    int discountPercentage = 1;
-//    if (customer.isGoldMember()) {
-//      discountPercentage += 3;
-//    }
-    int discountPercentage = customer.getDiscountPercentage();
-
-    Email email = Email.builder()
-        .from("noreply@cleanapp.com")
-        .to(customer.getEmail())
-        .subject("Welcome to our Gold membership!")
-        .body("Please enjoy a special discount of " + discountPercentage + "%\n" +
-              "Yours sincerely, " + userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase())
-        .build();
-
-    email.getCc().add(userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase()
-                      + " <" + userLdapDto.getWorkEmail() + ">");
-
-    emailSender.sendEmail(email);
-  }
 
 
 }
