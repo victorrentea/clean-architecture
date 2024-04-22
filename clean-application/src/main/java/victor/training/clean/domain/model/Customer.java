@@ -3,7 +3,7 @@ package victor.training.clean.domain.model;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -46,7 +46,7 @@ public class Customer {
   @ManyToOne
   private Country country;
 
-//  @Getter(AccessLevel.NONE) // bye-bye getter (in practice, not often I can do this)
+  //  @Getter(AccessLevel.NONE) // bye-bye getter (in practice, not often I can do this)
   private LocalDate createdDate;
   private String createdByUsername;
 
@@ -57,6 +57,10 @@ public class Customer {
   private boolean discountedVat;
 
   //
+  @Setter(AccessLevel.NONE)
+  private Status status = Status.DRAFT;
+  @Setter(AccessLevel.NONE)
+  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
   // it depends...
   // - Does this responsibility BELONG to the customer? But if code is small (MVP) - KISS
@@ -68,23 +72,50 @@ public class Customer {
     return discountPercentage;
   }
 
+  // guarded mutators
+  public void validate(String currentUser) {
+    requireNonNull(currentUser);
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Can't validate a non-DRAFT customer");
+    }
+    status = Status.VALIDATED;
+    validatedBy = currentUser;
+  }
+
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Can't activate a non-VALIDATED customer");
+    }
+    status = Status.ACTIVE;
+  }
+
+  public void delete() {
+    if (status != Status.ACTIVE) {
+      throw new IllegalStateException("Can't delete a non-ACTIVE customer");
+    }
+    status = Status.DELETED;
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 }
 
 //region Code in the project might [not] follow the rule
-//class CodeFollowingTheRule {
-//  public void ok(Customer draftCustomer) {
-//    draftCustomer.setStatus(VALIDATED);
+class CodeFollowingTheRule {
+  public void ok(Customer draftCustomer) {
+//    draftCustomer.setStatus(Customer.Status.VALIDATED);
 //    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//}
-//class CodeBreakingTheRule {
-//  public void farAway(Customer draftCustomer) {
-//    draftCustomer.setStatus(VALIDATED);
-//  }
-//}
+    draftCustomer.validate("currentUser");
+
+  }
+}
+
+// over the hills and far away
+class CodeBreakingTheRule {
+  public void farAway(Customer draftCustomer) {
+//    draftCustomer.setStatus(Customer.Status.VALIDATED);
+    draftCustomer.validate(null);
+  }
+}
 //endregion
