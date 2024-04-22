@@ -1,29 +1,45 @@
 package victor.training.clean.domain.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
 import static java.util.Objects.requireNonNull;
 
-@Entity
-@Data // avoid on ORM @Entity because:
-// 1) hashCode uses @Id⚠️ 2) toString triggers lazy-loading⚠️ 3) all setters = no encapsulation⚠️
+@Entity // should I use ORM on Domain Model?
+
+// 👑 Sacred Domain Object
+@Data // is bad because
+// - blind @Getter, @Setter for all = no encapsulation
+// - @ToString on all fields -> might trigger Lazy-Loading
+// - hashCode/equals uses @Id⚠️
+
+
 public class Customer {
   @Id
   @GeneratedValue
   private Long id;
   private String name;
   private String email;
+//  @OneToMany
+//  List<Child> childList;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+
+  @Embedded
+  private ShippingAddress shippingAddress;
+
+  // few total fields -> better things to do
+  // too many fields (PAIN eg 16 fields) -> extract
+
+//  private String billingAddressVATCode;
+//  private String billingAddressCity;
+//  private String billingAddressStreet;
+//  private String billingAddressZip;
 
   @ManyToOne
   private Country country;
