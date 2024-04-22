@@ -19,37 +19,11 @@ import java.util.Optional;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final UserAdapter userAdapter;
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-
-    // is there any relevant domain difference between "" and null email ? NO: never see an "" in your core logic.
-    if (ldapUserDto.getWorkEmail()!=null && ldapUserDto.getWorkEmail().equals("")) {
-      ldapUserDto.setWorkEmail(null);
-    }
-
-    String username = ldapUserDto.getUn();
-    if ("".equals(username)) {
-      username = null;
-    } else if (username != null) {
-      if (username.startsWith("s")) {
-        username="system";
-      }
-    }
-
-    User user = new User(
-        new Username(username),
-        ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase(),
-        Optional.ofNullable(ldapUserDto.getWorkEmail()));
-
-
-    // ---------------- below this line, there should be no sign of Ldap garbage
-
-
-
+    User user = userAdapter.fetch(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -69,22 +43,6 @@ public class NotificationService {
 
 
     customer.setCreatedByUsername(user.username());
-  }
-
-  private LdapUserDto fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    return dtoList.get(0);
-  }
-
-  private void normalize(LdapUserDto dto) {
-    if (dto.getUn().startsWith("s")) {
-      dto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
   }
 
 
