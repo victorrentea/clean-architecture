@@ -1,6 +1,5 @@
 package victor.training.clean.vsa;
 
-import com.google.common.annotations.VisibleForTesting;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import static java.lang.String.join;
 public class SearchCustomerUseCase {
   private final EntityManager entityManager;
 
-  @VisibleForTesting // only @Tests are allowed to use this
+//  @VisibleForTesting // only @Tests are allowed to use this
   record CustomerSearchCriteria(
       String name,
       String email,
@@ -27,7 +26,8 @@ public class SearchCustomerUseCase {
   ) {
   }
 
-  @VisibleForTesting
+
+//  @VisibleForTesting
   record CustomerSearchResult(
       long id,
       String name
