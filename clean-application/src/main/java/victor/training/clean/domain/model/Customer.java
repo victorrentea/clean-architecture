@@ -1,18 +1,23 @@
 package victor.training.clean.domain.model;
 
-import lombok.Data;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Data;
+
 import java.time.LocalDate;
 
-import static java.util.Objects.requireNonNull;
+//region Reasons to avoid @Data on Domain Model
+// Avoid @Data on Domain Model because:
+// 1) hashCode uses @Id⚠️
+// 2) toString might trigger lazy-loading⚠️
+// 3) all setters/getters = no encapsulation⚠️
+//endregion
 
-@Entity
-@Data // avoid on ORM @Entity because:
-// 1) hashCode uses @Id⚠️ 2) toString triggers lazy-loading⚠️ 3) all setters = no encapsulation⚠️
+// This class is part of your Domain Model, the backbone of your core complexity.
+@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
+@Entity // ORM/JPA (2)
 public class Customer {
   @Id
   @GeneratedValue
@@ -37,23 +42,24 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  private Status status;
+  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 }
 
 //region Code in the project might [not] follow the rule
 //class CodeFollowingTheRule {
 //  public void ok(Customer draftCustomer) {
-//    draftCustomer.setStatus(VALIDATED);
+//    draftCustomer.setStatus(Customer.Status.VALIDATED);
 //    draftCustomer.setValidatedBy("currentUser"); // from token/session..
 //  }
 //}
+
 //class CodeBreakingTheRule {
 //  public void farAway(Customer draftCustomer) {
-//    draftCustomer.setStatus(VALIDATED);
+//    draftCustomer.setStatus(Customer.Status.VALIDATED);
 //  }
 //}
 //endregion

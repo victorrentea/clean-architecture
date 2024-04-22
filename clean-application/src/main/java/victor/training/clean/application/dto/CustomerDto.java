@@ -9,7 +9,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 @Builder
 // Dto used to both QUERY and COMMAND use-cases ?
 public record CustomerDto(
-    Long id, // GET only (server-assigned)
+    Long id, // GET only (assigned by backend)
 
     String name,
     String email,
@@ -19,14 +19,14 @@ public record CustomerDto(
     String shippingAddressStreet, // GET only (updated via dedicated endpoint)
     String shippingAddressZip, // GET only (updated via dedicated endpoint)
 
-    String createdDateStr, // GET only (server-assigned)
+    String createdDateStr, // GET only (assigned by backend)
 
     Boolean gold, // GET & PUT
     String goldMemberRemovalReason, // GET & PUT(if gold changed true->false)
-    int discountPercentage, // GET only (server-side computed)
+    boolean canReturnOrders, // GET only (computed by backend)
 
     String legalEntityCode,
-    Boolean discountedVat // GET only (server-side fetched)
+    Boolean discountedVat // GET only (fetched by backend)
 ) {
 
   @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
@@ -50,7 +50,7 @@ public record CustomerDto(
         .shippingAddressStreet(customer.getShippingAddressStreet())
         .shippingAddressCity(customer.getShippingAddressCity())
         .shippingAddressZip(customer.getShippingAddressZip())
-        .discountPercentage(0) // TODO
+        //.canReturnOrders(TODO)
         .build();
   }
 }

@@ -1,6 +1,5 @@
 package victor.training.clean.vsa;
 
-import com.google.common.annotations.VisibleForTesting;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
