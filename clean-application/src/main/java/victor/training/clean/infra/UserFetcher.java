@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.domain.model.Username;
-import victor.training.clean.domain.service.IUserAdapter;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +13,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserAdapter implements IUserAdapter {
+public class UserFetcher implements victor.training.clean.domain.service.UserFetcher {
   private final LdapApi ldapApi;
 
   @Override
