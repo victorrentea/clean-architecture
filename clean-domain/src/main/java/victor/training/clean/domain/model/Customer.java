@@ -1,6 +1,9 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -23,6 +26,13 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+
+  // famous case of DRY violation.
+  // to maintain consistency indifferent of the UC changing this DM
+  @Size(min = 5)
+  @NotNull
+  @NotBlank
+//  @ValidName // custom validation annotation
   private String name;
   private String email;
 //  @OneToMany

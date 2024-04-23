@@ -1,8 +1,11 @@
 package victor.training.clean.application.dto;
 
-import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+
+import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -11,7 +14,12 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (server-assigned)
 
+    @Size(min = 5)
+    @NotNull
+    @NotBlank
+        // out of love for my API client
     String name,
+    @Email
     String email,
     Long countryId,
 
@@ -36,7 +44,7 @@ public record CustomerDto(
     //     or write this if in the first layer of logic 💖
   }
 
-  public CustomerDto fromEntity(Customer customer) {
+  public static CustomerDto fromEntity(Customer customer) {
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())
@@ -55,5 +63,14 @@ public record CustomerDto(
         .shippingAddressZip(customer.getShippingAddress().zip())
         .discountPercentage(0) // TODO
         .build();
+  }
+
+  public Customer asEntity() {
+    Customer customer = new Customer(name());
+    customer.setEmail(email());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(countryId()));
+    customer.setLegalEntityCode(legalEntityCode());
+    return customer;
   }
 }

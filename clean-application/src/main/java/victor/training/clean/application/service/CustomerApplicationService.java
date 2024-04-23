@@ -1,8 +1,12 @@
 package victor.training.clean.application.service;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
@@ -14,8 +18,6 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -23,6 +25,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
+@RestController
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
@@ -30,9 +33,19 @@ public class CustomerApplicationService {
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
 
-  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+   @Operation(description = "Search Customer")
+   @PostMapping("customers/search")
+   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
+    // in case I cannot pass in application service the CSC (dto) directly, then I will copy-paste that class
+    // into a DOMAIN class identical in structure and map field-to-field to it.
+
+    // if the dto cannot be easily mapped to one DM object, you will create another class just to be able to pass it to the domain
     return customerSearchQuery.search(searchCriteria);
   }
+  // BREAKING THE LAW: couplig nthe application code to REST. (to KISS, pragmatic variation) many would label this "BLASPHEMY"
+  // - versioning: I can't do v1.CustomerController  vs CustomerControllerV2 vs CustomerControllerV3 (interfaces) + Dto
+  // - expose the same feature over multiple channels: REST, SOAP, Kafka, JMS, etc.
+
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
@@ -42,40 +55,25 @@ public class CustomerApplicationService {
     // a) move it in a domain.service.DiscountService💖 (if small)
     // -) CustomerHellper/Util.getDiscountPercentage(customer) < NEVER
     // -) CustomerService🛑.getDiscountPercentage(customer) < NEVER too broad
-    int discountPercentage = customer.getDiscountPercentage();
 
     // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-        .discountPercentage(discountPercentage)
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+    // a) dto = mapStruct.map(customer);
+    // b) dto = new CustomerDto(customer); 💖
+    // c) dto = customer.toDto(); NO: couples DM to external API
+    // d) dto = CustomerUtil.toDto(); NO
+    return CustomerDto.fromEntity(customer);
   }
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = new Customer(dto.name());
-    customer.setEmail(dto.email());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
+    Customer customer = dto.asEntity(); // can't do this if your DTOs are generated
 
     // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
+    // anti-social validoation: the client only sees the FIRST failure.
+    // annotation report all violations at once,
+//    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
+//      throw new IllegalArgumentException("The customer name is too short");
+//    }
 
     // business rule/validation
     if (customerRepo.existsByEmail(customer.getEmail())) {

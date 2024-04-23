@@ -18,16 +18,19 @@ public class CustomerController {
 
    @PostMapping("customers")
    public void register(@RequestBody @Validated CustomerDto dto) {
+      // + mappers that converts to DTO(JSON) objects from Domain Model or Application??!!?
+      // ("read model to aggregate 2+ returned value")
       customerApplicationService.register(dto);
    }
 
-   @Operation(description = "Search Customer")
-   @PostMapping("customers/search")
-   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-      return customerApplicationService.search(searchCriteria);
-   }
+//   @Operation(description = "Search Customer")
+//   @PostMapping("customers/search")
+//   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
+//      return customerApplicationService.search(searchCriteria);
+//   }
 
    @GetMapping("customers/{id}")
+   //@GET @Path("customers/{id}")
    public CustomerDto findById(@PathVariable long id) {
       return customerApplicationService.findById(id);
    }
