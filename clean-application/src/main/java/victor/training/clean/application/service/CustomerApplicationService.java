@@ -57,7 +57,7 @@ public class CustomerApplicationService {
     // -) CustomerService🛑.getDiscountPercentage(customer) < NEVER too broad
 
     // boilerplate mapping code TODO move somewhere else
-    // a) dto = mapStruct.map(customer);
+//     a) dto = mapStruct.map(customer);
     // b) dto = new CustomerDto(customer); 💖
     // c) dto = customer.toDto(); NO: couples DM to external API
     // d) dto = CustomerUtil.toDto(); NO
@@ -65,9 +65,14 @@ public class CustomerApplicationService {
   }
 
   @Transactional
+  // "Facade": prefer to integration-test this with the entire flow.
+  // write more such "longer" tests, as many as you can.
+  // if the complexity here in this method is too high ->
   public void register(CustomerDto dto) {
     Customer customer = dto.asEntity(); // can't do this if your DTOs are generated
 
+    // + 2 if
+    // + 3 calls to other deps
     // request payload validation
     // anti-social validoation: the client only sees the FIRST failure.
     // annotation report all violations at once,
