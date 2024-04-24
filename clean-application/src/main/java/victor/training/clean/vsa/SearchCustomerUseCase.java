@@ -21,7 +21,7 @@ public class SearchCustomerUseCase {
 //  @VisibleForTesting // only @Tests are allowed to use this
   record CustomerSearchCriteria(
       String name,
-      String email,
+//      String email,
       Long countryId
   ) {
   }
@@ -50,10 +50,10 @@ public class SearchCustomerUseCase {
       params.put("name", criteria.name);
     }
 
-    if (criteria.email != null) {
-      jpqlParts.add("UPPER(c.email) = UPPER(:email)");
-      params.put("email", criteria.email);
-    }
+//    if (criteria.email != null) {
+//      jpqlParts.add("UPPER(c.email) = UPPER(:email)");
+//      params.put("email", criteria.email);
+//    }
 
     if (criteria.countryId != null) {
       jpqlParts.add("c.country.id = :countryId");
