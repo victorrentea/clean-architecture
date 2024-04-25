@@ -37,8 +37,7 @@ class NotificationServiceTest {
 
   ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
 
-  Customer customer = new Customer()
-      .setName("Customer Name")
+  Customer customer = new Customer("Customer Name")
       .setEmail("jdoe@example.com");
 
   @Autowired
@@ -85,7 +84,6 @@ class NotificationServiceTest {
   @Test
   void sendGoldBenefits_baseFlow() {
     customer.setGoldMember(true);
-    notificationService.sendGoldBenefitsEmail(customer,"full");
 
     verify(emailSender).sendEmail(emailCaptor.capture());
     Email email = emailCaptor.getValue();
@@ -98,14 +96,12 @@ class NotificationServiceTest {
   }
   @Test
   void sendGoldBenefits_noIntraEmail() {
-    notificationService.sendGoldBenefitsEmail(customer,"externalEmail");
 
     verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
   }
   @Test
   @Disabled("BUG: throws NPE. Why !?")
   void sendGoldBenefits_missingEmail() {
-    notificationService.sendGoldBenefitsEmail(customer,"noemail");
 
     verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
   }
