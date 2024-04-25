@@ -3,19 +3,18 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.IEmailSender;
+import victor.training.clean.domain.ILdapUserAdapter;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final LdapApi ldapApi;
-  private final LdapUserAdapter adapter;
+  private final IEmailSender IEmailSender;
+  private final ILdapUserAdapter adapter;
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
@@ -35,7 +34,7 @@ public class NotificationService {
         .map(emailAddress -> user.fullName() + " <" + emailAddress + ">")
         .ifPresent(email.getCc()::add);
 
-    emailSender.sendEmail(email);
+    IEmailSender.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
   }
