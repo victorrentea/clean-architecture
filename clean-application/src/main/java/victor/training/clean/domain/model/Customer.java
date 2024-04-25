@@ -1,10 +1,12 @@
 package victor.training.clean.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import victor.training.clean.domain.repo.CustomerRepo;
 
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -44,7 +46,12 @@ public class Customer {
   @ManyToOne
   private Country country;
 
+  @JsonIgnore
   private LocalDate createdDate;
+
+//  public String getDateFromatted(boolean bull) {
+//    return "</b>" + DateFormat.getDateInstance().format(createdDate)+"</b>";
+//  }
   private String createdByUsername;
 
   private boolean goldMember;
@@ -57,6 +64,20 @@ public class Customer {
   private Status status = Status.DRAFT;
   @Setter(NONE)
   private String validatedBy;
+
+
+
+  protected Customer() {
+  } // for hibernate only
+
+  public Customer(String name) {
+    this.name = Objects.requireNonNull(name);
+  }
+
+  public boolean canReturnOrders() {
+    return goldMember || legalEntityCode == null;
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }

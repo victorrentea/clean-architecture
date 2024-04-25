@@ -22,9 +22,11 @@ import static java.lang.String.join;
 public class CustomerSearchQuery {
    private final EntityManager entityManager;
 
+   // Use-case optimized query: SELECTing directly into DTOs sent out as JSONs.
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
       String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
+//      String jpql = "SELECT c "+ // WRONG: + 7 JOINS + 1KB mem + network traffic ?
                     " FROM Customer c " +
                     " WHERE ";
       List<String> jpqlParts = new ArrayList<>();
