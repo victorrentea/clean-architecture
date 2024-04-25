@@ -1,107 +1,56 @@
 package victor.training.clean.application.service;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.application.ApplicationService;
-import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.repo.CustomerSearchQuery;
+import victor.training.clean.domain.service.CustomerService;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.infra.AnafClient;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
-@ApplicationService // custom annotation refining the classic @Service
+@RestController // custom annotation refining the classic @Service
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
-  private final AnafClient anafClient;
+  private final CustomerService customerService;
 
-  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+  @Operation(description = "Search Customer")
+  @PostMapping("customers/search")
+  public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
   }
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
-
-    // Bit of domain logic on the state of one Entity?  What TODO?
-    // PS: it's also repeating somewhere else
-
-    // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-        .canReturnOrders(customer.canReturnOrders())
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+//    customer.toDto(); // illegal coupling Domain -> API WRONG!
+    return CustomerDto.fromEntity(customer); // if you didn't generated these Dtos from OpenAPI
   }
 
   @Transactional
-  public void register(CustomerDto dto) {
-    Customer customer = new Customer(dto.name());
-    customer.setEmail(dto.email());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
-
-    // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
-
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode() != null) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
+  @PostMapping("customers")
+  public void register(@RequestBody @Validated CustomerDto dto) {
+    Customer customer = dto.toEntity();
+    customerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
-  private String normalize(String s) {
-    return s.toLowerCase().replace("\\s+", "");
-  }
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands

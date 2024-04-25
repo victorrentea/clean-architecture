@@ -16,16 +16,16 @@ import java.util.List;
 public class CustomerController {
    private final CustomerApplicationService customerApplicationService;
 
-   @PostMapping("customers")
-   public void register(@RequestBody @Validated CustomerDto dto) {
-      customerApplicationService.register(dto);
-   }
+//   @PostMapping("customers")
+//   public void register(@RequestBody @Validated CustomerDto dto) {
+//      customerApplicationService.register(dto);
+//   }
 
-   @Operation(description = "Search Customer")
-   @PostMapping("customers/search")
-   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-      return customerApplicationService.search(searchCriteria);
-   }
+//   @Operation(description = "Search Customer")
+//   @PostMapping("customers/search")
+//   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
+//      return customerApplicationService.search(searchCriteria);
+//   }
 
    @GetMapping("customers/{id}")
    public CustomerDto findById(@PathVariable long id) {

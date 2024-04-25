@@ -25,8 +25,10 @@ public class ArchitectureTest {
     }
 
     @Test
-    public void domain_independent_of_application() {
-        // TODO check that no classes in the domain pacakge depend on any classes in the application (eg DTOs)
+    public void domain_independent_of_application() { // dto
+        noClasses().that().resideInAPackage("..domain..")
+                .should().dependOnClassesThat().resideInAPackage("..application..")
+                .check(allProjectClasses);
     }
 
     @Test

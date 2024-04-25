@@ -2,6 +2,9 @@ package victor.training.clean.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Setter;
 import victor.training.clean.domain.repo.CustomerRepo;
@@ -33,7 +36,10 @@ public class Customer {
   @Id
   @GeneratedValue(generator = "CUSTOMER_SEQ")
   private Long id;
+  @Size(min = 5) // allows null WTF?!!
+  @NotBlank
   private String name;
+  @Email // violation of DRY for the sake of consistency.
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
