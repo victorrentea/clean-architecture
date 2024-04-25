@@ -3,7 +3,7 @@ package victor.training.clean.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.IEmailSender;
+import victor.training.clean.domain.EmailSender;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.InsurancePolicy;
@@ -17,7 +17,7 @@ import victor.training.clean.domain.repo.PolicyNotificationRepo;
 public class InsuranceService {
    private final InsurancePolicyRepo insurancePolicyRepo;
    private final PolicyNotificationRepo policyNotificationRepo;
-   private final IEmailSender IEmailSender;
+   private final EmailSender EmailSender;
 
    public void customerDetailsChanged(Customer newCustomer) {
       InsurancePolicy currentPolicy = insurancePolicyRepo.findByCustomerId(newCustomer.getId());
@@ -38,7 +38,7 @@ public class InsuranceService {
           .subject("Customer " + customer.getName() + " policy has to be re-evaluated")
           .body("Please review the policy due to : " + reason)
           .build();
-      IEmailSender.sendEmail(email);
+      EmailSender.sendEmail(email);
    }
 
    public void printPolicy(long policyId) {

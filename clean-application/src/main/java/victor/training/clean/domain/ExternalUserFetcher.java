@@ -2,6 +2,6 @@ package victor.training.clean.domain;
 
 import victor.training.clean.domain.model.User;
 
-public interface ILdapUserAdapter {
-  User fetchUserFromLdap(String usernamePart);
+public interface ExternalUserFetcher {
+  User fetch(String usernamePart);
 }

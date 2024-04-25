@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.domain.IEmailSender;
+import victor.training.clean.domain.EmailSender;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.application.dto.CustomerDto;
@@ -50,7 +50,7 @@ public class LargeIntegrationTest {
     @Autowired
     private CustomerRepo customerRepo;
     @MockBean
-    private IEmailSender IEmailSender;
+    private EmailSender EmailSender;
 
     private Country country;
 
@@ -76,7 +76,7 @@ public class LargeIntegrationTest {
         assertThat(customer.getName()).isEqualTo("::name::");
         assertThat(customer.getEmail()).isEqualTo(CUSTOMER_EMAIL);
         assertThat(customer.getCountry().getId()).isEqualTo(country.getId());
-        verify(IEmailSender).sendEmail(argThat(email -> email.getTo().equals(CUSTOMER_EMAIL)));
+        verify(EmailSender).sendEmail(argThat(email -> email.getTo().equals(CUSTOMER_EMAIL)));
 
 
         CustomerDto responseDto = getCustomer(customer.getId());

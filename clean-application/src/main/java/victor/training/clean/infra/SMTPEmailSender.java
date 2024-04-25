@@ -2,11 +2,12 @@ package victor.training.clean.infra;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import victor.training.clean.domain.EmailSender;
 import victor.training.clean.domain.model.Email;
 
 @Slf4j
 @Service
-public class EmailSender implements victor.training.clean.domain.IEmailSender {
+public class SMTPEmailSender implements EmailSender {
    @Override
    public void sendEmail(Email email) {
       // Imagine 20 lines of infra code to:
