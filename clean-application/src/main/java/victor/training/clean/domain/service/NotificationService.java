@@ -8,10 +8,6 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -19,11 +15,12 @@ import java.util.Optional;
 public class NotificationService {
   private final EmailSender emailSender;
   private final LdapApi ldapApi;
+  private final LdapUserAdapter adapter;
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
-    User user = fetchUserFromLdap(usernamePart);
+    User user = adapter.fetchUserFromLdap(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -42,31 +39,6 @@ public class NotificationService {
 
     customer.setCreatedByUsername(user.username());
   }
-
-  private User fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    LdapUserDto ldapUserDto = dtoList.get(0);
-
-
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-
-    if (ldapUserDto.getUn().startsWith("s")) {
-      ldapUserDto.setUn("system");
-    }
-
-    User user = new User(
-        ldapUserDto.getUn(),
-        fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail()));
-   return user;
-  }
-
-
 
 
 }
