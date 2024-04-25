@@ -1,12 +1,10 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -16,19 +14,27 @@ import java.time.LocalDate;
 //endregion
 
 // This class is part of your Domain Model, the backbone of your core complexity.
-@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
+@Data //(1) =
+// @Getter++ @Setter = screw encapsulation
+// @ToString = can trigger LazyLoading and StackOverflowException when circular references
+// @EqualsAndHashCode = don;t implement hash/eq on domain model/@Entity
+
 @Entity // ORM/JPA (2)
+
+@SequenceGenerator(name = "CUSTOMER_SEQ", sequenceName = "CUSTOMER_SEQ", allocationSize = 1)
 public class Customer {
   @Id
-  @GeneratedValue
+  @GeneratedValue(generator = "CUSTOMER_SEQ")
   private Long id;
   private String name;
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+  @Embedded // did not change the DB schema
+  private ShippingAddress shippingAddress;
 
   @ManyToOne
   private Country country;
