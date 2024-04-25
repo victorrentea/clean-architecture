@@ -37,7 +37,7 @@ public class Customer {
   @GeneratedValue(generator = "CUSTOMER_SEQ")
   private Long id;
   @Size(min = 5) // allows null WTF?!!
-  @NotBlank
+  @NotBlank //
   private String name;
   @Email // violation of DRY for the sake of consistency.
   private String email;

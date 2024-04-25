@@ -14,6 +14,7 @@ import victor.training.clean.infra.AnafClient;
 public class CustomerService {
   private final CustomerRepo customerRepo;
   private final AnafClient anafClient;
+
   public  void register(Customer customer) {
     // business rule/validation
     if (customerRepo.existsByEmail(customer.getEmail())) {
