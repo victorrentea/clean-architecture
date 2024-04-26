@@ -1,7 +1,9 @@
 package victor.training.clean.application.controller;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.application.dto.CustomerDto;
@@ -61,5 +63,16 @@ public class CustomerController {
 //      }
 //   }
    //</editor-fold>
+
+//   @PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
+//   public void patch(@PathVariable long id, @RequestBody JsonPatch patch) {
+//
+//   }
+
+//   private Customer applyPatchToCustomer(
+//  JsonPatch patch, Customer targetCustomer) throws JsonPatchException, JsonProcessingException {
+//    JsonNode patched = patch.apply(objectMapper.convertValue(targetCustomer, JsonNode.class));
+//    return objectMapper.treeToValue(patched, Customer.class);
+//}
 }
 

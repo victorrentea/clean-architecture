@@ -61,11 +61,11 @@
             <version>2.1.210</version>
         </dependency>
 
-       <!-- <dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>openapi-generator</artifactId>
-            <version>6.6.0</version>
-        </dependency>-->
+        <!-- <dependency>
+             <groupId>org.openapitools</groupId>
+             <artifactId>openapi-generator</artifactId>
+             <version>6.6.0</version>
+         </dependency>-->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -106,6 +106,11 @@
                     <artifactId>validation-api</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.java-json-tools</groupId>
+            <artifactId>json-patch</artifactId>
+            <version>1.13</version>
         </dependency>
     </dependencies>
     <build>
