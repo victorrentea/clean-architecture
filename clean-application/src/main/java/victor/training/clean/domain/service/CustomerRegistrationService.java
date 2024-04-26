@@ -12,10 +12,11 @@ import victor.training.clean.infra.AnafClient;
 @Service
 @RequiredArgsConstructor
 public class CustomerRegistrationService { // verb/action = stateless piece of logic DOING not BEING something
+
   private final CustomerRepo customerRepo;
   private final AnafClient anafClient;
 
-  public  void register(Customer customer) {
+  public void register(Customer customer) {
     // business rule/validation
     if (customerRepo.existsByEmail(customer.getEmail())) {
       throw new IllegalArgumentException("A customer with this email is already registered!");
