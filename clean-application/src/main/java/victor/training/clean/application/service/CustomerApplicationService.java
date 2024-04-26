@@ -14,7 +14,7 @@ import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.service.RegisterCustomerService;
+import victor.training.clean.domain.service.CustomerRegistrationService;
 import victor.training.clean.domain.service.NotificationService;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class CustomerApplicationService {
   private final NotificationService notificationService;
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
-  private final RegisterCustomerService registerCustomerService;
+  private final CustomerRegistrationService customerRegistrationService;
 
   @Operation(description = "Search Customer")
   @PostMapping("customers/search")
@@ -47,7 +47,7 @@ public class CustomerApplicationService {
   @PostMapping("customers")
   public void register(@RequestBody @Validated CustomerDto dto) {
     Customer customer = dto.toEntity();
-    registerCustomerService.register(customer);
+    customerRegistrationService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
