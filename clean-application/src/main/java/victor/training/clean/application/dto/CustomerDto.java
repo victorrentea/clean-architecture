@@ -36,7 +36,7 @@ public record CustomerDto(
     //     or write this if in the first layer of logic 💖
   }
 
-  public CustomerDto fromEntity(Customer customer) {
+  public static CustomerDto fromEntity(Customer customer) {
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())
