@@ -30,7 +30,8 @@ public class SearchCustomerUseCase {
   @VisibleForTesting
   record CustomerSearchResult(
       long id,
-      String name
+      String name,
+      String email
       // TODO also return 'email' => only this file is impacted
   ) {
   }
@@ -38,7 +39,8 @@ public class SearchCustomerUseCase {
   @Operation(description = "Customer Search Poem")
   @PostMapping("customer/search-vsa")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria criteria) {
-    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name)" +
+//    GetCustomerByIdUseCase.GetCustomerByIdResponse response = GetCustomerByIdUseCase.GetCustomerByIdResponse.builder().build();
+    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name, c.email)" +
                   " FROM Customer c " +
                   " WHERE ";
     List<String> jpqlParts = new ArrayList<>();

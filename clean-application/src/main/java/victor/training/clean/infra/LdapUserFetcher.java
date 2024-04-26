@@ -3,7 +3,7 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.ExternalUserFetcher;
+import victor.training.clean.domain.service.ExternalUserFetcher;
 import victor.training.clean.domain.model.User;
 
 import java.util.List;

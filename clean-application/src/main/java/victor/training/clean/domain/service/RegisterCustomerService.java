@@ -11,7 +11,7 @@ import victor.training.clean.infra.AnafClient;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+public class RegisterCustomerService { // verb/action = stateless piece of logic DOING not BEING something
   private final CustomerRepo customerRepo;
   private final AnafClient anafClient;
 

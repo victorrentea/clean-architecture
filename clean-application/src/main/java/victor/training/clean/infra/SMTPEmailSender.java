@@ -2,7 +2,7 @@ package victor.training.clean.infra;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import victor.training.clean.domain.EmailSender;
+import victor.training.clean.domain.service.EmailSender;
 import victor.training.clean.domain.model.Email;
 
 @Slf4j
