@@ -31,7 +31,8 @@ public class GlobalExceptionHandler {
    @ExceptionHandler(CleanException.class)
    public ResponseEntity<String> onCleanException(HttpServletRequest request, CleanException cleanException) {
       log.error("CleanException occurred: " + cleanException.getErrorCode(), cleanException);
-      String userMessage = translateError(cleanException, cleanException.getErrorCode(), cleanException.getParameters(), request);
+//      String userMessage = translateError(cleanException, cleanException.getErrorCode(), cleanException.getParameters(), request);
+      String userMessage = cleanException.getMessage();
       String httpStatusCodeStr = messageSource.getMessage("error." + cleanException.getErrorCode() + ".code", null, "500", Locale.ENGLISH);
       int httpStatusCode = Integer.parseInt(httpStatusCodeStr);
       return status(httpStatusCode).body(userMessage);
@@ -41,7 +42,9 @@ public class GlobalExceptionHandler {
    @ResponseStatus(INTERNAL_SERVER_ERROR)
    @ExceptionHandler(MethodArgumentNotValidException.class)
    public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
-      List<String> response = e.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
+      List<String> response = e.getAllErrors().stream()
+          .map(DefaultMessageSourceResolvable::getDefaultMessage)
+          .collect(Collectors.toList());
       log.error("Validation failed. Returning: " + response, e);
       return response;
    }
