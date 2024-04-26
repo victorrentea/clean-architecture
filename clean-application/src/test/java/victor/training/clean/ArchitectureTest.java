@@ -18,7 +18,7 @@ public class ArchitectureTest {
     @Test
     @Disabled
     // NOTE: In case you don't understand this test, contact me:
-    // +40720019564 or victorrentea@gmail.com (the anarchitect)
+    // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
     public void domain_independent_of_infrastructure() {
         noClasses().that().resideInAPackage("..domain..")
                 .should().dependOnClassesThat().resideInAPackage("..infra..")
