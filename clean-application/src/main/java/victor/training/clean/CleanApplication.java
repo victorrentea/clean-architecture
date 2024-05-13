@@ -27,3 +27,14 @@ public class CleanApplication {
   }
 }
 
+//class A{
+//  public void method() {
+//
+//  }
+//}
+//class B extends A {
+//  @Override
+//  public void method() {
+//    super.method();
+//  }
+//}

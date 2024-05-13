@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,6 +14,8 @@ import java.time.LocalDate;
 
 // This class is part of your Domain Model, the backbone of your core complexity.
 @Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
+// Setter = mutable, no encapsulation : anyone can freely change any field
+
 @Entity // ORM/JPA (2)
 public class Customer {
   @Id
@@ -26,9 +25,12 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+
+  @Embedded // DOES NOT CHANGE THE DB SCHEMA, no alter-table needed.
+  private ShippingAddress shippingAddress;
 
   @ManyToOne
   private Country country;
