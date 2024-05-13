@@ -1,4 +1,4 @@
-package victor.training.clean.domain.repo;
+package victor.training.clean.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -6,7 +6,6 @@ import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 
 import jakarta.persistence.EntityManager;
-import victor.training.clean.domain.model.Customer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +14,7 @@ import java.util.Map;
 
 import static java.lang.String.join;
 
-// "Use-Case Optimized Query" pattern: SELECTing directly into DTOs sent out as JSONs.
+// "Use-Case Optimized QUERY (reading data)" pattern: SELECTing directly into DTOs sent out as JSONs.
 // ⚠️ DON'T change data in DB!
 // ⚠️ DON'T write heavy logic on the SELECTed DTOs!
 // For both points above, load and use the full Domain Model @Entity.
