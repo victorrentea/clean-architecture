@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
 
 // 1. map the LdapUserDto to a NEW domain data structure in my 'domain.model'
 // 2. move the infrastructure logic into the 'infra' package (as a class)
@@ -16,13 +14,12 @@ import victor.training.clean.infra.LdapApi;
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final LdapApi ldapApi;
-  private final LdapService   ldapService;
+  private final IEmailSender emailSender;
+  private final UserFetcher userFetcher;
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = ldapService.fetchUser(usernamePart);
+    User user = userFetcher.fetchUser(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -42,7 +39,7 @@ public class NotificationService {
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    User user = ldapService.fetchUser(usernamePart);
+    User user = userFetcher.fetchUser(usernamePart);
     String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
