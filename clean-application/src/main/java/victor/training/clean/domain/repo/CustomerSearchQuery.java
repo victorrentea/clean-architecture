@@ -6,6 +6,8 @@ import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 
 import jakarta.persistence.EntityManager;
+import victor.training.clean.domain.model.Customer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +24,10 @@ import static java.lang.String.join;
 public class CustomerSearchQuery {
    private final EntityManager entityManager;
 
+//   public List<Customer> search(CustomerSearchCriteria criteria) {
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
+//      String jpql = "SELECT c " + // downlaod too much. too many fields
       String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";

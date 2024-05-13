@@ -11,6 +11,9 @@ import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
 
+// 1. map the LdapUserDto to a NEW domain data structure in my 'domain.model'
+// 2. move the infrastructure logic into the 'infra' package (as a class)
+// 3. interface on which the domain to depend
 @RequiredArgsConstructor
 @Slf4j
 @Service
