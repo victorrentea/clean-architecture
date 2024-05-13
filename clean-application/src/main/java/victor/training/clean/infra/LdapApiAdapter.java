@@ -12,7 +12,9 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LdapService implements UserFetcher {
+// Adapter design pattern (GoF): adapts the LdapApi to the UserFetcher interface
+// isolate me from the external UGLY API
+public class LdapApiAdapter implements UserFetcher {
   private final LdapApi ldapApi;
 
 //  @Cacheable("user")
