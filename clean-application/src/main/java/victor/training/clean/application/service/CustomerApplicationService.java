@@ -64,22 +64,21 @@ public class CustomerApplicationService {
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = new Customer();
+    Customer customer = new Customer(dto.name());
     customer.setEmail(dto.email());
-    customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());
 
-    // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
+    // request request payload validation
+//    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
+//      throw new IllegalArgumentException("The customer name is too short");
+//    }
+    // + throw custom exception
 
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
+    // business rule implemented in a service somewhere
+    if (customerRepo.existsByEmailIgnoreCase(customer.getEmail())) {
       throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
     }
 
     // enrich data from external API

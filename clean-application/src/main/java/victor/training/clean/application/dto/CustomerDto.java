@@ -1,6 +1,8 @@
 package victor.training.clean.application.dto;
 
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -11,7 +13,12 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
+    // to act this object should be @Validated
+    @Size(min=5,message = "Whatever message I want")
     String name,
+    @Email // copy-pasted from Domain Model, but OK because:
+    // + this object serves a different goal: endpoint DTO: make life easier for the callers
+    // + fail-fast
     String email,
     Long countryId,
 

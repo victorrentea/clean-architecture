@@ -1,6 +1,8 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Setter;
 
@@ -25,7 +27,13 @@ public class Customer { // mutable💖 ORM entity
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min=5,message = "Whatever message I want")
+  // + enforced automatically by any Spring Data JPA repo
+  // + less code
+  // + reports ALL validation errors!!! (polite of you)
   private String name;
+  @Email
+  @Column(unique = true)
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
