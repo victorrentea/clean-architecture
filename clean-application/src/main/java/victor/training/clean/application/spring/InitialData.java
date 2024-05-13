@@ -27,8 +27,7 @@ public class InitialData {
   @Transactional
   public void onStartup() {
     Country country = countryRepo.save(new Country());
-    Long id = customerRepo.save(new Customer()
-        .setName("John Doe")
+    Long id = customerRepo.save(new Customer("John Doe")
         .setCountry(country)
         .setCreatedDate(now())
     ).getId();
