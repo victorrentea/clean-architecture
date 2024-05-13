@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +25,10 @@ public class CustomerController {
   private final CustomerApplicationService customerApplicationService;
   private final ObjectMapper jacksonObjectMapper;
 
-  @PostMapping("customers")
-  public void register(@RequestBody @Validated CustomerDto dto) {
-    customerApplicationService.register(dto);
-  }
+//  @PostMapping("customers")
+//  public void register(@RequestBody @Validated CustomerDto dto) {
+//    customerApplicationService.register(dto);
+//  }
 
   @Operation(description = "Search Customer")
   @PostMapping("customers/search")

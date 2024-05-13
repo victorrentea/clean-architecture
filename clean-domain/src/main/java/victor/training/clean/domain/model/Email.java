@@ -11,7 +11,7 @@ import java.util.List;
 @Value
 public class Email {
 	String to;
-	List<String> cc = new ArrayList<>();
+	List<User> cc = new ArrayList<>();
 	String from;
 	String subject;
 	String body;

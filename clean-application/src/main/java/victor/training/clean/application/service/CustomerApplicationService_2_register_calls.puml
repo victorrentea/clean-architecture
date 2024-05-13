@@ -1,0 +1,412 @@
+@startuml
+
+/' diagram meta data start
+config=CallConfiguration;
+{
+  "rootMethod": "victor.training.clean.application.service.CustomerApplicationService#register(CustomerDto)",
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showMethodParametersTypes": false,
+    "showMethodParametersNames": false,
+    "showMethodReturnType": false,
+    "showPackageLevels": 2,
+    "showCallOrder": false,
+    "edgeMode": "MethodsOnly", // TypesOnly, MethodsOnly, TypesAndMethods, MethodsAndDirectTypeUsage
+    "showDetailedClassStructure": false
+  },
+  "rootClass": "victor.training.clean.application.service.CustomerApplicationService",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="LR"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1276119258 { 
+   	label=training
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1843584971 { 
+   	label=clean
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   subgraph cluster_1008095993 { 
+   	label=Country
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   Country766465137XXXsetId3327612[
+	label="+ setId()"
+	style=filled
+	fillcolor=white
+	tooltip="Country
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_1792388607 { 
+   	label=EmailSender
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   EmailSender1420328162XXXsendEmail67066748[
+	label="+ sendEmail()"
+	style=filled
+	fillcolor=white
+	tooltip="EmailSender
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_2060608460 { 
+   	label=LdapApiAdapter
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   LdapApiAdapter1420328162XXXfetchUser1808118735[
+	label="+ fetchUser()"
+	style=filled
+	fillcolor=white
+	tooltip="LdapApiAdapter
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_2130579237 { 
+   	label=Customer
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   Customer766465137XXXsetCountry1672482954[
+	label="+ setCountry()"
+	style=filled
+	fillcolor=white
+	tooltip="Customer
+
+null"
+	fontcolor=darkgreen
+];
+
+Customer766465137XXXsetCreatedByUsername1808118735[
+	label="+ setCreatedByUsername()"
+	style=filled
+	fillcolor=white
+	tooltip="Customer
+
+null"
+	fontcolor=darkgreen
+];
+
+Customer766465137XXXsetCreatedDate798274969[
+	label="+ setCreatedDate()"
+	style=filled
+	fillcolor=white
+	tooltip="Customer
+
+null"
+	fontcolor=darkgreen
+];
+
+Customer766465137XXXsetDiscountedVat64711720[
+	label="+ setDiscountedVat()"
+	style=filled
+	fillcolor=white
+	tooltip="Customer
+
+null"
+	fontcolor=darkgreen
+];
+
+Customer766465137XXXsetEmail1808118735[
+	label="+ setEmail()"
+	style=filled
+	fillcolor=white
+	tooltip="Customer
+
+null"
+	fontcolor=darkgreen
+];
+
+Customer766465137XXXsetLegalEntityCode1808118735[
+	label="+ setLegalEntityCode()"
+	style=filled
+	fillcolor=white
+	tooltip="Customer
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_28261004 { 
+   	label=CustomerApplicationService
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   CustomerApplicationService650149093XXXregister104218367[
+	label="+ register()"
+	style=filled
+	fillcolor=white
+	tooltip="CustomerApplicationService
+
+null"
+	penwidth=4
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_552971682 { 
+   	label=CustomerDto
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   CustomerDto305189903XXXcountryId0[
+	label="+ countryId()"
+	style=filled
+	fillcolor=white
+	tooltip="CustomerDto
+
+null"
+	fontcolor=darkgreen
+];
+
+CustomerDto305189903XXXemail0[
+	label="+ email()"
+	style=filled
+	fillcolor=white
+	tooltip="CustomerDto
+
+null"
+	fontcolor=darkgreen
+];
+
+CustomerDto305189903XXXlegalEntityCode0[
+	label="+ legalEntityCode()"
+	style=filled
+	fillcolor=white
+	tooltip="CustomerDto
+
+null"
+	fontcolor=darkgreen
+];
+
+CustomerDto305189903XXXname0[
+	label="+ name()"
+	style=filled
+	fillcolor=white
+	tooltip="CustomerDto
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_575234888 { 
+   	label=User
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   User766465137XXXemail0[
+	label="+ email()"
+	style=filled
+	fillcolor=white
+	tooltip="User
+
+null"
+	fontcolor=darkgreen
+];
+
+User766465137XXXfullName0[
+	label="+ fullName()"
+	style=filled
+	fillcolor=white
+	tooltip="User
+
+null"
+	fontcolor=darkgreen
+];
+
+User766465137XXXusername0[
+	label="+ username()"
+	style=filled
+	fillcolor=white
+	tooltip="User
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_597359507 { 
+   	label=AnafClient
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   AnafClient1420328162XXXquery1808118735[
+	label="+ query()"
+	style=filled
+	fillcolor=white
+	tooltip="AnafClient
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_637453247 { 
+   	label=Email
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   Email766465137XXXbuilder0[
+	label="+ builder()"
+	style=filled
+	fillcolor=white
+	tooltip="Email
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_668426749 { 
+   	label=LdapApi
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   LdapApi1420328162XXXsearchUsingGET924985979[
+	label="+ searchUsingGET()"
+	style=filled
+	fillcolor=white
+	tooltip="LdapApi
+
+&#10;  search&#10;  &#10;  \<p\>\<b\>200\</b\> - OK&#10;  \<p\>\<b\>401\</b\> - Unauthorized&#10;  \<p\>\<b\>403\</b\> - Forbidden&#10;  \<p\>\<b\>404\</b\> - Not Found&#10;  @param un user name (optional)&#10;  @param fName fName (optional)&#10;  @param lName lName (optional)&#10;  @return List&lt;LdapUserDto&gt;&#10;  @throws RestClientException if an error occurs while attempting to invoke the API&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_810901945 { 
+   	label=NotificationService
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   NotificationService1404178947XXXsendWelcomeEmail754683741[
+	label="+ sendWelcomeEmail()"
+	style=filled
+	fillcolor=white
+	tooltip="NotificationService
+
+null"
+	fontcolor=darkgreen
+];
+} 
+} 
+} 
+
+'edges    
+CustomerApplicationService650149093XXXregister104218367 -> AnafClient1420328162XXXquery1808118735;
+CustomerApplicationService650149093XXXregister104218367 -> Country766465137XXXsetId3327612;
+CustomerApplicationService650149093XXXregister104218367 -> Customer766465137XXXsetCountry1672482954;
+CustomerApplicationService650149093XXXregister104218367 -> Customer766465137XXXsetCreatedDate798274969;
+CustomerApplicationService650149093XXXregister104218367 -> Customer766465137XXXsetDiscountedVat64711720;
+CustomerApplicationService650149093XXXregister104218367 -> Customer766465137XXXsetEmail1808118735;
+CustomerApplicationService650149093XXXregister104218367 -> Customer766465137XXXsetLegalEntityCode1808118735;
+CustomerApplicationService650149093XXXregister104218367 -> CustomerDto305189903XXXcountryId0;
+CustomerApplicationService650149093XXXregister104218367 -> CustomerDto305189903XXXemail0;
+CustomerApplicationService650149093XXXregister104218367 -> CustomerDto305189903XXXlegalEntityCode0;
+CustomerApplicationService650149093XXXregister104218367 -> CustomerDto305189903XXXname0;
+CustomerApplicationService650149093XXXregister104218367 -> NotificationService1404178947XXXsendWelcomeEmail754683741;
+LdapApiAdapter1420328162XXXfetchUser1808118735 -> LdapApi1420328162XXXsearchUsingGET924985979;
+NotificationService1404178947XXXsendWelcomeEmail754683741 -> Customer766465137XXXsetCreatedByUsername1808118735;
+NotificationService1404178947XXXsendWelcomeEmail754683741 -> Email766465137XXXbuilder0;
+NotificationService1404178947XXXsendWelcomeEmail754683741 -> EmailSender1420328162XXXsendEmail67066748;
+NotificationService1404178947XXXsendWelcomeEmail754683741 -> LdapApiAdapter1420328162XXXfetchUser1808118735;
+NotificationService1404178947XXXsendWelcomeEmail754683741 -> User766465137XXXemail0;
+NotificationService1404178947XXXsendWelcomeEmail754683741 -> User766465137XXXfullName0;
+NotificationService1404178947XXXsendWelcomeEmail754683741 -> User766465137XXXusername0;
+    
+}
+@enduml

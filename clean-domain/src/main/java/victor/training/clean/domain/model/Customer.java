@@ -44,6 +44,11 @@ public class Customer { // mutable💖 ORM entity
 //  private String shippingAddressZip;
 
   @Embedded // DOES NOT CHANGE THE DB SCHEMA, no alter-table needed.
+//  @AttributeOverrides({
+//      @AttributeOverride(name = "city", column = @Column(name = "shipping_address_city")),
+//      @AttributeOverride(name = "street", column = @Column(name = "shipping_address_street")),
+//      @AttributeOverride(name = "zip", column = @Column(name = "shipping_address_zip"))
+//  })
   private ShippingAddress shippingAddress;
 
   @ManyToOne
@@ -86,6 +91,7 @@ public class Customer { // mutable💖 ORM entity
   //  public boolean canReturnOrders(AnApiClient) { // NEVER
   //  public boolean canReturnOrders(AnotherDIManagedBean) { // NEVER
   // but okish to have 1-2 primitive/small params
+
   public boolean canReturnOrders() {
     return goldMember || isPhysicalPerson();
   }
@@ -115,6 +121,8 @@ public class Customer { // mutable💖 ORM entity
     }
     this.validatedBy = Objects.requireNonNull(user);
     this.status = Status.VALIDATED;
+//     20 lines of logic (7 if(), 1 for)
+    // switch (...)
   }
 
   public void activate() {

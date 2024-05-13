@@ -1,8 +1,12 @@
 package victor.training.clean.application.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
@@ -20,6 +24,7 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
+@RestController
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
@@ -62,7 +67,13 @@ public class CustomerApplicationService {
   }
 
   @Transactional
-  public void register(CustomerDto dto) {
+//  @CrossOrigin
+  @PostMapping("customers")
+  public void register(/*@RequestHeader */
+//      MultipartFile file,
+//      HttpServletRequest httpServletRequest,
+
+      @RequestBody @Validated CustomerDto dto) {
     Customer customer = new Customer(dto.name());
     customer.setEmail(dto.email());
     customer.setCreatedDate(LocalDate.now());
