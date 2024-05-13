@@ -1,5 +1,6 @@
 package victor.training.clean.domain.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Optional;
 
 import static lombok.AccessLevel.NONE;
 
@@ -53,8 +55,28 @@ public class Customer { // mutable💖 ORM entity
   private boolean goldMember;
   private String goldMemberRemovalReason;
 
+  // compiler-checked
+//  public Optional<String> getLegalEntityCode() {
+//    return Optional.ofNullable(legalEntityCode);
+//  }
+
+  /** @return null if physical person. */
+  @Nullable // IDE-checked
+  public String getLegalEntityCode() {
+    return legalEntityCode;
+  }
+
+  public static final String PERSON_ENTITY = "PERSON"; // null-object pattern
+
   private String legalEntityCode;
+//  private boolean isPhysicalPerson; // redundant field with legalEntityCode
+//  private enum type; // redundant field with legalEntityCode
+
+  // if the there is large complexity different between Legal/Physical => 2 subclasses
+  // perhaps +7 fields for one
   private boolean discountedVat;
+
+
 
   // Avoid coupling:
   //.. to data
@@ -65,7 +87,11 @@ public class Customer { // mutable💖 ORM entity
   //  public boolean canReturnOrders(AnotherDIManagedBean) { // NEVER
   // but okish to have 1-2 primitive/small params
   public boolean canReturnOrders() {
-    return goldMember || legalEntityCode == null;
+    return goldMember || isPhysicalPerson();
+  }
+
+  private boolean isPhysicalPerson() {
+    return legalEntityCode == null;
   }
 
   public enum Status {
@@ -119,6 +145,7 @@ class CodeBreakingTheRule {
   public void farAway(Customer draftCustomer) {
 //    draftCustomer.setStatus(Customer.Status.VALIDATED);
     draftCustomer.validate("currentUser");
+    System.out.println(draftCustomer.getLegalEntityCode().toUpperCase());
   }
 }
 //endregion
