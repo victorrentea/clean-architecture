@@ -46,6 +46,11 @@ public class Customer {
 
   private Status status;
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  public boolean canReturnOrders() {
+    return goldMember || legalEntityCode == null;
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }

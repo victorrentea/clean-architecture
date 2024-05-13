@@ -40,7 +40,7 @@ public class CustomerApplicationService {
 
     // Bit of domain logic on the state of one Entity?  What TODO?
     // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode() == null;
+//    CustomerHelper.canReturnOrders(customer); // Anti-pattern: put bits of logic using a single domain entity in Util/Helper
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -55,7 +55,7 @@ public class CustomerApplicationService {
         .shippingAddressStreet(customer.getShippingAddress().street())
         .shippingAddressZip(customer.getShippingAddress().zip())
 
-        .canReturnOrders(canReturnOrders)
+        .canReturnOrders(customer.canReturnOrders())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
