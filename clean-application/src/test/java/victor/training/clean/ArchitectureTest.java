@@ -40,4 +40,6 @@ public class ArchitectureTest {
                 .check(allProjectClasses);
     }
 
+    // also copy rules from https://github.com/xmolecules/jmolecules
+
 }
