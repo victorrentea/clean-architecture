@@ -47,6 +47,14 @@ public class Customer {
   private Status status;
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
+  // Avoid coupling:
+  //.. to data
+  //  public boolean canReturnOrders(AnotherHugeEntity30fields) { // NEVER
+  //.. to logic
+  //  public boolean canReturnOrders(ARepo) { // NEVER
+  //  public boolean canReturnOrders(AnApiClient) { // NEVER
+  //  public boolean canReturnOrders(AnotherDIManagedBean) { // NEVER
+  // but okish to have 1-2 primitive/small params
   public boolean canReturnOrders() {
     return goldMember || legalEntityCode == null;
   }
