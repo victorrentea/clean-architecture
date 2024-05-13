@@ -2,8 +2,12 @@ package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
+
+import static lombok.AccessLevel.NONE;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -17,7 +21,7 @@ import java.time.LocalDate;
 // Setter = mutable, no encapsulation : anyone can freely change any field
 
 @Entity // ORM/JPA (2)
-public class Customer {
+public class Customer { // mutable💖 ORM entity
   @Id
   @GeneratedValue
   private Long id;
@@ -44,9 +48,6 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
-  private Status status;
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
-
   // Avoid coupling:
   //.. to data
   //  public boolean canReturnOrders(AnotherHugeEntity30fields) { // NEVER
@@ -60,21 +61,60 @@ public class Customer {
   }
 
   public enum Status {
-    DRAFT, VALIDATED, ACTIVE, DELETED
+    DRAFT, VALIDATED, ACTIVE, DELETED;
+  }
+  @Setter(NONE)
+  private Status status = Status.DRAFT;
+  @Setter(NONE)
+  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+//  @AssertTrue
+//  public void method() {
+//    if (status == Status.VALIDATED && validatedBy == null) {
+//      throw new IllegalStateException("validatedBy must be set when status = VALIDATED");
+//    }
+//  }
+
+  public void validate(String user) {
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Can only validate a DRAFT Customer");
+    }
+    this.validatedBy = Objects.requireNonNull(user);
+    this.status = Status.VALIDATED;
+  }
+
+  public void activate() {
+    if (status != Status.VALIDATED) { // infant state machine
+      throw new IllegalStateException("Can only activate a VALIDATED Customer");
+    }
+    this.status = Status.ACTIVE;
+  }
+
+  protected Customer() {
+  } // for hibernate only
+
+  public Customer(String name) {
+    this.name = Objects.requireNonNull(name);
   }
 }
 
 //region Code in the project might [not] follow the rule
-//class CodeFollowingTheRule {
-//  public void ok(Customer draftCustomer) {
+class CodeFollowingTheRule {
+  public void ok(Customer draftCustomer) {
 //    draftCustomer.setStatus(Customer.Status.VALIDATED);
 //    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//}
+    draftCustomer.validate("currentUser");
+  }
+}
 
-//class CodeBreakingTheRule {
-//  public void farAway(Customer draftCustomer) {
+class CodeBreakingTheRule {
+  public void farAway(Customer draftCustomer) {
 //    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//}
+    draftCustomer.validate("currentUser");
+  }
+}
 //endregion
+
+
+// don't make ORM entities IMMUTABLE. Let them have setters
+// or better: mutator methods like validate() that guard a domain invariant
