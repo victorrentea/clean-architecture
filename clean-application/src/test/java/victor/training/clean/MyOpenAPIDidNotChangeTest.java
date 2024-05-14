@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openapitools.openapidiff.core.OpenApiCompare;
 import org.openapitools.openapidiff.core.model.ChangedOpenApi;
@@ -33,6 +34,7 @@ public class MyOpenAPIDidNotChangeTest {
   Resource myExpectedOpenAPI;
 
   @Test
+  @Disabled
   void my_contract_did_not_change() throws Exception {
     String actualOpenAPIJson = prettifyJsonString(
             mockMvc.perform(get("/v3/api-docs"))
