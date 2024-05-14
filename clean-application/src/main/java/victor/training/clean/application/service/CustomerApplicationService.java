@@ -1,25 +1,21 @@
 package victor.training.clean.application.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.ApplicationService;
-import victor.training.clean.domain.model.AnafResult;
+import victor.training.clean.domain.FiscalDetailsProvider;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.service.CustomerService;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.infra.AnafClient;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -33,7 +29,7 @@ public class CustomerApplicationService {
   private final NotificationService notificationService;
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
-  private final AnafClient anafClient;
+  private final FiscalDetailsProvider anafClient;
 
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
@@ -47,62 +43,20 @@ public class CustomerApplicationService {
 //    CustomerHelper.canReturnOrders(customer); // Anti-pattern: put bits of logic using a single domain entity in Util/Helper
 
     // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-        .canReturnOrders(customer.canReturnOrders())
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+//    return customer.toDto(); // couple generical things (entity) to specific things like Dto
+    return CustomerDto.fromEntity(customer);
   }
 
   @Transactional
 //  @CrossOrigin
   @PostMapping("customers")
   public void register(@RequestBody @Validated CustomerDto dto) {
-
-    Customer customer = new Customer(dto.name());
-    customer.setEmail(dto.email());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
-
-    if (customerRepo.existsByEmailIgnoreCase(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode() != null) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
+    Customer customer = dto.toEntity(); // or a mapper
+    customerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
-  private String normalize(String s) {
-    return s.toLowerCase().replace("\\s+", "");
-  }
+private final CustomerService customerService;
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
