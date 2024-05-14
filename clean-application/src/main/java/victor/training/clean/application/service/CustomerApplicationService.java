@@ -13,7 +13,7 @@ import victor.training.clean.domain.FiscalDetailsProvider;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.CustomerRegistrationService;
 import victor.training.clean.domain.service.NotificationService;
 
 import java.util.List;
@@ -52,11 +52,11 @@ public class CustomerApplicationService {
   @PostMapping("customers")
   public void register(@RequestBody @Validated CustomerDto dto) {
     Customer customer = dto.toEntity(); // or a mapper
-    customerService.register(customer);
+    customerRegistrationService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
-private final CustomerService customerService;
+private final CustomerRegistrationService customerRegistrationService;
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands

@@ -11,7 +11,7 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+public class CustomerRegistrationService {
   private final CustomerRepo customerRepo;
   private final FiscalDetailsProvider fiscalDetailsProvider;
 
