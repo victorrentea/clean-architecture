@@ -11,7 +11,9 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomerRegistrationService {
+//public class CustomerRegistrationService { // thing
+public class RegisterCustomerService { // ACTION/verb = because this is stateless piece of complex behavior. NOT A THNING,. NOT AN OBJECT.
+  // DI Beans are NOT objects (OOP). are just bags of behavior
   private final CustomerRepo customerRepo;
   private final FiscalDetailsProvider fiscalDetailsProvider;
 
