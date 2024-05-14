@@ -69,24 +69,14 @@ public class CustomerApplicationService {
   @Transactional
 //  @CrossOrigin
   @PostMapping("customers")
-  public void register(/*@RequestHeader */
-//      MultipartFile file,
-//      HttpServletRequest httpServletRequest,
+  public void register(@RequestBody @Validated CustomerDto dto) {
 
-      @RequestBody @Validated CustomerDto dto) {
     Customer customer = new Customer(dto.name());
     customer.setEmail(dto.email());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());
 
-    // request request payload validation
-//    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-//      throw new IllegalArgumentException("The customer name is too short");
-//    }
-    // + throw custom exception
-
-    // business rule implemented in a service somewhere
     if (customerRepo.existsByEmailIgnoreCase(customer.getEmail())) {
       throw new IllegalArgumentException("A customer with this email is already registered!");
     }

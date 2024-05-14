@@ -51,7 +51,9 @@ public class NotificationService {
               "Yours sincerely, " + user.fullName())
         .build();
 
-   user.asEmailRecipient().ifPresent(email.getCc()::add);
+   if (user.email().isPresent()) {
+      email.getCc().add(user);
+    }
 
 
     emailSender.sendEmail(email);
