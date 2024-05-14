@@ -52,6 +52,8 @@ public class Customer { // mutable💖 ORM entity
 //  })
   private ShippingAddress shippingAddress;
 
+//  private ShippingAddress invoiceAddress;
+
   @ManyToOne
   private Country country;
 
