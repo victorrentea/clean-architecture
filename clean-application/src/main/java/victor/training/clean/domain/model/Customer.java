@@ -43,8 +43,22 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
-  public boolean canReturnOrders() {
-    return goldMember || legalEntityCode == null;
+//  public boolean canReturnOrders(Repo, @Service, -> ) { RAU: coupling la behavior
+//  public boolean canReturnOrders(AltaEntitateCu20Campuri ) { RAU: coupling la alte date
+      // ==> mut logica in stateless @Service
+// public boolean canReturnOrders() { 30 linii de cod, 7 ifuri < de ob pt ca Entitea asta e huge
+//      => extragi VO sau spargi @Entity in 2-3
+
+//  public boolean canReturnOrders(String ) { Merge
+//  public boolean canReturnOrders(String,int ) { :/
+//  public boolean canReturnOrders(ShippingAddress ) { VO mic 2-5 campuri ~~ merge
+  public boolean canReturnOrders() { //90% asa, fara param, pe baza datelor MELE,
+    // ideal PURE FUNCTIONS: produc rezultate din ce am eu
+    return goldMember || isPhysicalPerson();
+  }
+
+  private boolean isPhysicalPerson() {
+    return legalEntityCode == null;
   }
 
   public enum Status {
