@@ -29,6 +29,8 @@ public class Customer {
   @Embedded // NU modifica tabela din spate.
   private ShippingAddress shippingAddress;
 
+//  private BillingAddress shippingAddress; // +VAT code
+
   @ManyToOne
   private Country country;
 
@@ -40,6 +42,10 @@ public class Customer {
 
   private String legalEntityCode;
   private boolean discountedVat;
+
+  public boolean canReturnOrders() {
+    return goldMember || legalEntityCode == null;
+  }
 
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
