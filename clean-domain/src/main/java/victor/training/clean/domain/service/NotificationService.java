@@ -12,7 +12,7 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
-  private final ILdapApiAdapter ldapApiAdapter;
+  private final UserFetcher ldapApiAdapter;
 
   /////////
   // Core application logic, my Zen garden 🧘☯
