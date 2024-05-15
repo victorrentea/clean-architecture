@@ -1,11 +1,9 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +11,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LdapService {
+public class LdapApiAdapter {
   private final LdapApi ldapApi;
 
   public User fetchUser(String usernamePart) {
