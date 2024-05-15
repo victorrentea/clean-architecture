@@ -3,9 +3,12 @@ package victor.training.clean.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.application.dto.CustomerSearchCriteria;
-import victor.training.clean.application.dto.CustomerSearchResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+import victor.training.clean.application.controller.api.dto.CustomerDto;
+import victor.training.clean.application.controller.api.dto.CustomerSearchCriteria;
+import victor.training.clean.application.controller.api.dto.CustomerSearchResult;
 import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
@@ -23,6 +26,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
+@RestController
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
@@ -34,7 +38,13 @@ public class CustomerApplicationService {
     return customerSearchQuery.search(searchCriteria);
   }
 
-  public CustomerDto findById(long id) {
+  // poti squashui controller REST cu primul layer de logica
+  // DOAR DACA nu ai lucru cu HTTP scarbos: ResponseEntity, MultipartFile
+  // TOT NU FACI ASTA daca expui si REST si Kafka... GPRC
+
+  @GetMapping("customers/{id}") //  M VC->FE(ts/js);
+  // MVC avea sens in vremea .jsp / .jsf / .velocity / .thymeleaf / .freemarker / .ftl
+  public CustomerDto findById(@PathVariable long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
     // Bit of domain logic on the state of one Entity?  What TODO?

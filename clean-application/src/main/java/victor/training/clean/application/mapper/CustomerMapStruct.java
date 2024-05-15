@@ -3,7 +3,7 @@ package victor.training.clean.application.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import victor.training.clean.domain.model.Customer;
-import victor.training.clean.application.dto.CustomerDto;
+import victor.training.clean.application.controller.api.dto.CustomerDto;
 
 @Mapper(componentModel = "spring")
 public interface CustomerMapStruct {

@@ -1,4 +1,4 @@
-package victor.training.clean.application.dto;
+package victor.training.clean.application.controller.api.dto;
 
 import jakarta.validation.constraints.AssertTrue;
 import lombok.Builder;

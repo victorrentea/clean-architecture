@@ -7,11 +7,11 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.application.dto.CustomerSearchCriteria;
-import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.application.controller.api.CustomerControllerApi;
+import victor.training.clean.application.controller.api.dto.CustomerDto;
+import victor.training.clean.application.controller.api.dto.CustomerSearchCriteria;
+import victor.training.clean.application.controller.api.dto.CustomerSearchResult;
 import victor.training.clean.application.service.CustomerApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
@@ -20,13 +20,18 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class CustomerController {
+public class CustomerController implements CustomerControllerApi /*implements InterfataOpenAPI*/ {
   private final CustomerApplicationService customerApplicationService;
   private final ObjectMapper jacksonObjectMapper;
 
-  @PostMapping("customers")
-  public void register(@RequestBody @Validated CustomerDto dto) {
-    customerApplicationService.register(dto);
+  @Override
+  public void register(CustomerDto dto) {
+    customerApplicationService.register(dto); // Middle Man code smell
+
+
+//    customerApplicationService.register(mapper.toEntity(dto, "alte")); // incepe sa merite controllerul.
+//     DaR NU TE OPRI DOAR LA MAPPING. pune si mici bucati de logica simpla high-level
+    // daca faci doar mapare vei vedea ca iti vei inventa noi structuri de date degeaba
   }
 
   @Operation(description = "Search Customer")
@@ -35,10 +40,10 @@ public class CustomerController {
     return customerApplicationService.search(searchCriteria);
   }
 
-  @GetMapping("customers/{id}")
-  public CustomerDto findById(@PathVariable long id) {
-    return customerApplicationService.findById(id);
-  }
+//  @GetMapping("customers/{id}")
+//  public CustomerDto findById(@PathVariable long id) {
+//    return customerApplicationService.findById(id);
+//  }
 
   //<editor-fold desc="GET returning ResponseEntity for 404 👎">
 //   @GetMapping("customers/{id}")

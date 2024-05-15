@@ -69,7 +69,7 @@ public class Customer {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
 
-  @Setter(NONE)
+  @Setter(NONE) // lui Hibernate nu-i pasa de setteri, acceseaza field-uri (reflection)
   private Status status = Status.DRAFT;
   @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
@@ -93,6 +93,12 @@ public class Customer {
     }
     status = Status.DELETED;
   }
+
+  @Embedded
+  private User user;
+//  String userId;
+//  String userName;
+//  String userEmail;
 
   // @Builder care la .build() sa valideze.
   // @Entity de ORM niciodata sa nu o faci IMUTABILA. Daca insa domain model entity
