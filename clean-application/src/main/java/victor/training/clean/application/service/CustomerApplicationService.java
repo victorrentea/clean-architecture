@@ -51,9 +51,9 @@ public class CustomerApplicationService {
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZip(customer.getShippingAddress().zip())
 
         .canReturnOrders(canReturnOrders)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
