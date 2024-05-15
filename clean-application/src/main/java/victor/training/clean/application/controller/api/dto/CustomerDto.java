@@ -1,8 +1,14 @@
 package victor.training.clean.application.controller.api.dto;
 
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+
+import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -11,8 +17,14 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
+    @Size(min = 5)
+    @NotNull
+//    @ValidCustomerName
     String name,
+    @Email
+    @NotNull
     String email,
+    @NotNull
     Long countryId,
 
     String shippingAddressCity, // GET only (updated via dedicated endpoint)
@@ -29,10 +41,18 @@ public record CustomerDto(
     Boolean discountedVat // GET only (fetched by backend)
 ) {
 
-  @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
+  @AssertTrue(message = "Shipping address can either " +
+                        "be fully present (city, street, zip) or " +
+                        "fully absent")
   public boolean isShippingAddressValid() { // multi-field validation with javax annotations
-    return shippingAddressCity != null && shippingAddressStreet != null && shippingAddressZip != null
-         || shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;
+    return shippingAddressCity != null &&
+           shippingAddressStreet != null &&
+           shippingAddressZip != null
+           ||
+
+           shippingAddressCity == null &&
+           shippingAddressStreet == null &&
+           shippingAddressZip == null;
     //     or write this if in the first layer of logic 💖
   }
 
@@ -47,14 +67,21 @@ public record CustomerDto(
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
-//        .shippingAddressStreet(customer.getShippingAddressStreet())
-//        .shippingAddressCity(customer.getShippingAddressCity())
-//        .shippingAddressZip(customer.getShippingAddressZip())
         .shippingAddressCity(customer.getShippingAddress().city())
         .shippingAddressStreet(customer.getShippingAddress().street())
         .shippingAddressZip(customer.getShippingAddress().zip())
 
         //.canReturnOrders(TODO)
         .build();
+  }
+
+  public Customer toEntity() {
+    Customer customer = new Customer();
+    customer.setEmail(email());
+    customer.setName(name());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(countryId()));
+    customer.setLegalEntityCode(legalEntityCode());
+    return customer;
   }
 }

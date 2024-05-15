@@ -1,6 +1,9 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Setter;
 
@@ -23,7 +26,11 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min=5) // automat validata de Hibernate la orice save/update
+  @NotNull
+//  @ValidCustomerName
   private String name;
+  @NotNull
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
@@ -31,11 +38,13 @@ public class Customer {
 //  private String shippingAddressStreet;
 //  private String shippingAddressZip;
   @Embedded // NU modifica tabela din spate.
+  @Valid
   private ShippingAddress shippingAddress;
 
 //  private BillingAddress shippingAddress; // +VAT code
 
   @ManyToOne
+  @NotNull
   private Country country;
 
   private LocalDate createdDate;

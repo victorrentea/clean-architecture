@@ -11,5 +11,7 @@ public interface CustomerControllerApi {
   @Operation(description = "Register Customer",
       summary = "Register a new Customer",
       tags = {"Customer"})
-  void register(@RequestBody @Validated CustomerDto dto);
+  void register(@RequestBody
+                @Validated // cere lui Spring sa valideze
+      CustomerDto dto);
 }
