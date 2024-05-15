@@ -1,220 +1,257 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "OpenAPI definition",
-    "version": "v0"
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "OpenAPI definition",
+    "version" : "v0"
   },
-  "servers": [
-    {
-      "url": "http://localhost",
-      "description": "Generated server url"
-    }
-  ],
-  "paths": {
-    "/customers/{id}": {
-      "get": {
-        "tags": [
-          "customer-controller"
-        ],
-        "operationId": "findById",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+  "servers" : [ {
+    "url" : "http://localhost",
+    "description" : "Generated server url"
+  } ],
+  "paths" : {
+    "/customers/{id}" : {
+      "get" : {
+        "tags" : [ "customer-controller" ],
+        "operationId" : "findById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
           }
-        ],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
+        } ],
+        "responses" : {
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "string"
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "string"
                 }
               }
             }
           },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerDto"
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CustomerDto"
                 }
               }
             }
           }
         }
       },
-      "put": {
-        "tags": [
-          "customer-controller"
-        ],
-        "operationId": "update",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+      "put" : {
+        "tags" : [ "customer-controller" ],
+        "operationId" : "update",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomerDto"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CustomerDto"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
+        "responses" : {
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "string"
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "string"
                 }
               }
             }
           },
-          "200": {
-            "description": "OK"
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "customer-controller" ],
+        "operationId" : "patch",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json-patch+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/JsonPatch"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "OK"
           }
         }
       }
     },
-    "/customers": {
-      "post": {
-        "tags": [
-          "customer-controller"
-        ],
-        "operationId": "register",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomerDto"
+    "/customers" : {
+      "post" : {
+        "tags" : [ "customer-controller" ],
+        "operationId" : "register",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CustomerDto"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
+        "responses" : {
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "string"
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "string"
                 }
               }
             }
           },
-          "200": {
-            "description": "OK"
+          "200" : {
+            "description" : "OK"
           }
         }
       }
     },
-    "/customers/search": {
-      "post": {
-        "tags": [
-          "customer-controller"
-        ],
-        "description": "Search Customer",
-        "operationId": "search",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SearchCustomerCriteria"
+    "/customers/search" : {
+      "post" : {
+        "tags" : [ "customer-controller" ],
+        "description" : "Search Customer",
+        "operationId" : "search",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CustomerSearchCriteria"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
+        "responses" : {
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "string"
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "string"
                 }
               }
             }
           },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SearchCustomerResponse"
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CustomerSearchResult"
                   }
                 }
               }
@@ -224,82 +261,84 @@
       }
     }
   },
-  "components": {
-    "schemas": {
-      "CustomerDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
+  "components" : {
+    "schemas" : {
+      "CustomerDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
           },
-          "name": {
-            "type": "string"
+          "name" : {
+            "type" : "string"
           },
-          "email": {
-            "type": "string"
+          "email" : {
+            "type" : "string"
           },
-          "countryId": {
-            "type": "integer",
-            "format": "int64"
+          "countryId" : {
+            "type" : "integer",
+            "format" : "int64"
           },
-          "shippingAddressCity": {
-            "type": "string"
+          "shippingAddressCity" : {
+            "type" : "string"
           },
-          "shippingAddressStreet": {
-            "type": "string"
+          "shippingAddressStreet" : {
+            "type" : "string"
           },
-          "shippingAddressZip": {
-            "type": "string"
+          "shippingAddressZip" : {
+            "type" : "string"
           },
-          "createdDateStr": {
-            "type": "string"
+          "createdDateStr" : {
+            "type" : "string"
           },
-          "gold": {
-            "type": "boolean"
+          "gold" : {
+            "type" : "boolean"
           },
-          "goldMemberRemovalReason": {
-            "type": "string"
+          "goldMemberRemovalReason" : {
+            "type" : "string"
           },
-          "discountPercentage": {
-            "type": "integer",
-            "format": "int32"
+          "canReturnOrders" : {
+            "type" : "boolean"
           },
-          "legalEntityCode": {
-            "type": "string"
+          "legalEntityCode" : {
+            "type" : "string"
           },
-          "discountedVat": {
-            "type": "boolean"
+          "discountedVat" : {
+            "type" : "boolean"
           }
         }
       },
-      "SearchCustomerCriteria": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Part of the name, case-insensitive"
+      "CustomerSearchCriteria" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "Part of the name, case-insensitive"
           },
-          "email": {
-            "type": "string"
+          "email" : {
+            "type" : "string"
           },
-          "countryId": {
-            "type": "integer",
-            "format": "int64"
+          "countryId" : {
+            "type" : "integer",
+            "format" : "int64"
           }
         }
       },
-      "SearchCustomerResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
+      "CustomerSearchResult" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
           },
-          "name": {
-            "type": "string"
+          "name" : {
+            "type" : "string"
           }
         }
+      },
+      "JsonPatch" : {
+        "type" : "object"
       }
     }
   }

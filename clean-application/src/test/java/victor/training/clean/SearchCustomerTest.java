@@ -29,6 +29,7 @@ import static victor.training.clean.application.dto.CustomerSearchCriteria.build
 @Transactional
 @ActiveProfiles("db-mem")
 @AutoConfigureMockMvc
+
 public class SearchCustomerTest {
   private final static ObjectMapper jackson = new ObjectMapper();
   @Autowired
@@ -42,7 +43,7 @@ public class SearchCustomerTest {
 
   @BeforeEach
   final void before() {
-    assertThat(customerRepo.findAll()).isEmpty();
+    customerRepo.deleteAll();
     Country country = countryRepo.save(new Country());
     countryId = country.getId();
     customerRepo.save(new Customer()

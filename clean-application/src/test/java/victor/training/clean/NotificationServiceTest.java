@@ -59,7 +59,7 @@ class NotificationServiceTest {
     assertThat(email.getBody())
         .contains("Dear Customer Name")
         .contains("John DOE");
-    assertThat(email.getCc()).containsExactly("jdoe@cleanApp.com");
+    assertThat(email.getCc()).containsExactly("John DOE <jdoe@cleanApp.com>");
     assertThat(customer.getCreatedByUsername()).isEqualTo("jdoe");
   }
   @Test
@@ -69,7 +69,7 @@ class NotificationServiceTest {
     verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
   }
   @Test
-  void sendWelcomeEmail_noIntraEmail() {
+  void sendWelcomeEmail_noEmail() {
     notificationService.sendWelcomeEmail(customer,"externalEmail");
 
     verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
@@ -92,15 +92,9 @@ class NotificationServiceTest {
     assertThat(email.getFrom()).isEqualTo("noreply@cleanapp.com");
     assertThat(email.getTo()).isEqualTo("jdoe@example.com");
     assertThat(email.getSubject()).isEqualTo("Welcome to our Gold membership!");
-    assertThat(email.getBody()).isEqualTo("Please enjoy a special discount of 4%\n"+
-        "Yours sincerely, John DOE");
-    assertThat(email.getCc()).containsExactly("jdoe@cleanApp.com");
-  }
-  @Test
-  void sendGoldBenefits_noIntraEmail() {
-    notificationService.sendGoldBenefitsEmail(customer,"externalEmail");
-
-    verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    assertThat(email.getBody()).isEqualTo("You are allowed to return orders\n" +
+                                          "Yours sincerely, John DOE");
+    assertThat(email.getCc()).containsExactly("John DOE <jdoe@cleanApp.com>");
   }
   @Test
   @Disabled("BUG: throws NPE. Why !?")

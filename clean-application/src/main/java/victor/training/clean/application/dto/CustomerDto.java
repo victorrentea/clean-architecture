@@ -1,5 +1,6 @@
 package victor.training.clean.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.AssertTrue;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
@@ -30,6 +31,7 @@ public record CustomerDto(
 ) {
 
   @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
+  @JsonIgnore
   public boolean isShippingAddressValid() { // multi-field validation with javax annotations
     return shippingAddressCity != null && shippingAddressStreet != null && shippingAddressZip != null
          || shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;

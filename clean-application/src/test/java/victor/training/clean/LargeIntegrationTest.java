@@ -57,6 +57,7 @@ public class LargeIntegrationTest {
     @BeforeEach
     public final void before() {
         country = countryRepo.save(new Country());
+        customerRepo.deleteAll();
     }
 
     private CustomerDtoBuilder registerRequest() {
