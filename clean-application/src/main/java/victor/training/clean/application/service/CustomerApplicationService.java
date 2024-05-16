@@ -11,7 +11,7 @@ import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.domain.service.FiscalDetailsProvider;
 import victor.training.clean.domain.service.NotificationService;
 
@@ -43,10 +43,10 @@ public class CustomerApplicationService {
   public void register(CustomerDto dto) {
     Customer customer = dto.toEntity();
 
-    customerService.register(customer);
+    registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
-  private final CustomerService customerService;
+  private final RegisterCustomerService registerCustomerService;
 
 
   @Transactional
