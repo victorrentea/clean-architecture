@@ -22,8 +22,8 @@ public class LdapApiAdapter {
       ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
     }
 
-    User user = new User(ldapUserDto.getUn(), fullName, Optional.ofNullable(ldapUserDto.getWorkEmail()));
-    return user;
+     return new User(ldapUserDto.getUn(), fullName,
+         Optional.ofNullable(ldapUserDto.getWorkEmail()));
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
