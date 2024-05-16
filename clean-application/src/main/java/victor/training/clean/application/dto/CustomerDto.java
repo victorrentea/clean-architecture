@@ -1,10 +1,12 @@
 package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+
+import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -13,8 +15,11 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
-    @NotBlank
+    @Size(min = 5, max = 100) // auto-validated at save by Hibernate // but accepts null
+    @NotNull
     String name,
+    @NotNull
+    @Email
     String email,
     Long countryId,
 
@@ -59,5 +64,15 @@ public record CustomerDto(
         .shippingAddressZip(customer.getShippingAddress().zip())
         //.canReturnOrders(TODO)
         .build();
+  }
+
+  public Customer toEntity() {
+    Customer customer = new Customer();
+    customer.setEmail(email());
+    customer.setName(name());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(countryId()));
+    customer.setLegalEntityCode(legalEntityCode());
+    return customer;
   }
 }

@@ -1,6 +1,9 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -26,7 +29,11 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 5, max = 100) // auto-validated at save by Hibernate // but accepts null
+  @NotNull
   private String name;
+  @NotNull
+  @Email
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
