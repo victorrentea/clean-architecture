@@ -1,10 +1,12 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -41,6 +43,32 @@ public class Customer {
 
   private String legalEntityCode;
   private boolean discountedVat;
+
+  public Optional<String> getLegalEntityCode() {
+    return ofNullable(legalEntityCode);
+  }
+
+  // maybe even refactor 2 subclasses: PhysicalPersonCustomer, LegalEntityCustomer
+  // - serious different logic (> 7 x if(isPhysicalPerson) {..} else {..})
+  // - different >3 fields
+  // - for stateless behavior, also extends for Template Method design pattern
+  //   !!! prefer composition over inheritance: inject the class to use, don't extend it
+
+  // Domain Behavior INSIDE the domain model
+  public boolean canReturnOrders() {
+    return goldMember || isPhysicalPerson();
+  }
+  // What logic should NOT get inside?
+  // or, what paramters should NOT be passed to this method?
+  // m(ObjWhoseFieldsAreChanged)
+  // m(LargeDataStructure)
+  // m(ShippingAddress) > should be immutable and small
+  // m(CustomerRepo) => statless @Service
+  // m(LdapApiAdapter) => statless @Service
+
+  private boolean isPhysicalPerson() {
+    return legalEntityCode == null;
+  }
 
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
