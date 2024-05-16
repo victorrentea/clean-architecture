@@ -2,6 +2,7 @@ package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -12,6 +13,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
+    @NotBlank
     String name,
     String email,
     Long countryId,
@@ -47,7 +49,7 @@ public record CustomerDto(
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
+        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
         .discountedVat(customer.isDiscountedVat())
 //        .shippingAddressStreet(customer.getShippingAddressStreet())
 //        .shippingAddressCity(customer.getShippingAddressCity())
