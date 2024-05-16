@@ -1,5 +1,6 @@
 package victor.training.clean.infra;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class LdapApiAdapter implements victor.training.clean.domain.service.User
 
 
    @Override
+   @Timed // done!
    public User fetchUser(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 

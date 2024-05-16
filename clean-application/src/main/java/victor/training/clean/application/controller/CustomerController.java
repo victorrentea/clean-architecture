@@ -7,12 +7,14 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.service.CustomerApplicationService;
+import victor.training.clean.application.service.CustomerSearchQuery;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
@@ -32,13 +34,15 @@ public class CustomerController {
   @Operation(description = "Search Customer")
   @PostMapping("customers/search")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-    return customerApplicationService.search(searchCriteria);
+    return customerSearchQuery.search(searchCriteria);
+//    return customerApplicationService.search(searchCriteria);
   }
+  private final CustomerSearchQuery customerSearchQuery;
 
-  @GetMapping("customers/{id}")
-  public CustomerDto findById(@PathVariable long id) {
-    return customerApplicationService.findById(id);
-  }
+//  @GetMapping("customers/{id}")
+//  public CustomerDto findById(@PathVariable long id) {
+//    return customerApplicationService.findById(id);
+//  }
 
   //<editor-fold desc="GET returning ResponseEntity for 404 👎">
 //   @GetMapping("customers/{id}")
