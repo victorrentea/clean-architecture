@@ -8,4 +8,8 @@ public record User(
     Optional<String> email
 ) {
 
+  public Optional<String> toEmailRecipient() {
+//    return fullName + " <" + email.get() + ">";
+    return email.map(e -> fullName + " <" + e + ">");
+  }
 }
