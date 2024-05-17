@@ -22,20 +22,23 @@ public class GetCustomerByIdUseCase {
       Long id,
       String name,
       String email,
-      Long siteId,
+//      Long siteId,
       String creationDateStr,
       boolean gold,
       String goldMemberRemovalReason) {
   }
+//  private final SearchCustomerUseCase searchCustomerUseCase;
 
   @GetMapping("customer/{id}/vsa")
   public GetCustomerByIdResponse findById(@PathVariable long id) {
       Customer customer = customerRepo.findById(id).orElseThrow();
+
+//      searchCustomerUseCase.search(new SearchCustomerUseCase.CustomerSearchCriteria());
       return GetCustomerByIdResponse.builder()
               .id(customer.getId())
               .name(customer.getName())
               .email(customer.getEmail())
-              .siteId(customer.getCountry().getId())
+//              .siteId(customer.getCountry().getId())
               .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
               .build();
   }

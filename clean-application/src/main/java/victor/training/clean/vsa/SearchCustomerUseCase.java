@@ -27,18 +27,21 @@ public class SearchCustomerUseCase {
   ) {
   }
 
-  @VisibleForTesting
+  @VisibleForTesting // isn't this damaging the prod design for testing? NO.
+    // Don't alter prod design for testing: eg public every method. add more fields.
   record CustomerSearchResult(
       long id,
-      String name
+      String name,
+      String email
       // TODO also return 'email' => only this file is impacted
   ) {
   }
 
   @Operation(description = "Customer Search Poem")
   @PostMapping("customer/search-vsa")
+  // the only public method takes @VisibleForTesting, use-cases are
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria criteria) {
-    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name)" +
+    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name, c.email)" +
                   " FROM Customer c " +
                   " WHERE ";
     List<String> jpqlParts = new ArrayList<>();
