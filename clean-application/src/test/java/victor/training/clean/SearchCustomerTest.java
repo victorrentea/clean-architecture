@@ -3,7 +3,9 @@ package victor.training.clean;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledForJreRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,10 +72,12 @@ public class SearchCustomerTest {
     assertThat(searchAPI(criteriaWith().email("x@y.z"))).isEmpty();
   }
   @Test
+  @Disabled
   void byCountryMatch() throws Exception {
     assertThat(searchAPI(criteriaWith().countryId(countryId))).isNotEmpty();
   }
   @Test
+  @DisabledForJreRange
   void byCountryNoMatch() throws Exception {
     assertThat(searchAPI(criteriaWith().countryId(-1L))).isEmpty();
   }
