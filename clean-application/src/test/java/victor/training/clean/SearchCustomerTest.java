@@ -29,7 +29,6 @@ import static victor.training.clean.application.dto.CustomerSearchCriteria.build
 @Transactional
 @ActiveProfiles("db-mem")
 @AutoConfigureMockMvc
-
 public class SearchCustomerTest {
   private final static ObjectMapper jackson = new ObjectMapper();
   @Autowired
@@ -49,7 +48,7 @@ public class SearchCustomerTest {
     customerRepo.save(new Customer()
         .setName("John")
         .setEmail("a@B.com")
-        .setCountry(country));
+        .setCountryId(country.getId()));
 
   }
   private static CustomerSearchCriteriaBuilder criteriaWith() {

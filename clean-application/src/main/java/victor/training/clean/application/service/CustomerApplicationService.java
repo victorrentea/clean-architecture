@@ -40,22 +40,21 @@ public class CustomerApplicationService {
 
     // Bit of domain logic on the state of one Entity?  What TODO?
     // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode() == null;
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())
         .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
+        .countryId(customer.getCountryId())
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZip(customer.getShippingAddress().zip())
 
-        .canReturnOrders(canReturnOrders)
+        .canReturnOrders(customer.canReturnOrders())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
@@ -68,7 +67,7 @@ public class CustomerApplicationService {
     customer.setEmail(dto.email());
     customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
+    customer.setCountryId(dto.countryId());
     customer.setLegalEntityCode(dto.legalEntityCode());
 
     // request payload validation
@@ -111,7 +110,7 @@ public class CustomerApplicationService {
     // CRUD part
     customer.setName(dto.name());
     customer.setEmail(dto.email());
-    customer.setCountry(new Country().setId(dto.countryId()));
+    customer.setCountryId(dto.countryId());
 
     if (!customer.isGoldMember() && dto.gold()) {
       // enable gold member status

@@ -43,15 +43,16 @@ public record CustomerDto(
         .id(customer.getId())
         .name(customer.getName())
         .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
+        .countryId(customer.getCountryId())
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+
         //.canReturnOrders(TODO)
         .build();
   }

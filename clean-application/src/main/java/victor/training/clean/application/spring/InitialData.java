@@ -29,7 +29,7 @@ public class InitialData {
     Country country = countryRepo.save(new Country());
     Long id = customerRepo.save(new Customer()
         .setName("John Doe")
-        .setCountry(country)
+        .setCountryId(country.getId())
         .setCreatedDate(now())
     ).getId();
     System.out.println("Saved customer with id " + id);

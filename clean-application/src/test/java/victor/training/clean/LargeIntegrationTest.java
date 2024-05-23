@@ -76,7 +76,7 @@ public class LargeIntegrationTest {
         Customer customer = customerRepo.findAll().get(0);
         assertThat(customer.getName()).isEqualTo("::name::");
         assertThat(customer.getEmail()).isEqualTo(CUSTOMER_EMAIL);
-        assertThat(customer.getCountry().getId()).isEqualTo(country.getId());
+        assertThat(customer.getCountryId()).isEqualTo(country.getId());
         verify(emailSender).sendEmail(argThat(email -> email.getTo().equals(CUSTOMER_EMAIL)));
 
 

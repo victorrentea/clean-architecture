@@ -21,7 +21,7 @@ public class InsuranceService {
 
    public void customerDetailsChanged(Customer newCustomer) {
       InsurancePolicy currentPolicy = insurancePolicyRepo.findByCustomerId(newCustomer.getId());
-      if (newCustomer.getCountry().getId() != currentPolicy.getCountryId()) {
+      if (newCustomer.getCountryId() != currentPolicy.getCountryId()) {
          // Imagine calculations to see if the policy has to be updated
          sendReevaluatePolicy(newCustomer, "Country changed");
          policyNotificationRepo.save(new PolicyNotification()
