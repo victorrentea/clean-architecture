@@ -23,7 +23,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static victor.training.clean.application.dto.CustomerSearchCriteria.builder;
 
 @SpringBootTest
 @Transactional
@@ -52,7 +51,7 @@ public class SearchCustomerTest {
 
   }
   private static CustomerSearchCriteriaBuilder criteriaWith() {
-    return builder();
+    return CustomerSearchCriteria.builder();
   }
   @Test
   void byNameLikeMatch() throws Exception {
