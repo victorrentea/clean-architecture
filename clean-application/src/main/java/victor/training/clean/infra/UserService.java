@@ -1,11 +1,9 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +12,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 // Adapter Design Pattern
-public class UserService {
+public class UserService implements victor.training.clean.domain.service.UserFetcher {
   private final LdapApi ldapApi;
 
+   @Override
    public User fetchUser(String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
