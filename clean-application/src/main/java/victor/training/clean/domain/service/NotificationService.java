@@ -38,6 +38,7 @@ public class NotificationService {
     // gunoi infra
     // -------------
     // curat domain
+
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
