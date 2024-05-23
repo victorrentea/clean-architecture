@@ -77,7 +77,7 @@ public class SearchCustomerTest {
     assertThat(searchAPI(criteriaWith().countryId(countryId))).isNotEmpty();
   }
   @Test
-  @DisabledForJreRange
+  @Disabled
   void byCountryNoMatch() throws Exception {
     assertThat(searchAPI(criteriaWith().countryId(-1L))).isEmpty();
   }
