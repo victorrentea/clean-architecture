@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 // Adapter Design Pattern
-public class UserService implements victor.training.clean.domain.service.UserFetcher {
+public class LdapUserFetcher implements victor.training.clean.domain.service.UserFetcher {
   private final LdapApi ldapApi;
 
    @Override
