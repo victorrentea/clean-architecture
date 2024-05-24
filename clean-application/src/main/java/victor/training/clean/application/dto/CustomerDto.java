@@ -56,4 +56,6 @@ public record CustomerDto(
         //.canReturnOrders(TODO)
         .build();
   }
+//  public String getEmailAddress() {
+//  }
 }
