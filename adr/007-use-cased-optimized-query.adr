@@ -1,0 +1,60 @@
+## Title
+Search Entities using Use-Case-Optimized Queries 
+
+## Status
+Accepted
+
+## Context
+We are using JPA (Hibernate). 
+
+Fetching a full @Entity from DB can be expensive, 
+as by default JPA loads the entity with all its fields
+and @ManyToOne/@OneToOne links, which adds unnecessary
+columns, JOINs and even additional SELECT statements.
+
+If a usecase requires only a small subset of the fields,
+it is more CPU/memory/network efficient to fetch 
+only those fields from the DB, especially if:
+we retrieve multiple entities (like in a search)
+and/or the entity is very large. 
+
+## Decision
+We will select DTOs (not Entities) from the DB query for every search use-case.
+
+## Consequences
+Positive:
+- Better performance by reading fewer data from DB.
+- Less mapping code needed: the ORM populates directly the DTO object.
+
+Negative:
+- May lead to implementing business rules on DTOs rather than Domain Entities.
+- May lead developers to UPDATE data directly in DB using DTOs, not using the domain model). 
+   This can bypass the consistency protections that the Domain Model wants to enforce.
+
+## Compliance
+Any search usecase should use this approach.
+
+This can be achieved by writing a JQPL query 
+that uses the `SELECT new` technique to directly populate 
+the required attributes into the DTO object:
+
+```java
+@Query("SELECT new com.example.dto.UserDto(u.id, u.name) FROM User u WHERE ...")
+```
+
+The DTO must have a constructor taking all fields (eg be a record).
+
+Alternatively, for objects containing more attributes, 
+[Spring Projections](https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html) 
+can be used:
+```java
+@Query("SELECT u.id as id, u.name as name FROM User u WHERE u.name = :name")
+List<UserProjection> findByName(@Param("name") String name);
+```
+
+Enforcing is done vie Peer Review of PR.
+
+## Notes
+- Author: Developer A 
+- Changelog: 
+  - 0.1 initial proposed version on 2023-11-01
