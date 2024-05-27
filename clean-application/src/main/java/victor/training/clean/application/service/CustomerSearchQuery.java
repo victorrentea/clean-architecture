@@ -26,6 +26,7 @@ public class CustomerSearchQuery {
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
 //      String jpql = "SELECT c" + // antipattern dpdv performanta. nu citesti @Entity = write model
       // Read model contine exact ce iese pe JSON.
+      // sau cu SQL nativ
       String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                     " FROM Customer c " +
                     " WHERE ";
