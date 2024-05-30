@@ -13,7 +13,8 @@ public interface CustomerMapStruct {
   @Mapping(target = "createdDateStr", source = "createdDate", dateFormat = "yyyy-MM-dd")
   @Mapping(target = "countryId", source = "country.id")
   // needed if Customer#getLegalEntity returns Optional<>
-  // @Mapping(target = "legalEntityCode", source = "legalEntityCode", qualifiedByName = "unwrap") // OMG!!
+  // @Mapping(target = "legalEntityCode", source = "legalEntityCode",
+    // qualifiedByName = "unwrap") // OMG!!
   CustomerDto toDto(Customer customer);
 
   @Named("unwrap")
