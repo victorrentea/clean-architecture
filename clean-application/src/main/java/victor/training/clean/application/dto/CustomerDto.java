@@ -56,4 +56,9 @@ public record CustomerDto(
         //.canReturnOrders(TODO)
         .build();
   }
+
+  @JsonIgnore
+  public String getEmailFormatted() {
+    return name + " <" + email + ">";
+  }
 }
