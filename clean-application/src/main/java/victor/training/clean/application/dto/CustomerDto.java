@@ -49,7 +49,7 @@ public record CustomerDto(
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
+        .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
         .shippingAddressCity(customer.getShippingAddress().city())
         .shippingAddressStreet(customer.getShippingAddress().street())

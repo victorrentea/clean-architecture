@@ -56,7 +56,7 @@ public class CustomerApplicationService {
 
         .canReturnOrders(customer.canReturnOrders())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
+        .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
         .build();
   }
@@ -83,10 +83,10 @@ public class CustomerApplicationService {
 
     // enrich data from external API
     if (customer.getLegalEntityCode() != null) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode().get())) {
+      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
         throw new IllegalArgumentException("Company already registered");
       }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode().get());
+      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
       if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
         throw new IllegalArgumentException("Legal Entity not found!");
       }
