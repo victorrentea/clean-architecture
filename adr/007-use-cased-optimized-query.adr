@@ -19,7 +19,8 @@ we retrieve multiple entities (like in a search)
 and/or the entity is very large. 
 
 ## Decision
-We will select DTOs (not Entities) from the DB query for every search use-case.
+We will select DTOs (not Entities) from the DB query 
+for every search use-case.
 
 ## Consequences
 Positive:
