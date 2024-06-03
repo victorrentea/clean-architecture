@@ -14,7 +14,6 @@ import java.util.Optional;
 public class LdapApiAdapter {
   private final LdapApi ldapApi;
 
-
   public User fetchUserByUsername(String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
