@@ -56,6 +56,7 @@ public class Customer {
   }
   @Setter(NONE)
   private Status status;
+  @Setter(NONE)
   private String validatedBy; // ⚠🤞 (JDD) Always not-null when status = VALIDATED or later
 
   public void validate(String currentUser) {
