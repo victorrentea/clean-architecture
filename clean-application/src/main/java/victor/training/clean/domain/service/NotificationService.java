@@ -11,7 +11,7 @@ import victor.training.clean.domain.model.User;
 @Slf4j
 @Service
 public class NotificationService {
-  private final IEmailSender emailSender;
+  private final EmailSender emailSender;
   private final UserFetcher ldapApiAdapter;
 
   // Core application logic, my Zen garden 🧘☯
