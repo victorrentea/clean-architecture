@@ -14,6 +14,9 @@ public interface CustomerMapStruct {
   @Mapping(target = "countryId", source = "country.id")
   // needed if Customer#getLegalEntity returns Optional<>
   // @Mapping(target = "legalEntityCode", source = "legalEntityCode", qualifiedByName = "unwrap") // OMG!!
+//  @Mapping(target = "shippingAddressCity", source = "shippingAddress.city")
+//  @Mapping(target = "shippingAddressCity", source = "shippingAddress.city")
+//  @Mapping(target = "shippingAddressCity", source = "shippingAddress.city")
   CustomerDto toDto(Customer customer);
 
   @Named("unwrap")

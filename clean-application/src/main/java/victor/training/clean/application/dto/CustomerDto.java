@@ -9,6 +9,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 
 @Builder
 // Dto used to both QUERY and COMMAND use-cases ?
+// FROZEN pt client ❄️
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
@@ -49,9 +50,10 @@ public record CustomerDto(
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+
         //.canReturnOrders(TODO)
         .build();
   }

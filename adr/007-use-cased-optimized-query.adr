@@ -40,7 +40,8 @@ that uses the `SELECT new` technique to directly populate
 the required attributes into the DTO object:
 
 ```java
-@Query("SELECT new com.example.dto.UserDto(u.id, u.name) FROM User u WHERE ...")
+@Query("SELECT new com.example.dto.UserDto(u.id, u.name) FROM" +
+       " User u WHERE ...")
 ```
 
 The DTO must have a constructor taking all fields (eg be a record).
