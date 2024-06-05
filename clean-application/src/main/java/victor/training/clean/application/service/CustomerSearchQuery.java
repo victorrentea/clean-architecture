@@ -17,7 +17,6 @@ import static java.lang.String.join;
 // ⚠️ DON'T change data in DB!
 // ⚠️ DON'T write heavy logic on the SELECTed DTOs!
 // For both points above, load and use the full Domain Model @Entity.
-@Repository
 @RequiredArgsConstructor
 public class CustomerSearchQuery {
    private final EntityManager entityManager;
