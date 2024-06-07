@@ -42,6 +42,7 @@ public class MyOpenAPIDidNotChangeTest {
             IOUtils.toString(myExpectedOpenAPI.getInputStream())
                     .replace(":8080", "")); // hack the extracted port
 
+
     System.out.println("New contract: " + actualOpenAPIJson);
     ChangedOpenApi diff = OpenApiCompare.fromContents(expectedOpenAPIJson, actualOpenAPIJson);
 
