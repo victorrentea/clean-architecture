@@ -5,7 +5,7 @@ Search Entities using Use-Case-Optimized Queries
 Accepted
 
 ## Context
-We are using JPA (Hibernate). 
+We are using Doctrine. 
 
 Fetching a full @Entity from DB can be expensive, 
 as by default JPA loads the entity with all its fields
@@ -19,7 +19,8 @@ we retrieve multiple entities (like in a search)
 and/or the entity is very large. 
 
 ## Decision
-We will select DTOs (not Entities) from the DB query for every search use-case.
+We will select DTOs (not Entities) from the DB query for 
+every search use-case.
 
 ## Consequences
 Positive:
