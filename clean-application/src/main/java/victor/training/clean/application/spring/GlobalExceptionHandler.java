@@ -12,62 +12,51 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import victor.training.clean.domain.CleanException;
 import victor.training.clean.domain.CleanException.ErrorCode;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.ResponseEntity.*;
+import static org.springframework.http.ResponseEntity.status;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-   private final MessageSource messageSource;
+  @ResponseStatus(BAD_REQUEST)
+  @ExceptionHandler(MethodArgumentNotValidException.class) // @Validated
+  public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
+    List<String> validationErrors = e.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList();
+    log.error("Invalid request: {}", validationErrors, e);
+    return validationErrors;
+  }
 
-   // my custom exception: translate error code enum to HTTP status and human-readable message via messages.properties (+i18n)
-   @ExceptionHandler(CleanException.class)
-   public ResponseEntity<String> onCleanException(HttpServletRequest request, CleanException cleanException) {
-      log.error("CleanException occurred: " + cleanException.getErrorCode(), cleanException);
-//      String userMessage = translateError(cleanException, cleanException.getErrorCode(), cleanException.getParameters(), request);
-      String userMessage = cleanException.getMessage();
-      String httpStatusCodeStr = messageSource.getMessage("error." + cleanException.getErrorCode() + ".code", null, "500", Locale.ENGLISH);
-      int httpStatusCode = Integer.parseInt(httpStatusCodeStr);
-      return status(httpStatusCode).body(userMessage);
-   }
+  @ResponseStatus(NOT_FOUND)
+  @ExceptionHandler(NoSuchElementException.class) // optional.get() on empty Optional
+  public String onNoSuchElementException() {
+    return "Not Found!";
+  }
 
-   // @Validated errors
-   @ResponseStatus(INTERNAL_SERVER_ERROR)
-   @ExceptionHandler(MethodArgumentNotValidException.class)
-   public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
-      List<String> response = e.getAllErrors().stream()
-          .map(DefaultMessageSourceResolvable::getDefaultMessage)
-          .collect(Collectors.toList());
-      log.error("Validation failed. Returning: " + response, e);
-      return response;
-   }
-   @ResponseStatus(NOT_FOUND)
-   @ExceptionHandler(NoSuchElementException.class)
-   public String onNoSuchElementException(NoSuchElementException e) {
-      return "Not Found!";
-   }
+  @ExceptionHandler(CleanException.class) // my custom exception
+  public ResponseEntity<String> onCleanException(CleanException cleanException) {
+    return handleException(cleanException.getErrorCode(), cleanException.getParameters(), cleanException);
+  }
 
-   // any other uncaught exception
-   @ExceptionHandler(Exception.class)
-   public ResponseEntity<String> onAnyException(HttpServletRequest request, Exception exception) {
-      String userMessage = translateError(exception, ErrorCode.GENERAL, null, request);
-      return internalServerError().body(userMessage);
-   }
+  private final MessageSource messageSource;
 
-   private String translateError(Throwable throwable, ErrorCode errorCode, String[] parameters, HttpServletRequest request) {
-      String messageKey = "error." + errorCode + ".message";
-      String userMessage = messageSource.getMessage(messageKey, parameters, "Internal Error", request.getLocale());
-      log.error(String.format("Error occurred [%s]: %s", errorCode, userMessage), throwable);
-      return userMessage;
-   }
+  private ResponseEntity<String> handleException(ErrorCode errorCode, String[] messageParameters, Exception exception) {
+    String userMessage = messageSource.getMessage(
+        "error." + errorCode,
+        messageParameters, "Internal Error",
+        Locale.ENGLISH); // supports i18n of messages based on user's locale
 
+    log.error("Error {}: {}", errorCode, userMessage, exception);
+    return status(errorCode.statusCode).body(userMessage);
+  }
 
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<String> onAnyOtherException(Exception exception) {
+    return handleException(ErrorCode.GENERAL, null, exception);
+  }
 
 }
