@@ -3,7 +3,6 @@ package victor.training.clean.application.spring;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,7 +15,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.ResponseEntity.status;
 
 @Slf4j
@@ -26,7 +26,9 @@ public class GlobalExceptionHandler {
   @ResponseStatus(BAD_REQUEST)
   @ExceptionHandler(MethodArgumentNotValidException.class) // @Validated
   public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
-    List<String> validationErrors = e.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList();
+    List<String> validationErrors = e.getBindingResult().getFieldErrors().stream()
+        .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+        .toList();
     log.error("Invalid request: {}", validationErrors, e);
     return validationErrors;
   }
