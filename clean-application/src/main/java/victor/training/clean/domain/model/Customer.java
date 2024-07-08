@@ -44,6 +44,8 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+
+  // RULE: YOU SHALL HAVE NO LOGIC IN THE DATA STRUCTURES (=PTSD)
   public boolean isPhysicalPerson() {
     return getLegalEntityCode() == null;
   }
@@ -51,6 +53,15 @@ public class Customer {
   public boolean canReturnOrders() {
     return isGoldMember() || isPhysicalPerson();
   }
+
+  // f(boolean b) - AVOID??±
+  // f(CustomerService omg) - AVOID
+  // f(CustomerRepo/ApiClient omg) - AVOID
+  // f(LargeOtherEntity34Fields contract) - AVOID; can grow too large
+  // f(Supplier<X> lambdaKungFu) - AVOID
+
+
+
 
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
