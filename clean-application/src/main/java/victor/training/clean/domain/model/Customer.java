@@ -29,6 +29,8 @@ public class Customer {
 
   @Embedded // did not change the DB schema (no ALTER TABLE)
   private ShippingAddress shippingAddress;
+  // the DOMAIN MODEL should remain UNDER YOUR STRICT EXCLUSIVE CONTROL.
+  // no one should be able to stop you from refactoring it as you see fit.
 
   @ManyToOne
   private Country country;
