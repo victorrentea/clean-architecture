@@ -44,6 +44,14 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public boolean isPhysicalPerson() {
+    return getLegalEntityCode() == null;
+  }
+
+  public boolean canReturnOrders() {
+    return isGoldMember() || isPhysicalPerson();
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
