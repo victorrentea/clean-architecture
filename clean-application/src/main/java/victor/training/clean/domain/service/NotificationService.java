@@ -22,17 +22,9 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-
-    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    if (ldapUserDto.getUn().startsWith("s")) {
-      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-    User user = new User(ldapUserDto.getUn(), fullName, Optional.ofNullable(ldapUserDto.getWorkEmail()));
+    User user = fetchUserByUsername(usernamePart);
     // infrastructure shit
-    /// Architecture = the art of drawing lines between things
+    /// ------------------------ Architecture = the art of drawing lines between things
     // sacred app logic. MY STUFF
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -50,6 +42,19 @@ public class NotificationService {
     emailSender.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
+  }
+
+  private User fetchUserByUsername(String usernamePart) {
+    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
+    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
+
+    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    if (ldapUserDto.getUn().startsWith("s")) {
+      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
+    }
+    User user = new User(ldapUserDto.getUn(), fullName, Optional.ofNullable(ldapUserDto.getWorkEmail()));
+    return user;
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
