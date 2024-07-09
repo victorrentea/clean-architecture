@@ -77,6 +77,19 @@ public class Customer {
   @Setter(NONE)
   private String validatedBy; // 🤞HDD: ⚠ Always not-null when status = VALIDATED or later
 
+  // despite our best efforts the OPS runs an UPDATE statemetn that trashes our data in DB
+
+  // they want to UNDO (un-validate) => CR
+
+  public void unvalidate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Can't unvalidate a non-validated customer");
+    }
+    status = Status.DRAFT;
+    validatedBy = null;
+  }
+
+
   // guarded mutator
   public void validate(String validatedBy) {
     if (status != Status.DRAFT) {
