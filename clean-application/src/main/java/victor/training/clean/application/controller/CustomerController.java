@@ -24,10 +24,10 @@ public class CustomerController {
   private final CustomerApplicationService customerApplicationService;
   private final ObjectMapper jacksonObjectMapper;
 
-  @PostMapping("customers")
-  public void register(@RequestBody @Validated CustomerDto dto) {
-    customerApplicationService.register(dto);
-  }
+//  @PostMapping("customers")
+//  public void register(@RequestBody @Validated CustomerDto dto) {
+//    customerApplicationService.register(dto);
+//  }
 
   @Operation(description = "Search Customer")
   @PostMapping("customers/search")

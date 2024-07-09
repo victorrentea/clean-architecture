@@ -16,6 +16,7 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
+//    victor.training.clean.infra.LdapUserDto dto; // does not compile
     User user = ldapApiAdapter.fetchUserByUsername(usernamePart);
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
