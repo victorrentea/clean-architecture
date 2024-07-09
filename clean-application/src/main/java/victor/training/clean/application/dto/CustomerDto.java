@@ -1,6 +1,7 @@
 package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
@@ -10,21 +11,22 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 @Builder
 // Dto used to both QUERY and COMMAND use-cases ?
 public record CustomerDto(
-    Long id, // GET only (assigned by backend)
+    Long id, // Q
 
-    String name,
-    String email,
-    Long countryId,
+    String name, // QC
+    String email, // QC
+    Long countryId, // QC
 
-    String shippingAddressCity, // GET only (updated via dedicated endpoint)
-    String shippingAddressStreet, // GET only (updated via dedicated endpoint)
-    String shippingAddressZip, // GET only (updated via dedicated endpoint)
+    String shippingAddressCity,
+    String shippingAddressStreet,
+    @Schema(description = "ZIP code of the shipping address", example = "123456")
+    String shippingAddressZip,
 
-    String createdDateStr, // GET only (assigned by backend)
+    String createdDateStr, // Q
 
-    Boolean gold, // GET & PUT
-    String goldMemberRemovalReason, // GET & PUT(if gold changed true->false)
-    boolean canReturnOrders, // GET only (computed by backend)
+    Boolean gold, // Q
+    String goldMemberRemovalReason, // Q
+    boolean canReturnOrders,
 
     String legalEntityCode,
     Boolean discountedVat // GET only (fetched by backend)
