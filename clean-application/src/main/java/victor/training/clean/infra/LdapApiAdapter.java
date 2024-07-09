@@ -11,9 +11,10 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LdapApiAdapter { // or ..Client
+public class LdapApiAdapter implements victor.training.clean.domain.service.UserFetcher { // or ..Client
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchUserByUsername(String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
