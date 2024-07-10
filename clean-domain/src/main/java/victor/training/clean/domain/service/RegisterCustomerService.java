@@ -10,8 +10,9 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
-
+//public class CustomerService { // too broad
+public class RegisterCustomerService { // action/verb on purpose. stateless piece of logic
+//public class RegisterCustomer { // hard to navigate/find
   private final CustomerRepo customerRepo;
   private final IAnafClient anafClient;
 

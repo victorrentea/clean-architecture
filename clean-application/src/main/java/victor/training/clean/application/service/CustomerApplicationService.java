@@ -14,7 +14,7 @@ import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.service.CustomerService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.domain.service.IAnafClient;
 import victor.training.clean.domain.service.NotificationService;
 
@@ -34,7 +34,7 @@ public class CustomerApplicationService {
   private final InsuranceService insuranceService;
   private final IAnafClient anafClient;
 
-  private final CustomerService customerService;
+  private final RegisterCustomerService registerCustomerService;
 
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
@@ -71,7 +71,7 @@ public class CustomerApplicationService {
   @PostMapping("customers")
   public void register(@RequestBody @Validated CustomerDto dto) {
     Customer customer = dto.toEntity();
-    customerService.register(customer);
+    registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
