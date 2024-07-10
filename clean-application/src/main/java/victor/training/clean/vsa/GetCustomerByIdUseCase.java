@@ -21,7 +21,6 @@ public class GetCustomerByIdUseCase {
   record GetCustomerByIdResponse(
       Long id,
       String name,
-      String email,
       Long siteId,
       String creationDateStr,
       boolean gold,
@@ -34,7 +33,6 @@ public class GetCustomerByIdUseCase {
       return GetCustomerByIdResponse.builder()
               .id(customer.getId())
               .name(customer.getName())
-              .email(customer.getEmail())
               .siteId(customer.getCountry().getId())
               .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
               .build();
