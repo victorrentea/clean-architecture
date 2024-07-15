@@ -69,7 +69,10 @@ public class NotificationService {
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
     LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
 
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode() == null;
+//    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode() == null;
+    boolean canReturnOrders = customer.canReturnOrders(); // reusing bits of logic inside the Domain Model
+//    boolean canReturnOrders = CustomerUtil.canReturnOrders(customer); // 2000s
+//    boolean canReturnOrders = CustomerHellper.canReturnOrders(customer);// now
 
     String returnOrdersStr = canReturnOrders ? "You are allowed to return orders\n" : "";
 

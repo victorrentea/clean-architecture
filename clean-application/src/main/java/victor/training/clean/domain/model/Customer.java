@@ -66,6 +66,26 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public boolean isPhysicalPerson() {
+    return getLegalEntityCode() == null;
+  }
+
+  // OOP: Encapsulation = data + logic
+  // is an entity allowed to contain logic
+  public boolean canReturnOrders() { // bits (1-3 lines of logic)
+    // on top of MY data. that makes my object friendlier to use
+    return isGoldMember() || isPhysicalPerson();
+  }
+  // BUT!!!!
+  // it depends.... on what logic / what parameters
+  // Examples of BAD functions in here:
+  // f(CustomerRepo no) {
+  // f(RecordingApi no) {
+  // f(Order35Fields no) {
+  // f(int ok)
+  // f(Struct2field ok)
+  // f() ideally 90%
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
