@@ -1,10 +1,14 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
+
+import static lombok.AccessLevel.NONE;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -89,21 +93,39 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
+  @Setter(NONE)
   private Status status;
+  @Setter(NONE)
   private String validatedBy; // ⚠🤞 Always not-null when status = VALIDATED or later
+//  public void updateStatus(Status newStatus, String username) {
+//    status= newStatus;
+//    validatedBy = username;
+//  }
+
+  public Customer setStatus(Status status) {
+    if (validatedBy == null && status == Status.VALIDATED)
+      throw new IllegalArgumentException("How dare you forget that you SHALL CALL setValdiatedBy BEFORE");
+    this.status = status;
+    return this;
+  }
+
+  public Customer setValidatedBy(String validatedBy) {
+    this.validatedBy = validatedBy;
+    return this;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class CodeFollowingTheRule {
-//  public void ok(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//}
-
-//class CodeBreakingTheRule {
-//  public void farAway(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//}
+class CodeFollowingTheRule {
+  public void ok(Customer draftCustomer) {
+    // temporal coupling = order of calls matters for no obvious reason
+    draftCustomer.setValidatedBy("currentUser"); // from token/session..
+    draftCustomer.setStatus(Customer.Status.VALIDATED);
+  }
+}
+class CodeBreakingTheRule {
+  public void farAway(Customer draftCustomer) {
+    draftCustomer.setStatus(Customer.Status.VALIDATED);
+  }
+}
 //endregion
