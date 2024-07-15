@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
@@ -16,13 +17,24 @@ import java.time.LocalDate;
 //endregion
 
 // This class is part of your Domain Model, the backbone of your core complexity.
-@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
+@Data // = @Getter @Setter
+// @ToString= manually only for debugging
+// @EqualsAndHashCode = avoid on entities
+// @Getter = challenges encapsulation
+// @Setter = prefer guarded mutators
+ // data can be dangerous!
+// exposes everything
+// my suggestion in any non-trivial system:
+// don't use @Data but it's parts:
+
+//@Getter// better: not on the class but on the actual fields
 @Entity // ORM/JPA (2)
 public class Customer {
   @Id
   @GeneratedValue
   private Long id;
   private String name;
+//  @Getter
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
