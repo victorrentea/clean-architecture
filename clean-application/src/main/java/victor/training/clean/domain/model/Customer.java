@@ -90,7 +90,7 @@ public class Customer {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
   private Status status;
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+  private String validatedBy; // ⚠🤞 Always not-null when status = VALIDATED or later
 }
 
 //region Code in the project might [not] follow the rule
