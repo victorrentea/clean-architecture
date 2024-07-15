@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static lombok.AccessLevel.NONE;
 
@@ -94,7 +95,7 @@ public class Customer {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
   @Setter(NONE)
-  private Status status;
+  private Status status =Status.DRAFT;
   @Setter(NONE)
   private String validatedBy; // ⚠🤞 Always not-null when status = VALIDATED or later
 //  public void updateStatus(Status newStatus, String username) {
@@ -102,30 +103,52 @@ public class Customer {
 //    validatedBy = username;
 //  }
 
-  public Customer setStatus(Status status) {
-    if (validatedBy == null && status == Status.VALIDATED)
-      throw new IllegalArgumentException("How dare you forget that you SHALL CALL setValdiatedBy BEFORE");
-    this.status = status;
-    return this;
-  }
-
-  public Customer setValidatedBy(String validatedBy) {
-    this.validatedBy = validatedBy;
-    return this;
-  }
+//  public Customer setStatus(Status status) {
+//    if (validatedBy == null && status == Status.VALIDATED)
+//      throw new IllegalArgumentException("How dare you forget that you SHALL CALL setValdiatedBy BEFORE");
+//    this.status = status;
+//    return this;
+//  }
+//
+//  public Customer setValidatedBy(String validatedBy) {
+//    this.validatedBy = validatedBy;
+//    return this;
+//  }
+//  setStatusValidated(String use)
+   public void validate(String username) {
+     if (status != Status.DRAFT) {
+       throw new IllegalStateException("Can't validate a non-draft customer");
+     }
+     status = Status.VALIDATED;
+     validatedBy = Objects.requireNonNull(username);
+   }
+   public void activate() {
+     if (status != Status.VALIDATED) {
+       throw new IllegalStateException("Can't activate a non-validated customer");
+     }
+     status = Status.ACTIVE;
+   }
+   public void delete() {
+     if (status != Status.ACTIVE) {
+       throw new IllegalStateException("Can't delete a non-active customer");
+     }
+     status = Status.DELETED;
+   }
 }
 
 //region Code in the project might [not] follow the rule
 class CodeFollowingTheRule {
   public void ok(Customer draftCustomer) {
+    draftCustomer.validate("currentUser");
     // temporal coupling = order of calls matters for no obvious reason
-    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-    draftCustomer.setStatus(Customer.Status.VALIDATED);
+//    draftCustomer.setStatus(Customer.Status.VALIDATED);
+//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
   }
 }
 class CodeBreakingTheRule {
   public void farAway(Customer draftCustomer) {
-    draftCustomer.setStatus(Customer.Status.VALIDATED);
+//    draftCustomer.setStatus(Customer.Status.VALIDATED);
+    draftCustomer.validate(null);
   }
 }
 //endregion
