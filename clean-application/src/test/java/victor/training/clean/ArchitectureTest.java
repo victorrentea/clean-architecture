@@ -12,7 +12,6 @@ import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPac
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
 public class ArchitectureTest {
-
     private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
 
     @Test

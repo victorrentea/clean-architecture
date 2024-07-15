@@ -43,10 +43,8 @@ public class NotificationService {
 
     emailSender.sendEmail(email);
 
-    // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
     normalize(ldapUserDto);
 
-    // ⚠️ 'un' = bad name2 TODO use my domain names ('username')
     customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 
