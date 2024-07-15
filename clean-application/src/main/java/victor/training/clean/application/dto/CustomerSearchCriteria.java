@@ -6,7 +6,7 @@ import lombok.Builder;
 // received as JSON from a search screen in UI
 @Builder // for tests
 public record CustomerSearchCriteria(
-   @Schema(description = "Part of the name, case-insensitive")
+   @Schema(description = "Part of the name2, case-insensitive")
    String name,
    String email,
    Long countryId

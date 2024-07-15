@@ -44,7 +44,7 @@ public class CustomerApplicationService {
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
-        .name(customer.getName())
+        .name2(customer.getName())
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
@@ -66,14 +66,14 @@ public class CustomerApplicationService {
   public void register(CustomerDto dto) {
     Customer customer = new Customer();
     customer.setEmail(dto.email());
-    customer.setName(dto.name());
+    customer.setName(dto.name2());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());
 
     // request payload validation
     if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
+      throw new IllegalArgumentException("The customer name2 is too short");
     }
 
     // business rule/validation
@@ -109,7 +109,7 @@ public class CustomerApplicationService {
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
     Customer customer = customerRepo.findById(id).orElseThrow();
     // CRUD part
-    customer.setName(dto.name());
+    customer.setName(dto.name2());
     customer.setEmail(dto.email());
     customer.setCountry(new Country().setId(dto.countryId()));
 
@@ -132,6 +132,6 @@ public class CustomerApplicationService {
 
 
   private void auditRemovedGoldMember(String customerName, String reason) {
-    log.info("Kafka.send ( {name:" + customerName + ", reason:" + reason + "} )");
+    log.info("Kafka.send ( {name2:" + customerName + ", reason:" + reason + "} )");
   }
 }

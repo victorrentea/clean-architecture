@@ -12,7 +12,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
-    String name,
+    String name2,
     String email,
     Long countryId,
 
@@ -41,7 +41,7 @@ public record CustomerDto(
   public static CustomerDto fromEntity(Customer customer) {
     return CustomerDto.builder()
         .id(customer.getId())
-        .name(customer.getName())
+        .name2(customer.getName())
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))

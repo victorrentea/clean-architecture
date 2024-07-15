@@ -23,8 +23,8 @@
           }
         } ],
         "responses" : {
-          "500" : {
-            "description" : "Internal Server Error",
+          "400" : {
+            "description" : "Bad Request",
             "content" : {
               "application/hal+json" : {
                 "schema" : {
@@ -81,8 +81,8 @@
           "required" : true
         },
         "responses" : {
-          "500" : {
-            "description" : "Internal Server Error",
+          "400" : {
+            "description" : "Bad Request",
             "content" : {
               "application/hal+json" : {
                 "schema" : {
@@ -132,8 +132,8 @@
           "required" : true
         },
         "responses" : {
-          "500" : {
-            "description" : "Internal Server Error",
+          "400" : {
+            "description" : "Bad Request",
             "content" : {
               "application/hal+json" : {
                 "schema" : {
@@ -176,8 +176,8 @@
           "required" : true
         },
         "responses" : {
-          "500" : {
-            "description" : "Internal Server Error",
+          "400" : {
+            "description" : "Bad Request",
             "content" : {
               "application/hal+json" : {
                 "schema" : {
@@ -221,8 +221,8 @@
           "required" : true
         },
         "responses" : {
-          "500" : {
-            "description" : "Internal Server Error",
+          "400" : {
+            "description" : "Bad Request",
             "content" : {
               "application/hal+json" : {
                 "schema" : {
@@ -270,7 +270,7 @@
             "type" : "integer",
             "format" : "int64"
           },
-          "name" : {
+          "name2" : {
             "type" : "string"
           },
           "email" : {
@@ -314,7 +314,7 @@
         "properties" : {
           "name" : {
             "type" : "string",
-            "description" : "Part of the name, case-insensitive"
+            "description" : "Part of the name2, case-insensitive"
           },
           "email" : {
             "type" : "string"
