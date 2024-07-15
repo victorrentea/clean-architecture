@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 
@@ -15,6 +12,7 @@ import java.time.LocalDate;
 // 2) toString might trigger lazy-loading⚠️
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
+
 
 // This class is part of your Domain Model, the backbone of your core complexity.
 @Data // = @Getter @Setter
@@ -28,7 +26,7 @@ import java.time.LocalDate;
 // don't use @Data but it's parts:
 
 //@Getter// better: not on the class but on the actual fields
-@Entity // ORM/JPA (2)
+@Entity // ORM/JPA (2) or @Document
 public class Customer {
   @Id
   @GeneratedValue
@@ -38,9 +36,23 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+
+  @Embedded // ideally no ALTER table should be needed (CUSTOMER is still flat)
+  // you just changed the way you manipulate data in Java, in DB should remain the same
+  private ShippingAddress shippingAddress;
+
+//  private String billingAddressCity;
+//  private String billingAddressStreet;
+//  private String billingAddressZip;
+//  private String billingVATCode;
+
+  // class ShippingAddress <<< stick to specific by default
+  // class Address if i can reuse it somewhere else TODAY!
+    // risk=accidental coupling of it (reusing it wrongly) eg for VATCode
+    // better: BillingInfo{address,VATCode}
 
   @ManyToOne
   private Country country;
