@@ -2,6 +2,7 @@ package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 
@@ -13,6 +14,7 @@ public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
     String name,
+//    @Email// regex=
     String email,
     Long countryId,
 
