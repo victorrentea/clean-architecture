@@ -11,7 +11,8 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LdapStuff {
+public class LdapApiAdapter { // the core of the ANtiCorruption Layer (ACL)
+  // protecting your world against the chaos of the external world
   private final LdapApi ldapApi;
   public User retrieveUser(String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
