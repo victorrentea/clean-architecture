@@ -319,6 +319,15 @@
           "canReturnOrders": {
             "type": "boolean"
           },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "VALIDATED",
+              "ACTIVE",
+              "DELETED"
+            ]
+          },
           "legalEntityCode": {
             "type": "string"
           },

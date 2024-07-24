@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.AssertTrue;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.Customer.Status;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -26,6 +27,7 @@ public record CustomerDto(
     String goldMemberRemovalReason, // GET & PUT(if gold changed true->false)
     boolean canReturnOrders, // GET only (computed by backend)
 
+    Status status,
     String legalEntityCode,
     Boolean discountedVat // GET only (fetched by backend)
 ) {
@@ -45,6 +47,7 @@ public record CustomerDto(
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
+        .status(customer.getStatus())
         .gold(customer.isGoldMember())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
