@@ -6,14 +6,16 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LdapApiAdapter { // the core of the ANtiCorruption Layer (ACL)
+public class LdapApiAdapter implements victor.training.clean.domain.service.ILdapApiAdapter { // the core of the ANtiCorruption Layer (ACL)
   // protecting your world against the chaos of the external world
   private final LdapApi ldapApi;
+  @Override
   public User retrieveUser(String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
@@ -22,9 +24,11 @@ public class LdapApiAdapter { // the core of the ANtiCorruption Layer (ACL)
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
     normalize(ldapUserDto);
-    User user = new User(ldapUserDto.getUn(), fullName, Optional.ofNullable(ldapUserDto.getWorkEmail()));
     // infra sh*t
-    return user;
+    return new User(
+        Objects.requireNonNull(ldapUserDto.getUn()),
+        fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail()));
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
