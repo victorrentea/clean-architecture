@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -14,6 +11,7 @@ import java.time.LocalDate;
 // 2) toString might trigger lazy-loading⚠️
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
+
 
 // This class is part of your Domain Model, the backbone of your core complexity.
 @Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
@@ -26,9 +24,8 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+  @Embedded // the DATABASE SCHEMA (TABLE STRUCTURE) DOES NOT HAVE TO CHANGE!!
+  private ShippingAddress shippingAddress;
 
   @ManyToOne
   private Country country;
