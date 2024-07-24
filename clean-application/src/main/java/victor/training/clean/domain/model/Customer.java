@@ -1,9 +1,15 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
+import static lombok.AccessLevel.NONE;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -50,21 +56,44 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+  @Setter(NONE)
+  private Status status = Status.DRAFT;
+  @Setter(NONE)
+  private String validatedBy; // ⚠ Always(🤞HDD) not-null when status = VALIDATED or later
+
+  public void validate(String validatedBy) {
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Can only validate a DRAFT customer");
+    }
+    this.validatedBy = requireNonNull(validatedBy);
+    status = Status.VALIDATED;
+  }
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Can only activate a VALIDATED customer");
+    }
+    status = Status.ACTIVE;
+  }
+  public void delete() {
+    if (status != Status.ACTIVE && status != Status.DRAFT) {
+      throw new IllegalStateException("Can only delete an ACTIVE customer");
+    }
+    status = Status.DELETED;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class CodeFollowingTheRule {
-//  public void ok(Customer draftCustomer) {
+class CodeFollowingTheRule {
+  public void ok(Customer draftCustomer) {
 //    draftCustomer.setStatus(Customer.Status.VALIDATED);
 //    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//}
+    draftCustomer.validate("currentUser");
+  }
+}
 
-//class CodeBreakingTheRule {
-//  public void farAway(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//}
+class CodeBreakingTheRule {
+  public void farAway(Customer draftCustomer) {
+    draftCustomer.validate(null);
+  }
+}
 //endregion
