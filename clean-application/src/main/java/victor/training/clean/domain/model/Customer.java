@@ -45,9 +45,21 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
-  public boolean isPhysicalPerson() {
+  public boolean isPhysicalPerson() { // ideal
     return legalEntityCode == null;
+    // don't shovel here 12 lines of hard-core biz logc
   }
+
+//  public boolean foo(boolean okish?) {
+//  public boolean foo(int perhaps) {
+//  public boolean foo(SmallStructure perhaps) {
+
+  // NO
+//  public boolean foo(DataStructure12Fields noWay) {
+//  public boolean foo(DtoOfAnotherAPI domainCorruption) {
+//  public boolean foo(CustomerRepo ohShitThisWillNeedMocking) { // WE NEVER MOCK DATA STRUCTURES!
+//  public boolean foo(LdapApiClient canCallOut) {
+
 
   public boolean canReturnOrders() {
     return isGoldMember() || isPhysicalPerson();
