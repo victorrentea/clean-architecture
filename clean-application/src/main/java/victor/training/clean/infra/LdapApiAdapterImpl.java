@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.UserRetriever;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +13,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LdapApiAdapter implements victor.training.clean.domain.service.ILdapApiAdapter { // the core of the ANtiCorruption Layer (ACL)
+public class LdapApiAdapterImpl implements UserRetriever { // the core of the ANtiCorruption Layer (ACL)
   // protecting your world against the chaos of the external world
   private final LdapApi ldapApi;
   @Override

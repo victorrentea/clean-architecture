@@ -35,10 +35,10 @@ public class CustomerController {
     return customerApplicationService.search(searchCriteria);
   }
 
-  @GetMapping("customers/{id}")
-  public CustomerDto findById(@PathVariable long id) {
-    return customerApplicationService.findById(id);
-  }
+//  @GetMapping("customers/{id}")
+//  public CustomerDto findById(@PathVariable long id) {
+//    return customerApplicationService.findById(id);
+//  }
 
   //<editor-fold desc="GET returning ResponseEntity for 404 👎">
 //   @GetMapping("customers/{id}")
