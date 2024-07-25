@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
@@ -17,7 +16,6 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -40,7 +38,6 @@ public class CustomerApplicationService {
   @GetMapping("customers/{id}")
   public CustomerDto findById(@PathVariable long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
-
     // Bit of domain logic on the state of one Entity?  What TODO?
     // PS: it's also repeating somewhere else
 
@@ -66,12 +63,7 @@ public class CustomerApplicationService {
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = new Customer();
-    customer.setEmail(dto.email());
-    customer.setName(dto.name());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
+    Customer customer = dto.toEntity();
 
     // request payload validation
     if (customer.getName().length() < 5) { // TODO alternatives to implement this?
@@ -100,6 +92,7 @@ public class CustomerApplicationService {
     log.info("More Business Logic (imagine)");
     log.info("More Business Logic (imagine)");
     customerRepo.save(customer);
+
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
