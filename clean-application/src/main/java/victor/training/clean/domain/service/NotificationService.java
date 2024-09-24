@@ -22,6 +22,7 @@ public class NotificationService {
   private final EmailSender emailSender;
   private final LdapApi ldapApi;
 
+
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
