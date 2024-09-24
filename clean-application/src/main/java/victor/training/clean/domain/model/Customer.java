@@ -17,9 +17,25 @@ import java.time.LocalDate;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 
+// VALUE OBJECT = small immutable (data class with val inside)
+// that does not have an identity (PK/SSN..)
+record ShippingAddress(
+    String city,
+    String street,
+    String zip) {}
+// more example of VO
+// record Money(BigDecimal amount, Currency currency) {}
+// record Email(String value) {}
+// record PhoneNumber(String countryPrefix, String value) {}
+
+
 // This class is part of your Domain Model, the backbone of your core complexity.
 @Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
 @Entity // ORM/JPA (2)
+// MY PRIVATE INTERNAL STRUCTURE THAT IF I CHANGE
+// I DON'T BREAK ANYONE ELSE'S CODE
+// my DOMAIN MODEL: the backbone of my core complexity
+// my representation of the business concepts
 public class Customer {
   @Id
   @GeneratedValue
@@ -35,6 +51,7 @@ public class Customer {
   private String shippingAddressCity;
   private String shippingAddressStreet;
   private String shippingAddressZip;
+//  private ShippingAddress shippingAddress;
 
   @ManyToOne
   private Country country;
