@@ -60,9 +60,9 @@ public class NotificationService {
     return dtoList.get(0);
   }
 
-  private void normalize(LdapUserDto dto) {
-    if (dto.getUn().startsWith("s")) {
-      dto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
+  private void normalize(LdapUserDto ldapUserDto) {
+    if (ldapUserDto.getUn().startsWith("s")) {
+      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
     }
   }
 
