@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.UserFetcher;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,13 +13,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 // Adapter design pattern
-public class LdapClient {
+public class LdapClient implements UserFetcher {
   private final LdapApi ldapApi;
 
 //  public LdapUserDto lifeIsHard(String usernamePart) {
 //    return fetchUserFromLdap(usernamePart);
 //  }
 
+  @Override
   public User fetchUserByUsername(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
     User user = mapToMyDomain(ldapUserDto);

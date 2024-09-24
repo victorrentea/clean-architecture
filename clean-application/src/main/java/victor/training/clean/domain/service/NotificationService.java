@@ -6,9 +6,6 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapClient;
-import victor.training.clean.infra.LdapUserDto;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -16,12 +13,12 @@ import victor.training.clean.infra.LdapUserDto;
 //peace, love, empathy, respect, responsibility, ultimate clean code!!
 // best of my code, my Zen garden 🧘☯
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final LdapClient ldapClient;
+  private final IEmailSender emailSender;
+  private final UserFetcher userFetcher;
 
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
-    User user = ldapClient.fetchUserByUsername(usernamePart);
+    User user = userFetcher.fetchUserByUsername(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
