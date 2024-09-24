@@ -8,6 +8,7 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapClient;
+import victor.training.clean.infra.LdapUserDto;
 
 @RequiredArgsConstructor
 @Slf4j

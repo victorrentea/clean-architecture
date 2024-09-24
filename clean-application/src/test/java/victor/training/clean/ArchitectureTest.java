@@ -16,10 +16,11 @@ public class ArchitectureTest {
 
   private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
 
-  @Disabled("Fix this after I return from vacation")
+//  @Disabled("Fix this after I return from vacation") // RISK of enforcing arch using tests.
+
   // NOTE: In case you don't understand this test, contact me:
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
-  @Test
+  @Test // runs on CI at every commit
   public void domain_independent_of_infrastructure() {
     noClasses().that()
           .resideInAPackage("..domain..")

@@ -11,8 +11,13 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+// Adapter design pattern
 public class LdapClient {
   private final LdapApi ldapApi;
+
+//  public LdapUserDto lifeIsHard(String usernamePart) {
+//    return fetchUserFromLdap(usernamePart);
+//  }
 
   public User fetchUserByUsername(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
