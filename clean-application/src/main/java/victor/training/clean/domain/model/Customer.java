@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -22,7 +24,11 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @NotBlank
+  @Size(min = 3, max = 100)
   private String name;
+  @Email
+//  @Pattern(regexp = ".+@.+\\..+")
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
@@ -32,7 +38,7 @@ public class Customer {
 
   @ManyToOne
   private Country country;
-
+//@PastOrPresent
   private LocalDate createdDate;
   private String createdByUsername;
 

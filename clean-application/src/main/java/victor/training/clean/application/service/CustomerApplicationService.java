@@ -1,5 +1,9 @@
 package victor.training.clean.application.service;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +21,7 @@ import victor.training.clean.infra.AnafClient;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
@@ -36,6 +41,8 @@ public class CustomerApplicationService {
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
+
+
 
     // Bit of domain logic on the state of one Entity?  What TODO?
     // PS: it's also repeating somewhere else
@@ -61,10 +68,12 @@ public class CustomerApplicationService {
         .discountedVat(customer.isDiscountedVat())
         .build();
   }
-
   @Transactional
   public void register(CustomerDto dto) {
     Customer customer = dto.toDomain();
+//    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+//    Validator validator = factory.getValidator();
+//    Set<ConstraintViolation<CustomerDto>> violations = validator.validate(dto);
 
     // request payload validation
 //    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
@@ -72,12 +81,13 @@ public class CustomerApplicationService {
 //    }
 
     // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
+    checksNoDuplicatedEmail(customer);
     // enrich data from external API
+    register(customer);
+    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+  }
+
+  private void register(Customer customer) {
     if (customer.getLegalEntityCode() != null) {
       if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
         throw new IllegalArgumentException("Company already registered");
@@ -93,7 +103,13 @@ public class CustomerApplicationService {
     log.info("More Business Logic (imagine)");
     log.info("More Business Logic (imagine)");
     customerRepo.save(customer);
-    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+  }
+
+  private void checksNoDuplicatedEmail(Customer customer) {
+    if (customerRepo.existsByEmail(customer.getEmail())) {
+      throw new IllegalArgumentException("A customer with this email is already registered!");
+      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
+    }
   }
 
   private String normalize(String s) {
