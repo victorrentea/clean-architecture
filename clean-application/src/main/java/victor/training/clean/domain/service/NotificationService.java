@@ -20,16 +20,11 @@ import java.util.Optional;
 // best of my code, my Zen garden 🧘☯
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final LdapClient ldapClient;
 
-
-  // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-    User user = mapToMyDomain(ldapUserDto);
-
-    // ------ line -------- Architecture is the art of drawing lines
+    User user = ldapClient.fetchUserByUsername(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -51,29 +46,5 @@ public class NotificationService {
 
     customer.setCreatedByUsername(user.username());
   }
-
-  private static User mapToMyDomain(LdapUserDto ldapUserDto) {
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    if (ldapUserDto.getUn().startsWith("s")) {
-      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-    User user = new User( // my own domain model!! 🎉
-        ldapUserDto.getUn(),
-        fullName,
-        Optional.of(ldapUserDto.getWorkEmail()
-        ));
-    return user;
-  }
-
-  private LdapUserDto fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    return dtoList.get(0);
-  }
-
-
 }
+
