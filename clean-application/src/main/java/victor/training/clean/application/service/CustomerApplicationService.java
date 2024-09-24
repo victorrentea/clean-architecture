@@ -1,9 +1,5 @@
 package victor.training.clean.application.service;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +17,6 @@ import victor.training.clean.infra.AnafClient;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
@@ -46,7 +41,6 @@ public class CustomerApplicationService {
 
     // Bit of domain logic on the state of one Entity?  What TODO?
     // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode() == null;
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -62,12 +56,14 @@ public class CustomerApplicationService {
         .shippingAddressCity(customer.getShippingAddressCity())
         .shippingAddressZip(customer.getShippingAddressZip())
 
-        .canReturnOrders(canReturnOrders)
+        .canReturnOrders(customer.canReturnOrders())
+//        .canReturnOrders(customer.canReturnOrders)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
         .build();
   }
+
   @Transactional
   public void register(CustomerDto dto) {
     Customer customer = dto.toDomain();
@@ -127,7 +123,6 @@ public class CustomerApplicationService {
     if (!customer.isGoldMember() && dto.gold()) {
       // enable gold member status
       customer.setGoldMember(true);
-      notificationService.sendGoldBenefitsEmail(customer, "1"); // userId from JWT token via SecuritContext
     }
 
     if (customer.isGoldMember() && !dto.gold()) {

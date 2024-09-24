@@ -6,9 +6,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.Email;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
+
+import static lombok.AccessLevel.NONE;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -65,24 +69,79 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  // helper methods / properties
+  // in kt these can also be extension functions if you can't modify the class
+  //   (grpc generated classes)
+  public boolean canReturnOrders() {
+    return goldMember || isIndividual();
+  }
+
+  //  val canReturnOrders get() = goldMember || isIndividual();
+
+  private boolean isIndividual() {
+    return legalEntityCode == null;
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+  //var in kt
+  @Setter(NONE)
+  private Status status=Status.DRAFT;
+  @Setter(NONE)
+  private String validatedBy; // ⚠ Always not-null🤞 when status = VALIDATED or later
+
+  // Kotlin
+  // sealed interface Status {
+  //  object Draft : Status
+  //  object Validated(val validatedBy:string) : Status
+  //  object Active(validated: Validated) : Status
+  //  object Deleted : Status
+
+//  var status: Status = Status.DRAFT
+
+//  public void setStatus(Status newStatus, String who) {
+//  }
+
+  public void validate(String who) { // guards my consistency rule = OOP
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Can't validate a non-draft customer");
+    }
+    status = Status.VALIDATED;
+    validatedBy = who;
+  }
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Can't activate a non-validated customer");
+    }
+    status = Status.ACTIVE;
+  }
+  public void delete() {
+    if (status != Status.ACTIVE) {
+      throw new IllegalStateException("Can't delete a non-active customer");
+    }
+    status = Status.DELETED;
+  }
 }
 
-//region Code in the project might [not] follow the rule
-//class CodeFollowingTheRule {
-//  public void ok(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//}
 
-//class CodeBreakingTheRule {
-//  public void farAway(Customer draftCustomer) {
+
+// comments don't get maintained. becomes irrelevant
+// comments make up for bad naming/code
+
+//region Code in the project might [not] follow the rule
+class CodeFollowingTheRule {
+  public void ok(Customer draftCustomer) {
+//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
 //    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//}
+    draftCustomer.validate("currentUser");
+  }
+}
+
+class CodeBreakingTheRule {
+  public void farAway(Customer draftCustomer) {
+//    draftCustomer.setStatus(Customer.Status.VALIDATED);
+    draftCustomer.validate("currentUser");
+  }
+}
 //endregion
