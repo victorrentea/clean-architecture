@@ -26,17 +26,9 @@ public class NotificationService {
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    if (ldapUserDto.getUn().startsWith("s")) {
-      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-    User user = new User( // my own domain model!! 🎉
-        ldapUserDto.getUn(),
-        fullName,
-        Optional.of(ldapUserDto.getWorkEmail()
-        ));
+    User user = mapToMyDomain(ldapUserDto);
 
-    // line --------
+    // ------ line -------- Architecture is the art of drawing lines
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -49,7 +41,7 @@ public class NotificationService {
 
     // ⚠️ Unguarded nullable fields (causing NPE in other places) TODO return Optional<> from getter
     if (user.email().isPresent()) {
-      email.getCc().add(fullName + " <" + user.email().get() + ">");
+      email.getCc().add(user.fullName() + " <" + user.email().get() + ">");
     }
 
     emailSender.sendEmail(email);
@@ -57,6 +49,19 @@ public class NotificationService {
     //side effect inside causing mysterious TEMPORAL COUPLING
 
     customer.setCreatedByUsername(user.username());
+  }
+
+  private static User mapToMyDomain(LdapUserDto ldapUserDto) {
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    if (ldapUserDto.getUn().startsWith("s")) {
+      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
+    }
+    User user = new User( // my own domain model!! 🎉
+        ldapUserDto.getUn(),
+        fullName,
+        Optional.of(ldapUserDto.getWorkEmail()
+        ));
+    return user;
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
