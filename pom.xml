@@ -69,6 +69,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <!-- extract package diagram from code as .svg and .puml in /target/apidocs -->
                     <doclet>nl.talsmasoftware.umldoclet.UMLDoclet</doclet>
                     <docletArtifact>
                         <groupId>nl.talsmasoftware</groupId>
@@ -77,8 +78,6 @@
                     </docletArtifact>
                     <additionalOptions>
                         <additionalOption>-createPumlFiles</additionalOption>
-                        <!--<additionalOption>-verbose</additionalOption>-->
-                        <!--<additionalOption>...</additionalOption>-->
                     </additionalOptions>
                 </configuration>
             </plugin>
