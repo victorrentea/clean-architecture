@@ -69,9 +69,7 @@ public class NotificationService {
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
     LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
 
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode() == null;
-
-    String returnOrdersStr = canReturnOrders ? "You are allowed to return orders\n" : "";
+    String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")

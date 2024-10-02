@@ -1,9 +1,15 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
+import victor.training.clean.domain.model.Customer.Status;
 
 import java.time.LocalDate;
+import java.util.Objects;
+
+import static lombok.AccessLevel.NONE;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -42,24 +48,43 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public boolean canReturnOrders() {
+    return goldMember || isIndividual();
+  }
+
+  public boolean isIndividual() {
+    return getLegalEntityCode() == null;
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
+  @Setter(NONE)
+  private Status status=Status.DRAFT;
+  @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  public void setStatus(Status status, String username) {
+    if (status == Status.VALIDATED) {
+      validatedBy = Objects.requireNonNull(username);
+    }
+    this.status = status;
+  }
+
 }
 
 //region Code in the project might [not] follow the rule
-//class CodeFollowingTheRule {
-//  public void ok(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
+class CodeFollowingTheRule {
+  public void ok(Customer draftCustomer) {
+    draftCustomer.setStatus(Customer.Status.VALIDATED, "currentUser");
 //    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//}
+  }
+}
 
-//class CodeBreakingTheRule {
-//  public void farAway(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//}
+class CodeBreakingTheRule {
+  public void farAway(Customer draftCustomer) {
+    draftCustomer.setStatus(Customer.Status.VALIDATED, "NULL");
+//    draftCustomer.setStatus(Status.ACTIVE, "????????");
+  }
+}
 //endregion
