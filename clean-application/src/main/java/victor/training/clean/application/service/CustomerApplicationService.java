@@ -7,7 +7,6 @@ import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.ApplicationService;
-import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
@@ -16,7 +15,6 @@ import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.AnafClient;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -65,24 +63,13 @@ public class CustomerApplicationService {
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = convert(dto);
-
+    Customer customer = dto.toEntity();
     registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
+
   private final RegisterCustomerService registerCustomerService;
 
-
-
-  private static Customer convert(CustomerDto dto) {
-    Customer customer = new Customer();
-    customer.setEmail(dto.email());
-    customer.setName(dto.name());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
-    return customer;
-  }
 
   private String normalize(String s) {
     return s.toLowerCase().replace("\\s+", "");
