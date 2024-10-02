@@ -35,7 +35,6 @@ public class NotificationService {
               "Sincerely, " + user.fullName())
         .build();
 
-
     if (user.email().isPresent()) {
       email.getCc().add(user.fullName() + " <" + user.email().get() + ">");
     }
