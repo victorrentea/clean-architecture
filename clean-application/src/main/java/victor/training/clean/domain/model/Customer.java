@@ -1,6 +1,7 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min=5)
   private String name;
   private String email;
 

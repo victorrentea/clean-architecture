@@ -12,7 +12,7 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final UserFetcher userFetcher;
+  private final UserService userFetcher;
 
   // Core application logic, my Zen garden 🧘☯
   public void sendWelcomeEmail(Customer customer, String usernamePart) {

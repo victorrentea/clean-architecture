@@ -13,6 +13,7 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.repo.CustomerSearchQuery;
 import victor.training.clean.domain.service.NotificationService;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.infra.AnafClient;
 
 import java.time.LocalDate;
@@ -64,41 +65,23 @@ public class CustomerApplicationService {
 
   @Transactional
   public void register(CustomerDto dto) {
+    Customer customer = convert(dto);
+
+    registerCustomerService.register(customer);
+    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+  }
+  private final RegisterCustomerService registerCustomerService;
+
+
+
+  private static Customer convert(CustomerDto dto) {
     Customer customer = new Customer();
     customer.setEmail(dto.email());
     customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());
-
-    // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
-
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode() != null) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
-    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+    return customer;
   }
 
   private String normalize(String s) {
