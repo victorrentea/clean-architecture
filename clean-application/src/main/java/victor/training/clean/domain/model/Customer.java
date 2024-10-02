@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.domain.model.Customer.Status;
 import victor.training.clean.domain.repo.CustomerRepo;
 
@@ -31,6 +32,13 @@ public class Customer {
   @Size(min=5)
   private String name;
   private String email;
+
+  public static Customer fromDto(CustomerDto dto) {
+    return new Customer();
+//        .setName(dto.getName())
+//        .setEmail(dto.getEmail());
+
+  }
 
 //  @Inject
 //  private CustomerRepo repo;
