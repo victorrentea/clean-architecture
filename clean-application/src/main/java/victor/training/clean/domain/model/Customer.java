@@ -5,7 +5,9 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import victor.training.clean.domain.model.Customer.Status;
+import victor.training.clean.domain.repo.CustomerRepo;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -27,6 +29,11 @@ public class Customer {
   private Long id;
   private String name;
   private String email;
+
+//  @Inject
+//  private CustomerRepo repo;
+//  @Inject
+//  private FiscalAuthorityApi fiscalAuthorityApi;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
 //  private String shippingAddressCity;
@@ -64,7 +71,13 @@ public class Customer {
   @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
+//  public void onEvent(CustomerValidatedEvent event) {
+//    status = Status.VALIDATED;
+//    validatedBy = event.getValidatedBy();
+//  }
+
   public void validate(String validatedBy) {
+    // return List.of(new CustomerValidatedEvent(validatedBy));
     if (status != Status.DRAFT) {
       throw new IllegalStateException("Cannot validate a non-draft Customer");
     }
