@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.UserFetcher;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,8 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserFetcher implements victor.training.clean.domain.service.IUserFetcher { // Adapter design pattern, the basis of a ANTI-CORRUPTION LAYER
+public class LdapUserFetcher  // avery infra name, to make it clear what you're dealing with
+    implements UserFetcher { // Adapter design pattern, the basis of a ANTI-CORRUPTION LAYER
   private final LdapApi ldapApi;
   
   @Override
