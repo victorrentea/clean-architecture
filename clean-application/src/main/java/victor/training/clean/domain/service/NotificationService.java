@@ -43,7 +43,7 @@ public class NotificationService {
 
     customer.setCreatedByUsername(user.username());
   }
-
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   private User fetchUserByUsername(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
