@@ -50,16 +50,16 @@ public class Customer {
 }
 
 //region Code in the project might [not] follow the rule
-//class CodeFollowingTheRule {
-//  public void ok(Customer draftCustomer) {
+//class SomeCode {
+//  public void correct(Customer draftCustomer) {
 //    draftCustomer.setStatus(Customer.Status.VALIDATED);
 //    draftCustomer.setValidatedBy("currentUser"); // from token/session..
 //  }
-//}
-
-//class CodeBreakingTheRule {
-//  public void farAway(Customer draftCustomer) {
+//  public void incorrect(Customer draftCustomer) {
 //    draftCustomer.setStatus(Customer.Status.VALIDATED);
+//  }
+//  public void activate(Customer draftCustomer) {
+//    draftCustomer.setStatus(Customer.Status.ACTIVE);
 //  }
 //}
 //endregion
