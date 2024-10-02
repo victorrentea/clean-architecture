@@ -11,9 +11,10 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserFetcher { // Adapter design pattern, the basis of a ANTI-CORRUPTION LAYER
+public class UserFetcher implements victor.training.clean.domain.service.IUserFetcher { // Adapter design pattern, the basis of a ANTI-CORRUPTION LAYER
   private final LdapApi ldapApi;
   
+  @Override
   public User fetchUserByUsername(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
