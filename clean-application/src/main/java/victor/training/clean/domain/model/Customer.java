@@ -64,11 +64,26 @@ public class Customer {
   @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
-  public void setStatus(Status status, String username) {
-    if (status == Status.VALIDATED) {
-      validatedBy = Objects.requireNonNull(username);
+  public void validate(String validatedBy) {
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Cannot validate a non-draft Customer");
     }
-    this.status = status;
+    status = Status.VALIDATED;
+    this.validatedBy = Objects.requireNonNull(validatedBy);
+  }
+
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Cannot activate a non-validated Customer");
+    }
+    status = Status.ACTIVE;
+  }
+
+  public void delete() {
+    if (status != Status.ACTIVE) {
+      throw new IllegalStateException("Cannot delete a non-active Customer");
+    }
+    status = Status.DELETED;
   }
 
 }
@@ -76,15 +91,17 @@ public class Customer {
 //region Code in the project might [not] follow the rule
 class CodeFollowingTheRule {
   public void ok(Customer draftCustomer) {
-    draftCustomer.setStatus(Customer.Status.VALIDATED, "currentUser");
+//    draftCustomer.setStatus(Customer.Status.VALIDATED, "currentUser");
 //    draftCustomer.setValidatedBy("currentUser"); // from token/session..
+    draftCustomer.validate("currentUser");
   }
 }
 
 class CodeBreakingTheRule {
   public void farAway(Customer draftCustomer) {
-    draftCustomer.setStatus(Customer.Status.VALIDATED, "NULL");
+//    draftCustomer.setStatus(Customer.Status.VALIDATED, "NULL");
 //    draftCustomer.setStatus(Status.ACTIVE, "????????");
+    draftCustomer.validate(null); // exception
   }
 }
 //endregion
