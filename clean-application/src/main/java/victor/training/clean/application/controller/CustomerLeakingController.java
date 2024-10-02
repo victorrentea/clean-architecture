@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
-//@RestController
+@RestController // breaking my clients whenever I
+// change my internal domain model structure, causing breaking changes in my clients
 @RequestMapping("customer-leaking")
 @RequiredArgsConstructor
 public class CustomerLeakingController {

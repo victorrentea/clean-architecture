@@ -20,7 +20,7 @@ and/or the entity is very large.
 
 ## Decision
 We will select DTOs (rather than full Entities) 
-for every search use-case.
+for every search use-case, as a form of a read model in CQRS (a different representation of the data when you READ it).
 
 ## Consequences
 Positive:
@@ -29,6 +29,7 @@ Positive:
 
 Negative:
 - May lead to implementing business rules on DTOs rather than Domain Entities.
+- DTOs are present in the Repository interface, which will lead to a non-homogeneous approach.
 - May lead developers to UPDATE data directly in DB using DTOs. 
    This can bypass the consistency protections that the Domain Model wants to enforce.
 
