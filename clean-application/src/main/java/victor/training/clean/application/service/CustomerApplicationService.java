@@ -46,7 +46,7 @@ public class CustomerApplicationService {
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .status(customer.getStatus())
-        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+        .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
         .shippingAddressCity(customer.getShippingAddress().city())
