@@ -1,11 +1,7 @@
 package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Customer.Status;
@@ -17,19 +13,15 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
-    @Size(min = 5)
     String name,
-//    @Email
-        @Pattern(regexp = ".+@.+\\..+")
     String email,
-    @Schema(description = "Country ID")
     Long countryId,
 
     String shippingAddressCity, // GET only (updated via dedicated endpoint)
     String shippingAddressStreet, // GET only (updated via dedicated endpoint)
     String shippingAddressZip, // GET only (updated via dedicated endpoint)
 
-    String createdDate, // GET only (assigned by backend)
+    String createdDateStr, // GET only (assigned by backend)
 
     Boolean gold, // GET & PUT
     String goldMemberRemovalReason, // GET & PUT(if gold changed true->false)
@@ -54,7 +46,7 @@ public record CustomerDto(
         .name(customer.getName())
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
-        .createdDate(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
+        .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
         .status(customer.getStatus())
         .gold(customer.isGoldMember())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())

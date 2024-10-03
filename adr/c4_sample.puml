@@ -1,15 +1,12 @@
 @startuml Basic Sample
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
-Person(customer, "Customer")
+Person(admin, "Administrator")
 System_Boundary(c1, "Sample System") {
     Container(web_app, "Web Application", "C#, ASP.NET Core 2.1 MVC", "Allows users to compare multiple Twitter timelines")
 }
 System(twitter, "Twitter")
-System(eCommerce, "eCommerce System")
-System(pg, "Payment Gateway")
 
-Rel(customer, web_app, "Uses", "HTTPS")
-Rel(eCommerce, pg, "Redirects payments to")
+Rel(admin, web_app, "Uses", "HTTPS")
 Rel(web_app, twitter, "Gets tweets from", "HTTPS")
 @enduml

@@ -49,7 +49,7 @@ public class CustomerApplicationService {
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .status(customer.getStatus())
-        .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+        .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
         .shippingAddressStreet(customer.getShippingAddressStreet())
