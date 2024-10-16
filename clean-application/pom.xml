@@ -23,15 +23,16 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-contract-wiremock</artifactId>
-        </dependency>
-        <dependency>
+            <!-- http://localhost:8080/actuator -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <!-- @ConfigurationProperties -->
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-wiremock</artifactId>
+        </dependency>
+        <dependency>
+            <!-- @ConfigurationProperties + IntelliJ = 💖-->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
@@ -58,7 +59,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>2.1.210</version>
+            <version>2.2.224</version>
         </dependency>
 
         <!-- <dependency>
