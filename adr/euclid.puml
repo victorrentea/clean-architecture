@@ -1,0 +1,17 @@
+@startuml Euclid's Algorithm
+start
+:read a, b;
+
+while (a!=b) is (true)
+    if (a > b) then (yes)
+        :a = a - b;
+    else (no)
+        :b = b - a;
+    endif
+endwhile
+
+:print "GCD=" + a;
+
+stop
+
+@enduml
