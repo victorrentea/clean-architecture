@@ -1,7 +1,7 @@
 @startuml Basic Sample
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
-Person(admin, "Administrator")
+Person(admin, "The Boss")
 System_Boundary(c1, "Sample System") {
     Container(web_app, "Web Application", "C#, ASP.NET Core 2.1 MVC", "Allows users to compare multiple Twitter timelines")
 }

@@ -31,6 +31,7 @@ Negative:
 - May lead to implementing business rules on DTOs rather than Domain Entities.
 - May lead developers to UPDATE data directly in DB using DTOs. 
    This can bypass the consistency protections that the Domain Model wants to enforce.
+- REquires access to repo with DTO (external world), which requires bypassing domain!
 
 ## Compliance
 Any search usecase should use this approach.
@@ -53,7 +54,8 @@ provide a better alternative be used:
 List<UserProjection> findByName(@Param("name") String name);
 ```
 
-Enforcing is done via PR Review.
+Enforcing is done via PR Review. 😔 
+(we did not find an automated way 😔😔😔)
 
 ## Notes
 - Author: Developer A 
