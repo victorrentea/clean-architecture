@@ -47,6 +47,14 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public boolean canReturnOrders() { // more reusable
+    return goldMember || isIndividual();
+  }
+
+  private boolean isIndividual() { // 🧠-friendlier names
+    return legalEntityCode == null;
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }

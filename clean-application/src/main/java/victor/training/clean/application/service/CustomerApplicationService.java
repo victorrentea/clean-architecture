@@ -1,11 +1,9 @@
 package victor.training.clean.application.service;
 
 import jakarta.validation.Valid;
-import jakarta.validation.ValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
@@ -40,10 +38,6 @@ public class CustomerApplicationService {
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
-    // Bit of domain logic on the state of one Entity?  What TODO?
-    // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode() == null;
-
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
@@ -58,7 +52,7 @@ public class CustomerApplicationService {
         .shippingAddressStreet(customer.getShippingAddress().street())
         .shippingAddressZip(customer.getShippingAddress().zip())
 
-        .canReturnOrders(canReturnOrders)
+        .canReturnOrders(customer.canReturnOrders())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
