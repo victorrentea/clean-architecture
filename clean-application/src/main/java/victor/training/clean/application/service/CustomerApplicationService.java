@@ -78,6 +78,24 @@ public class CustomerApplicationService {
       if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
         throw new IllegalArgumentException("Company already registered");
       }
+      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
+        throw new IllegalArgumentException("Company already registered");
+      }
+      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
+        throw new IllegalArgumentException("Company already registered");
+      }
+      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
+        throw new IllegalArgumentException("Company already registered");
+      }
+      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
+        throw new IllegalArgumentException("Company already registered");
+      }
+      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
+        throw new IllegalArgumentException("Company already registered");
+      }
+      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode())) {
+        throw new IllegalArgumentException("Company already registered");
+      }
       AnafResult anafResult = anafClient.query(customer.getLegalEntityCode());
       if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
         throw new IllegalArgumentException("Legal Entity not found!");
