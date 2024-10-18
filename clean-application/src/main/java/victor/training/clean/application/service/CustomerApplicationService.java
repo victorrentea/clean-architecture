@@ -12,7 +12,6 @@ import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.repo.CustomerSearchQuery;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
