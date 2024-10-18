@@ -11,8 +11,8 @@ import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.domain.service.FiscalDetailsProvider;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,7 +27,7 @@ public class CustomerApplicationService {
   private final NotificationService notificationService;
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
-  private final FiscalDetailsProvider fiscalDetailsProvider;
+  private final RegisterCustomerService registerCustomerService;
 
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
@@ -60,7 +60,7 @@ public class CustomerApplicationService {
   @Transactional
   public void register(@Valid CustomerDto dto) {
     Customer customer = dto.toEntity();
-    register(customer);
+    registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 

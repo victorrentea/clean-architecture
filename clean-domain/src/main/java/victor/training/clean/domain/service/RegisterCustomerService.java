@@ -10,11 +10,11 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+public class RegisterCustomerService { // DDD ideology: DS are actions!!
   private final CustomerRepo customerRepo;
   private final FiscalDetailsProvider fiscalDetailsProvider;
 
-  private void register(Customer customer) {
+  public void register(Customer customer) {
     // business rule/validation
     if (customerRepo.existsByEmail(customer.getEmail())) {
       throw new IllegalArgumentException("A customer with this email is already registered!");
