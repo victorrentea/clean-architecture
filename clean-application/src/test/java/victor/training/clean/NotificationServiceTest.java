@@ -85,7 +85,6 @@ class NotificationServiceTest {
   @Test
   void sendGoldBenefits_baseFlow() {
     customer.setGoldMember(true);
-    notificationService.sendGoldBenefitsEmail(customer,"full");
 
     verify(emailSender).sendEmail(emailCaptor.capture());
     Email email = emailCaptor.getValue();
