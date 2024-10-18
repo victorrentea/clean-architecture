@@ -2,6 +2,8 @@ package victor.training.clean;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.lang.FailureReport;
+import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArchitectureTest {
 
@@ -22,11 +25,20 @@ public class ArchitectureTest {
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
   @Test
   public void agnostic_domain_independent_of_infrastructure() {
-    noClasses().that()
-          .resideInAPackage("..domain..")
+    ClassesShouldConjunction classesShouldConjunction = noClasses().that()
+        .resideInAPackage("..domain..")
         .should().dependOnClassesThat()
-          .resideInAPackage("..infra..")
-        .check(allProjectClasses);
+        .resideInAPackage("..infra..");
+
+    FailureReport report = classesShouldConjunction.evaluate(allProjectClasses).getFailureReport();
+    assertThat(report.getDetails()).hasSizeLessThan(37);
+    assertThat(report.getDetails()).hasSizeLessThan(27);// next sprint
+    assertThat(report.getDetails()).hasSizeLessThan(12);// next sprint
+    assertThat(report.getDetails()).hasSizeLessThan(15);// next sprint
+    assertThat(report.getDetails()).hasSizeLessThan(3);// next sprint
+    assertThat(report.getDetails()).hasSizeLessThan(0);// next sprint
+
+    classesShouldConjunction.check(allProjectClasses); // throws
   }
 
   @Test
