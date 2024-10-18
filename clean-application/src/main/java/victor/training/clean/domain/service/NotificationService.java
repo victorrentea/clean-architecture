@@ -22,17 +22,7 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-    normalize(ldapUserDto);
-    User user = new User(
-        ldapUserDto.getUn(),
-        ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase(),
-        Optional.ofNullable(ldapUserDto.getWorkEmail()));
-
-    // external corruption, aka infrastructure
-    /// a line =================
-    // my holy domain model. peace be with you 🙏
+    User user = fetchUserByUsername(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -50,6 +40,15 @@ public class NotificationService {
     emailSender.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
+  }
+
+  private User fetchUserByUsername(String usernamePart) {
+    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
+    normalize(ldapUserDto);
+    return new User(
+        ldapUserDto.getUn(),
+        ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase(),
+        Optional.ofNullable(ldapUserDto.getWorkEmail()));
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
