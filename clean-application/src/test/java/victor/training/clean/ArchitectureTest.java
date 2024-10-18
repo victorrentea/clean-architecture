@@ -25,12 +25,12 @@ public class ArchitectureTest {
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
   @Test
   public void agnostic_domain_independent_of_infrastructure() {
-    ClassesShouldConjunction classesShouldConjunction = noClasses().that()
+    ClassesShouldConjunction rule = noClasses().that()
         .resideInAPackage("..domain..")
         .should().dependOnClassesThat()
         .resideInAPackage("..infra..");
 
-    FailureReport report = classesShouldConjunction.evaluate(allProjectClasses).getFailureReport();
+    FailureReport report = rule.evaluate(allProjectClasses).getFailureReport();
 //    assertThat(report.getDetails()).hasSize(37);// because if it happens to go DOWN to 36, burn it in the test
     assertThat(report.getDetails()).hasSizeLessThan(27);// next sprint
     assertThat(report.getDetails()).hasSizeLessThan(12);// next sprint
@@ -38,7 +38,7 @@ public class ArchitectureTest {
     assertThat(report.getDetails()).hasSizeLessThan(3);// next sprint
     assertThat(report.getDetails()).hasSizeLessThan(0);// next sprint
 
-    classesShouldConjunction.check(allProjectClasses); // throws
+    rule.check(allProjectClasses); // throws
   }
 
   @Test
