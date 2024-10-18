@@ -31,7 +31,7 @@ public class ArchitectureTest {
         .resideInAPackage("..infra..");
 
     FailureReport report = classesShouldConjunction.evaluate(allProjectClasses).getFailureReport();
-    assertThat(report.getDetails()).hasSizeLessThan(37);
+//    assertThat(report.getDetails()).hasSize(37);// because if it happens to go DOWN to 36, burn it in the test
     assertThat(report.getDetails()).hasSizeLessThan(27);// next sprint
     assertThat(report.getDetails()).hasSizeLessThan(12);// next sprint
     assertThat(report.getDetails()).hasSizeLessThan(15);// next sprint
