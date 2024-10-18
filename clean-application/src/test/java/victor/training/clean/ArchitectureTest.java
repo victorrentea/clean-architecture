@@ -15,12 +15,13 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 public class ArchitectureTest {
 
   private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
+// Evolutionary Architecture by Neal Ford
 
-  @Disabled("Fix this after I return from vacation")
+//  @Disabled("Fix this after I return from vacation")
   // NOTE: In case you don't understand this test, contact me:
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
   @Test
-  public void domain_independent_of_infrastructure() {
+  public void agnostic_domain_independent_of_infrastructure() {
     noClasses().that()
           .resideInAPackage("..domain..")
         .should().dependOnClassesThat()
