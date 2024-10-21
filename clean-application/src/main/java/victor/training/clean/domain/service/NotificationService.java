@@ -22,15 +22,7 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    normalize(ldapUserDto);
-
-    User user = new User(
-        ldapUserDto.getUn(),
-        fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail()));
+    User user = fetchByUsername(usernamePart);
 
     //----
     Email email = Email.builder()
@@ -54,6 +46,18 @@ public class NotificationService {
     customer.setCreatedByUsername(user.username());
   }
 
+  private User fetchByUsername(String usernamePart) {
+    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
+
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    normalize(ldapUserDto);
+
+    return new User(
+        ldapUserDto.getUn(),
+        fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail()));
+  }
+
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
 
@@ -70,24 +74,7 @@ public class NotificationService {
     }
   }
 
-  public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
 
-    String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
-
-    Email email = Email.builder()
-        .from("noreply@cleanapp.com")
-        .to(customer.getEmail())
-        .subject("Welcome to our Gold membership!")
-        .body(returnOrdersStr +
-              "Yours sincerely, " + userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase())
-        .build();
-
-    email.getCc().add(userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase()
-                      + " <" + userLdapDto.getWorkEmail() + ">");
-
-    emailSender.sendEmail(email);
-  }
 
 
 }
