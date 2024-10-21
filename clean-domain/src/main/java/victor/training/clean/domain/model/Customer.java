@@ -1,7 +1,6 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
