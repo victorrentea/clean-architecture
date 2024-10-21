@@ -2,7 +2,7 @@
 Search Entities using Use-Case-Optimized Queries 
 
 ## Status
-Accepted
+Superseded
 
 ## Context
 We are using an ORM (Hibernate). 
@@ -53,7 +53,7 @@ provide a better alternative be used:
 List<UserProjection> findByName(@Param("name") String name);
 ```
 
-Enforcing is done via PR Review.
+Enforcing is done via PR Review. (😔 We did not find any automated way to enforce it)
 
 ## Notes
 - Author: Developer A 

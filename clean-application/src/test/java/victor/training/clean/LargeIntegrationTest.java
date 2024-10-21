@@ -62,7 +62,7 @@ public class LargeIntegrationTest {
 
     private CustomerDtoBuilder registerRequest() {
         return CustomerDto.builder()
-            .email(CUSTOMER_EMAIL)
+            .emailAddres(CUSTOMER_EMAIL)
             .name("::name::")
             .countryId(country.getId());
     }
@@ -84,7 +84,7 @@ public class LargeIntegrationTest {
 
         assertThat(responseDto.id()).isEqualTo(customer.getId());
         assertThat(responseDto.name()).isEqualTo("::name::");
-        assertThat(responseDto.email()).isEqualTo(CUSTOMER_EMAIL);
+        assertThat(responseDto.emailAddres()).isEqualTo(CUSTOMER_EMAIL);
         assertThat(responseDto.countryId()).isEqualTo(country.getId());
         assertThat(responseDto.createdDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
@@ -105,13 +105,13 @@ public class LargeIntegrationTest {
 
     @Test
     void twoCustomerWithSameEmail() throws Exception {
-        register(registerRequest().email(CUSTOMER_EMAIL))
+        register(registerRequest().emailAddres(CUSTOMER_EMAIL))
             .andExpect(status().isOk());
 
-        register(registerRequest().email(CUSTOMER_EMAIL))
+        register(registerRequest().emailAddres(CUSTOMER_EMAIL))
             .andExpect(status().isInternalServerError())
         //          .andExpect(status().is4xxClientError())
-        //          .andExpect(content().string("Customer email is already registered"))
+        //          .andExpect(content().string("Customer emailAddres is already registered"))
         ;
     }
 

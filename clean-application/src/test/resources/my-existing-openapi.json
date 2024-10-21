@@ -291,7 +291,7 @@
           "name": {
             "type": "string"
           },
-          "email": {
+          "emailAdres": {
             "type": "string"
           },
           "countryId": {
@@ -343,7 +343,7 @@
             "type": "string",
             "description": "Part of the name, case-insensitive"
           },
-          "email": {
+          "emailAdres": {
             "type": "string"
           },
           "countryId": {

@@ -19,7 +19,7 @@ import java.util.List;
 import static org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy.RepositoryDetectionStrategies.ANNOTATED;
 
 // Brutal: expose CRUD directly from the DB - example of how VSA enables different architecture per use-case
-//@RepositoryRestResource // generally avoid ⚠️
+@RepositoryRestResource // generally avoid ⚠️
 public interface CountryRestRepo extends PagingAndSortingRepository<Country, Long>, JpaRepository<Country, Long> {
     List<Country> findByName(@Param("name") String name);
 }

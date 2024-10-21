@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -26,9 +23,11 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+  @Embedded // fighting primitive obsession code smell
+  private ShippingAddress shippingAddress; // -2 fields => dev=:)
 
   @ManyToOne
   private Country country;
@@ -41,6 +40,16 @@ public class Customer {
 
   private String legalEntityCode;
   private boolean discountedVat;
+
+  // reusable bits of logic
+  public boolean canReturnOrders() {
+    return isGoldMember() || isIndividual();
+  }
+
+  // explanatory methods
+  private boolean isIndividual() {
+    return getLegalEntityCode() == null;
+  }
 
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED

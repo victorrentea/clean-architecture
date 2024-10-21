@@ -32,7 +32,7 @@ public class MyOpenAPIDidNotChangeTest {
   @Value("classpath:/my-existing-openapi.json") // extracted from deploy
   Resource myExpectedOpenAPI;
 
-  @Test
+  @Test /// this test is gonna fail for any accidental change in my contract for any breaking change
   void my_contract_did_not_change() throws Exception {
     String actualOpenAPIJson = prettifyJsonString(
             mockMvc.perform(get("/v3/api-docs"))

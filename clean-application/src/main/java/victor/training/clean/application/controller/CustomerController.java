@@ -33,7 +33,10 @@ public class CustomerController {
   @PostMapping("customers/search")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
     return customerApplicationService.search(searchCriteria);
+//    return customerSearchQuery.search(searchCriteria); // scary
   }
+//  private final CustomerSearchQuery customerSearchQuery;
+
 
   @GetMapping("customers/{id}")
   public CustomerDto findById(@PathVariable long id) {

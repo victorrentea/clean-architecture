@@ -14,7 +14,7 @@ public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
     String name,
-    String email,
+    String emailAddres,
     Long countryId,
 
     String shippingAddressCity, // GET only (updated via dedicated endpoint)
@@ -44,7 +44,7 @@ public record CustomerDto(
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())
-        .email(customer.getEmail())
+        .emailAddres(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
         .status(customer.getStatus())
@@ -52,9 +52,12 @@ public record CustomerDto(
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+//        .shippingAddressStreet(customer.getShippingAddressStreet())
+//        .shippingAddressCity(customer.getShippingAddressCity())
+//        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZip(customer.getShippingAddress().zip())
         //.canReturnOrders(TODO)
         .build();
   }

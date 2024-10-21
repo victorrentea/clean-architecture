@@ -40,21 +40,24 @@ public class CustomerApplicationService {
 
     // Bit of domain logic on the state of one Entity?  What TODO?
     // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode() == null;
+    boolean canReturnOrders = customer.canReturnOrders();
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())
-        .email(customer.getEmail())
+        .emailAddres(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .status(customer.getStatus())
         .createdDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+//        .shippingAddressStreet(customer.getShippingAddressStreet())
+//        .shippingAddressCity(customer.getShippingAddressCity())
+//        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZip(customer.getShippingAddress().zip())
 
         .canReturnOrders(canReturnOrders)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
@@ -66,7 +69,7 @@ public class CustomerApplicationService {
   @Transactional
   public void register(CustomerDto dto) {
     Customer customer = new Customer();
-    customer.setEmail(dto.email());
+    customer.setEmail(dto.emailAddres());
     customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
@@ -79,7 +82,7 @@ public class CustomerApplicationService {
 
     // business rule/validation
     if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
+      throw new IllegalArgumentException("A customer with this emailAddres is already registered!");
       // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
     }
 
@@ -111,7 +114,7 @@ public class CustomerApplicationService {
     Customer customer = customerRepo.findById(id).orElseThrow();
     // CRUD part
     customer.setName(dto.name());
-    customer.setEmail(dto.email());
+    customer.setEmail(dto.emailAddres());
     customer.setCountry(new Country().setId(dto.countryId()));
 
     if (!customer.isGoldMember() && dto.gold()) {
