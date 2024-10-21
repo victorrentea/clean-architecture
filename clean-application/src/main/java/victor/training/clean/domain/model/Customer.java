@@ -1,9 +1,14 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
+
+import static lombok.AccessLevel.NONE;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -54,21 +59,49 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
+  @Setter(NONE)
+  private Status status=Status.DRAFT;
+  @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+//  public Customer setStatus(Status status, String username) {
+//    this.status = status;
+//    if (status == Status.VALIDATED) {
+//      this.validatedBy = username;
+//    }
+//    return this;
+//  }
+  // guards changes
+  public void validate(String username) {
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Can only validate DRAFT customers");
+    }
+    this.status = Status.VALIDATED;
+    this.validatedBy = Objects.requireNonNull(username);
+  }
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Can only activate VALIDATED customers");
+    }
+    this.status = Status.ACTIVE;
+  }
+  public void delete() {
+    if (status == Status.DELETED) {
+      throw new IllegalStateException("Already deleted");
+    }
+    this.status = Status.DELETED;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+class SomeCode {
+  public void correct(Customer draftCustomer) {
+    draftCustomer.validate("currentUser");
+  }
+  public void incorrect(Customer draftCustomer) {
+    draftCustomer.validate("null"); // ☠️
+  }
+  public void activate(Customer draftCustomer) {
+    draftCustomer.activate();
+  }
+}
 //endregion
