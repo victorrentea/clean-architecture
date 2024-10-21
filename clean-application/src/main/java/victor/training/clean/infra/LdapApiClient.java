@@ -12,11 +12,12 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LdapApiClient // adapter pattern
+public class LdapApiClient implements victor.training.clean.domain.service.UserApiClient // adapter pattern
 {
   private final LdapApi ldapApi;
  // Dirty
-  public User fetchByUsername(String usernamePart) {
+ @Override
+ public User fetchByUsername(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
