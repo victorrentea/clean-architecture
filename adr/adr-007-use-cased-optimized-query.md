@@ -53,7 +53,8 @@ provide a better alternative be used:
 List<UserProjection> findByName(@Param("name") String name);
 ```
 
-Enforcing is done via PR Review.
+Enforcing is done via PR Review. :(
+N-am gasit nici un mod automat @Test de a verifica aceasta regula.
 
 ## Notes
 - Author: Developer A 

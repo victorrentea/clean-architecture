@@ -63,7 +63,7 @@ public class LargeIntegrationTest {
     private CustomerDtoBuilder registerRequest() {
         return CustomerDto.builder()
             .email(CUSTOMER_EMAIL)
-            .name("::name::")
+            .name2("::name2::")
             .countryId(country.getId());
     }
 
@@ -74,7 +74,7 @@ public class LargeIntegrationTest {
 
         assertThat(customerRepo.findAll()).hasSize(1);
         Customer customer = customerRepo.findAll().get(0);
-        assertThat(customer.getName()).isEqualTo("::name::");
+        assertThat(customer.getName()).isEqualTo("::name2::");
         assertThat(customer.getEmail()).isEqualTo(CUSTOMER_EMAIL);
         assertThat(customer.getCountry().getId()).isEqualTo(country.getId());
         verify(emailSender).sendEmail(argThat(email -> email.getTo().equals(CUSTOMER_EMAIL)));
@@ -83,7 +83,7 @@ public class LargeIntegrationTest {
         CustomerDto responseDto = getCustomer(customer.getId());
 
         assertThat(responseDto.id()).isEqualTo(customer.getId());
-        assertThat(responseDto.name()).isEqualTo("::name::");
+        assertThat(responseDto.name2()).isEqualTo("::name2::");
         assertThat(responseDto.email()).isEqualTo(CUSTOMER_EMAIL);
         assertThat(responseDto.countryId()).isEqualTo(country.getId());
         assertThat(responseDto.createdDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
@@ -100,7 +100,7 @@ public class LargeIntegrationTest {
 
     @Test
     void nameTooShortThrows() throws Exception {
-        register(registerRequest().name("1")).andExpect(status().isInternalServerError());
+        register(registerRequest().name2("1")).andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class LargeIntegrationTest {
         register(registerRequest().email(CUSTOMER_EMAIL))
             .andExpect(status().isInternalServerError())
         //          .andExpect(status().is4xxClientError())
-        //          .andExpect(content().string("Customer email is already registered"))
+        //          .andExpect(content().string("Customer emails is already registered"))
         ;
     }
 
@@ -124,7 +124,7 @@ public class LargeIntegrationTest {
     private List<CustomerSearchResult> search(String name) throws Exception {
         String responseJson = mockMvc.perform(post("/customers/search")
                 .contentType(APPLICATION_JSON)
-                .content(String.format("{\"name\": \"%s\"}\n", name)))
+                .content(String.format("{\"name2\": \"%s\"}\n", name)))
             .andExpect(status().is2xxSuccessful())
             .andReturn()
             .getResponse()

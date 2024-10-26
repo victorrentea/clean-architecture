@@ -32,12 +32,12 @@ public class CustomerSearchQuery {
       Map<String, Object> params = new HashMap<>();
 
       if (criteria.name() != null) {
-         jpqlParts.add("UPPER(c.name) LIKE UPPER('%' || :name || '%')");
+         jpqlParts.add("UPPER(c.name2) LIKE UPPER('%' || :name2 || '%')");
          params.put("name", criteria.name());
       }
 
       if (criteria.email() != null) {
-         jpqlParts.add("UPPER(c.email) = UPPER(:email)");
+         jpqlParts.add("UPPER(c.emails) = UPPER(:emails)");
          params.put("email", criteria.email());
       }
 
@@ -64,16 +64,16 @@ public class CustomerSearchQuery {
 //      CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 //      CriteriaQuery<CustomerSearchResult> criteriaQuery = cb.createQuery(CustomerSearchResult.class);
 //      Root<Customer> root = criteriaQuery.from(Customer.class);
-//      criteriaQuery.select(cb.construct(CustomerSearchResult.class, root.get(Customer_.id), root.get(Customer_.name)));
+//      criteriaQuery.select(cb.construct(CustomerSearchResult.class, root.get(Customer_.id), root.get(Customer_.name2)));
 //      List<Predicate> predicates = new ArrayList<>();
 //      predicates.add(cb.isTrue(cb.literal(true)));
 //
 //      if (criteria.getName() != null) {
-//         predicates.add(cb.like(cb.upper(root.get(Customer_.name)), cb.upper(cb.literal("%" + criteria.getName() + "%"))));
+//         predicates.add(cb.like(cb.upper(root.get(Customer_.name2)), cb.upper(cb.literal("%" + criteria.getName() + "%"))));
 //      }
 //
 //      if (criteria.getEmail() != null) {
-//         predicates.add(cb.equal(cb.upper(root.get(Customer_.email)), cb.upper(cb.literal(criteria.getEmail()))));
+//         predicates.add(cb.equal(cb.upper(root.get(Customer_.emails)), cb.upper(cb.literal(criteria.getEmail()))));
 //      }
 //
 //      if (criteria.getCountryId() != null) {

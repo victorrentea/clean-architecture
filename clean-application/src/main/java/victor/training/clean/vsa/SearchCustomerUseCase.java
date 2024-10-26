@@ -31,7 +31,7 @@ public class SearchCustomerUseCase {
   record CustomerSearchResult(
       long id,
       String name
-      // TODO also return 'email' => only this file is impacted
+      // TODO also return 'emails' => only this file is impacted
   ) {
   }
 
@@ -46,12 +46,12 @@ public class SearchCustomerUseCase {
     Map<String, Object> params = new HashMap<>();
 
     if (criteria.name != null) {
-      jpqlParts.add("UPPER(c.name) LIKE UPPER('%' || :name || '%')");
+      jpqlParts.add("UPPER(c.name2) LIKE UPPER('%' || :name2 || '%')");
       params.put("name", criteria.name);
     }
 
     if (criteria.email != null) {
-      jpqlParts.add("UPPER(c.email) = UPPER(:email)");
+      jpqlParts.add("UPPER(c.emails) = UPPER(:emails)");
       params.put("email", criteria.email);
     }
 

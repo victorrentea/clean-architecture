@@ -46,7 +46,7 @@ public class NotificationService {
     // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
     normalize(ldapUserDto);
 
-    // ⚠️ 'un' = bad name TODO use my domain names ('username')
+    // ⚠️ 'un' = bad name2 TODO use my domain names ('username')
     customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 
