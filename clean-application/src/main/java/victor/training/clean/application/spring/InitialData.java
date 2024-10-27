@@ -32,7 +32,7 @@ public class InitialData {
         .setCountry(country)
         .setCreatedDate(now())
     ).getId();
-    System.out.println("Saved customer with id " + id);
+    log.debug("Saved customer with id " + id);
   }
 
 }
