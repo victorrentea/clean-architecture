@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <!-- example on how to log in two formats: logstash JSON and plain text -->
     <appender name="stash" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>app.json.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/some/path/to/your/file.log.%d{yyyy-MM-dd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">

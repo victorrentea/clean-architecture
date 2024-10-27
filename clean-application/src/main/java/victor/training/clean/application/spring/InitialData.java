@@ -2,6 +2,7 @@ package victor.training.clean.application.spring;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
@@ -32,6 +33,7 @@ public class InitialData {
         .setCountry(country)
         .setCreatedDate(now())
     ).getId();
+    MDC.put("testkey", "testvalue"); // search this in application.json.log when activating example-logback.xml
     log.debug("Saved customer with id " + id);
   }
 
