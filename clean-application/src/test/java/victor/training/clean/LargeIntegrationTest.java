@@ -86,7 +86,7 @@ public class LargeIntegrationTest {
         assertThat(responseDto.name()).isEqualTo("::name::");
         assertThat(responseDto.email()).isEqualTo(CUSTOMER_EMAIL);
         assertThat(responseDto.countryId()).isEqualTo(country.getId());
-        assertThat(responseDto.createdDateStr()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        assertThat(responseDto.createdDate()).isEqualTo(now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         assertThat(search("ame")).hasSize(1);
     }

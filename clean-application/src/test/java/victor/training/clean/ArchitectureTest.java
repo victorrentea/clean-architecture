@@ -2,15 +2,19 @@ package victor.training.clean;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
 import victor.training.clean.utils.ParameterizedReturnTypeCondition;
 
+import java.util.List;
+
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArchitectureTest {
 
@@ -21,11 +25,21 @@ public class ArchitectureTest {
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
   @Test
   public void domain_independent_of_infrastructure() {
-    noClasses().that()
-          .resideInAPackage("..domain..")
+    ClassesShouldConjunction rule = noClasses().that()
+        .resideInAPackage("..domain..")
         .should().dependOnClassesThat()
-          .resideInAPackage("..infra..")
-        .check(allProjectClasses);
+        .resideInAPackage("..infra..");
+//    rule.check(allProjectClasses);
+    List<String> violations = rule.evaluate(allProjectClasses)
+        .getFailureReport().getDetails();
+    assertThat(violations).hasSizeLessThan(100); // initial status of my code t0
+    assertThat(violations).hasSizeLessThan(90); //next spring
+    assertThat(violations).hasSizeLessThan(60); //next spring
+    assertThat(violations).hasSizeLessThan(50); //next spring
+    assertThat(violations).hasSizeLessThan(60); //next spring
+    assertThat(violations).hasSizeLessThan(20); //next spring
+    assertThat(violations).hasSizeLessThan(10); //next spring
+    assertThat(violations).hasSizeLessThan(0); //end, 🍾
   }
 
   @Test

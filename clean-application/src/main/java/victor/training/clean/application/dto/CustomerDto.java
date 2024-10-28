@@ -21,7 +21,7 @@ public record CustomerDto(
     String shippingAddressStreet, // GET only (updated via dedicated endpoint)
     String shippingAddressZip, // GET only (updated via dedicated endpoint)
 
-    String createdDateStr, // GET only (assigned by backend)
+    String createdDate, // GET only (assigned by backend)
 
     Boolean gold, // GET & PUT
     String goldMemberRemovalReason, // GET & PUT(if gold changed true->false)
@@ -46,7 +46,7 @@ public record CustomerDto(
         .name(customer.getName())
         .email(customer.getEmail())
         .countryId(customer.getCountry().getId())
-        .createdDateStr(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
+        .createdDate(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
         .status(customer.getStatus())
         .gold(customer.isGoldMember())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())

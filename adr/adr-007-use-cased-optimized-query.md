@@ -2,7 +2,7 @@
 Search Entities using Use-Case-Optimized Queries 
 
 ## Status
-Accepted
+Superseded
 
 ## Context
 We are using an ORM (Hibernate). 
