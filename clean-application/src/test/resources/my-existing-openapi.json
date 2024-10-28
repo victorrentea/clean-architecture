@@ -307,7 +307,7 @@
           "shippingAddressZip": {
             "type": "string"
           },
-          "createdDateStr": {
+          "createdDate": {
             "type": "string"
           },
           "gold": {
