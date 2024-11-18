@@ -3,13 +3,13 @@ Search Entities using Use-Case-Optimized Queries (CQRS)
 
 ## Status
 Accepted
-(Note: can be `Superseded` by a later ADR)
+(Training Note: can be `Superseded` by a later ADR)
 
 ## Context
 We are using an ORM (Hibernate/JPA). 
 
 Fetching a JPA @Entity from DB can be expensive, 
-as by default, JPA loads all its fields and
+as by default, JPA eager loads all its fields and
 all @ManyToOne/@OneToOne links, 
 which adds unnecessary columns, JOINs 
 and sometimes even additional SELECT queries.
@@ -29,15 +29,15 @@ This can be implemented in two ways:
 @Query("SELECT new com.example.dto.UserDto(u.id, u.name) FROM User u WHERE ...")
 List<UserDto> search(...);
 ```
-Such DTO must have a constructor taking all fields
-(eg a record, Lombok @Value, or handwritten).
+Such DTO must have a constructor taking all fields:
+a record, Lombok's @Value, or handwritten.
 
 2) Using [Spring Projections](https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html) for larger DTOs:
 ```java
 @Query("SELECT u.id as id, u.name as fullName FROM User u WHERE ...")
 List<UserDto> search(...);
 ```
-In this case, the DTO needs to have getters and setters (eg. @Data)
+Such a DTO needs to have getters and setters (eg. @Data)
 matching the column aliases ('id', and 'fullName' above).
 
 ## Consequences
