@@ -57,7 +57,8 @@
 
     <build>
         <plugins>
-            <plugin>
+            <!-- extract package diagram from code as .svg and .puml in /target/apidocs -->
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.0.1</version>
@@ -70,7 +71,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- extract package diagram from code as .svg and .puml in /target/apidocs -->
                     <doclet>nl.talsmasoftware.umldoclet.UMLDoclet</doclet>
                     <docletArtifact>
                         <groupId>nl.talsmasoftware</groupId>
@@ -81,7 +81,7 @@
                         <additionalOption>-createPumlFiles</additionalOption>
                     </additionalOptions>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 </project>
