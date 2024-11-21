@@ -29,6 +29,10 @@ public class CustomerController {
     customerApplicationService.register(dto);
   }
 
+//  public void method() {
+//    register(new CustomerDto()); // nu treci prin validari
+//  }
+
   @Operation(description = "Search Customer")
   @PostMapping("customers/search")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {

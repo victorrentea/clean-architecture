@@ -20,7 +20,7 @@ public class ArchitectureTest {
 
   private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
 
-  @Disabled("Fix this after I return from vacation")
+//  @Disabled("Fix this after I return from vacation")
   // NOTE: In case you don't understand this test, contact me:
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
   @Test
@@ -32,14 +32,7 @@ public class ArchitectureTest {
 //    rule.check(allProjectClasses);
     List<String> violations = rule.evaluate(allProjectClasses)
         .getFailureReport().getDetails();
-    assertThat(violations).hasSizeLessThan(100); // initial status of my code t0
-    assertThat(violations).hasSizeLessThan(90); //next spring
-    assertThat(violations).hasSizeLessThan(60); //next spring
-    assertThat(violations).hasSizeLessThan(50); //next spring
-    assertThat(violations).hasSizeLessThan(60); //next spring
-    assertThat(violations).hasSizeLessThan(20); //next spring
-    assertThat(violations).hasSizeLessThan(10); //next spring
-    assertThat(violations).hasSizeLessThan(0); //end, 🍾
+    assertThat(violations).hasSize(0); //end, 🍾
   }
 
   @Test

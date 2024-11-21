@@ -22,13 +22,7 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-
-    normalize(ldapUserDto);
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    User user = new User(ldapUserDto.getUn(),fullName, Optional.ofNullable(ldapUserDto.getWorkEmail()));
-
-    ///  linie --------
+    User user = fetchUser(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -38,7 +32,6 @@ public class NotificationService {
               "Sincerely, " + user.fullName())
         .build();
 
-
     user.contact().ifPresent(email.getCc()::add);
 
     emailSender.sendEmail(email);
@@ -46,20 +39,23 @@ public class NotificationService {
     customer.setCreatedByUsername(user.username());
   }
 
-  private LdapUserDto fetchUserFromLdap(String usernamePart) {
+
+  // ---
+
+  private User fetchUser(String usernamePart) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
       throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
     }
 
-    return dtoList.get(0);
-  }
+    LdapUserDto ldapUserDto = dtoList.get(0);
 
-  private void normalize(LdapUserDto ldapUserDto) {
     if (ldapUserDto.getUn().startsWith("s")) {
       ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
     }
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    return new User(ldapUserDto.getUn(),fullName, Optional.ofNullable(ldapUserDto.getWorkEmail()));
   }
 
 
