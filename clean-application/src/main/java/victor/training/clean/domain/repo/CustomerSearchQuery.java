@@ -41,9 +41,9 @@ public class CustomerSearchQuery {
          params.put("email", criteria.email());
       }
 
-      if (criteria.countryId() != null) {
+      if (criteria.country() != null) {
          jpqlParts.add("c.country.id = :countryId");
-         params.put("countryId", criteria.countryId());
+         params.put("countryId", criteria.country());
       }
 
       String whereCriteria = join(" AND ", jpqlParts);

@@ -73,11 +73,11 @@ public class SearchCustomerTest {
   }
   @Test
   void byCountryMatch() throws Exception {
-    assertThat(searchAPI(criteriaWith().countryId(countryId))).isNotEmpty();
+    assertThat(searchAPI(criteriaWith().country(countryId))).isNotEmpty();
   }
   @Test
   void byCountryNoMatch() throws Exception {
-    assertThat(searchAPI(criteriaWith().countryId(-1L))).isEmpty();
+    assertThat(searchAPI(criteriaWith().country(-1L))).isEmpty();
   }
 
   private List<CustomerSearchResult> searchAPI(CustomerSearchCriteriaBuilder searchCriteria) throws Exception {

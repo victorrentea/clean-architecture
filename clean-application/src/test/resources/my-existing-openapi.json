@@ -277,6 +277,60 @@
           }
         }
       }
+    },
+    "/customer-leaking/{id}": {
+      "get": {
+        "tags": [
+          "customer-leaking-controller"
+        ],
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -310,7 +364,7 @@
           "createdDate": {
             "type": "string"
           },
-          "gold": {
+          "goldMember": {
             "type": "boolean"
           },
           "goldMemberRemovalReason": {
@@ -346,7 +400,7 @@
           "email": {
             "type": "string"
           },
-          "countryId": {
+          "country": {
             "type": "integer",
             "format": "int64"
           }
@@ -366,6 +420,90 @@
       },
       "JsonPatch": {
         "type": "object"
+      },
+      "Country": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iso": {
+            "type": "string"
+          }
+        }
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "shippingAddress": {
+            "$ref": "#/components/schemas/ShippingAddress"
+          },
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "createdByUsername": {
+            "type": "string"
+          },
+          "goldMember": {
+            "type": "boolean"
+          },
+          "goldMemberRemovalReason": {
+            "type": "string"
+          },
+          "legalEntityCode": {
+            "type": "string"
+          },
+          "discountedVat": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "VALIDATED",
+              "ACTIVE",
+              "DELETED"
+            ]
+          },
+          "validatedBy": {
+            "type": "string"
+          },
+          "physicalPerson": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ShippingAddress": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "zip": {
+            "type": "string"
+          }
+        }
       }
     }
   }

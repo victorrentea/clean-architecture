@@ -49,7 +49,7 @@ public class CustomerApplicationService {
         .countryId(customer.getCountry().getId())
         .status(customer.getStatus())
         .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
+        .goldMember(customer.isGoldMember())
 
         .shippingAddressStreet(customer.getShippingAddress().street())
         .shippingAddressCity(customer.getShippingAddress().city())
@@ -113,13 +113,13 @@ public class CustomerApplicationService {
     customer.setEmail(dto.email());
     customer.setCountry(new Country().setId(dto.countryId()));
 
-    if (!customer.isGoldMember() && dto.gold()) {
+    if (!customer.isGoldMember() && dto.goldMember()) {
       // enable gold member status
       customer.setGoldMember(true);
       notificationService.sendGoldBenefitsEmail(customer, "1"); // userId from JWT token via SecuritContext
     }
 
-    if (customer.isGoldMember() && !dto.gold()) {
+    if (customer.isGoldMember() && !dto.goldMember()) {
       // remove gold member status
       customer.setGoldMember(false);
       customer.setGoldMemberRemovalReason(requireNonNull(dto.goldMemberRemovalReason()));

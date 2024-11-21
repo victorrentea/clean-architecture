@@ -23,7 +23,7 @@ public record CustomerDto(
 
     String createdDate, // GET only (assigned by backend)
 
-    Boolean gold, // GET & PUT
+    Boolean goldMember, // GET & PUT
     String goldMemberRemovalReason, // GET & PUT(if gold changed true->false)
     boolean canReturnOrders, // GET only (computed by backend)
 
@@ -48,7 +48,7 @@ public record CustomerDto(
         .countryId(customer.getCountry().getId())
         .createdDate(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
         .status(customer.getStatus())
-        .gold(customer.isGoldMember())
+        .goldMember(customer.isGoldMember())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode())
         .discountedVat(customer.isDiscountedVat())
