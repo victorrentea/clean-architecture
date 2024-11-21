@@ -30,14 +30,13 @@ public class NotificationService {
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
-        .body("Dear " + customer.getName() + ", Welcome to our clean app!\n" +
-              "Sincerely, " + fullName)
+        .body("Dear " + customer.getName() + ", welcome! Sincerely, " + fullName)
         .build();
 
 
-    // ⚠️ Unguarded nullable fields (causing NPE in other places) TODO return Optional<> from getter
+    // ⚠️ Unguarded nullable fields can cause NPE in other places TODO return Optional<> from getter
     if (ldapUserDto.getWorkEmail() != null) {
-      // ⚠️ Logic repeats in other places TODO push logic in my new class
+      // ⚠️ Logic repeated in other places TODO move logic to the new class
       email.getCc().add(fullName + " <" + ldapUserDto.getWorkEmail() + ">");
     }
 
@@ -46,7 +45,7 @@ public class NotificationService {
     // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
     normalize(ldapUserDto);
 
-    // ⚠️ 'un' = bad name TODO use my domain names ('username')
+    // ⚠️ 'un' = bad name TODO in my ubiquitous language 'un' means 'username'
     customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 
