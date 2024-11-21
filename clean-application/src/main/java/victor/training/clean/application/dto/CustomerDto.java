@@ -2,7 +2,11 @@ package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import lombok.NonNull;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Customer.Status;
 
@@ -13,7 +17,10 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
+    @NotNull
+    @Size(min = 5, max = 20)
     String name,
+    @Email
     String email,
     Long countryId,
 

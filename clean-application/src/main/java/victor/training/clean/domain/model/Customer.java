@@ -1,6 +1,8 @@
 package victor.training.clean.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,6 +43,7 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 5, max = 20)
   private String name;
   private String email;
 
@@ -56,6 +59,8 @@ public class Customer {
 
   @ManyToOne
   private Country country;
+  @JsonIgnore
+  private String cnp;
 
   private LocalDate createdDate;
   private String createdByUsername;
@@ -82,6 +87,13 @@ public class Customer {
   private Status status = Status.DRAFT;
   @Setter(AccessLevel.NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+//  protected Customer() {
+//  } // for hibernate only
+//
+//  public Customer(String name) {
+//    this.name = Objects.requireNonNull(name);
+//  }
 
   public void validate(String user) {
     if (status != Status.DRAFT) {
