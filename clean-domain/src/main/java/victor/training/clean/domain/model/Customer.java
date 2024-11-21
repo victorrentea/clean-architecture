@@ -1,6 +1,6 @@
 package victor.training.clean.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -59,7 +59,7 @@ public class Customer {
 
   @ManyToOne
   private Country country;
-  @JsonIgnore
+//  @JsonIgnore
   private String cnp;
 
   private LocalDate createdDate;
