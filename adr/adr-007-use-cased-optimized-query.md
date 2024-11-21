@@ -3,7 +3,7 @@ Search Entities using Use-Case-Optimized Queries (CQRS)
 
 ## Status
 Accepted
-(Training Note: can be `Superseded` by a later ADR)
+(Training Note: never deleted, but can be `Superseded` by a later ADR)
 
 ## Context
 We are using an ORM (Hibernate/JPA). 
