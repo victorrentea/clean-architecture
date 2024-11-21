@@ -10,4 +10,8 @@ public record User(
   public Optional<String> contact() {
     return email.map(e -> fullName + " <" + e + ">");
   }
+
+//  public String usernameForDisplay() { // infra mapping logic
+//    return username.startsWith("s") ? "system" : username;
+//  }
 }
