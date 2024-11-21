@@ -79,6 +79,7 @@ public class LargeIntegrationTest {
         assertThat(customer.getCountry().getId()).isEqualTo(country.getId());
         verify(emailSender).sendEmail(argThat(email -> email.getTo().equals(CUSTOMER_EMAIL)));
 
+//        CustomerDto.builder().canReturnOrders()
 
         CustomerDto responseDto = getCustomer(customer.getId());
 

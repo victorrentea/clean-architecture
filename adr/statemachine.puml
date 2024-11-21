@@ -1,0 +1,8 @@
+@startuml
+[*] --> DRAFT : Initial state
+
+DRAFT --> VALIDATED : Validate()
+VALIDATED --> ACTIVE : Activate()
+ACTIVE --> DELETED : Delete()
+VALIDATED --> DELETED : Delete()
+@enduml

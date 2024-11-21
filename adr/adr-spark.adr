@@ -1,0 +1,28 @@
+## Title
+Use Spark Batching for new jobs
+
+## Status
+Proposed
+
+## Context
+Due to complexity and lack of knowledge inside the project,
+developing and maintaining Spark Streaming applications proves to be a real challange.
+Batching can run fast enough to emulate a pseudo streaming
+OutOfMemoryError using Rocks DB, embedded state database for Spark Stateful Streaming.
+
+## Decision
+- New Spark functionalities be developed using Spark Batch.
+- Changes to the existing Spark Streaming applications will require a higher estimation x 3.
+
+## Consequences
+### Positives
+- Less complexity; developers are more familiar with Spark Batching
+- Easier reprocessing of late events
+- No Kafka involved 😎
+
+### Negatives
+- Added latency in data processing (~500 seconds)
+- Hard to manage state for Spark Batching applications
+
+## Compliance
+PR review
