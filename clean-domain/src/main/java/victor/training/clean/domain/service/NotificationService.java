@@ -17,7 +17,7 @@ public class NotificationService {
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     User user = userFetcher.fetchUser(usernamePart);
-
+//victor.training.clean.application.dto.CustomerDto
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
