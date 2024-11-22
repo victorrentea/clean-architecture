@@ -11,8 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-import victor.training.clean.application.dto.CustomerSearchCriteria.CustomerSearchCriteriaBuilder;
-import victor.training.clean.application.dto.CustomerSearchResult;
+import victor.training.clean.application.controller.dto.CustomerSearchCriteria.CustomerSearchCriteriaBuilder;
+import victor.training.clean.application.controller.dto.CustomerSearchResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CountryRepo;
@@ -22,7 +22,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static victor.training.clean.application.dto.CustomerSearchCriteria.builder;
+import static victor.training.clean.application.controller.dto.CustomerSearchCriteria.builder;
 
 @SpringBootTest
 @Transactional

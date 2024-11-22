@@ -9,10 +9,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.application.dto.CustomerSearchCriteria;
-import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.application.service.CustomerApplicationService;
+import victor.training.clean.application.controller.dto.CustomerDto;
+import victor.training.clean.application.controller.dto.CustomerSearchCriteria;
+import victor.training.clean.application.controller.dto.CustomerSearchResult;
+import victor.training.clean.application.service.CustomerFacade;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
@@ -21,12 +21,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class CustomerController {
-  private final CustomerApplicationService customerApplicationService;
+  private final CustomerFacade customerFacade;
   private final ObjectMapper jacksonObjectMapper;
 
   @PostMapping("customers")
   public void register(@RequestBody @Validated CustomerDto dto) {
-    customerApplicationService.register(dto);
+    customerFacade.register(dto);
   }
 
 //  public void method() {
@@ -36,12 +36,12 @@ public class CustomerController {
   @Operation(description = "Search Customer")
   @PostMapping("customers/search")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-    return customerApplicationService.search(searchCriteria);
+    return customerFacade.search(searchCriteria);
   }
 
   @GetMapping("customers/{id}")
   public CustomerDto findById(@PathVariable long id) {
-    return customerApplicationService.findById(id);
+    return customerFacade.findById(id);
   }
 
   //<editor-fold desc="GET returning ResponseEntity for 404 👎">
@@ -58,7 +58,7 @@ public class CustomerController {
 
   @PutMapping("customers/{id}")
   public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
-    customerApplicationService.update(id, dto);
+    customerFacade.update(id, dto);
   }
 
   //<editor-fold desc="PUT returning ResponseEntity for 404 👎">

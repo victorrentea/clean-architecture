@@ -1,7 +1,6 @@
-package victor.training.clean.application.dto;
+package victor.training.clean.application.controller.dto;
 
 import lombok.Builder;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Io;
 
 import java.util.Optional;
 

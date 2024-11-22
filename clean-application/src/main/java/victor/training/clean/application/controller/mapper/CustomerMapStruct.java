@@ -1,9 +1,9 @@
-package victor.training.clean.application.mapper;
+package victor.training.clean.application.controller.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import victor.training.clean.application.dto.CustomerDto;
+import victor.training.clean.application.controller.dto.CustomerDto;
 import victor.training.clean.domain.model.Customer;
 
 import java.util.Optional;

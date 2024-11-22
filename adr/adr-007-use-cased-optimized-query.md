@@ -49,6 +49,20 @@ Negative:
 - Coupling - this repository method depends on DTOs => can't be in `domain`.
 We will place it in another Spring Data Repo interface next to controller.
 - Risk - domain logic in DTO, if applying logic after SELECT.
+
+
+a) Logica in DB query: 
+iau din DB direct AlarmDTO de pleaca JSON cu un SQL!!/JPQL horror☠️
+CASE
+b) Logica in Java: adica iau din DB AlarmDBDto
+- si apoi mapez cu un MapStruct horror☠️ la AlarmDto de trimis JSON
+- adaug metode in AlarmDBDto ca sa iasa JSON frumos 
+
+
+
+
+
+
 - Risk - updating DB using DTOs, bypassing the integrity protection
 potentially enforced by the Domain Model.
 

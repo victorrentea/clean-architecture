@@ -1,4 +1,4 @@
-package victor.training.clean.application.dto;
+package victor.training.clean.application.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.AssertTrue;
