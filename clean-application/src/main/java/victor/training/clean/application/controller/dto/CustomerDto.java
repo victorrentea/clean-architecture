@@ -6,8 +6,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Customer.Status;
+
+import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -37,6 +40,16 @@ public record CustomerDto(
     String legalEntityCode,
     Boolean discountedVat // GET only (fetched by backend)
 ) {
+
+  public Customer toEntity() {
+    Customer customer = new Customer();
+    customer.setEmail(email());
+    customer.setName(name());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(countryId()));
+    customer.setLegalEntityCode(legalEntityCode());
+    return customer;
+  }
 
   @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
   @JsonIgnore

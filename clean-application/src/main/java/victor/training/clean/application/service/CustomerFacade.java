@@ -9,12 +9,13 @@ import victor.training.clean.application.controller.dto.CustomerSearchResult;
 import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.domain.service.IAnafClient;
 import victor.training.clean.domain.service.RegisterCustomerService;
+import victor.training.clean.domain.service.UserFetcher;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -64,18 +65,12 @@ public class CustomerFacade {
 
   @Transactional
   public void register(CustomerDto dto) {
-    // mapare DTO -> Entity
-    Customer customer = new Customer();
-    customer.setEmail(dto.email());
-    customer.setName(dto.name());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
-
+    Customer customer = dto.toEntity();
     registerCustomerService.register(customer);
-
-    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+    User user = userFetcher.fetchUser("FULL");
+    notificationService.sendWelcomeEmail(customer, user); // userId from JWT token via SecuritContext
   }
+  private final UserFetcher userFetcher;
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands

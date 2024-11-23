@@ -12,11 +12,9 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
-  private final UserFetcher userFetcher;
 
   // Core application logic, my Zen garden 🧘☯☮️
-  public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = userFetcher.fetchUser(usernamePart);
+  public void sendWelcomeEmail(Customer customer, User user) {
 //victor.training.clean.application.dto.CustomerDto
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
