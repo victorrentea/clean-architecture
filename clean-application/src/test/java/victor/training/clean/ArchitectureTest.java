@@ -29,17 +29,12 @@ public class ArchitectureTest {
         .resideInAPackage("..domain..")
         .should().dependOnClassesThat()
         .resideInAPackage("..infra..");
-//    rule.check(allProjectClasses);
-    List<String> violations = rule.evaluate(allProjectClasses)
-        .getFailureReport().getDetails();
-    assertThat(violations).hasSizeLessThan(100); // initial status of my code t0
-    assertThat(violations).hasSizeLessThan(90); //next spring
-    assertThat(violations).hasSizeLessThan(60); //next spring
-    assertThat(violations).hasSizeLessThan(50); //next spring
-    assertThat(violations).hasSizeLessThan(60); //next spring
-    assertThat(violations).hasSizeLessThan(20); //next spring
-    assertThat(violations).hasSizeLessThan(10); //next spring
-    assertThat(violations).hasSizeLessThan(0); //end, 🍾
+    rule.check(allProjectClasses);
+
+    assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
+        .hasSizeLessThan(100) //  t0 initial
+        .hasSizeLessThan(50) // 3 months later
+        .hasSize(0); // end 🍾
   }
 
   @Test

@@ -37,7 +37,8 @@ public class NotificationService {
     // ⚠️ Unguarded nullable fields can cause NPE in other places TODO return Optional<> from getter
     if (ldapUserDto.getWorkEmail() != null) {
       // ⚠️ Logic repeated in other places TODO move logic to the new class
-      email.getCc().add(fullName + " <" + ldapUserDto.getWorkEmail() + ">");
+      String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
+      email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
@@ -80,8 +81,9 @@ public class NotificationService {
               "Yours sincerely, " + userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase())
         .build();
 
-    email.getCc().add(userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase()
-                      + " <" + userLdapDto.getWorkEmail() + ">");
+    String contact = userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase()
+               + " <" + userLdapDto.getWorkEmail().toLowerCase() + ">";
+    email.getCc().add(contact);
 
     emailSender.sendEmail(email);
   }
