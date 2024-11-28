@@ -5,13 +5,13 @@
     <groupId>victor.training</groupId>
     <artifactId>clean-architecture</artifactId>
     <version>1.0</version>
-    <packaging>pom</packaging>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.1.5</version>
     </parent>
 
+    <packaging>pom</packaging>
     <modules>
         <module>clean-domain</module>
         <module>clean-application</module>

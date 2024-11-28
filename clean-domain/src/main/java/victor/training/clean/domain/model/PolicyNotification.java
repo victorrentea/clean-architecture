@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import victor.training.clean.application.dto.CustomerDto;
 
 import java.time.LocalDateTime;
 
