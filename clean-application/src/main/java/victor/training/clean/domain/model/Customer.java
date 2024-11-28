@@ -1,15 +1,19 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Optional;
+
+// in computer science, there are only two problems:
+// 1) Naming things
+// 2) Cache invalidation
+// the rule of 3: extr stuff when it repeats 3 times
+
+// Favor composition over inheritance. ie. dont use 'extends'🤨
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -31,9 +35,14 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+
+  @Embedded // ORM did not change the DB schema; there is no alter table needed
+  // LIKE: - 2 fields
+  // LIKE: more semantics
+  private ShippingAddress shippingAddress;
 
   @ManyToOne
   private Country country;
