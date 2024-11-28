@@ -1,4 +1,6 @@
 @startuml
+!theme sketchy-outline
+
 class Customer
 
 PolicyNotification "*" -> InsurancePolicy
