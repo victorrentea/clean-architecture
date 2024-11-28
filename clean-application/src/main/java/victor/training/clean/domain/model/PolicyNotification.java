@@ -24,7 +24,6 @@ public class PolicyNotification {
 
   private String title;
 
-  public void dontdothis(CustomerDto dto) { // violation 5
-
-  }
+//  public void dontdothis(CustomerDto dto) { // violation 5
+//  }
 }

@@ -10,9 +10,7 @@ import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.repo.CustomerSearchQuery;
 import victor.training.clean.domain.service.RegisterCustomerService;
-import victor.training.clean.domain.service.FiscalDetailsProvider;
 import victor.training.clean.domain.service.NotificationService;
 
 import java.time.format.DateTimeFormatter;
@@ -28,12 +26,11 @@ public class CustomerApplicationService {
   private final NotificationService notificationService;
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
-  private final FiscalDetailsProvider fiscalDetailsProvider;
   private final RegisterCustomerService registerCustomerService;
 
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
-  }
+  } // text book example of Middle Man code smell
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
@@ -61,7 +58,7 @@ public class CustomerApplicationService {
         .build();
   }
 
-  // higher level
+  // higher level orchestration
   @Transactional
   public void register(CustomerDto dto) {
     Customer customer = dto.asCustomer();

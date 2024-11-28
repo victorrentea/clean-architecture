@@ -7,5 +7,5 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @RestController
 @RequiredArgsConstructor
 public class ViolatingA {
-  private final CustomerRepo customerRepo;
+//  private final CustomerRepo customerRepo;
 }
