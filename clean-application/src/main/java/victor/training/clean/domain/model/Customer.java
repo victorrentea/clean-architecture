@@ -1,6 +1,8 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,8 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static lombok.AccessLevel.NONE;
-import static victor.training.clean.domain.model.Customer.Status.ACTIVE;
-import static victor.training.clean.domain.model.Customer.Status.VALIDATED;
+import static victor.training.clean.domain.model.Customer.Status.*;
 
 // in computer science, there are only two problems:
 // 1) Naming things
@@ -36,6 +37,7 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 3, max = 100)
   private String name;
   private String email;
 
@@ -80,6 +82,14 @@ public class Customer {
   private Status status = Status.DRAFT;
   @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  @AssertTrue // are checked at .save() time by hibernate or by @Validated
+  public boolean hasValidatedByInCaseOfValidated() {
+    if (status == DRAFT) {
+      return true;
+    }
+    return validatedBy != null;
+  }
 
   public void validate(String currentUser) {
     if (status != Status.DRAFT) {
