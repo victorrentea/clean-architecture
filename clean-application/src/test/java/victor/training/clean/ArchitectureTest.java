@@ -14,8 +14,7 @@ import java.util.List;
 
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArchitectureTest {
@@ -81,7 +80,7 @@ public class ArchitectureTest {
         .should().dependOnClassesThat().resideInAPackage("..service..")
         .check(allProjectClasses);
   }
-  //D) ArchUnit rule: no @Entity (jpa) should be annotated with @Data (lombok)
+  //D) ArchUnit rule: no @Entity (jpa) should implement hashCode, eg via @Data (lombok)
   @Test
   public void noEntityShouldBeAnnotatedWithData() {
     noClasses().that().areAnnotatedWith("jakarta.persistence.Entity")
@@ -90,12 +89,12 @@ public class ArchitectureTest {
   }
 
   //D) ArchUnit rule: no @Entity (jpa) should not override hashCode
-//  @Test
-//  public void noEntityShouldOverrideHashCode() {
-//    noClasses().that().areAnnotatedWith("jakarta.persistence.Entity")
-//        .should().haveMethod("hashCode")
-//        .check(allProjectClasses);
-//  }
+  @Test
+  public void noEntityShouldOverrideHashCode() {
+    noMethods().that().areDeclaredInClassesThat().areAnnotatedWith("jakarta.persistence.Entity")
+        .should().haveName("hashCode")
+        .check(allProjectClasses);
+  }
 
   //E) ArchUnit rule: domain should not use DTOs
   @Test
