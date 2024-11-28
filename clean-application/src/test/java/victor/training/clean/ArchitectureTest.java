@@ -20,9 +20,7 @@ public class ArchitectureTest {
 
   private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
 
-  @Disabled("Fix this after I return from vacation")
-  // NOTE: In case you don't understand this test, contact me:
-  // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
+  // use the CODEOWNERS file to request a PR review to the arch/lead on any change of this file
   @Test
   public void domain_independent_of_infrastructure() {
     ClassesShouldConjunction rule = noClasses().that()
@@ -32,8 +30,6 @@ public class ArchitectureTest {
     rule.check(allProjectClasses);
 
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
-        .hasSizeLessThan(100) //  t0 initial
-        .hasSizeLessThan(50) // 3 months later
         .hasSize(0); // end 🍾
   }
 
