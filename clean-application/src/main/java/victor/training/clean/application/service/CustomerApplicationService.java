@@ -38,7 +38,7 @@ public class CustomerApplicationService {
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
+    boolean canReturnOrders = customer.canReturnOrders();
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
