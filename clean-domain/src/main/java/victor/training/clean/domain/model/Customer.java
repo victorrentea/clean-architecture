@@ -109,6 +109,11 @@ public class Customer {
     }
     status = Status.DELETED;
   }
+
+  // not the place. presentation. out
+  public String toCSVForExportToBI() {
+    return id + "," + name + "," + email + "," + country.getId() + "," + status + "," + createdDate + "," + goldMember;
+  }
 }
 
 //region Code in the project might [not] follow the rule
