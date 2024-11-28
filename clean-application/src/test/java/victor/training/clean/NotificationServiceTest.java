@@ -59,7 +59,7 @@ class NotificationServiceTest {
     assertThat(email.getBody())
         .contains("Dear Customer Name")
         .contains("John DOE");
-    assertThat(email.getCc()).containsExactly("John DOE <jdoe@cleanApp.com>");
+    assertThat(email.getCc()).containsExactly("John DOE <jdoe@cleanapp.com>");
     assertThat(customer.getCreatedByUsername()).isEqualTo("jdoe");
   }
   @Test
@@ -94,7 +94,7 @@ class NotificationServiceTest {
     assertThat(email.getSubject()).isEqualTo("Welcome to our Gold membership!");
     assertThat(email.getBody()).isEqualTo("You are allowed to return orders\n" +
                                           "Yours sincerely, John DOE");
-    assertThat(email.getCc()).containsExactly("John DOE <jdoe@cleanApp.com>");
+    assertThat(email.getCc()).containsExactly("John DOE <jdoe@cleanapp.com>");
   }
   @Test
   @Disabled("BUG: throws NPE. Why !?")
