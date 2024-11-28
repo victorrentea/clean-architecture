@@ -12,12 +12,13 @@ import java.util.Optional;
 public interface CustomerMapStruct {
   @Mapping(target = "createdDate", source = "createdDate", dateFormat = "yyyy-MM-dd")
   @Mapping(target = "countryId", source = "country.id")
-  // needed if Customer#getLegalEntity returns Optional<>
-  // @Mapping(target = "legalEntityCode", source = "legalEntityCode", qualifiedByName = "unwrap") // OMG!!
+
+  // Customer#getLegalEntity() returns Optional<>
+  @Mapping(target = "legalEntityCode", source = "legalEntityCode", qualifiedByName = "unwrapOpt")
   CustomerDto toDto(Customer customer);
 
-  @Named("unwrap")
-  default <T> T unwrap(Optional<T> optional) {// OMG
+  @Named("unwrapOpt")
+  default <T> T unwrapOpt(Optional<T> optional) {// OMG
     return optional.orElse(null);
   }
 }

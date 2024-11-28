@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -41,6 +42,10 @@ public class Customer {
 
   private String legalEntityCode;
   private boolean discountedVat;
+
+  public Optional<String> getLegalEntityCode() {
+    return Optional.ofNullable(legalEntityCode);
+  }
 
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED

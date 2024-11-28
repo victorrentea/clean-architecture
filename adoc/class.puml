@@ -1,0 +1,7 @@
+@startuml
+class Customer
+
+PolicyNotification "*" -> InsurancePolicy
+Customer --> "1" Country
+InsurancePolicy --> Customer
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+[application] --> [domain]
+[domain] <-- [infra]
+@enduml

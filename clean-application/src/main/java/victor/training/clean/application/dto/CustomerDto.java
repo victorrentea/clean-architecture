@@ -36,7 +36,7 @@ public record CustomerDto(
   @JsonIgnore
   public boolean isShippingAddressValid() { // multi-field validation with javax annotations
     return shippingAddressCity != null && shippingAddressStreet != null && shippingAddressZip != null
-         || shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;
+           || shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;
     //     or write this if in the first layer of logic 💖
   }
 
@@ -50,7 +50,7 @@ public record CustomerDto(
         .status(customer.getStatus())
         .gold(customer.isGoldMember())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode())
+        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
         .discountedVat(customer.isDiscountedVat())
         .shippingAddressStreet(customer.getShippingAddressStreet())
         .shippingAddressCity(customer.getShippingAddressCity())
