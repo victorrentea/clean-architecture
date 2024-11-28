@@ -70,15 +70,15 @@ public class CustomerController {
 //   }
   //</editor-fold>
 
-  @PatchMapping(path = "customers/{id}", consumes = "application/json-patch+json")
-  public void patch(@PathVariable long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
-    Customer oldCustomer = customerRepo.findById(id).orElseThrow();
-    JsonNode oldJson = jacksonObjectMapper.convertValue(oldCustomer, JsonNode.class);
-    JsonNode patchedJson = patch.apply(oldJson);
-    Customer patchedCustomer = jacksonObjectMapper.treeToValue(patchedJson, Customer.class);
-    customerRepo.save(patchedCustomer);
-  }
-  private final CustomerRepo customerRepo;
+//  @PatchMapping(path = "customers/{id}", consumes = "application/json-patch+json")
+//  public void patch(@PathVariable long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
+//    Customer oldCustomer = customerRepo.findById(id).orElseThrow();
+//    JsonNode oldJson = jacksonObjectMapper.convertValue(oldCustomer, JsonNode.class);
+//    JsonNode patchedJson = patch.apply(oldJson);
+//    Customer patchedCustomer = jacksonObjectMapper.treeToValue(patchedJson, Customer.class);
+//    customerRepo.save(patchedCustomer);
+//  }
+//  private final CustomerRepo customerRepo;
 
 }
 
