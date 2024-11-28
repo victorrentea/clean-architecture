@@ -10,7 +10,8 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+// CustomerRegistrationService = thing
+public class RegisterCustomerService { // = action, stateless piece of behavior
   private final CustomerRepo customerRepo;
   private final FiscalDetailsProvider fiscalDetailsProvider;
 
