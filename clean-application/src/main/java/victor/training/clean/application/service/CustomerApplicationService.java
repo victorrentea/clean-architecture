@@ -3,6 +3,10 @@ package victor.training.clean.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
@@ -21,6 +25,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
+@RestController
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
@@ -28,9 +33,9 @@ public class CustomerApplicationService {
   private final InsuranceService insuranceService;
   private final RegisterCustomerService registerCustomerService;
 
-  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-    return customerSearchQuery.search(searchCriteria);
-  } // text book example of Middle Man code smell
+//  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
+//    return customerSearchQuery.search(searchCriteria);
+//  } // text book example of Middle Man code smell
 
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
@@ -59,8 +64,9 @@ public class CustomerApplicationService {
   }
 
   // higher level orchestration
+  @PostMapping("customers")
   @Transactional
-  public void register(CustomerDto dto) {
+  public void register(@RequestBody @Validated CustomerDto dto) {
     Customer customer = dto.asCustomer();
     registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext

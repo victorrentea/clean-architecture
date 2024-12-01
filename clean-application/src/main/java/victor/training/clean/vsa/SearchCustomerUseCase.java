@@ -4,8 +4,10 @@ import com.google.common.annotations.VisibleForTesting;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,20 +17,20 @@ import java.util.Map;
 import static java.lang.String.join;
 
 @RequiredArgsConstructor
-//@RestController
+@RestController
 public class SearchCustomerUseCase {
   private final EntityManager entityManager;
+//  private final JdbcTemplate hellYes;
 
-  @VisibleForTesting // only @Tests are allowed to use this
-  record CustomerSearchCriteria(
+  @VisibleForTesting // package-protected only @Tests are allowed to use this
+  record CustomerSearchCriteria( // "request"
       String name,
       String email,
-      Long countryId
-  ) {
+      Long countryId) {
   }
 
   @VisibleForTesting
-  record CustomerSearchResult(
+  record CustomerSearchResult( // "response"
       long id,
       String name
       // TODO also return 'email' => only this file is impacted

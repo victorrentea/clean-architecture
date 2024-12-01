@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.vsa.SearchCustomerUseCase.CustomerSearchCriteria;
 
 import java.time.format.DateTimeFormatter;
 
@@ -28,6 +29,8 @@ public class GetCustomerByIdUseCase {
   @GetMapping("customer/{id}/vsa")
   public GetCustomerByIdResponse findById(@PathVariable long id) {
       Customer customer = customerRepo.findById(id).orElseThrow();
+//    CustomerSearchCriteria c = new CustomerSearchCriteria(null, null, null);
+
       return GetCustomerByIdResponse.builder()
               .id(customer.getId())
               .name(customer.getName())

@@ -9,6 +9,7 @@ import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.service.CustomerApplicationService;
+import victor.training.clean.application.service.CustomerSearchQuery;
 
 import java.util.List;
 
@@ -17,16 +18,21 @@ import java.util.List;
 public class CustomerController {
   private final CustomerApplicationService customerApplicationService;
   private final ObjectMapper jacksonObjectMapper;
+  private final CustomerSearchQuery customerSearchQuery;
 
-  @PostMapping("customers")
-  public void register(@RequestBody @Validated CustomerDto dto) {
-    customerApplicationService.register(dto);
-  }
+//  @PostMapping("customers")
+//  public void register(@RequestBody @Validated CustomerDto dto) {
+//    customerApplicationService.register(dto); // inline this here
+
+  //  Customer customer = dto.asCustomer();
+  //  registerCustomerService.register(customer);
+  //  notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+//  }
 
   @Operation(description = "Search Customer")
   @PostMapping("customers/search")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-    return customerApplicationService.search(searchCriteria);
+    return customerSearchQuery.search(searchCriteria);
   }
 
   @GetMapping("customers/{id}")
@@ -45,6 +51,9 @@ public class CustomerController {
 //      }
 //   }
   //</editor-fold>
+
+//  @RequestMapping(method = RequestMethod.HEAD)
+//  @HeadMapping
 
   @PutMapping("customers/{id}")
   public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
