@@ -1,16 +1,9 @@
 @startuml
 !theme sketchy-outline
 
-package domain {
-    class Person {
-    }
-    class Customer extends Person {
-      name
-    }
-    
-    Customer -> "1" Country : lives in
-    Customer -> "1" Country : works in
-    PolicyNotification "N" ---> "1" InsurancePolicy
-    InsurancePolicy --> Customer
-}
+class Customer
+
+PolicyNotification "*" -> InsurancePolicy
+Customer --> "1" Country
+InsurancePolicy --> Customer
 @enduml

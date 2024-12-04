@@ -5,8 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -19,9 +17,7 @@ import java.util.Optional;
 //endregion
 
 // This class is part of your Domain Model, the backbone of your core complexity.
-//@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
-@Getter
-@Setter
+@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
 @Entity // ORM/JPA (2)
 public class Customer {
   @Id
