@@ -1,6 +1,7 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -54,14 +55,6 @@ public class Customer {
 
   private String legalEntityCode;
   private boolean discountedVat;
-
-  public boolean canReturnOrders() { // business rules
-    return goldMember || isPhysicalPerson();
-  }
-
-  public boolean isPhysicalPerson() { // explaining better the data
-    return legalEntityCode == null;
-  }
 
   public Optional<String> getLegalEntityCode() {
     return Optional.ofNullable(legalEntityCode);
