@@ -8,7 +8,6 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapApiAdapter;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
@@ -19,10 +18,11 @@ import java.util.Optional;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApiAdapter ldapApiAdapter;
+  private final LdapApi ldapApi;
 
+  // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = ldapApiAdapter.fetchUser(usernamePart);
+    User user = fetchUser(usernamePart);
     // ------
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -38,8 +38,26 @@ public class NotificationService {
     customer.setCreatedByUsername(user.username());
   }
 
+  private User fetchUser(String usernamePart) {
+    // fetch
+    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
+    if (dtoList.size() != 1) {
+      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
+    }
+    LdapUserDto ldapUserDto = dtoList.get(0);
+    // map
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    if (ldapUserDto.getUn().startsWith("s")) {
+      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
+    }
+    return new User(
+        ldapUserDto.getUn(),
+        fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail()));
+  }
+
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    User user = ldapApiAdapter.fetchUser(usernamePart);
+    User user = fetchUser(usernamePart);
 
     boolean canReturnOrders = customer.canReturnOrders();
 
