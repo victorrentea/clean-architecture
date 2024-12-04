@@ -1,4 +1,4 @@
-package victor.training.clean.application.service;
+package victor.training.clean.domain.repo;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -6,6 +6,7 @@ import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 
 import jakarta.persistence.EntityManager;
+import victor.training.clean.domain.service.NotificationService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import static java.lang.String.join;
 @RequiredArgsConstructor
 public class CustomerSearchQuery {
    private final EntityManager entityManager;
-//   private final NotificationService notificationService;// violation C
+   private final NotificationService notificationService;// violation C
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
