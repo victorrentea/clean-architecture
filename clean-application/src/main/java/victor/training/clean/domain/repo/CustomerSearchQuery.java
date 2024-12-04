@@ -6,15 +6,13 @@ import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 
 import jakarta.persistence.EntityManager;
-import victor.training.clean.domain.service.NotificationService;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.join;
-// violation B
+
 // "Use-Case Optimized Query" pattern: SELECTing directly into DTOs sent out as JSONs.
 // ⚠️ DON'T change data in DB!
 // ⚠️ DON'T write heavy logic on the SELECTed DTOs!
@@ -23,7 +21,6 @@ import static java.lang.String.join;
 @RequiredArgsConstructor
 public class CustomerSearchQuery {
    private final EntityManager entityManager;
-   private final NotificationService notificationService;// violation C
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html

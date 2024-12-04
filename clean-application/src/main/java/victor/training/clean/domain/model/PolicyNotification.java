@@ -6,12 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import victor.training.clean.application.dto.CustomerDto;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Data // violation 4
+@Data
 public class PolicyNotification {
   @Id
   @GeneratedValue
@@ -23,8 +21,4 @@ public class PolicyNotification {
   private LocalDateTime time = LocalDateTime.now();
 
   private String title;
-
-  public void dontdothis(CustomerDto dto) { // violation 5
-
-  }
 }
