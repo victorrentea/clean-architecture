@@ -52,10 +52,9 @@ public record CustomerDto(
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode().orElse(null))
         .discountedVat(customer.isDiscountedVat())
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
+        .shippingAddressStreet(customer.getShippingAddressStreet())
+        .shippingAddressCity(customer.getShippingAddressCity())
+        .shippingAddressZip(customer.getShippingAddressZip())
         //.canReturnOrders(TODO)
         .build();
   }
