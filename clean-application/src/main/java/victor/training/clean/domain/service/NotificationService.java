@@ -7,17 +7,22 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.UserFetcher;
+import victor.training.clean.infra.LdapApi;
+import victor.training.clean.infra.LdapApiAdapter;
+import victor.training.clean.infra.LdapUserDto;
+
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final UserFetcher userFetcher;
+  private final LdapApiAdapter ldapApiAdapter;
 
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = userFetcher.fetchUser(usernamePart);
+    User user = ldapApiAdapter.fetchUser(usernamePart);
     // ------
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -34,7 +39,7 @@ public class NotificationService {
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    User user = userFetcher.fetchUser(usernamePart);
+    User user = ldapApiAdapter.fetchUser(usernamePart);
 
     boolean canReturnOrders = customer.canReturnOrders();
 
