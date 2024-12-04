@@ -32,14 +32,7 @@ public class ArchitectureTest {
     rule.check(allProjectClasses);
 
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
-//        .hasSize(100); // initial stage
-        // 101 => why?
-        // 95 => change test to 95
-//        .hasSize(50); // 1 month stage
-//        .hasSize(20); // +1 month
-//        .hasSize(30); // +1 month bad sprint
-//        .hasSize(10); // +1 month
-        .hasSize(0); // DONE
+        .hasSize(0); // end 🍾
   }
 
   @Test
