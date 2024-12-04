@@ -16,6 +16,7 @@ import victor.training.clean.application.service.CustomerApplicationService;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -35,9 +36,35 @@ public class CustomerController {
     return customerApplicationService.search(searchCriteria);
   }
 
+  private final CustomerRepo customerRepo;
+
   @GetMapping("customers/{id}")
   public CustomerDto findById(@PathVariable long id) {
-    return customerApplicationService.findById(id);
+//    return customerApplicationService.findById(id);
+
+    Customer customer = customerRepo.findById(id).orElseThrow();
+
+    boolean canReturnOrders = customer.canReturnOrders();
+
+    // boilerplate mapping code TODO move somewhere else
+    return CustomerDto.builder()
+        .id(customer.getId())
+        .name(customer.getName())
+        .email(customer.getEmail())
+        .countryId(customer.getCountry().getId())
+        .status(customer.getStatus())
+        .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+        .gold(customer.isGoldMember())
+
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+
+        .canReturnOrders(canReturnOrders)
+        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
+        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
+        .discountedVat(customer.isDiscountedVat())
+        .build();
   }
 
   //<editor-fold desc="GET returning ResponseEntity for 404 👎">

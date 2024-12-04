@@ -12,7 +12,7 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
-  private final IUserFetcher userFetcher;
+  private final UserFetcher userFetcher;
 
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     User user = userFetcher.fetchUser(usernamePart);

@@ -11,7 +11,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserFetcher implements victor.training.clean.domain.service.IUserFetcher {
+public class LdapUserFetcher implements victor.training.clean.domain.service.UserFetcher {
   private final LdapApi ldapApi;
 
   @Override

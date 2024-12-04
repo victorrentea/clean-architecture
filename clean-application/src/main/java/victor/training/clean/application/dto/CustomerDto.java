@@ -18,8 +18,6 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
-    @NotBlank
-        @Size(min =1)
     String name,
     String email,
     Long countryId,
