@@ -1,7 +1,6 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +25,14 @@ public class Customer {
   private Long id;
   private String name;
   private String email;
+
+  public boolean canReturnOrders() {
+    return goldMember || isPhysicalPerson();
+  }
+
+  private boolean isPhysicalPerson() {
+    return legalEntityCode == null;
+  }
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
 //  private String shippingAddressCity;
