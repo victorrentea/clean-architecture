@@ -1,6 +1,5 @@
 package victor.training.clean;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,13 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.service.EmailSender;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.infra.EmailSender;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -33,7 +31,7 @@ class NotificationServiceTest {
   ApiClient apiClient;
 
   @MockBean
-  EmailSender emailSender;
+  EmailSender EmailSender;
 
   ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
 
@@ -51,7 +49,7 @@ class NotificationServiceTest {
   void sendWelcomeEmail_baseFlow() {
     notificationService.sendWelcomeEmail(customer,"full");
 
-    verify(emailSender).sendEmail(emailCaptor.capture());
+    verify(EmailSender).sendEmail(emailCaptor.capture());
     Email email = emailCaptor.getValue();
     assertThat(email.getFrom()).isEqualTo("noreply@cleanapp.com");
     assertThat(email.getTo()).isEqualTo("jdoe@example.com");
@@ -66,13 +64,13 @@ class NotificationServiceTest {
   void sendWelcomeEmail_noWorkEmail() {
     notificationService.sendWelcomeEmail(customer,"noemail");
 
-    verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    verify(EmailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
   }
   @Test
   void sendWelcomeEmail_noEmail() {
     notificationService.sendWelcomeEmail(customer,"externalEmail");
 
-    verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    verify(EmailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
   }
   @Test
   void sendWelcomeEmail_systemUser() {
@@ -87,7 +85,7 @@ class NotificationServiceTest {
     customer.setGoldMember(true);
     notificationService.sendGoldBenefitsEmail(customer,"full");
 
-    verify(emailSender).sendEmail(emailCaptor.capture());
+    verify(EmailSender).sendEmail(emailCaptor.capture());
     Email email = emailCaptor.getValue();
     assertThat(email.getFrom()).isEqualTo("noreply@cleanapp.com");
     assertThat(email.getTo()).isEqualTo("jdoe@example.com");
@@ -101,7 +99,7 @@ class NotificationServiceTest {
   void sendGoldBenefits_missingEmail() {
     notificationService.sendGoldBenefitsEmail(customer,"noemail");
 
-    verify(emailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    verify(EmailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
   }
 
 }
