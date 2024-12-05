@@ -44,6 +44,7 @@ public class CustomerApplicationService {
   }
 
   @Transactional
+//  public void register(RegisterCustomerCommand command) {
   public void register(CustomerDto dto) {
     Customer customer = dto.toEntity();
     registerCustomerService.register(customer);

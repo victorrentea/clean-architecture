@@ -10,6 +10,8 @@ import victor.training.clean.domain.repo.CustomerRepo;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+// RegisterCommand
+// ? does it contain state eg parameters or just stateless logic (DI bean)?
 public class RegisterCustomerService { // verb? YES. it's not a thing, it's an action
   private final CustomerRepo customerRepo;
   private final AnafClient anafClient;
@@ -37,6 +39,8 @@ public class RegisterCustomerService { // verb? YES. it's not a thing, it's an a
     log.info("More Business Logic (imagine)");
     customerRepo.save(customer);
   }
+
+
 
   private String normalize(String s) {
     return s.toLowerCase().replace("\\s+", "");
