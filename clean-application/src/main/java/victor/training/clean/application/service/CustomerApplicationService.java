@@ -7,15 +7,14 @@ import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.ApplicationService;
-import victor.training.clean.domain.model.AnafResult;
+import victor.training.clean.application.mapper.CustomerMapStruct;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.service.AnafClient;
+import victor.training.clean.domain.service.RegisterCustomerService;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.infra.AnafClient;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -29,6 +28,8 @@ public class CustomerApplicationService {
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
+  private final CustomerMapStruct customerMapStruct;
+  private final RegisterCustomerService registerCustomerService;
 
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
@@ -37,73 +38,18 @@ public class CustomerApplicationService {
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
-    // Bit of domain logic on the state of one Entity?  What TODO?
-    // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.canReturnOrders();
-
-    // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .status(customer.getStatus())
-        .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-        .canReturnOrders(canReturnOrders)
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+//    customerMapStruct.toDto(customer);
+//    return CustomerMapper/Transformer/Converter.toDto(customer);
+    return CustomerDto.fromEntity(customer);
   }
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = new Customer();
-    customer.setEmail(dto.email());
-    customer.setName(dto.name());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
-
-    // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
-
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode().isPresent()) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode().get())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode().get());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
+    Customer customer = dto.toEntity();
+    registerCustomerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
-  private String normalize(String s) {
-    return s.toLowerCase().replace("\\s+", "");
-  }
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands

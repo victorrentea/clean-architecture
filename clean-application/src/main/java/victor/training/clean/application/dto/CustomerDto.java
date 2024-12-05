@@ -2,9 +2,13 @@ package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Customer.Status;
+
+import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -13,7 +17,10 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
+    @Size(min = 5, max = 100)
     String name,
+//    @
+//    int age,
     String email,
     Long countryId,
 
@@ -32,6 +39,38 @@ public record CustomerDto(
     Boolean discountedVat // GET only (fetched by backend)
 ) {
 
+  // you can't touch this if you generate YOUR DTOs from Swagger/OpenAPI = mistake?
+  public static CustomerDto fromEntity(Customer customer) {
+    return builder()
+        .id(customer.getId())
+        .name(customer.getName())
+        .email(customer.getEmail())
+        .countryId(customer.getCountry().getId())
+        .status(customer.getStatus())
+        .createdDate(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
+        .gold(customer.isGoldMember())
+
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+
+        .canReturnOrders(customer.canReturnOrders())
+        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
+        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
+        .discountedVat(customer.isDiscountedVat())
+        .build();
+  }
+
+  public Customer toEntity() {
+    Customer customer = new Customer();
+    customer.setEmail(email());
+    customer.setName(name());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(countryId()));
+    customer.setLegalEntityCode(legalEntityCode());
+    return customer;
+  }
+
   @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
   @JsonIgnore
   public boolean isShippingAddressValid() { // multi-field validation with javax annotations
@@ -40,23 +79,4 @@ public record CustomerDto(
     //     or write this if in the first layer of logic 💖
   }
 
-  public static CustomerDto fromEntity(Customer customer) {
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDate(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
-        .status(customer.getStatus())
-        .gold(customer.isGoldMember())
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
-        .discountedVat(customer.isDiscountedVat())
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-        //.canReturnOrders(TODO)
-        .build();
-  }
 }
