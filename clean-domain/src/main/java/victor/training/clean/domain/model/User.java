@@ -14,4 +14,6 @@ public record User(
   public Optional<String> asContact() {
     return email.map(e -> fullName + " <" + e + ">");
   }
+
+//  User(LdapUserDto dto)
 }
