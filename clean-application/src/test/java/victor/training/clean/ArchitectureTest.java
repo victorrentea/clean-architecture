@@ -1,7 +1,12 @@
 package victor.training.clean;
 
+import com.tngtech.archunit.core.domain.JavaAccess;
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -12,8 +17,7 @@ import java.util.List;
 
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArchitectureTest {
@@ -29,12 +33,18 @@ public class ArchitectureTest {
         .resideInAPackage("..domain..")
         .should().dependOnClassesThat()
         .resideInAPackage("..infra..");
-    rule.check(allProjectClasses);
 
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
-        .hasSizeLessThan(100) //  t0 initial
-        .hasSizeLessThan(50) // 3 months later
+//        .hasSize(100); //  t0 initial 😭
+//        .hasSize(50); // 3 months later
         .hasSize(0); // end 🍾
+  }
+
+  @Test
+  public void domainClassesShouldBeSmall() {
+    classes().that().resideInAPackage("..domain..")
+        .should(haveLessLineNumbersThan(200))
+        .check(allProjectClasses);
   }
 
   @Test
@@ -50,6 +60,22 @@ public class ArchitectureTest {
         .should().haveRawReturnType(not(resideInAPackage("..domain..")))
         .andShould(new ParameterizedReturnTypeCondition(not(resideInAPackage("..domain.."))))
         .check(allProjectClasses);
+  }
+
+  private ArchCondition<JavaClass> haveLessLineNumbersThan(int number) {
+    return new ArchCondition<JavaClass>("have less line numbers than " + number) {
+      @Override
+      public void check(JavaClass javaClass, ConditionEvents events) {
+        int lastLineNumber = javaClass.getCodeUnits().stream()
+            .flatMap(c -> c.getAccessesFromSelf().stream())
+            .map(JavaAccess::getLineNumber)
+            .mapToInt(n -> n)
+            .max()
+            .orElse(0);
+        boolean satisfied = lastLineNumber < number;
+        events.add(new SimpleConditionEvent(javaClass, satisfied, javaClass.getName() + " has more than " + lastLineNumber + " lines"));
+      }
+    };
   }
 
 }
