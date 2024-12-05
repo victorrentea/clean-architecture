@@ -20,6 +20,8 @@ public class ArchitectureTest {
 
   private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
 
+  // CODEOWNERS on git  can be used to enforce code reviews on certain files
+
 //  @Disabled("Fix this after I return from vacation")
   // NOTE: In case you don't understand this test, contact me:
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
