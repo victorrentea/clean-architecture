@@ -52,7 +52,7 @@ We will place it in another Spring Data Repo interface next to controller.
 - Risk - updating DB using DTOs, bypassing the integrity protection
 potentially enforced by the Domain Model.
 
-## Compliance
+## Compliancej
 Enforcing is done via Code Review.
 (since we couldn't find any automated way to check it😢)
 

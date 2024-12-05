@@ -1,10 +1,9 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -17,7 +16,9 @@ import java.util.Optional;
 //endregion
 
 // This class is part of your Domain Model, the backbone of your core complexity.
-@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
+//@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
+@Getter
+@Setter
 @Entity // ORM/JPA (2)
 public class Customer {
   @Id
@@ -27,9 +28,18 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+
+  // Value Object  !DESIGN PATTERN = IMMUTABLE! and lacks identity
+  // Canonical example: Money{amount, currency}
+  @Embeddable
+  public record ShippingAddress(String city, String street, String zip) {}
+
+
+  @Embedded // no ALTER table is required
+  private ShippingAddress shippingAddress;
 
   @ManyToOne
   private Country country;
