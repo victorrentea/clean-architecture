@@ -1,11 +1,15 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
+
+import static lombok.AccessLevel.NONE;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -67,21 +71,45 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
+  @Setter(NONE)
+  private Status status=Status.DRAFT;
+  @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  public void validate(String user) {
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Can't validate a non-DRAFT Customer");
+    }
+    status = Status.VALIDATED;
+    validatedBy = Objects.requireNonNull(user);
+  }
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Can't activate a non-VALIDATED Customer");
+    }
+    status = Status.ACTIVE;
+  }
+  public void delete() {
+    if (status != Status.ACTIVE) {
+      throw new IllegalStateException("Can't delete a non-ACTIVE Customer");
+    }
+    status = Status.DELETED;
+  }
+
 }
 
 //region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
+class SomeCode {
+  public void correct(Customer draftCustomer) {
 //    draftCustomer.setStatus(Customer.Status.VALIDATED);
 //    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+    draftCustomer.validate("currentUser");
+  }
+  public void incorrect(Customer draftCustomer) {
+    draftCustomer.validate("null");
+  }
+  public void activate(Customer draftCustomer) {
+    draftCustomer.activate();
+  }
+}
 //endregion

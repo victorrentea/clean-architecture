@@ -1,0 +1,17 @@
+@startuml
+[*] --> DRAFT
+
+DRAFT : Initial state
+DRAFT --> VALIDATED : validate(user)
+VALIDATED : validatedBy is not null
+
+VALIDATED --> ACTIVE : activate()
+ACTIVE : Customer is active
+
+ACTIVE --> DELETED : delete()
+DELETED : Final state
+
+DRAFT --> [*] : Throw IllegalStateException("Can't validate a non-DRAFT Customer")
+VALIDATED --> [*] : Throw IllegalStateException("Can't activate a non-VALIDATED Customer")
+ACTIVE --> [*] : Throw IllegalStateException("Can't delete a non-ACTIVE Customer")
+@enduml
