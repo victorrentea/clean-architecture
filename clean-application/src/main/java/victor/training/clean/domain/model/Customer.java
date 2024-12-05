@@ -77,9 +77,11 @@ public class Customer {
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
   public void validate(String user) {
-    if (status != Status.DRAFT) {
-      throw new IllegalStateException("Can't validate a non-DRAFT Customer");
-    }
+    // A: ignore can be unexpected from caller side, hard to debug
+    if (status != Status.DRAFT) return;
+    // B: failing; let the UI be kind to user. in BE, be strict!
+    if (status != Status.DRAFT) throw new IllegalStateException("Can't validate a non-DRAFT Customer");
+
     status = Status.VALIDATED;
     validatedBy = Objects.requireNonNull(user);
   }
