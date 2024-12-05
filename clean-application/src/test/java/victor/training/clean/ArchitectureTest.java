@@ -2,6 +2,7 @@ package victor.training.clean;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import victor.training.clean.utils.ParameterizedReturnTypeCondition;
 import java.util.List;
 
 import static com.tngtech.archunit.base.DescribedPredicate.not;
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.*;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,6 +39,16 @@ public class ArchitectureTest {
         .hasSize(0); // end 🍾
   }
 
+//    @Test
+//    public void repository_methods_should_return_dto() {
+//      ArchRule rule = methods()
+//          .that().haveNameStartingWith("search")
+//          .and().areDeclaredInClassesThat().resideInAnyPackage("..repo..")
+//          .should().haveRawReturnType(resideInAnyPackage("..dto..").and(simpleNameEndingWith("SearchResult")))
+//          .because("Repository methods using @Query should return DTOs instead of entities.");
+//
+//      rule.check(new ClassFileImporter().importPackages("com.example"));
+//  }
   @Test
   public void domain_independent_of_application() {
     // TODO check that no classes in the domain pacakge depend on any classes in the application (eg DTOs)
