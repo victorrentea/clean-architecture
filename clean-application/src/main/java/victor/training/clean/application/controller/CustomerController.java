@@ -24,10 +24,10 @@ public class CustomerController {
   private final CustomerApplicationService customerApplicationService;
   private final ObjectMapper jacksonObjectMapper;
 
-  @PostMapping("customers")
-  public void register(@RequestBody @Validated CustomerDto dto) {
-    customerApplicationService.register(dto);
-  }
+//  @PostMapping("customers")
+//  public void register(@RequestBody @Validated CustomerDto dto) {
+//    customerApplicationService.register(dto);
+//  }
 
   @Operation(description = "Search Customer")
   @PostMapping("customers/search")
@@ -37,9 +37,13 @@ public class CustomerController {
 
   @GetMapping("customers/{id}")
   public CustomerDto findById(@PathVariable long id) {
-    return customerApplicationService.findById(id);
+    // ok, i can immediately see there's no logic involved- @alexandru
+    Customer customer = customerRepo.findById(id).orElseThrow();
+    return CustomerDto.fromEntity(customer);
   }
 
+//    customerMapStruct.toDto(customer);
+//    return CustomerMapper/Transformer/Converter.toDto(customer);
   //<editor-fold desc="GET returning ResponseEntity for 404 👎">
 //   @GetMapping("customers/{id}")
 //   public ResponseEntity<CustomerDto> findById(@PathVariable long id) {

@@ -1,5 +1,6 @@
 package victor.training.clean.vsa;
 
+import com.google.common.annotations.VisibleForTesting;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +15,12 @@ import java.time.format.DateTimeFormatter;
 public class GetCustomerByIdUseCase {
   private final CustomerRepo customerRepo;
 
+  // not public, package-private and
+  @VisibleForTesting// so that it can be ONLY BE used in tests
   @Builder
   record GetCustomerByIdResponse(
       Long id,
       String name,
-      String email,
       Long siteId,
       String creationDateStr,
       boolean gold,
@@ -31,7 +33,6 @@ public class GetCustomerByIdUseCase {
       return GetCustomerByIdResponse.builder()
               .id(customer.getId())
               .name(customer.getName())
-              .email(customer.getEmail())
               .siteId(customer.getCountry().getId())
               .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
               .build();
