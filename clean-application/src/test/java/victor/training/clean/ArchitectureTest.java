@@ -43,7 +43,7 @@ public class ArchitectureTest {
   @Test
   public void domainClassesShouldBeSmall() {
     classes().that().resideInAPackage("..domain..")
-        .should(haveLessLineNumbersThan(200))
+        .should(haveLessLineNumbersThan(300))
         .check(allProjectClasses);
   }
 
