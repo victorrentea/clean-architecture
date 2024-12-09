@@ -2,7 +2,7 @@
 Search Entities using Use-Case-Optimized Queries (CQRS)
 
 ## Status
-Accepted
+Accepted ⚠️please don't hesitate to challenge it!
 (Training Note: never deleted, but can be `Superseded` by a later ADR)
 
 ## Context
