@@ -45,6 +45,27 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public boolean canReturnOrders() {
+    // can this appear in a 'record':
+    // a) "record" = java 17+ keyword
+    // b) "Record" = message in Kafka = DTO ("api-model")
+
+    // who is defining that contract?
+    // REST API=>server
+    // Message=>consumer(commands) or producer(events)?
+
+    // is Kafka:
+    // (1) transportation => record == dto  << mostly the case
+    // (2) source-of-truth(storage)=event sourcing => record == domain model?
+    //    :( KStream,KTables processing, hard to build&maintain, expert in (re)partitioning
+    // now moving from 2->1
+    return goldMember || isPhysicalPerson();
+  }
+
+  private boolean isPhysicalPerson() {
+    return legalEntityCode == null;
+  }
+
   public Optional<String> getLegalEntityCode() {
     return Optional.ofNullable(legalEntityCode);
   }
