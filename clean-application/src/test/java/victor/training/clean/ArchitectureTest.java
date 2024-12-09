@@ -24,7 +24,11 @@ public class ArchitectureTest {
 
   private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
 
-  @Disabled("Fix this after I return from vacation")
+  // using CODEOWNERS file the architect/lead of a project
+  // could be the MANDATORY reviewer of any change
+  // in the folder /src/tests/java/arch.*
+
+//  @Disabled("Fix this after I return from vacation")
   // NOTE: In case you don't understand this test, contact me:
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
   @Test
@@ -34,10 +38,11 @@ public class ArchitectureTest {
         .should().dependOnClassesThat()
         .resideInAPackage("..infra..");
 
+    // architectural fitness function - Evolutionary Architecture by Neal Ford...
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
-//        .hasSize(100); //  t0 initial 😭
+        .hasSize(16); //  t0 initial 😭
 //        .hasSize(50); // 3 months later
-        .hasSize(0); // end 🍾
+//        .hasSize(0); // end 🍾
   }
 
   @Test
