@@ -43,6 +43,9 @@ public class ArchitectureTest {
 
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
         .hasSize(0); // end 🍾
+
+    // NOTE you might need to include AssertJ in your project for assertThat to work
+    // see clean-architecture/pom.xml for the dependencies to copy to your project
   }
 
   @Test
