@@ -4,6 +4,7 @@ import com.tngtech.archunit.core.domain.JavaAccess;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.core.importer.ImportOption.Predefined;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
@@ -17,12 +18,15 @@ import java.util.List;
 
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import static com.tngtech.archunit.core.importer.ImportOption.Predefined.DO_NOT_INCLUDE_TESTS;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArchitectureTest {
 
-  private final JavaClasses allProjectClasses = new ClassFileImporter().importPackages("victor.training");
+  private final JavaClasses allProjectClasses = new ClassFileImporter()
+      .withImportOption(DO_NOT_INCLUDE_TESTS)
+      .importPackages("victor.training");
 
   @Disabled("Fix this after I return from vacation")
   // NOTE: In case you don't understand this test, contact me:
