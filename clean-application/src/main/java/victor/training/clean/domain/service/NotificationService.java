@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final LdapUserApiAdapter ldapUserApiAdapter;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
@@ -31,7 +31,7 @@ public class NotificationService {
     // retrieveUser
     // fetchUser follows conventions already in the code
     // fetchUserFromLdap = "leaky abstraction", I don't care it's LDAP -@vladyslav
-    User user = fetchUser(usernamePart);
+    User user = ldapUserApiAdapter.fetchUser(usernamePart);
 
     Email email = generateEmail(customer, user.fullName());
 
@@ -51,40 +51,9 @@ public class NotificationService {
         .build();
   }
 
-  // this method's complexity is more about mapping. shouldn't it be called mapUser()
-  // every time you name SOMETHING, think of that name from its caller's perspective
-  private User fetchUser(String usernamePart) {
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-    return convert(ldapUserDto);
-  }
-
-  private User convert(LdapUserDto ldapUserDto) {
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    normalize(ldapUserDto); // Temporal Coupling
-    return new User(
-        ldapUserDto.getUn(),
-        fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail()).filter(StringUtils::isNoneBlank));
-  }
-
-  private LdapUserDto fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    return dtoList.get(0);
-  }
-
-  private void normalize(LdapUserDto ldapUserDto) {
-    if (ldapUserDto.getUn().startsWith("s")) {
-      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-  }
 
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    User user = fetchUser(usernamePart);
+    User user = ldapUserApiAdapter.fetchUser(usernamePart);
 
     String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
 
