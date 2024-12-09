@@ -2,14 +2,17 @@ package victor.training.clean.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -20,34 +23,38 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-
-    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    normalize(ldapUserDto); // Temporal Coupling
+    User user = new User(
+        ldapUserDto.getUn(),
+        fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail()));
 
+    // 💩 code (infrastructure)
+    // ------
+    // good code (my domain, world peace)
+
+    Email email = generateEmail(customer, user.fullName());
+
+    if (user.workEmail().isPresent()) {
+      String contact = fullName + " <" + user.workEmail().get().toLowerCase() + ">";
+      email.getCc().add(contact);
+    }
+
+    emailSender.sendEmail(email);
+
+    customer.setCreatedByUsername(user.username());
+  }
+
+  private static Email generateEmail(Customer customer, String fullName) {
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
         .body("Dear " + customer.getName() + ", welcome! Sincerely, " + fullName)
         .build();
-
-
-    // ⚠️ Unguarded nullable fields can cause NPE in other places TODO return Optional<> from getter
-    if (ldapUserDto.getWorkEmail() != null) {
-      // ⚠️ Logic repeated in other places TODO move logic to the new class
-      String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
-      email.getCc().add(contact);
-    }
-
-    emailSender.sendEmail(email);
-
-    // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
-    normalize(ldapUserDto);
-
-    // ⚠️ 'un' = bad name TODO in my ubiquitous language 'un' means 'username'
-    customer.setCreatedByUsername(ldapUserDto.getUn());
+    return email;
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
