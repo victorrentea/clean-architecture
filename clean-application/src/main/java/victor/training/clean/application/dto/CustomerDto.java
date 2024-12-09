@@ -39,23 +39,4 @@ public record CustomerDto(
            || shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;
     //     or write this if in the first layer of logic 💖
   }
-
-  public static CustomerDto fromEntity(Customer customer) {
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .createdDate(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
-        .status(customer.getStatus())
-        .gold(customer.isGoldMember())
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
-        .discountedVat(customer.isDiscountedVat())
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
-        //.canReturnOrders(TODO)
-        .build();
-  }
 }
