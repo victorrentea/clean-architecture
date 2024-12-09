@@ -23,24 +23,19 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    normalize(ldapUserDto); // Temporal Coupling
-    User user = new User(
-        ldapUserDto.getUn(),
-        fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail()));
-
-    // 💩 code (infrastructure)
-    // ------
-    // good code (my domain, world peace)
+    // getEnrichedUser - misleading name, it's not just getting, it's enriching
+    // materializeUser
+    // getUser = too "weak"
+    // findUser = smells of Sprign Data
+    // fetchNotificationUser
+    // retrieveUser
+    // fetchUser follows conventions already in the code
+    // fetchUserFromLdap = "leaky abstraction", I don't care it's LDAP -@vladyslav
+    User user = fetchUser(usernamePart);
 
     Email email = generateEmail(customer, user.fullName());
 
-    if (user.workEmail().isPresent()) {
-      String contact = fullName + " <" + user.workEmail().get().toLowerCase() + ">";
-      email.getCc().add(contact);
-    }
+    user.asContact().ifPresent(contact->email.getCc().add(contact));
 
     emailSender.sendEmail(email);
 
@@ -48,13 +43,28 @@ public class NotificationService {
   }
 
   private static Email generateEmail(Customer customer, String fullName) {
-    Email email = Email.builder()
+    return Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
         .body("Dear " + customer.getName() + ", welcome! Sincerely, " + fullName)
         .build();
-    return email;
+  }
+
+  // this method's complexity is more about mapping. shouldn't it be called mapUser()
+  // every time you name SOMETHING, think of that name from its caller's perspective
+  private User fetchUser(String usernamePart) {
+    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
+    return convert(ldapUserDto);
+  }
+
+  private User convert(LdapUserDto ldapUserDto) {
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    normalize(ldapUserDto); // Temporal Coupling
+    return new User(
+        ldapUserDto.getUn(),
+        fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail()).filter(StringUtils::isNoneBlank));
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
@@ -74,7 +84,7 @@ public class NotificationService {
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
+    User user = fetchUser(usernamePart);
 
     String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
 
@@ -83,12 +93,11 @@ public class NotificationService {
         .to(customer.getEmail())
         .subject("Welcome to our Gold membership!")
         .body(returnOrdersStr +
-              "Yours sincerely, " + userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase())
+              "Yours sincerely, " + user.fullName())
         .build();
 
-    String contact = userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase()
-               + " <" + userLdapDto.getWorkEmail().toLowerCase() + ">";
-    email.getCc().add(contact);
+
+    user.asContact().ifPresent(contact->email.getCc().add(contact));
 
     emailSender.sendEmail(email);
   }

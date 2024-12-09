@@ -10,8 +10,12 @@ public record User(
     // the only exception to the rule of
     // DON'T have Optionals on field or parameter
     // ie. Java Sucks!
-    Optional<String> workEmail
+    Optional<String> workEmail // TODO rename with 'contact'
 ) {
+  public Optional<String> asContact() {
+//    return fullName() + " <" + workEmail().get().toLowerCase() + ">";
+    return workEmail.map(email -> fullName + " <" + email.toLowerCase() + ">");
+  }
 
   // embedding mapping into the structure
   // more natural to happen from the beginning, from the mapper
