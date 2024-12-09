@@ -1,10 +1,8 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+import victor.training.clean.application.dto.CustomerDto;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -15,6 +13,8 @@ import java.util.Optional;
 // 2) toString might trigger lazy-loading⚠️
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
+
+// eg: Money{amount, currency}
 
 // This class is part of your Domain Model, the backbone of your core complexity.
 @Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
@@ -27,9 +27,11 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+  @Embedded // no ALTER table, just ORM mapping
+  private ShippingAddress shippingAddress; // adjusted without breaking the clients or DB schema
 
   @ManyToOne
   private Country country;
@@ -52,6 +54,10 @@ public class Customer {
   }
   private Status status;
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  public void method(CustomerDto bad) {
+
+  }
 }
 
 //region Code in the project might [not] follow the rule

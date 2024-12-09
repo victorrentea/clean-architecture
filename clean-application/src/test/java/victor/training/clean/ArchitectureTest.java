@@ -48,6 +48,15 @@ public class ArchitectureTest {
   }
 
   @Test
+  public void searchesShouldReturnDtos() {
+    // all methods starting with "search" should return DTOs
+
+//    methods()
+//        .that().haveNameStartingWith("search")
+//        .should().haveRawReturnType(resideInAPackage("..application.dto.."))
+  }
+
+  @Test
   public void domain_independent_of_application() {
     // TODO check that no classes in the domain pacakge depend on any classes in the application (eg DTOs)
   }

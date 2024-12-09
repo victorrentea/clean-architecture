@@ -6,6 +6,9 @@ import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 
 import jakarta.persistence.EntityManager;
+import victor.training.clean.application.service.CustomerApplicationService;
+import victor.training.clean.domain.model.Customer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +24,12 @@ import static java.lang.String.join;
 @RequiredArgsConstructor
 public class CustomerSearchQuery {
    private final EntityManager entityManager;
+
+   private final CustomerApplicationService service;
+
+   public List<Customer> search(String s) {
+      return List.of();
+   }
 
    public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
       // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
-//@RestController
+@RestController
 @RequestMapping("customer-leaking")
 @RequiredArgsConstructor
 public class CustomerLeakingController {
