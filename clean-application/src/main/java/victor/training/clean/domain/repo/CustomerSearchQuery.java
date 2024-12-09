@@ -25,8 +25,6 @@ import static java.lang.String.join;
 public class CustomerSearchQuery {
    private final EntityManager entityManager;
 
-   private final CustomerApplicationService service;
-
    public List<Customer> search(String s) {
       return List.of();
    }

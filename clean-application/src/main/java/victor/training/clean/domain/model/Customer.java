@@ -36,7 +36,7 @@ public class Customer {
 //  private String shippingAddressStreet;
 //  private String shippingAddressZip;
   @Embedded // no ALTER table, just ORM mapping
-  private ShippingAddress shippingAddress; // adjusted without breaking the clients or DB schema
+  private ShippingAddress shippingAddress = new ShippingAddress(null,null,null); // adjusted without breaking the clients or DB schema
 
   @ManyToOne
   private Country country;
