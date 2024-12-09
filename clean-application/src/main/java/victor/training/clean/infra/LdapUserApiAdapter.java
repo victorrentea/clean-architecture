@@ -11,11 +11,12 @@ import java.util.Optional;
 @Slf4j
 @Adapter // design pattern from GoF
 @RequiredArgsConstructor
-public class LdapUserApiAdapter {
+public class LdapUserApiAdapter implements victor.training.clean.domain.service.UserFetcher {
   private final LdapApi ldapApi;
 
   // this method's complexity is more about mapping. shouldn't it be called mapUser()
   // every time you name SOMETHING, think of that name from its caller's perspective
+  @Override
   public User fetchUser(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
     return convert(ldapUserDto);

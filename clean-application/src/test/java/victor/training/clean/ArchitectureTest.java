@@ -41,8 +41,8 @@ public class ArchitectureTest {
     // architectural fitness function - Evolutionary Architecture by Neal Ford...
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
 //        .hasSize(16); //  t0 initial 😭
-        .hasSize(8); // 3 months later
-//        .hasSize(0); // end 🍾
+//        .hasSize(8); // 3 months later
+        .hasSize(0); // end 🍾
   }
 
   @Test

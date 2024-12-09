@@ -6,15 +6,13 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapUserApiAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final LdapUserApiAdapter ldapUserApiAdapter;
+  private final IEmailSender emailSender;
+  private final UserFetcher userFetcher;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
@@ -26,7 +24,7 @@ public class NotificationService {
     // retrieveUser
     // fetchUser follows conventions already in the code
     // fetchUserFromLdap = "leaky abstraction", I don't care it's LDAP -@vladyslav
-    User user = ldapUserApiAdapter.fetchUser(usernamePart);
+    User user = userFetcher.fetchUser(usernamePart);
 
     Email email = generateEmail(customer, user.fullName());
 
@@ -48,7 +46,7 @@ public class NotificationService {
 
 
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    User user = ldapUserApiAdapter.fetchUser(usernamePart);
+    User user = userFetcher.fetchUser(usernamePart);
 
     String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
 
