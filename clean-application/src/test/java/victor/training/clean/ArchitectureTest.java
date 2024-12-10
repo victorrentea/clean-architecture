@@ -4,17 +4,13 @@ import com.tngtech.archunit.core.domain.JavaAccess;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.tngtech.archunit.core.importer.ImportOption.Predefined;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
 import victor.training.clean.utils.ParameterizedReturnTypeCondition;
-
-import java.util.List;
 
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
@@ -33,7 +29,7 @@ public class ArchitectureTest {
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
   @Test
   public void domain_independent_of_infrastructure() {
-    ClassesShouldConjunction rule = noClasses().that()
+    var rule = noClasses().that()
         .resideInAPackage("..domain..")
         .should().dependOnClassesThat()
         .resideInAPackage("..infra..");
