@@ -8,6 +8,7 @@ import lombok.Builder;
 public record CustomerSearchCriteria(
    @Schema(description = "Part of the name, case-insensitive")
    String name,
+   String phone,
    String email,
    Long countryId
 ) {

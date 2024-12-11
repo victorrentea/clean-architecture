@@ -1,6 +1,8 @@
 package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
@@ -9,6 +11,14 @@ import victor.training.clean.domain.model.Customer.Status;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 @Builder
+//@Schema(example = @ExampleObject(value = """
+//    {
+//      "id": 1,
+//      "name": "John Doe",
+//      "email": "a@b.com"
+//      }
+//    """)
+//)
 // Dto used to both QUERY and COMMAND use-cases ?
 public record CustomerDto(
     Long id, // GET only (assigned by backend)

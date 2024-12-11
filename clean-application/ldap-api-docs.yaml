@@ -66,6 +66,8 @@ definitions:
         type: "string"
       fname:
         type: "string"
+      gname:
+        type: "string"
       lname:
         type: "string"
       creationDate:

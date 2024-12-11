@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,14 @@ public class CustomerController {
     customerApplicationService.register(dto);
   }
 
-  @Operation(description = "Search Customer")
+  @ExampleObject(name = "Search by name")
+  @Operation(description = """
+      Search Customer; 
+      Examples1: ....
+      Examples2: ....
+      Examples3: ....
+      Examples4: ....
+      """)
   @PostMapping("customers/search")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
     return customerApplicationService.search(searchCriteria);
