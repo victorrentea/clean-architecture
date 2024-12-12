@@ -12,10 +12,10 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
-  private final IUserFetcher userFetcher;
+  private final UserFetcher userFetcher;
 
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = userFetcher.fetchUserFromLdap(usernamePart);
+    User user = userFetcher.fetchUser(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -31,7 +31,7 @@ public class NotificationService {
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    User user = userFetcher.fetchUserFromLdap(usernamePart);
+    User user = userFetcher.fetchUser(usernamePart);
 
     String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
 

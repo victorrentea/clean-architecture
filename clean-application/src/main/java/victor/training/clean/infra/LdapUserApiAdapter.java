@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.UserFetcher;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +20,11 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserFetcher implements victor.training.clean.domain.service.IUserFetcher {// !!! API CALL
+public class LdapUserApiAdapter implements UserFetcher {// !!! API CALL
   private final LdapApi ldapApi;
 
   @Override
-  public User fetchUserFromLdap(String usernamePart) {
+  public User fetchUser(String usernamePart) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
