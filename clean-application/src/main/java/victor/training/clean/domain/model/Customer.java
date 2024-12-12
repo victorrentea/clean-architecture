@@ -44,6 +44,14 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  public boolean canReturnOrders() { // little biz rules reused
+    return goldMember || isPhysicalPerson();
+  }
+
+  private boolean isPhysicalPerson() { // explain data meaning
+    return legalEntityCode == null;
+  }
+
   public Optional<String> getLegalEntityCode() {
     return Optional.ofNullable(legalEntityCode);
   }
