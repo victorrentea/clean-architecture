@@ -1,6 +1,8 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Setter;
 
@@ -27,7 +29,9 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 5)
   private String name;
+  @Email
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
@@ -100,6 +104,17 @@ public class Customer {
 //    }
     status = Status.DELETED;
   }
+
+// pollutes the domain with external Dtos
+//  public Customer fromDto(victor.training.clean.application.dto.CustomerDto dto) {
+//    Customer customer = new Customer();
+//    customer.setEmail(email());
+//    customer.setName(name());
+//    customer.setCreatedDate(LocalDate.now());
+//    customer.setCountry(new Country().setId(countryId()));
+//    customer.setLegalEntityCode(legalEntityCode());
+//    return customer;
+//  }
 
 //  State state;
 }
