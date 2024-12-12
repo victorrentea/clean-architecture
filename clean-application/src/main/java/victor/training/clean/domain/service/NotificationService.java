@@ -7,21 +7,17 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
-import java.util.Optional;
+import victor.training.clean.infra.UserFetcher;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final UserFetcher userFetcher;
 
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = fetchUserFromLdap(usernamePart);
+    User user = userFetcher.fetchUserFromLdap(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -33,31 +29,11 @@ public class NotificationService {
     user.email().ifPresent(c-> email.getCc().add(c));
 
     emailSender.sendEmail(email);
-
-
-
     customer.setCreatedByUsername(user.username());
   }
 
-  private User fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    LdapUserDto dto = dtoList.get(0);
-
-    if (dto.getUn().startsWith("s")) {
-      dto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-    return new User(dto.getUn(),
-        dto.getFname() + " " + dto.getLname().toUpperCase(),
-        Optional.ofNullable(dto.getWorkEmail()));
-  }
-
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    User user = fetchUserFromLdap(usernamePart);
+    User user = userFetcher.fetchUserFromLdap(usernamePart);
 
     String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
 
@@ -73,6 +49,5 @@ public class NotificationService {
 
     emailSender.sendEmail(email);
   }
-
 
 }
