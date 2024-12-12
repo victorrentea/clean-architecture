@@ -2,9 +2,15 @@ package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
+import static lombok.AccessLevel.*;
+import static victor.training.clean.domain.model.Customer.Status.DRAFT;
+import static victor.training.clean.domain.model.Customer.Status.VALIDATED;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -59,21 +65,45 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+  @Setter(NONE)
+  private Status status = DRAFT;
+  @Setter(NONE)
+  private String validatedBy; // Domain Invariant: ⚠ Always not-null when status = VALIDATED or later
+
+ public void validate(String validatedBy) {
+    if (status != DRAFT) {
+      throw new IllegalStateException("Can only validate DRAFT customers");
+    }
+    status = VALIDATED;
+   this.validatedBy = requireNonNull(validatedBy);
+  }
+
+  public void activate() {
+    if (status != VALIDATED) {
+      throw new IllegalStateException("Can only activate VALIDATED customers");
+    }
+    status = Status.ACTIVE;
+  }
+
+  public void delete() {
+//    if (status != Status.ACTIVE) {
+//      throw new IllegalStateException("Can only delete ACTIVE customers");
+//    }
+    status = Status.DELETED;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+class SomeCode {
+  public void correct(Customer draftCustomer) {
+    draftCustomer.validate("currentUser"); // from token/session..
+  }
+  public void incorrect(Customer draftCustomer) {
+    draftCustomer.validate("null");
+  }
+  public void activate(Customer draftCustomer) {
+//    draftCustomer.validate(Customer.Status.ACTIVE, "WTH?Y!!! incorrect to overwrite ");
+    draftCustomer.activate();
+  }
+}
 //endregion
