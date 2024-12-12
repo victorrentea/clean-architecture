@@ -50,6 +50,15 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+//  protected Customer() {
+//  } // for hibernate only
+
+
+//  public Customer(String name) {
+//    this.name = requireNonNull(name);
+//  }
+
+
   public boolean canReturnOrders() { // little biz rules reused
     return goldMember || isPhysicalPerson();
   }
@@ -91,7 +100,11 @@ public class Customer {
 //    }
     status = Status.DELETED;
   }
+
+//  State state;
 }
+//interface State
+//class ValidState(user)
 
 //region Code in the project might [not] follow the rule
 class SomeCode {
