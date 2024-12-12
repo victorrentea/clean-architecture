@@ -2,3 +2,7 @@
 # This file is located in the .github/ directory of your repository.
 
 /src/test/java/victor/training/clean/ArchitectureTest.java @architects
+/clean-application/pom.xml @julian
+/clean-domain/pom.xml @julian
+
+pom.xml @julian

@@ -3,6 +3,7 @@ package victor.training.clean;
 import com.tngtech.archunit.core.domain.JavaAccess;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
@@ -53,10 +54,10 @@ public class ArchitectureTest {
   }
 
   @Test
-  @Disabled
   public void domain_not_leaked_via_controller_methods() {
     methods().that().areMetaAnnotatedWith(RequestMapping.class)
         .and().arePublic()
+//        .should().haveRawReturnType(not(Predicates.annotatedWith(@Domain)))
         .should().haveRawReturnType(not(resideInAPackage("..domain..")))
         .andShould(new ParameterizedReturnTypeCondition(not(resideInAPackage("..domain.."))))
         .check(allProjectClasses);
