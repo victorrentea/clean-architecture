@@ -1,5 +1,6 @@
 package victor.training.clean.infra;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,7 @@ public class LdapUserApiAdapter implements victor.training.clean.domain.service.
   // this method's complexity is more about mapping. shouldn't it be called mapUser()
   // every time you name SOMETHING, think of that name from its caller's perspective
   @Override
+  @Timed
   public User fetchUser(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
     return convert(ldapUserDto);

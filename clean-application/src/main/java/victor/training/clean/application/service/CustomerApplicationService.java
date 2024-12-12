@@ -1,5 +1,6 @@
 package victor.training.clean.application.service;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,6 +65,7 @@ public class CustomerApplicationService {
   }
 
   @Transactional
+
   public void register(CustomerDto dto) {
     Customer customer = new Customer();
     customer.setEmail(dto.email());
