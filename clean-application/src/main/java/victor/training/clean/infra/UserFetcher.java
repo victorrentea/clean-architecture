@@ -19,9 +19,10 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserFetcher {// !!! API CALL
+public class UserFetcher implements victor.training.clean.domain.service.IUserFetcher {// !!! API CALL
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchUserFromLdap(String usernamePart) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
 
