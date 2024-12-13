@@ -7,9 +7,11 @@ import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.ApplicationService;
+import victor.training.clean.domain.CleanException;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.service.CustomerService;
 import victor.training.clean.domain.service.FiscalDetailsProvider;
 import victor.training.clean.domain.service.NotificationService;
 
@@ -27,6 +29,7 @@ public class CustomerApplicationService {
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
   private final FiscalDetailsProvider anafClient;
+  private final CustomerService customerService;
 
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
@@ -58,8 +61,11 @@ public class CustomerApplicationService {
   @Transactional
   public void register(CustomerDto dto) {
     Customer customer = dto.toEntity();
-
-    register(customer);
+//    if (customerRepo.existsByEmail(customer.getEmail())) {
+//      throw new IllegalArgumentException("A customer with this email is already registered!");
+//       throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
+//    }
+    customerService.register(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
   }
 
