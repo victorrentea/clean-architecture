@@ -10,6 +10,7 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Customer.Status;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -39,16 +40,17 @@ public record CustomerDto(
     Boolean discountedVat // GET only (fetched by backend)
 ) {
 
+
   // impossible to change YOUR API DTO if
   // a) they are generated
   // b) is packaged separately in clean-app-client-1.0.0.jar
   public Customer toEntity() {
     Customer customer = new Customer();
-    customer.setEmail(email());
-    customer.setName(name());
+    customer.setEmail(email);
+    customer.setName(name);
     customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(countryId()));
-    customer.setLegalEntityCode(legalEntityCode());
+    customer.setCountry(new Country().setId(countryId));
+    customer.setLegalEntityCode(legalEntityCode);
     return customer;
   }
 

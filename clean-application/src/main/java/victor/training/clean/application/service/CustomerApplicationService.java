@@ -3,11 +3,13 @@ package victor.training.clean.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.ApplicationService;
-import victor.training.clean.domain.CleanException;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
@@ -15,7 +17,6 @@ import victor.training.clean.domain.service.CustomerService;
 import victor.training.clean.domain.service.FiscalDetailsProvider;
 import victor.training.clean.domain.service.NotificationService;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -38,28 +39,12 @@ public class CustomerApplicationService {
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .status(customer.getStatus())
-        .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-        .canReturnOrders(customer.canReturnOrders())
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+    return CustomerDto.fromEntity(customer);
   }
 
   @Transactional
-  public void register(CustomerDto dto) {
+  @PostMapping("customers")
+  public void register(@RequestBody @Validated CustomerDto dto) {
     Customer customer = dto.toEntity();
 //    if (customerRepo.existsByEmail(customer.getEmail())) {
 //      throw new IllegalArgumentException("A customer with this email is already registered!");

@@ -37,7 +37,10 @@ public class CustomerController {
 
   @GetMapping("customers/{id}")
   public CustomerDto findById(@PathVariable long id) {
-    return customerApplicationService.findById(id);
+//    return customerApplicationService.findById(id);
+    Customer customer = customerRepo.findById(id).orElseThrow();
+
+    return CustomerDto.fromEntity(customer);
   }
 
   //<editor-fold desc="GET returning ResponseEntity for 404 👎">
