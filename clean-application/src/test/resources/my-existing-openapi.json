@@ -224,6 +224,8 @@
             "format": "int64"
           },
           "name": {
+            "maxLength": 2147483647,
+            "minLength": 5,
             "type": "string"
           },
           "email": {
