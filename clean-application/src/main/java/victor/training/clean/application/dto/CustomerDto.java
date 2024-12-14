@@ -77,7 +77,7 @@ public record CustomerDto(
         .shippingAddressCity(customer.getShippingAddress().city())
         .shippingAddressStreet(customer.getShippingAddress().street())
         .shippingAddressZip(customer.getShippingAddress().zip())
-
+        .canReturnOrders(customer.canReturnOrders())
 
 
 
