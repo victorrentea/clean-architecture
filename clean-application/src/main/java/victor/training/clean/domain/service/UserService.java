@@ -16,6 +16,7 @@ import java.util.Optional;
 public class UserService {
   private final LdapApi ldapApi;
 
+
   public User fetchUser(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
     if (ldapUserDto.getUn().startsWith("s")) {
