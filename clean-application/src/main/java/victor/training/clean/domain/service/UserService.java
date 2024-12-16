@@ -13,7 +13,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LdapUserService {
+public class UserService {
   private final LdapApi ldapApi;
 
   public User fetchUser(String usernamePart) {
