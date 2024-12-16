@@ -19,7 +19,7 @@ public class CustomerLeakingController {
    // - Business Object = used in core logic
    // - Domain Object = object mapped to/from DB tables
 
-   @GetMapping("{id}")
+//   @GetMapping("{id}")
    public Customer findById(@PathVariable long id) {
       // TODO return a CustomerDto instead!!!
       // WRONG because tomorrow
