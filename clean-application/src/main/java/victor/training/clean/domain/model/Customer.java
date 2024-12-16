@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static lombok.AccessLevel.NONE;
 import static victor.training.clean.domain.model.Customer.Status.DRAFT;
@@ -70,10 +71,11 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED;
 
-    public void requireState(Status expected) {
-      if (this != expected) {
-        throw new IllegalStateException("Expected status: "+expected);
-      }
+    public void shouldBeOneOf(Status... expected) {
+      Stream.of(expected)
+          .filter(e -> e == this)
+          .findAny()
+          .orElseThrow(() -> new IllegalStateException("Expected status: " + expected));
     }
   }
   @Setter(NONE) // sorry for using Lombok
@@ -82,13 +84,13 @@ public class Customer {
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
   public void validate(String username) {
-    status.requireState(DRAFT);
+    status.shouldBeOneOf(DRAFT);
     status = VALIDATED;
     validatedBy = Objects.requireNonNull(username);
   }
 
   public void activate() {
-    status.requireState(VALIDATED);
+    status.shouldBeOneOf(VALIDATED);
     status = Status.ACTIVE;
   }
 
