@@ -1,10 +1,7 @@
 package victor.training.clean.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -28,9 +25,16 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+  // any client doing setShippingAddressCity("Bucharest")
+  //      and ..Street("A") and ..Zip("B")
+  // will now call customer.setShippingAddress(new ShippingAddress(
+  //     "Bucharest", "A", "B"))
+
+  @Embedded // no ALTER table needed
+  private ShippingAddress shippingAddress;
 
   @ManyToOne
   private Country country;
