@@ -38,9 +38,7 @@ public class CustomerApplicationService {
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
-    // Bit of domain logic on the state of one Entity?  What TODO?
-    // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
+//    boolean canReturnOrders = CustomerUtil.canReturnOrders(customer); PR REJECTED by Victor
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -57,7 +55,7 @@ public class CustomerApplicationService {
         .shippingAddressZip(customer.getShippingAddress().zip())
 
 
-        .canReturnOrders(canReturnOrders)
+        .canReturnOrders(customer.canReturnOrders())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode().orElse(null))
         .discountedVat(customer.isDiscountedVat())
