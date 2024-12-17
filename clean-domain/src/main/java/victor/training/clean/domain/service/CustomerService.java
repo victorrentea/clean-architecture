@@ -1,4 +1,4 @@
-package victor.training.clean.application.service;
+package victor.training.clean.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,14 +6,13 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.infra.AnafClient;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
   private final CustomerRepo customerRepo;
-  private final AnafClient anafClient;
+  private final IAnafClient anafClient;
 
   public void register(Customer customer) {
     // business rule/validation
