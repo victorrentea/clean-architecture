@@ -56,6 +56,21 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+//  public static Customer toEntity(CustomerDto dto) {
+//    // this method could go:
+//    // - stay here if simple
+//    // - DTO
+//    // - DM "Customer" = WRONG because I couple my holy DM to ONE of the way I present this data
+//    // - CustomerMapper (hand written or MapStruct-generated)
+//    Customer customer = new Customer();
+//    customer.setEmail(dto.email());
+//    customer.setName(dto.name());
+//    customer.setCreatedDate(LocalDate.now());
+//    customer.setCountry(new Country().setId(dto.countryId()));
+//    customer.setLegalEntityCode(dto.legalEntityCode());
+//    return customer;
+//  }
+
   public boolean canReturnOrders() {
     return goldMember || isIndividual();
   }
