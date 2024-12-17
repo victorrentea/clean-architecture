@@ -38,7 +38,10 @@ public record CustomerDto(
   public Customer toEntity() {
     // this method could go:
     // - stay here if simple
-    // - DTO 💖
+    // - DTO 💖 only possible if the DTO is editable.
+    //     - DTO might not be changeable when it's:
+    //     a) generated = you develop your API WSDL/swagger-contract-first
+    //     b) packaged in a client-jar that my java clients depend on also
     // - DM "Customer" = WRONG because I couple my holy DM to ONE of the way I present this data
     // - CustomerMapper (hand written or MapStruct-generated)
     Customer customer = new Customer();
