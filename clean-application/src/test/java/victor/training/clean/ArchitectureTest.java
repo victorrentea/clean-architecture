@@ -4,9 +4,11 @@ import com.tngtech.archunit.core.domain.JavaAccess;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +19,15 @@ import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPac
 import static com.tngtech.archunit.core.importer.ImportOption.Predefined.DO_NOT_INCLUDE_TESTS;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
 
+//@AnalyzeClasses
 public class ArchitectureTest {
 
   private final JavaClasses allProjectClasses = new ClassFileImporter()
       .withImportOption(DO_NOT_INCLUDE_TESTS)
-      .importPackages("victor.training");
+      .importPackages("victor.training")
+      ;
 
 //  @Disabled("Fix this after I return from vacation")
   // NOTE: In case you don't understand this test, contact me:
@@ -36,7 +41,7 @@ public class ArchitectureTest {
 
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
         .hasSize(14); //  t0 initial 😭22
-//        .hasSize(50); // 3 months later
+//        .hasSize(6); // 3 months later
 //        .hasSize(0); // end 🍾
   }
 

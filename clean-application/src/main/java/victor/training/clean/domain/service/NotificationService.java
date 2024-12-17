@@ -13,11 +13,11 @@ import victor.training.clean.infra.EmailSender;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final UserService userService;
+  private final UserFetcher userFetcher;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = userService.fetchUser(usernamePart);
+    User user = userFetcher.fetchUser(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -34,7 +34,7 @@ public class NotificationService {
   }
 
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    User user = userService.fetchUser(usernamePart);
+    User user = userFetcher.fetchUser(usernamePart);
 
     String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
 
