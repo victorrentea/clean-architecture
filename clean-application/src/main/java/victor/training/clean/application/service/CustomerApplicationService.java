@@ -65,9 +65,9 @@ public class CustomerApplicationService {
     Customer customer = dto.toEntity();
 
     // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
+//    if (customer.getName().length() < 5) { // TODO alternatives to implement this? // 1) validation class 2) @
+//      throw new IllegalArgumentException("The customer name is too short");
+//    }
 
     // business rule/validation
     if (customerRepo.existsByEmail(customer.getEmail())) {

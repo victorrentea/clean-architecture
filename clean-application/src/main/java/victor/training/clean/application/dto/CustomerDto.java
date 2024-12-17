@@ -2,6 +2,9 @@ package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
@@ -16,8 +19,14 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public record CustomerDto(
     Long id, // GET only (assigned by backend)
 
+    @Size(min = 5)
+    @NotNull
     String name,
+
+    @Email
+    @NotNull
     String email,
+
     Long countryId,
 
     String shippingAddressCity, // GET only (updated via dedicated endpoint)
@@ -45,7 +54,7 @@ public record CustomerDto(
     // - DM "Customer" = WRONG because I couple my holy DM to ONE of the way I present this data
     // - CustomerMapper (hand written or MapStruct-generated)
     Customer customer = new Customer();
-    customer.setEmail(email());
+    customer.setEmail(email!=null ?email.trim():null);
     customer.setName(name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(countryId()));

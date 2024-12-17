@@ -1,7 +1,11 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -29,7 +33,11 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 5)
+  @NotNull
   private String name;
+  @Email
+  @NotNull
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
