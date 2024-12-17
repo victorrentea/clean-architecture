@@ -1,6 +1,10 @@
 package victor.training.clean.application.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import victor.training.clean.application.dto.CustomerDto;
@@ -30,6 +34,7 @@ public class CustomerApplicationService {
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
+  private final ObjectMapper jacksonObjectMapper;
 
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
@@ -134,5 +139,14 @@ public class CustomerApplicationService {
 
   private void auditRemovedGoldMember(String customerName, String reason) {
     log.info("Kafka.send ( {name:" + customerName + ", reason:" + reason + "} )");
+  }
+
+  @SneakyThrows
+  public void patchUpdate(long id, JsonPatch patch) {
+    Customer oldCustomer = customerRepo.findById(id).orElseThrow();
+    JsonNode oldJson = jacksonObjectMapper.convertValue(oldCustomer, JsonNode.class);
+    JsonNode patchedJson = patch.apply(oldJson);
+    Customer patchedCustomer = jacksonObjectMapper.treeToValue(patchedJson, Customer.class);
+    customerRepo.save(patchedCustomer);
   }
 }

@@ -22,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerController {
   private final CustomerApplicationService customerApplicationService;
-  private final ObjectMapper jacksonObjectMapper;
 
   @PostMapping("customers")
   public void register(@RequestBody @Validated CustomerDto dto) {
@@ -72,13 +71,7 @@ public class CustomerController {
 
   @PatchMapping(path = "customers/{id}", consumes = "application/json-patch+json")
   public void patch(@PathVariable long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
-    Customer oldCustomer = customerRepo.findById(id).orElseThrow();
-    JsonNode oldJson = jacksonObjectMapper.convertValue(oldCustomer, JsonNode.class);
-    JsonNode patchedJson = patch.apply(oldJson);
-    Customer patchedCustomer = jacksonObjectMapper.treeToValue(patchedJson, Customer.class);
-    customerRepo.save(patchedCustomer);
+    customerApplicationService.patchUpdate(id, patch);
   }
-  private final CustomerRepo customerRepo;
-
 }
 
