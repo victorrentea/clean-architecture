@@ -1,6 +1,7 @@
 package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ public record CustomerDto(
 
     @Size(min = 5)
     @NotNull
+    @Schema(description = "The name of the customer")
     String name,
 
     @Email

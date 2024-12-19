@@ -2,6 +2,7 @@ package victor.training.clean;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Builder;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.openapitools.openapidiff.core.OpenApiCompare;
@@ -28,7 +29,7 @@ public class MyOpenAPIDidNotChangeTest {
   @Autowired
   MockMvc mockMvc;
 
-  @Value("classpath:/my-existing-openapi.json") // extracted yesterday
+  @Value("classpath:/my-existing-openapi.json") // extracted yesterday stored on Git now
   Resource myExpectedOpenAPI;
 
   @Test

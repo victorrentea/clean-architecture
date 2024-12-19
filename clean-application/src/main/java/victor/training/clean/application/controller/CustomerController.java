@@ -13,6 +13,7 @@ import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.service.CustomerApplicationService;
+import victor.training.clean.application.service.CustomerSearchQuery;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
@@ -20,19 +21,21 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class CustomerController {
+public class CustomerController /*implements MyApiSwaggerDocced*/{
   private final CustomerApplicationService customerApplicationService;
   private final ObjectMapper jacksonObjectMapper;
+  private final CustomerSearchQuery customerSearchQuery;
 
-  @PostMapping("customers")
-  public void register(@RequestBody @Validated CustomerDto dto) {
-    customerApplicationService.register(dto);
-  }
+//  @PostMapping("customers")
+//  public void register(@RequestBody @Validated CustomerDto dto) {
+//    customerApplicationService.register(dto);
+//  }
 
   @Operation(description = "Search Customer")
   @PostMapping("customers/search")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-    return customerApplicationService.search(searchCriteria);
+//    return customerApplicationService.search(searchCriteria);
+    return customerSearchQuery.search(searchCriteria);
   }
 
   @GetMapping("customers/{id}")

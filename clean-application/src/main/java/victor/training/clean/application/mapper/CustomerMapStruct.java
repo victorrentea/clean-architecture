@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface CustomerMapStruct {
   @Mapping(target = "createdDate", source = "createdDate", dateFormat = "yyyy-MM-dd")
   @Mapping(target = "countryId", source = "country.id")
-
   // Customer#getLegalEntity() returns Optional<>
   @Mapping(target = "legalEntityCode", source = "legalEntityCode", qualifiedByName = "unwrapOpt")
   CustomerDto toDto(Customer customer);
