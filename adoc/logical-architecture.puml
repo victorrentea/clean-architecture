@@ -1,0 +1,6 @@
+@startuml
+[Some Source] <<..some.source..>>
+[Some Target] <<..some.target..>> as target
+
+[Some Source] --> target
+@enduml
