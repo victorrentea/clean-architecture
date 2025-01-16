@@ -162,7 +162,6 @@
                                     victor.training.clean.domain.model
                                 </scanPackage>
                             </scanPackages>
-<!--                            <hideMethods>true</hideMethods>-->
                             <removeMethods>true</removeMethods>
                             <useShortClassNames>true</useShortClassNames>
                             <addJPAAnnotations>true</addJPAAnnotations>
