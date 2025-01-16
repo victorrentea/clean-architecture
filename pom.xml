@@ -66,6 +66,7 @@
 
     <build>
         <plugins>
+
             <!-- extract package diagram from code as .svg and .puml in /target/apidocs -->
             <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>

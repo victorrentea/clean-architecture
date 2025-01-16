@@ -142,6 +142,35 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>de.elnarion.maven</groupId>
+                <artifactId>plantuml-generator-maven-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>generate-simple-diagram</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>generate-test-sources</phase>
+                        <configuration>
+                            <outputFilename>domain.puml</outputFilename>
+                            <outputDirectory>${project.basedir}</outputDirectory>
+                            <scanPackages>
+                                <scanPackage>
+                                    victor.training.clean.domain.model
+                                </scanPackage>
+                            </scanPackages>
+<!--                            <hideMethods>true</hideMethods>-->
+                            <removeMethods>true</removeMethods>
+                            <useShortClassNames>true</useShortClassNames>
+                            <addJPAAnnotations>true</addJPAAnnotations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -153,7 +182,7 @@
                         </goals>
                         <configuration>
                             <!-- Generate client stubs based on consumed contract -->
-                            <inputSpec>clean-application/ldap-api-docs.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/ldap-api-docs.yaml</inputSpec>
                             <generatorName>java</generatorName>
                             <library>resttemplate</library>
                             <apiPackage>victor.training.clean.infra</apiPackage>

@@ -1,0 +1,80 @@
+@startuml
+
+class AnafResult {
+	{field} -isVatPayer : boolean
+	{field} -name : String
+}
+
+
+class Country <<Entity>>  {
+	{field} +@Id id : long
+	{field} +iso : String
+	{field} +name : String
+}
+
+
+class Customer <<Entity>>  {
+	{field} +createdByUsername : String
+	{field} +createdDate : LocalDate
+	{field} +discountedVat : boolean
+	{field} +email : String
+	{field} +goldMember : boolean
+	{field} +goldMemberRemovalReason : String
+	{field} +@Id id : Long
+	{field} +legalEntityCode : String
+	{field} +name : String
+	{field} +shippingAddressCity : String
+	{field} +shippingAddressStreet : String
+	{field} +shippingAddressZip : String
+	{field} +validatedBy : String
+}
+
+
+class Email {
+	{field} -body : String
+	{field} -cc : List
+	{field} -from : String
+	{field} -subject : String
+	{field} -to : String
+}
+
+
+class EmailBuilder {
+	{field} -body : String
+	{field} -from : String
+	{field} -subject : String
+	{field} -to : String
+}
+
+
+class InsurancePolicy <<Entity>>  {
+	{field} +countryId : Long
+	{field} +@Id id : Long
+	{field} +valueInEur : BigDecimal
+}
+
+
+class PolicyNotification <<Entity>>  {
+	{field} +@Id id : Long
+	{field} +time : LocalDateTime
+	{field} +title : String
+}
+
+
+enum Status {
+	{field} +ACTIVE
+	{field} +DELETED
+	{field} +DRAFT
+	{field} +VALIDATED
+}
+
+
+
+
+Customer -->  Country :  @ManyToOne\ncountry
+Customer -->  Status : status
+InsurancePolicy -->  Customer :  @ManyToOne\ncustomer
+PolicyNotification -->  InsurancePolicy :  @ManyToOne\npolicy
+
+
+@enduml
