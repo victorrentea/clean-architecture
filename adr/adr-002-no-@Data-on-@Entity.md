@@ -24,6 +24,8 @@ Instead:
 3. We will prefer changing entity's state via dedicated mutator methods (not setters) everytime we can protect a domain invariant; we will use @Setter on the other fields.
 4. @Getter is allowed on the classlevel (propagating on all fields)
 
+**Side-note**: You don't need `@Builder` on a mutable `@Entity`, because we configured Lombok to generate setters that return `this` by adding `lombok.accessors.chain=true` in `lombok.config`. So you can now write: `new MyEntity().setA("a").setB("b");`
+
 ## Consequences
 Positive:
 - We avoid (common) potential lazy-loading issues
