@@ -56,6 +56,7 @@ public class ArchitectureTest {
   }
 
   @Test
+//  @Disabled("TODO fix when I reaturn from vacation")// date 7y ago
   public void domainClassesShouldBeSmall() {
     classes().that().resideInAPackage("..domain..")
         .should(haveLessLineNumbersThan(300))

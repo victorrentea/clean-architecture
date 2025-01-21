@@ -54,7 +54,7 @@ potentially enforced by the Domain Model.
 
 ## Compliance
 Enforcing is done via Code Review.
-(since we couldn't find any automated way to check it😢)
+(since we couldn't find any automated way to check it yet😢)
 
 ## Notes
 - Author: Developer A 
