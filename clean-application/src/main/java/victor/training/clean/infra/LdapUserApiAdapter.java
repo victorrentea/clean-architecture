@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.UserFetcher;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,7 @@ import java.util.Optional;
 @Slf4j
 @Adapter // design pattern from GoF
 @RequiredArgsConstructor
-public class LdapUserApiAdapter implements victor.training.clean.domain.service.UserFetcher {
+public class LdapUserApiAdapter implements UserFetcher {
   private final LdapApi ldapApi;
 
   // this method's complexity is more about mapping. shouldn't it be called mapUser()

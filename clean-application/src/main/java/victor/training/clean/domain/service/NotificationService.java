@@ -7,12 +7,17 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 
-@RequiredArgsConstructor
+
 @Slf4j
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
   private final UserFetcher userFetcher;
+
+  public NotificationService(IEmailSender emailSender, UserFetcher userFetcher) {
+    this.emailSender = emailSender;
+    this.userFetcher = userFetcher;
+  }
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
