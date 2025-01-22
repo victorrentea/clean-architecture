@@ -1,20 +1,20 @@
 package victor.training.clean.domain.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.infra.LdapUserApiAdapter;
 
 
 @Slf4j
 @Service
 public class NotificationService {
   private final IEmailSender emailSender;
-  private final UserFetcher userFetcher;
+  private final LdapUserApiAdapter userFetcher;
 
-  public NotificationService(IEmailSender emailSender, UserFetcher userFetcher) {
+  public NotificationService(IEmailSender emailSender, LdapUserApiAdapter userFetcher) {
     this.emailSender = emailSender;
     this.userFetcher = userFetcher;
   }
