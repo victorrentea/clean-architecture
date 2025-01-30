@@ -25,7 +25,7 @@ public class ArchitectureTest {
       .importPackages("victor.training");
 
   @Disabled("Fix this after I return from vacation")
-  // NOTE: In case you don't understand this test, contact me:
+  // NOTE: In case you don't understand this test, asContact me:
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
   @Test
   public void domain_independent_of_infrastructure() {
