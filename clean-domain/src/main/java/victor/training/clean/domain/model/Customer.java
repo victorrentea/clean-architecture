@@ -112,6 +112,13 @@ public class Customer {
     validatedBy = Objects.requireNonNull(currentUser);
   }
 
+  // big mistake
+//  public CustomerDto toDto() {
+//     bad practice:
+//  }
+
+  // java visibility sucks. package-protected is flawed
+
   public void activate() {
     if (status != Status.VALIDATED) {
       throw new IllegalStateException("Can't activate a non-validated customer");
