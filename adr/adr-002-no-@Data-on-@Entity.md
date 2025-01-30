@@ -13,7 +13,7 @@ Lombok @Data generates problematic code for our Domain Model:
    - can trigger **lazy-loading** of child collections (unless fields are marked with @HashCodeAndEquals.Excluded)
    - hashCode is **unstable**: it changes when Hibernate assigns @GeneratedValue @Id => can lead to loosing elements in a HashSet/Map
 2. **@ToString** can trigger **lazy-loading** of child collections (unless fields are marked with @ToString.Excluded) 
-3. **@Setters** encourage an **anemic** model lacking behavior
+3. ±**@Setters** encourage an **anemic** model lacking behavior
 
 ## Decision
 We will not use @Data on @Entity classes. 

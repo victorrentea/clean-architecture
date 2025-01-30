@@ -23,7 +23,7 @@ like in a search.
 ## Decision
 For every search use-case we will select DTOs instead of Entities.
 
-This can be implemented in two ways:
+For example, this can be implemented in two ways:
 1) Instantiating the DTO from the JQPL query:
 ```java
 @Query("SELECT new com.example.dto.UserDto(u.id, u.name) FROM User u WHERE ...")
@@ -60,3 +60,12 @@ Enforcing is done via Code Review.
 - Author: Developer A 
 - Changelog: 
   - 0.1 initial proposed version on 2023-11-01
+
+
+Can you give some examples, what should NOT be put into ADR (what kind of decision)?
+- functional requirements/docs
+- taste-based
+- emotional talk
+
+
+only why and what should be answered by ADR not how(implementation details)
