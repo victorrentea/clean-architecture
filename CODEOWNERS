@@ -1,4 +1,6 @@
 # Each line is a rule consisting of a pattern followed by one or more GitHub usernames or team names.
 # This file is located in the .github/ directory of your repository.
+# any time this file changes it requires mandatory reviewer the ELDER architect
 
 /src/test/java/victor/training/clean/ArchitectureTest.java @architects
+/adr/* @architects
