@@ -7,18 +7,17 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapUserAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapUserAdapter ldapUserAdapter;
+  private final UserFetcher UserFetcher;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = ldapUserAdapter.fetchUser(usernamePart);
+    User user = UserFetcher.fetchUser(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -39,7 +38,7 @@ public class NotificationService {
 
   // 💖
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    User user = ldapUserAdapter.fetchUser(usernamePart);
+    User user = UserFetcher.fetchUser(usernamePart);
 
     String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
 

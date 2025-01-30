@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.UserFetcher;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,8 +13,9 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service // Adapter pattern <> more than a mapper
-public class LdapUserAdapter {
+public class LdapUserAdapter implements UserFetcher {
   private final LdapApi ldapApi;
+  @Override
   public User fetchUser(String usernamePart) {
     // Anti-Corruption Layer (ACL)
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
