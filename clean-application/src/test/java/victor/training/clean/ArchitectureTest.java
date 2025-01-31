@@ -56,7 +56,6 @@ public class ArchitectureTest {
         .and().arePublic()
         .should().haveRawReturnType(not(resideInAPackage("..domain..")))
         .andShould(new ParameterizedReturnTypeCondition(not(resideInAPackage("..domain.."))))
-//        .igno
         .check(allProjectClasses);
   }
 
