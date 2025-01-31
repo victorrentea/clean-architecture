@@ -7,7 +7,11 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapUserAdapter;
+import victor.training.clean.infra.LdapApi;
+import victor.training.clean.infra.LdapUserDto;
+
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
