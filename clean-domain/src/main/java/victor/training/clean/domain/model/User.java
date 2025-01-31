@@ -1,7 +1,5 @@
 package victor.training.clean.domain.model;
 
-import jakarta.validation.constraints.NotNull;
-
 import java.util.Optional;
 
 // VALUE OBJECT
@@ -20,7 +18,6 @@ public record User(
 //  private String fName; // JACKSON doesn't need getter/setters
 //  private String lName;
 //  private String workEmail;
-//  @NotNull
 //  private String un;
 //
 //  public String fullName() {
