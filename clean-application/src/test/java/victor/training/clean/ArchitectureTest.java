@@ -25,7 +25,7 @@ public class ArchitectureTest {
       .importPackages("victor.training");
 
 //  @Disabled("Fix this after I return from vacation")
-  // NOTE: In case you don't bunderstand this test, asContact me:
+  // NOTE: In case you don't understand this test, asContact me:
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
 
   @Test // @see ADR-007 onion architecture
@@ -46,8 +46,6 @@ public class ArchitectureTest {
   public void domain_independent_of_application() {
     // TODO check that no classes in the domain pacakge depend on any classes in the application (eg DTOs)
   }
-
-  // add in CI pipe for aLL projects one check that there is at least 3 ArchUnit in any Git repo.
 
   @Test
   @Disabled
