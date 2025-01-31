@@ -62,6 +62,7 @@ public class ArchitectureTest {
         .check(allProjectClasses);
   }
 
+
   private ArchCondition<JavaClass> haveLessLineNumbersThan(int number) {
     return new ArchCondition<JavaClass>("have less line numbers than " + number) {
       @Override

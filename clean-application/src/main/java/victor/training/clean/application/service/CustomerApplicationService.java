@@ -45,7 +45,7 @@ public class CustomerApplicationService {
 
     // Bit of domain logic on the state of one Entity?  What TODO?
     // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.canReturnOrders();
+    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -57,13 +57,9 @@ public class CustomerApplicationService {
         .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-//        .shippingAddressStreet(customer.getShippingAddressStreet())
-//        .shippingAddressCity(customer.getShippingAddressCity())
-//        .shippingAddressZip(customer.getShippingAddressZip())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressStreet(customer.getShippingAddress().street())
-
+        .shippingAddressStreet(customer.getShippingAddressStreet())
+        .shippingAddressCity(customer.getShippingAddressCity())
+        .shippingAddressZip(customer.getShippingAddressZip())
 
         .canReturnOrders(canReturnOrders)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
