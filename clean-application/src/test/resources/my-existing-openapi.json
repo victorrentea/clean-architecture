@@ -217,6 +217,9 @@
   "components": {
     "schemas": {
       "CustomerDto": {
+        "required": [
+          "name"
+        ],
         "type": "object",
         "properties": {
           "id": {

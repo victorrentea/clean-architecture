@@ -3,6 +3,7 @@ package victor.training.clean.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
@@ -14,7 +15,6 @@ public class NotificationService {
   private final IEmailSender IEmailSender;
   private final UserFetcher UserFetcher;
 
-  // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     User user = UserFetcher.fetchUser(usernamePart);
 
@@ -37,6 +37,10 @@ public class NotificationService {
   // 💖
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
     User user = UserFetcher.fetchUser(usernamePart);
+
+    String s = "Abc";
+
+//    String s2 = StringUtils.capitalize(s);
 
     String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
 

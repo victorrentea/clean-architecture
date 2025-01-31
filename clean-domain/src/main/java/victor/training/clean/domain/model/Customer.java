@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -22,6 +23,8 @@ import java.util.Optional;
 @Entity // ORM/JPA (2)
 //@Configurable // don't use it @Value("${)
 // 👑 Domain Model Entity, the backbone of your core complexity.
+
+//@Cache()
 public class Customer {
   @Id
   @GeneratedValue
@@ -116,6 +119,23 @@ public class Customer {
 //  public CustomerDto toDto() {
 //     bad practice:
 //  }
+
+
+  // NO
+  public String toSearchResultPrettyStringForGridInSearch() {
+    return "Customer{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", email='" + email + '\'' +
+        ", country=" + country +
+        ", createdDate=" + createdDate +
+        ", createdByUsername='" + createdByUsername + '\'' +
+        ", goldMember=" + goldMember +
+        ", goldMemberRemovalReason='" + goldMemberRemovalReason + '\'' +
+        ", legalEntityCode='" + legalEntityCode + '\'' +
+        ", discountedVat=" + discountedVat +
+        '}';
+  }
 
   // java visibility sucks. package-protected is flawed
 
