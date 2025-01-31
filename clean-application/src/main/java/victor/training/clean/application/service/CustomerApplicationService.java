@@ -18,6 +18,8 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -33,7 +35,6 @@ public class CustomerApplicationService {
   private final AnafClient anafClient;
   private final ObjectMapper jacksonObjectMapper;
 
-  // middle man code smell, but we tolerate it for consistency.
   public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerSearchQuery.search(searchCriteria);
   }
@@ -43,14 +44,41 @@ public class CustomerApplicationService {
 
     // Bit of domain logic on the state of one Entity?  What TODO?
     // PS: it's also repeating somewhere else
+    boolean canReturnOrders = customer.canReturnOrders();
 
     // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.fromEntity(customer);
+    return CustomerDto.builder()
+        .id(customer.getId())
+        .name(customer.getName())
+        .email(customer.getEmail())
+        .countryId(customer.getCountry().getId())
+        .status(customer.getStatus())
+        .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+        .gold(customer.isGoldMember())
+
+//        .shippingAddressStreet(customer.getShippingAddressStreet())
+//        .shippingAddressCity(customer.getShippingAddressCity())
+//        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+
+
+        .canReturnOrders(canReturnOrders)
+        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
+        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
+        .discountedVat(customer.isDiscountedVat())
+        .build();
   }
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = dto.toEntity();
+    Customer customer = new Customer();
+    customer.setEmail(dto.email());
+    customer.setName(dto.name());
+    customer.setCreatedDate(LocalDate.now());
+    customer.setCountry(new Country().setId(dto.countryId()));
+    customer.setLegalEntityCode(dto.legalEntityCode());
 
     // request payload validation
     if (customer.getName().length() < 5) { // TODO alternatives to implement this?

@@ -16,7 +16,7 @@ import static java.lang.String.join;
 
 @RequiredArgsConstructor
 //@RestController
-public class SearchCustomerUseCase { //
+public class SearchCustomerUseCase {
   private final EntityManager entityManager;
 
   @VisibleForTesting // only @Tests are allowed to use this
