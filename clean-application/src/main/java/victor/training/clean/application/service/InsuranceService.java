@@ -9,7 +9,7 @@ import victor.training.clean.domain.model.InsurancePolicy;
 import victor.training.clean.domain.model.PolicyNotification;
 import victor.training.clean.domain.repo.InsurancePolicyRepo;
 import victor.training.clean.domain.repo.PolicyNotificationRepo;
-import victor.training.clean.domain.service.IEmailSender;
+import victor.training.clean.infra.EmailSender;
 
 @Slf4j
 @Service
@@ -17,7 +17,7 @@ import victor.training.clean.domain.service.IEmailSender;
 public class InsuranceService {
    private final InsurancePolicyRepo insurancePolicyRepo;
    private final PolicyNotificationRepo policyNotificationRepo;
-   private final IEmailSender IEmailSender;
+   private final EmailSender emailSender;
 
    public void customerDetailsChanged(Customer newCustomer) {
       InsurancePolicy currentPolicy = insurancePolicyRepo.findByCustomerId(newCustomer.getId());
@@ -38,7 +38,7 @@ public class InsuranceService {
           .subject("Customer " + customer.getName() + " policy has to be re-evaluated")
           .body("Please review the policy due to : " + reason)
           .build();
-      IEmailSender.sendEmail(email);
+      emailSender.sendEmail(email);
    }
 
    public void printPolicy(long policyId) {

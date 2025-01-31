@@ -27,8 +27,7 @@ public class ArchitectureTest {
 //  @Disabled("Fix this after I return from vacation")
   // NOTE: In case you don't understand this test, asContact me:
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
-
-  @Test // @see ADR-007 onion architecture
+  @Test
   public void domain_independent_of_infrastructure() {
     var rule = noClasses().that()
         .resideInAPackage("..domain..")
@@ -37,9 +36,8 @@ public class ArchitectureTest {
 
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
 //        .hasSize(8); //  t0 initial 😭
-//        .hasSize(4); // 3 months later => drink
-        .hasSize(0); // end 🍾 -> team building
-    // = architectural fitness functions
+        .hasSize(4); // 3 months later
+//        .hasSize(0); // end 🍾
   }
 
   @Test
