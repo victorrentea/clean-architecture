@@ -35,8 +35,8 @@ public class ArchitectureTest {
         .resideInAPackage("..infra..");
 
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
-//        .hasSize(8); //  t0 initial 😭
-        .hasSize(4); // 3 months later
+        .hasSize(8); //  t0 initial 😭
+//        .hasSize(50); // 3 months later
 //        .hasSize(0); // end 🍾
   }
 
