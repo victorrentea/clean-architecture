@@ -25,7 +25,8 @@ public class NotificationService {
         .body("Dear " + customer.getName() + ", welcome! Sincerely, " + user.name())
         .build();
 
-    user.asContact().ifPresent(email.getCc()::add);
+
+    user.email().ifPresent(email.getCc()::add);
 
     IEmailSender.sendEmail(email);
 
