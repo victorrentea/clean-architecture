@@ -48,6 +48,13 @@ public class Customer {
     return Optional.ofNullable(legalEntityCode);
   }
 
+  // AM I ALLOWED TO ADD LOGIC TO THIS CLASS?
+  // YES
+  // but...
+  public boolean canReturnOrders() {
+    return goldMember || legalEntityCode == null;
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
