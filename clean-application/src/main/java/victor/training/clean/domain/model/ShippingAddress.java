@@ -7,6 +7,7 @@ package victor.training.clean.domain.model;
 // "VALUE OBJECT" DESIGN PATTERN
 // 1) Immutable
 // 2) No Identity (no PK)
+// eg: Money{amount, currency}, Temperature{value, unit}, Point{x, y}
 
 public record ShippingAddress(
     String city,

@@ -1,0 +1,17 @@
+@startuml
+[*] --> DRAFT
+
+DRAFT --> VALIDATED : validate(username)
+VALIDATED --> ACTIVE : activate()
+DRAFT --> DELETED : delete()
+VALIDATED --> DELETED : delete()
+ACTIVE --> DELETED : delete()
+
+DELETED : Final State
+
+DRAFT : Initial State
+DRAFT : "Can be validated or deleted"
+VALIDATED : "Can be activated or deleted"
+ACTIVE : "Can only be deleted"
+
+@enduml
