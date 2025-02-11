@@ -27,9 +27,10 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+  private ShippingAddress shippingAddress; // this change never breaks the API
 
   @ManyToOne
   private Country country;
@@ -50,6 +51,7 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
+
   private Status status;
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 }

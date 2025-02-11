@@ -39,5 +39,5 @@ Negative:
 - https://thorben-janssen.com/ultimate-guide-to-implementing-equals-and-hashcode-with-hibernate/
 
 ## Compliance
-Enforced by Code Review
+Enforced by Code Review: pt ca nu am gasit un mod automat de a verifica asta :(
 

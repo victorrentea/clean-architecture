@@ -34,10 +34,11 @@ public class ArchitectureTest {
         .should().dependOnClassesThat()
         .resideInAPackage("..infra..");
 
+    // achitecture fitness function
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
-//        .hasSize(100); //  t0 initial 😭
+        .hasSize(100); //  t0 initial 😭
 //        .hasSize(50); // 3 months later
-        .hasSize(0); // end 🍾
+//        .hasSize(0); // end 🍾
   }
 
   @Test
@@ -57,6 +58,7 @@ public class ArchitectureTest {
 
   @Test
   public void domainClassesShouldBeSmall() {
+    // mai putin clasa MonsterVechi
     classes().that().resideInAPackage("..domain..")
         .should(haveLessLineNumbersThan(300))
         .check(allProjectClasses);

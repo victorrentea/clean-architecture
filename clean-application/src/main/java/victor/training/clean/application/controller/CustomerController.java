@@ -24,7 +24,7 @@ public class CustomerController {
   private final CustomerApplicationService customerApplicationService;
 
   @PostMapping("customers")
-  public void register(@RequestBody @Validated CustomerDto dto) {
+  public void register(@RequestBody @Validated CustomerDto dto, @CookieValue("JSESSIONID") String sessionId) {
     customerApplicationService.register(dto);
   }
 
