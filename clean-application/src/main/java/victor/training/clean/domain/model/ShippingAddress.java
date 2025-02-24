@@ -9,6 +9,9 @@ package victor.training.clean.domain.model;
 // 2) No Identity (no PK)
 // eg: Money{amount, currency}, Temperature{value, unit}, Point{x, y}
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public record ShippingAddress(
     String city,
     String street,

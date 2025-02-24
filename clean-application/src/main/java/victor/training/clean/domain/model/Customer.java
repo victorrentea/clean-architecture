@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -35,6 +32,7 @@ public class Customer {
 //  private String shippingAddressCity;
 //  private String shippingAddressStreet;
 //  private String shippingAddressZip;
+  @Embedded
   private ShippingAddress shippingAddress; // this change never breaks the API
 
   @ManyToOne
