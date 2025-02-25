@@ -10,9 +10,10 @@ import java.util.Optional;
 // Adapter design pattern, in a Hexagonal arch is a OutputPort
 @Component
 @RequiredArgsConstructor
-public class UserProvider {
+public class LdapUserProvider implements victor.training.clean.domain.service.UserProvider {
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchUserByUsername(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 

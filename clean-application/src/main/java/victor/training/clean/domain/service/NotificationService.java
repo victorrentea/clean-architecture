@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.*;
 
 @RequiredArgsConstructor
 @Slf4j

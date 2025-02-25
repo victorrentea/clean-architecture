@@ -6,7 +6,8 @@ import victor.training.clean.domain.model.Email;
 
 @Slf4j
 @Service
-public class EmailSender {
+public class SmtpEmailSender implements victor.training.clean.domain.service.EmailSender {
+   @Override
    public void sendEmail(Email email) {
       // Imagine 20 lines of infra code to:
       // - get a SMTP connection to RELAY-COSMO-SMTP server
