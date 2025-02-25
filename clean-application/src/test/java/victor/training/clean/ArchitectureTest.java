@@ -36,8 +36,8 @@ public class ArchitectureTest {
 
     // achitecture fitness function
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
-        .hasSize(14); //  t0 initial 😭 = status quo at the start of the migration of legacy
-//        .hasSize(50); // 3 months later
+//        .hasSize(14); //  t0 initial 😭 = status quo at the start of the migration of legacy
+        .hasSize(8); // 3 months later
 //        .hasSize(0); // end 🍾
   }
 
