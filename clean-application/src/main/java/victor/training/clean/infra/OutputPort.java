@@ -8,6 +8,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Component
 @Retention(RUNTIME)
-public @interface Adapter {
+public @interface OutputPort {
 
 }

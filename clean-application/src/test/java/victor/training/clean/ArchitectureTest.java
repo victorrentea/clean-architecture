@@ -24,7 +24,7 @@ public class ArchitectureTest {
       .withImportOption(DO_NOT_INCLUDE_TESTS)
       .importPackages("victor.training");
 
-  @Disabled("Fix this after I return from vacation")
+//  @Disabled("Fix this after I return from vacation")
   // NOTE: In case you don't understand this test, contact me:
   // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
   @Test
@@ -36,7 +36,7 @@ public class ArchitectureTest {
 
     // achitecture fitness function
     assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
-        .hasSize(100); //  t0 initial 😭
+        .hasSize(14); //  t0 initial 😭 = status quo at the start of the migration of legacy
 //        .hasSize(50); // 3 months later
 //        .hasSize(0); // end 🍾
   }
