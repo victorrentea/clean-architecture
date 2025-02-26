@@ -45,7 +45,7 @@ Positive:
 - Better performance - by reading less from DB.
 - Less mapping needed - the ORM populates directly the DTO object.
 
-Negative:
+Negative💖:
 - Coupling - this repository method depends on DTOs => can't be in `domain`.
 We will place it in another Spring Data Repo interface next to controller.
 - Risk - domain logic in DTO, if applying logic after SELECT.
