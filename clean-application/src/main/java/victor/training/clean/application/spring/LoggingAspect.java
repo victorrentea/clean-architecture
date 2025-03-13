@@ -23,7 +23,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static java.util.stream.Collectors.joining;
 
 @Slf4j
-@Aspect
+//@Aspect
 @Component
 public class LoggingAspect {
 	@Target(METHOD)

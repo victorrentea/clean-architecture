@@ -40,6 +40,11 @@ public class ArchitectureTest {
         .hasSize(0); // end 🍾
   }
 
+
+
+
+
+
   @Test
   public void domain_independent_of_application() {
     // TODO check that no classes in the domain pacakge depend on any classes in the application (eg DTOs)
@@ -55,12 +60,16 @@ public class ArchitectureTest {
         .check(allProjectClasses);
   }
 
-  @Test
+  @Test // 💖💖💖
   public void domainClassesShouldBeSmall() {
     classes().that().resideInAPackage("..domain..")
         .should(haveLessLineNumbersThan(300))
         .check(allProjectClasses);
   }
+
+
+
+
 
 
   private ArchCondition<JavaClass> haveLessLineNumbersThan(int number) {

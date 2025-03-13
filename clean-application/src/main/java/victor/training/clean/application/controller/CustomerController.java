@@ -52,7 +52,7 @@ public class CustomerController {
   //</editor-fold>
 
   @PutMapping("customers/{id}")
-  public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
+  public void update(@PathVariable long id, @RequestBody  @Validated CustomerDto dto) {
     customerApplicationService.update(id, dto);
   }
 

@@ -1,5 +1,6 @@
 package victor.training.clean.application.spring;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import victor.training.clean.domain.CleanException;
 import victor.training.clean.domain.CleanException.ErrorCode;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
@@ -23,15 +25,15 @@ import static org.springframework.http.ResponseEntity.status;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-  @ResponseStatus(BAD_REQUEST)
-  @ExceptionHandler(MethodArgumentNotValidException.class) // @Validated
-  public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
-    List<String> validationErrors = e.getBindingResult().getFieldErrors().stream()
-        .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
-        .toList();
-    log.error("Invalid request: {}", validationErrors, e);
-    return validationErrors;
-  }
+//  @ResponseStatus(BAD_REQUEST)
+//  @ExceptionHandler(MethodArgumentNotValidException.class) // @Validated
+//  public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
+//    List<String> validationErrors = e.getBindingResult().getFieldErrors().stream()
+//        .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+//        .toList();
+//    log.error("Invalid request: {}", validationErrors, e);
+//    return validationErrors;
+//  }
 
   @ResponseStatus(NOT_FOUND)
   @ExceptionHandler(NoSuchElementException.class) // optional.get() on empty Optional
@@ -57,8 +59,9 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<String> onAnyOtherException(Exception exception) {
-    return handleException(ErrorCode.GENERAL, null, exception);
+  public void onAnyOtherException(Exception exception, HttpServletResponse response) throws IOException {
+//    return handleException(ErrorCode.GENERAL, null, exception);
+    exception.printStackTrace(response.getWriter());
   }
 
 }

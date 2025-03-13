@@ -1,10 +1,9 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -27,9 +26,11 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+  @Embedded // nu e nevoie ALTER TABLE
+  private ShippingAddress shippingAddress;
 
   @ManyToOne
   private Country country;
@@ -47,24 +48,55 @@ public class Customer {
     return Optional.ofNullable(legalEntityCode);
   }
 
+  public boolean isPrivate() { // semantic ++, cu lb de domeniu
+    return getLegalEntityCode().isEmpty();
+  }
+
+  public boolean canReturnOrders() { // DRY #raise the sallary
+    return goldMember || isPrivate();
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
+  @Setter(AccessLevel.NONE)
   private Status status;
+  @Setter(AccessLevel.NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  public void validate(String currentUser) {
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Can't validate a non-draft customer");
+    }
+    status = Status.VALIDATED;
+    validatedBy = currentUser;
+  }
+
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Can't activate a non-validated customer");
+    }
+    status = Status.ACTIVE;
+  }
+
+  public void delete() {
+    if (status == Status.DELETED) {
+      throw new IllegalStateException("Can't delete a non-active customer");
+    }
+    status = Status.DELETED;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+class SomeCode {
+  public void correct(Customer draftCustomer) {
+    draftCustomer.validate("currentUser");
+  }
+  public void incorrect(Customer draftCustomer) {
+    draftCustomer.validate("trebe");
+  }
+  public void activate(Customer draftCustomer) {
+    draftCustomer.activate();
+  }
+}
 //endregion
