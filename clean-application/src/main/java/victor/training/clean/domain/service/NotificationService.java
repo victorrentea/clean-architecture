@@ -41,20 +41,19 @@ public class NotificationService {
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
-        .body("Dear " + customer.getName() + ", welcome! Sincerely, " + fullName)
+        .body("Dear " + customer.getName() + ", welcome! Sincerely, " + user.fullName())
         .build();
 
 
-    // ⚠️ Unguarded nullable fields can cause NPE in other places TODO return Optional<> from getter
-    if (ldapUserDto.getWorkEmail() != null) {
+    if (user.email().isPresent()) {
       // ⚠️ Logic repeated in other places TODO move logic to the new class
-      String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
+      String contact = user.fullName() + " <" + user.email().get().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
 
-    customer.setCreatedByUsername(ldapUserDto.getUn());
+    customer.setCreatedByUsername(user.username());
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
