@@ -22,16 +22,11 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-
-    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    normalize(ldapUserDto); // NU E FUNCTIE PURA(=da acelasi rez fara sa modifice chestii)!
-
-    User user = new User(fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail()),
-        ldapUserDto.getUn());
+//    User user = getAndMap(usernamePart);
+//    User user = returnZaUser(usernamePart);
+//    User user = findUser(usernamePart); // DB 2ms
+//    User user = getUser(usernamePart); // prea slab
+    User user = retrieveUser(usernamePart);
 
     // 💩 infra
     ///  ===========
@@ -54,6 +49,25 @@ public class NotificationService {
     emailSender.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
+  }
+
+  private User retrieveUser(String usernamePart) {
+    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
+    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
+
+    User user = map(ldapUserDto);
+    return user;
+  }
+
+  private User map(LdapUserDto ldapUserDto) {
+    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    normalize(ldapUserDto); // NU E FUNCTIE PURA(=da acelasi rez fara sa modifice chestii)!
+
+    User user = new User(fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail()),
+        ldapUserDto.getUn());
+    return user;
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
