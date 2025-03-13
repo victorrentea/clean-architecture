@@ -72,25 +72,4 @@ public class NotificationService {
     }
   }
 
-  public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
-
-    String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
-
-    Email email = Email.builder()
-        .from("noreply@cleanapp.com")
-        .to(customer.getEmail())
-        .subject("Welcome to our Gold membership!")
-        .body(returnOrdersStr +
-              "Yours sincerely, " + userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase())
-        .build();
-
-    String contact = userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase()
-               + " <" + userLdapDto.getWorkEmail().toLowerCase() + ">";
-    email.getCc().add(contact);
-
-    emailSender.sendEmail(email);
-  }
-
-
 }
