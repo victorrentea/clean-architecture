@@ -3,6 +3,7 @@ package victor.training.clean.domain.model;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -15,7 +16,10 @@ import java.util.Optional;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 
-@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
+//@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
+@Getter
+@Setter
+
 @Entity // ORM/JPA (2)
 // 👑 Domain Model Entity, the backbone of your core complexity.
 public class Customer {

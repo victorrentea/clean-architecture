@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +27,15 @@ public class NotificationService {
 
     // ⚠️ Data mapping mixed with core logic TODO pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    normalize(ldapUserDto); // NU E FUNCTIE PURA(=da acelasi rez fara sa modifice chestii)!
+
+    User user = new User(fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail()),
+        ldapUserDto.getUn());
+
+    // 💩 infra
+    ///  ===========
+    // 🧘 domain
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -43,10 +54,6 @@ public class NotificationService {
 
     emailSender.sendEmail(email);
 
-    // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
-    normalize(ldapUserDto);
-
-    // ⚠️ 'un' = bad name TODO in my ubiquitous language 'un' means 'username'
     customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 
