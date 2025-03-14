@@ -31,7 +31,7 @@ public class SearchCustomerUseCase {
   record CustomerSearchResult(
       long id,
       String name
-      // TODO also return 'email' => only this file is impacted
+      // TODO also return 'emailAddress' => only this file is impacted
   ) {
   }
 
@@ -51,7 +51,7 @@ public class SearchCustomerUseCase {
     }
 
     if (criteria.email != null) {
-      jpqlParts.add("UPPER(c.email) = UPPER(:email)");
+      jpqlParts.add("UPPER(c.emailAddress) = UPPER(:emailAddress)");
       params.put("email", criteria.email);
     }
 

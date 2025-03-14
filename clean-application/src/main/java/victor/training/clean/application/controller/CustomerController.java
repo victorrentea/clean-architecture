@@ -1,8 +1,6 @@
 package victor.training.clean.application.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,32 +10,30 @@ import org.springframework.web.bind.annotation.*;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.application.service.CustomerApplicationService;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.application.service.CustomerFacade;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class CustomerController {
-  private final CustomerApplicationService customerApplicationService;
+  private final CustomerFacade customerFacade;
 
   @PostMapping("customers")
   public void register(@RequestBody @Validated CustomerDto dto) {
-    customerApplicationService.register(dto);
+    customerFacade.register(dto);
   }
 
   @Operation(description = "Search Customer")
   @PostMapping("customers/search")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
-    return customerApplicationService.search(searchCriteria);
+    return customerFacade.search(searchCriteria);
   }
 
-  @GetMapping("customers/{id}")
-  public CustomerDto findById(@PathVariable long id) {
-    return customerApplicationService.findById(id);
-  }
+//  @GetMapping("customers/{id}")
+//  public CustomerDto findById(@PathVariable long id) {
+//    return customerFacade.findById(id);
+//  }
 
   //<editor-fold desc="GET returning ResponseEntity for 404 👎">
 //   @GetMapping("customers/{id}")
@@ -53,7 +49,7 @@ public class CustomerController {
 
   @PutMapping("customers/{id}")
   public void update(@PathVariable long id, @RequestBody  @Validated CustomerDto dto) {
-    customerApplicationService.update(id, dto);
+    customerFacade.update(id, dto);
   }
 
   //<editor-fold desc="PUT returning ResponseEntity for 404 👎">
@@ -71,7 +67,7 @@ public class CustomerController {
 
   @PatchMapping(path = "customers/{id}", consumes = "application/json-patch+json")
   public void patch(@PathVariable long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
-    customerApplicationService.patchUpdate(id, patch);
+    customerFacade.patchUpdate(id, patch);
   }
 }
 

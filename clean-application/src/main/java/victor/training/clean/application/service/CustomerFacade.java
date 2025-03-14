@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
@@ -19,7 +22,6 @@ import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -27,7 +29,8 @@ import static java.util.Objects.requireNonNull;
 @Slf4j // ❤️Lombok adds private static final Logger log = LoggerFactory.getLogger(CustomerApplicationService.class);
 @RequiredArgsConstructor // ❤️Lombok generates constructor including all 'private final' fields
 @ApplicationService // custom annotation refining the classic @Service
-public class CustomerApplicationService {
+@RestController
+public class CustomerFacade {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
   private final CustomerSearchQuery customerSearchQuery;
@@ -39,40 +42,16 @@ public class CustomerApplicationService {
     return customerSearchQuery.search(searchCriteria);
   }
 
-  public CustomerDto findById(long id) {
+  @GetMapping("customers/{id}")
+  public CustomerDto findById(@PathVariable long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
-
-    // Bit of domain logic on the state of one Entity?  What TODO?
-    // PS: it's also repeating somewhere else
-
-    // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .status(customer.getStatus())
-        .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-//        .shippingAddressStreet(customer.getShippingAddressStreet())
-//        .shippingAddressCity(customer.getShippingAddressCity())
-//        .shippingAddressZip(customer.getShippingAddressZip())
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-        .canReturnOrders(customer.canReturnOrders())
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+    return CustomerDto.fromEntity(customer);
   }
 
   @Transactional
   public void register(CustomerDto dto) {
     Customer customer = new Customer();
-    customer.setEmail(dto.email());
+    customer.setEmail(dto.emailAddress());
     customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
@@ -85,7 +64,7 @@ public class CustomerApplicationService {
 
     // business rule/validation
     if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
+      throw new IllegalArgumentException("A customer with this emailAddress is already registered!");
       // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
     }
 
@@ -114,10 +93,15 @@ public class CustomerApplicationService {
 
   @Transactional
   public void update(long id, CustomerDto dto) { // TODO move to fine-grained Task-based Commands
+    Customer customer = registerCustomer(id, dto);
+    insuranceService.customerDetailsChanged(customer);
+  }
+
+  private Customer registerCustomer(long id, CustomerDto dto) {
     Customer customer = customerRepo.findById(id).orElseThrow();
     // CRUD part
     customer.setName(dto.name());
-    customer.setEmail(dto.email());
+    customer.setEmail(dto.emailAddress());
     customer.setCountry(new Country().setId(dto.countryId()));
 
     if (!customer.isGoldMember() && dto.gold()) {
@@ -133,7 +117,7 @@ public class CustomerApplicationService {
     }
 
     customerRepo.save(customer); // not required within a @Transactional method if using ORM(JPA/Hibernate)
-    insuranceService.customerDetailsChanged(customer);
+    return customer;
   }
 
 

@@ -37,7 +37,7 @@ public class CustomerSearchQuery {
       }
 
       if (criteria.email() != null) {
-         jpqlParts.add("UPPER(c.email) = UPPER(:email)");
+         jpqlParts.add("UPPER(c.emailAddress) = UPPER(:emailAddress)");
          params.put("email", criteria.email());
       }
 
@@ -73,7 +73,7 @@ public class CustomerSearchQuery {
 //      }
 //
 //      if (criteria.getEmail() != null) {
-//         predicates.add(cb.equal(cb.upper(root.get(Customer_.email)), cb.upper(cb.literal(criteria.getEmail()))));
+//         predicates.add(cb.equal(cb.upper(root.get(Customer_.emailAddress)), cb.upper(cb.literal(criteria.getEmail()))));
 //      }
 //
 //      if (criteria.getCountryId() != null) {

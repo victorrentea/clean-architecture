@@ -13,7 +13,7 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.infra.IEmailSender;
+import victor.training.clean.infra.EmailSender;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -31,7 +31,7 @@ class NotificationServiceTest {
   ApiClient apiClient;
 
   @MockBean
-  IEmailSender IEmailSender;
+  EmailSender EmailSender;
 
   ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
 
@@ -49,7 +49,7 @@ class NotificationServiceTest {
   void sendWelcomeEmail_baseFlow() {
     notificationService.sendWelcomeEmail(customer,"full");
 
-    verify(IEmailSender).sendEmail(emailCaptor.capture());
+    verify(EmailSender).sendEmail(emailCaptor.capture());
     Email email = emailCaptor.getValue();
     assertThat(email.getFrom()).isEqualTo("noreply@cleanapp.com");
     assertThat(email.getTo()).isEqualTo("jdoe@example.com");
@@ -64,13 +64,13 @@ class NotificationServiceTest {
   void sendWelcomeEmail_noWorkEmail() {
     notificationService.sendWelcomeEmail(customer,"noemail");
 
-    verify(IEmailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    verify(EmailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
   }
   @Test
   void sendWelcomeEmail_noEmail() {
     notificationService.sendWelcomeEmail(customer,"externalEmail");
 
-    verify(IEmailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    verify(EmailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
   }
   @Test
   void sendWelcomeEmail_systemUser() {
@@ -84,7 +84,7 @@ class NotificationServiceTest {
   void sendGoldBenefits_baseFlow() {
     customer.setGoldMember(true);
 
-    verify(IEmailSender).sendEmail(emailCaptor.capture());
+    verify(EmailSender).sendEmail(emailCaptor.capture());
     Email email = emailCaptor.getValue();
     assertThat(email.getFrom()).isEqualTo("noreply@cleanapp.com");
     assertThat(email.getTo()).isEqualTo("jdoe@example.com");
@@ -97,7 +97,7 @@ class NotificationServiceTest {
   @Disabled("BUG: throws NPE. Why !?")
   void sendGoldBenefits_missingEmail() {
 
-    verify(IEmailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
+    verify(EmailSender).sendEmail(argThat(email -> email.getCc().isEmpty()));
   }
 
 }

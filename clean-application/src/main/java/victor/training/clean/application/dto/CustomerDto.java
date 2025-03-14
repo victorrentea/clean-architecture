@@ -2,7 +2,6 @@ package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
@@ -18,7 +17,7 @@ public record CustomerDto(
     @NotNull
 //    @Min(2)
     String name,
-    String email,
+    String emailAddress,
     Long countryId,
 
     String shippingAddressCity, // GET only (updated via dedicated endpoint)
@@ -35,6 +34,26 @@ public record CustomerDto(
     String legalEntityCode,
     Boolean discountedVat // GET only (fetched by backend)
 ) {
+
+  public static CustomerDto fromEntity(Customer customer) {
+    return builder()
+        .id(customer.getId())
+        .name(customer.getName())
+        .emailAddress(customer.getEmail())
+        .countryId(customer.getCountry().getId())
+        .status(customer.getStatus())
+        .createdDate(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
+        .gold(customer.isGoldMember())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressZip(customer.getShippingAddress().zip())
+
+        .canReturnOrders(customer.canReturnOrders())
+        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
+        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
+        .discountedVat(customer.isDiscountedVat())
+        .build();
+  }
 
   @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
   @JsonIgnore

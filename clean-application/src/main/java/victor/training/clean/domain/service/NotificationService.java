@@ -12,7 +12,7 @@ import victor.training.clean.infra.*;
 @Slf4j
 @Service
 public class NotificationService {
-  private final IEmailSender IEmailSender;
+  private final EmailSender emailSender;
   private final UserRetriever userRetriever;
 
   // Core application logic, my Zen garden 🧘☯☮️
@@ -37,7 +37,7 @@ public class NotificationService {
       email.getCc().add(contact);
     }
 
-    IEmailSender.sendEmail(email);
+    emailSender.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
   }
