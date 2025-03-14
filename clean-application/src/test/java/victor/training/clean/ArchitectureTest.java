@@ -12,37 +12,49 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
 import victor.training.clean.utils.ParameterizedReturnTypeCondition;
 
+import java.util.List;
+
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.importer.ImportOption.Predefined.DO_NOT_INCLUDE_TESTS;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Disabled("Fix this after I return from vacation")
+// NOTE: In case you don't understand this test, contact me:
+// call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
 public class ArchitectureTest {
 
   private final JavaClasses allProjectClasses = new ClassFileImporter()
       .withImportOption(DO_NOT_INCLUDE_TESTS)
-      .importPackages("victor.training");
+      .importPackages("victor.training"); // TODO adjust
 
-  @Disabled("Fix this after I return from vacation")
-  // NOTE: In case you don't understand this test, contact me:
-  // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
   @Test
   public void domain_independent_of_infrastructure() {
     var rule = noClasses().that()
         .resideInAPackage("..domain..")
         .should().dependOnClassesThat()
         .resideInAPackage("..infra..");
+    List<String> failures = rule.evaluate(allProjectClasses).getFailureReport().getDetails();
 
-    assertThat(rule.evaluate(allProjectClasses).getFailureReport().getDetails())
-//        .hasSize(100); //  t0 initial 😭
-//        .hasSize(50); // 3 months later
-        .hasSize(0); // end 🍾
+//    int expectedFailureCount = 100; //  initial 😭
+//    int expectedFailureCount = 30; //  3 months later
+    int expectedFailureCount = 0; // end 🍾
+
+    assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
+
+    // TODO FreezingArchRule.freeze(rule.check(classes))
   }
 
   @Test
-  public void domain_independent_of_application() {
-    // TODO check that no classes in the domain pacakge depend on any classes in the application (eg DTOs)
+  public void yourRule() {
+    // TODO check an architectural rule for your project (passing or failing)
+    // Ideas (if lacking):
+    // - controller package should not depend on repository
+    // - repository should not use services
+    // - domain should not use DTOs
+    // - no classes in package X should have > 300 lines
+    // - the 'common' package doesn't depend on any other package
   }
 
   @Test
