@@ -32,7 +32,7 @@
             <artifactId>spring-cloud-contract-wiremock</artifactId>
         </dependency>
         <dependency>
-            <!-- @ConfigurationProperties + IntelliJ = 💖-->
+            <!-- @ConfigurationProperties + IntelliJ = love-->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
