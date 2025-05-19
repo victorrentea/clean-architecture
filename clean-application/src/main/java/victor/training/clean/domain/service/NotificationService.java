@@ -8,10 +8,6 @@ import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -19,6 +15,7 @@ import java.util.Optional;
 public class NotificationService {
   private final EmailSender emailSender;
   private final LdapApi ldapApi;
+  private final RetrieveUserService retrieveUserService;
 
   // + class UserApi {
   //    getUser(username):Optional<domain.model.User{strictly what we need}>?
@@ -30,8 +27,7 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String creatorUsername) {
-    User user = retrieveUser(creatorUsername);
-
+    User user = retrieveUserService.retrieveUser(creatorUsername);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -51,41 +47,10 @@ public class NotificationService {
 
     customer.setCreatedByUsername(user.username());
   }
-  // 🧘 domain = my core complexity
-  //  ===========
-  // 💩 infra details my app just HAS to do
-
-  private User retrieveUser(String usernamePart) {
-    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-
-    return map(ldapUserDto);
-  }
-
-  private User map(LdapUserDto ldapUserDto) {
-    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    normalize(ldapUserDto); // NU E FUNCTIE PURA(=da acelasi rez fara sa modifice chestii)!
-
-    return new User(fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail()),
-        ldapUserDto.getUn());
-  }
-
-  private LdapUserDto fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    return dtoList.get(0);
-  }
-
-  private void normalize(LdapUserDto ldapUserDto) {
-    if (ldapUserDto.getUn().startsWith("s")) {
-      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-  }
 
 }
+
+// 🧘 domain = my core complexity
+//  ===========
+// 💩 infra details my app just HAS to do
+
