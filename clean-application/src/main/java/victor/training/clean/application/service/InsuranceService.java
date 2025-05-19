@@ -9,7 +9,7 @@ import victor.training.clean.domain.model.InsurancePolicy;
 import victor.training.clean.domain.model.PolicyNotification;
 import victor.training.clean.domain.repo.InsurancePolicyRepo;
 import victor.training.clean.domain.repo.PolicyNotificationRepo;
-import victor.training.clean.infra.EmailSenderSMTP;
+import victor.training.clean.domain.service.EmailSender;
 
 @Slf4j
 @Service
@@ -17,7 +17,7 @@ import victor.training.clean.infra.EmailSenderSMTP;
 public class InsuranceService {
    private final InsurancePolicyRepo insurancePolicyRepo;
    private final PolicyNotificationRepo policyNotificationRepo;
-   private final EmailSenderSMTP emailSender;
+   private final EmailSender emailSender;
 
    public void customerDetailsChanged(Customer newCustomer) {
       InsurancePolicy currentPolicy = insurancePolicyRepo.findByCustomerId(newCustomer.getId());

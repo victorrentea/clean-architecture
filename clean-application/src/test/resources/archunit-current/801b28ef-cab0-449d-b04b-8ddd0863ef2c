@@ -1,3 +1,0 @@
-Constructor <victor.training.clean.domain.service.NotificationService.<init>(victor.training.clean.infra.EmailSenderSMTP, victor.training.clean.domain.service.RetrieveUserService)> has parameter of type <victor.training.clean.infra.EmailSenderSMTP> in (NotificationService.java:0)
-Field <victor.training.clean.domain.service.NotificationService.emailSender> has type <victor.training.clean.infra.EmailSenderSMTP> in (NotificationService.java:0)
-Method <victor.training.clean.domain.service.NotificationService.sendWelcomeEmail(victor.training.clean.domain.model.Customer, java.lang.String)> calls method <victor.training.clean.infra.EmailSenderSMTP.sendEmail(victor.training.clean.domain.model.Email)> in (NotificationService.java:44)
