@@ -25,7 +25,7 @@ public class RetrieveUserService { // for code navigability (Ctrl-O/Shift x 2)
   // takeawy: narrow action + Service
   private final LdapApi ldapApi;
 
-  public User retrieveUser(String usernamePart) {
+  public User retrieve(String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 

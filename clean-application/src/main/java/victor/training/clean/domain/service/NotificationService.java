@@ -27,7 +27,7 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String creatorUsername) {
-    User user = retrieveUserService.retrieveUser(creatorUsername);
+    User user = retrieveUserService.retrieve(creatorUsername);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
