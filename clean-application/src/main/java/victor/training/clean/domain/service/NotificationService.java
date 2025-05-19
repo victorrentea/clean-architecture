@@ -32,9 +32,6 @@ public class NotificationService {
   public void sendWelcomeEmail(Customer customer, String creatorUsername) {
     User user = retrieveUser(creatorUsername);
 
-    // 💩 infra
-    ///  ===========
-    // 🧘 domain
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -54,6 +51,9 @@ public class NotificationService {
 
     customer.setCreatedByUsername(user.username());
   }
+  // 🧘 domain = my core complexity
+  //  ===========
+  // 💩 infra details my app just HAS to do
 
   private User retrieveUser(String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
@@ -67,10 +67,9 @@ public class NotificationService {
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
     normalize(ldapUserDto); // NU E FUNCTIE PURA(=da acelasi rez fara sa modifice chestii)!
 
-    User user = new User(fullName,
+    return new User(fullName,
         Optional.ofNullable(ldapUserDto.getWorkEmail()),
         ldapUserDto.getUn());
-    return user;
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
