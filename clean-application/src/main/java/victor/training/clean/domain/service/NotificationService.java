@@ -18,6 +18,14 @@ public class NotificationService {
   private final EmailSender emailSender;
   private final LdapApi ldapApi;
 
+  //
+  // + class UserApi {
+  //    getUser(username):Optional<domain.model.User{strictly what we need}>?
+  // }
+  // - 🔐narrow down the name of this class to "EmailService" since it's only doing emails
+  //  to discourage my colleagues (and me) to add MORE to it. it's 120 lines already.
+  // - implementing a new interface perhaps IN THE FUTURE ... <OVER ENGINEERING?>
+
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
@@ -69,9 +77,7 @@ public class NotificationService {
   public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
     LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
 
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
-
-    String returnOrdersStr = canReturnOrders ? "You are allowed to return orders\n" : "";
+    String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
