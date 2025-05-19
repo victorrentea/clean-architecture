@@ -1,3 +1,5 @@
 #
-#Tue Dec 17 19:38:06 EET 2024
+#Mon May 19 15:31:06 EEST 2025
+no\ classes\ that\ reside\ in\ a\ package\ '..domain..'\ should\ depend\ on\ classes\ that\ reside\ in\ a\ package\ '..infra..'=801b28ef-cab0-449d-b04b-8ddd0863ef2c
 no\ classes\ that\ reside\ in\ a\ package\ '..controller..'\ should\ depend\ on\ classes\ that\ reside\ in\ a\ package\ '..repo..'=8514c63b-2458-4ee4-907d-307092ee440d
+no\ classes\ that\ reside\ in\ a\ package\ '..domain.model..'\ should\ depend\ on\ classes\ that\ reside\ in\ a\ package\ '..application..'=fac95b03-f452-45fe-9038-1dee9dce6de5
