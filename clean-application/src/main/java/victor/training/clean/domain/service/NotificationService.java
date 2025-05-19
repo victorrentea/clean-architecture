@@ -7,7 +7,6 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.RetrieveUserService;
 
 @RequiredArgsConstructor
@@ -15,7 +14,6 @@ import victor.training.clean.infra.RetrieveUserService;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
   private final RetrieveUserService retrieveUserService;
 
   // + class UserApi {
