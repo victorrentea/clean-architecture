@@ -12,8 +12,8 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.service.EmailSender;
 import victor.training.clean.domain.service.NotificationService;
-import victor.training.clean.infra.EmailSender;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;

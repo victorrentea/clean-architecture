@@ -19,10 +19,11 @@ import java.util.Optional;
 //public class UserAccess { // "noun"
 //public class AccessUser { // stateless piece of BEHAVIOR = verb! action!
 //public class RetrieveUser { // no conventions. close to the business terms!
-public class RetrieveUserService { // for code navigability (Ctrl-O/Shift x 2)
+public class RetrieveUserServiceFromLdap implements victor.training.clean.domain.service.RetrieveUserService { // for code navigability (Ctrl-O/Shift x 2)
   // takeawy: narrow action + Service
   private final LdapApi ldapApi;
 
+  @Override
   public User retrieve(String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
