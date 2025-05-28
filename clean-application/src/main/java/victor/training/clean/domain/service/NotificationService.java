@@ -11,10 +11,10 @@ import victor.training.clean.infra.EmailSender;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final ILdapUserApiAdapter ldapUserApiAdapter;
+  private final LdapUserApiAdapter ldapUserApiAdapter;
 
   @java.beans.ConstructorProperties({"emailSender", "ldapUserApiAdapter"})
-  public NotificationService(EmailSender emailSender, ILdapUserApiAdapter ldapUserApiAdapter) {
+  public NotificationService(EmailSender emailSender, LdapUserApiAdapter ldapUserApiAdapter) {
     this.emailSender = emailSender;
     this.ldapUserApiAdapter = ldapUserApiAdapter;
   }

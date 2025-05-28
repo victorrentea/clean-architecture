@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.LdapUserApiAdapter;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ import java.util.Optional;
 // AGNOSTIC DOMAIN dream =
 // domain should not CARE of the outside world
 // when working in the domain you should not CARE of outside world
-public class LdapUserApiAdapter implements victor.training.clean.domain.service.ILdapUserApiAdapter {
+public class LdapUserApiAdapterImpl implements LdapUserApiAdapter {
   private final LdapApi ldapApi;
 
   @Override
