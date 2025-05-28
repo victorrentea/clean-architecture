@@ -11,17 +11,17 @@ import victor.training.clean.infra.EmailSender;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapUserApiAdapter ldapUserApiAdapter;
+  private final UserFetcher userFetcher;
 
   @java.beans.ConstructorProperties({"emailSender", "ldapUserApiAdapter"})
-  public NotificationService(EmailSender emailSender, LdapUserApiAdapter ldapUserApiAdapter) {
+  public NotificationService(EmailSender emailSender, UserFetcher userFetcher) {
     this.emailSender = emailSender;
-    this.ldapUserApiAdapter = ldapUserApiAdapter;
+    this.userFetcher = userFetcher;
   }
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    var user = ldapUserApiAdapter.fetchUser(usernamePart);
+    var user = userFetcher.fetchUser(usernamePart);
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
