@@ -7,6 +7,7 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import com.tngtech.archunit.library.freeze.FreezingArchRule;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,12 +40,12 @@ public class ArchitectureTest {
     List<String> failures = rule.evaluate(allProjectClasses).getFailureReport().getDetails();
 
 //    int expectedFailureCount = 8; //  initial 😭 < at least it doesn't get worse
-    int expectedFailureCount = 6; //  3 months later 🍺
+//    int expectedFailureCount = 6; //  3 months later 🍺
 //    int expectedFailureCount = 0; // end 🍾🍺🍺🍺🍺🍺
 
-    assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
+//    assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
 
-    // TODO FreezingArchRule.freeze(rule.check(classes))
+    FreezingArchRule.freeze(rule).check(allProjectClasses);
   }
 
   @Test

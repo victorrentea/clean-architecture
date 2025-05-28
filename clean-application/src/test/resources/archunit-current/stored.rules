@@ -1,3 +1,0 @@
-#
-#Tue Dec 17 19:38:06 EET 2024
-no\ classes\ that\ reside\ in\ a\ package\ '..controller..'\ should\ depend\ on\ classes\ that\ reside\ in\ a\ package\ '..repo..'=8514c63b-2458-4ee4-907d-307092ee440d
