@@ -2,9 +2,13 @@ package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
+
+import static lombok.AccessLevel.NONE;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -55,25 +59,56 @@ public class Customer {
     return Optional.ofNullable(legalEntityCode);
   }
 
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
 
-  private Status status;
+  @Setter(NONE)
+  private Status status = Status.DRAFT;
+  @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  //  public void setValid(Status newStatus) {
+//  public void setValidStatus(Status newStatus) { // never go for the first name
+  public void validate(String currentUser) { // OOP
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Cannot validate a customer that is not in DRAFT status");
+    }
+    status = Status.VALIDATED;
+    validatedBy = Objects.requireNonNull(currentUser);
+  }
+
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Cannot activate a customer that is not VALIDATED");
+    }
+    status = Status.ACTIVE;
+  }
+
+  public void delete() {
+    if (status == Status.DELETED) {
+      throw new IllegalStateException("Cannot redelete");
+    }
+    status = Status.DELETED;
+  }
+
+  private void isTransitionAllowed() {
+
+  }
 }
 
-//region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+class SomeCode {
+  public void correct(Customer draftCustomer) {
+    draftCustomer.validate("currentUser");
+  }
+
+  public void incorrect(Customer draftCustomer) {
+    draftCustomer.validate("null");
+  }
+
+  public void activate(Customer draftCustomer) {
+    draftCustomer.activate();
+  }
+}
 //endregion
