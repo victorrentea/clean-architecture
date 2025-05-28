@@ -5,11 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
+
+class Adapter {
+
+}
 
 @RequiredArgsConstructor
 @Slf4j
@@ -24,23 +30,30 @@ public class NotificationService {
 
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
+    normalize(ldapUserDto);
+
+    User user = new User(
+        fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail()),
+        ldapUserDto.getUn()
+    );
+    //-------- nothing from the evil CORRUPTED world outside should be below this line
+
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
         .subject("Welcome!")
-        .body("Dear " + customer.getName() + ", welcome! Sincerely, " + fullName)
+        .body("Dear " + customer.getName() + ", welcome! Sincerely, " + user.fullName())
         .build();
 
-    if (ldapUserDto.getWorkEmail() != null) {
-      String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
+    if (user.email().isPresent()) {
+      String contact = user.fullName() + " <" + user.email().get().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
 
-    normalize(ldapUserDto);
-
-    customer.setCreatedByUsername(ldapUserDto.getUn());
+    customer.setCreatedByUsername(user.username());
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
@@ -57,26 +70,6 @@ public class NotificationService {
     if (ldapUserDto.getUn().startsWith("s")) {
       ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
     }
-  }
-
-  public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
-
-    String returnOrdersStr = customer.canReturnOrders() ? "You are allowed to return orders\n" : "";
-
-    Email email = Email.builder()
-        .from("noreply@cleanapp.com")
-        .to(customer.getEmail())
-        .subject("Welcome to our Gold membership!")
-        .body(returnOrdersStr +
-              "Yours sincerely, " + userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase())
-        .build();
-
-    String contact = userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase()
-               + " <" + userLdapDto.getWorkEmail().toLowerCase() + ">";
-    email.getCc().add(contact);
-
-    emailSender.sendEmail(email);
   }
 
 
