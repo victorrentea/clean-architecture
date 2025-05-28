@@ -1,8 +1,12 @@
 package victor.training.clean.domain.model;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Setter;
+import victor.training.clean.application.dto.CustomerDto;
+import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.infra.LdapApi;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -69,14 +73,24 @@ public class Customer {
   @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
+//  public void bad(Order objectWith35Fields) {}
+//  public void bad(Object anything) {}
+//  public void bad(CustomerRepo repo) {}
+//  public void bad(LdapApi api) {}
+
+//  public void bad(CustomerDto restApiModel) {} // coupling to external things:
+//     friction to an (older) API model;
+//     boilerplate mapping code
+
+
   //  public void setValid(Status newStatus) {
 //  public void setValidStatus(Status newStatus) { // never go for the first name
-  public void validate(String currentUser) { // OOP
+  public void validate(@Nonnull String currentUser) { // OOP
     if (status != Status.DRAFT) {
       throw new IllegalStateException("Cannot validate a customer that is not in DRAFT status");
     }
     status = Status.VALIDATED;
-    validatedBy = Objects.requireNonNull(currentUser);
+    validatedBy = currentUser;
   }
 
   public void activate() {
@@ -93,9 +107,8 @@ public class Customer {
     status = Status.DELETED;
   }
 
-  private void isTransitionAllowed() {
-
-  }
+//  private void isTransitionAllowed() {
+//  }
 }
 
 class SomeCode {
@@ -104,7 +117,11 @@ class SomeCode {
   }
 
   public void incorrect(Customer draftCustomer) {
-    draftCustomer.validate("null");
+    draftCustomer.validate(f());
+  }
+
+  private String f() {
+    return null;
   }
 
   public void activate(Customer draftCustomer) {

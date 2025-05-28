@@ -20,10 +20,8 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
-    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
     Email email = Email.builder()
@@ -33,20 +31,15 @@ public class NotificationService {
         .body("Dear " + customer.getName() + ", welcome! Sincerely, " + fullName)
         .build();
 
-
-    // ⚠️ Unguarded nullable fields can cause NPE in other places TODO return Optional<> from getter
     if (ldapUserDto.getWorkEmail() != null) {
-      // ⚠️ Logic repeated in other places TODO move logic to the new class
       String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
 
-    // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
     normalize(ldapUserDto);
 
-    // ⚠️ 'un' = bad name TODO in my ubiquitous language 'un' means 'username'
     customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 
