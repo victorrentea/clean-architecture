@@ -112,3 +112,8 @@ class SomeCode {
   }
 }
 //endregion
+
+// paranoid? question: what if despite my encapsulated business rules
+// in Java someone updates directly the database bypassing the Java logic?
+// DON'T TRIGGER/CHECK CONSTRAING
+// instead: have the database PRIVATE TO YOUR DEV. Be full-stack owner of your DB
