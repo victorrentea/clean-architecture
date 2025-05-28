@@ -15,7 +15,6 @@ import victor.training.clean.infra.LdapUserApiAdapter;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
   private final LdapUserApiAdapter ldapUserApiAdapter;
 
   // Core application logic, my Zen garden 🧘☯☮️
