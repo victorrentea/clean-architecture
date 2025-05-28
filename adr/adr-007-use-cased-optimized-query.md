@@ -47,7 +47,7 @@ Positive:
 
 Negative (must-have):
 - Coupling - this repository method depends on DTOs => can't be in `domain`.
-We will place it in another Spring Data Repo interface next to controller.
+  We will place it in another Repo next to controller.
 - Risk - might leak domain logic in DTO, if applying logic after SELECT.
 - Risk - updating DB using DTOs, bypassing the integrity protection
 potentially enforced by the Domain Model.
