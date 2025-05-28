@@ -31,7 +31,7 @@ public class ArchitectureTest {
       .importPackages("victor.training"); // TODO adjust
 
   @Test // as per ADR-005
-  @Disabled("Fix when return from vacation")
+  //@Disabled("Fix when return from vacation")
   public void domain_independent_of_infrastructure() {
     var rule = noClasses().that()
         .resideInAPackage("..domain..")
@@ -42,10 +42,12 @@ public class ArchitectureTest {
 //    int expectedFailureCount = 8; //  initial 😭 < at least it doesn't get worse
 //    int expectedFailureCount = 6; //  3 months later 🍺
 //    int expectedFailureCount = 0; // end 🍾🍺🍺🍺🍺🍺
-
 //    assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
 
     FreezingArchRule.freeze(rule).check(allProjectClasses);
+    // it would make sure no NEW violations are found
+    // compared to the ones saved on Git yesterday
+    // this set of known violations is auto-created in a folder in your project
   }
 
   @Test
