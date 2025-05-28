@@ -13,6 +13,12 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+// Architect (@thomas) PR says: bleah,
+// why domain..NotificationService->infra..LdapBlaBla
+
+// AGNOSTIC DOMAIN dream =
+// domain should not CARE of the outside world
+// when working in the domain you should not CARE of outside world
 public class LdapUserApiAdapter {
   private final LdapApi ldapApi;
 
