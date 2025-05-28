@@ -1,4 +1,8 @@
 # Each line defines what group of people must review any PR touching these files
 # Supported by GitHub, GitLab, BitBucket
 
+
 /src/test/java/victor/training/clean/ArchitectureTest.java @architects
+
+# This could be read as "I don't trust my developers".
+# move this off-band: just get an email when someone changes the file
