@@ -26,6 +26,14 @@ public class Customer {
   @Embedded // does not require any ALTER TABLE;
   private ShippingAddress shippingAddress;
 
+  public boolean canReturnOrders() { // reuse (DRY) - very discoverable
+    return goldMember || isPrivatePerson();
+  }
+
+  public boolean isPrivatePerson() { // explain
+    return legalEntityCode == null;
+  }
+
   // "Value Object" design pattern = small immutable type lacking PK
 //  record Address(.., String vatCode) - risk=the broader the name the more chances to reuse & coupling
   @Embeddable
@@ -50,6 +58,7 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
+
   private Status status;
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 }
