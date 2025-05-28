@@ -1,0 +1,4 @@
+@startuml
+Bob -> Alice : bye
+Alice -> Chloe : bye
+@enduml

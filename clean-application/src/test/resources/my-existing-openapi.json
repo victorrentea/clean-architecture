@@ -217,6 +217,9 @@
   "components": {
     "schemas": {
       "CustomerDto": {
+        "required": [
+          "name"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -224,6 +227,8 @@
             "format": "int64"
           },
           "name": {
+            "maxLength": 2147483647,
+            "minLength": 4,
             "type": "string"
           },
           "email": {
