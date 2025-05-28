@@ -7,6 +7,7 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
+import victor.training.clean.infra.LdapUserApiAdapter;
 
 
 @RequiredArgsConstructor
