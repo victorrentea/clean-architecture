@@ -22,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerController {
   private final CustomerApplicationService customerApplicationService;
+  private final CustomerRepo customerRepo;
 
   @PostMapping("customers")
   public void register(@RequestBody @Validated CustomerDto dto) {
