@@ -1,3 +1,3 @@
 #
-#Wed May 28 15:03:32 EEST 2025
-no\ classes\ that\ reside\ in\ a\ package\ '..domain..'\ should\ depend\ on\ classes\ that\ reside\ in\ a\ package\ '..infra..'=93fe9688-803a-4f9f-a07d-68ee1f17730d
+#Wed May 28 15:12:06 EEST 2025
+no\ classes\ that\ reside\ in\ a\ package\ '..domain..'\ should\ depend\ on\ classes\ that\ reside\ in\ a\ package\ '..infra..'=abd20dc9-8200-4112-ad9d-b9f7ebe92fc1

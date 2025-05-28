@@ -19,9 +19,10 @@ import java.util.Optional;
 // AGNOSTIC DOMAIN dream =
 // domain should not CARE of the outside world
 // when working in the domain you should not CARE of outside world
-public class LdapUserApiAdapter {
+public class LdapUserApiAdapter implements victor.training.clean.domain.service.ILdapUserApiAdapter {
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchUser(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
