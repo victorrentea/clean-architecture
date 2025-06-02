@@ -17,14 +17,16 @@ public class CustomerLeakingController {
       return customerRepo.findById(id).orElseThrow();
    }
 
-   @GetMapping("two/{id}")
-   public Customer findById2(@PathVariable long id) {
-      return customerRepo.findById(id).orElseThrow();
-   }
+//   @GetMapping("two/{id}") // if one violation is removed
+   // ArchUnit freeze should not complain about this method
+   // should remove the violation from the known ones. and pass the test
+//   public Customer findById2(@PathVariable long id) {
+//      return customerRepo.findById(id).orElseThrow();
+//   }
 
-   @GetMapping("two/{id}")
-   public Customer findById3(@PathVariable long id) { // fails the test. +1 violation
-      return customerRepo.findById(id).orElseThrow();
-   }
+//   @GetMapping("two/{id}")
+//   public Customer findById3(@PathVariable long id) { // fails the test. +1 violation
+//      return customerRepo.findById(id).orElseThrow();
+//   }
 
 }
