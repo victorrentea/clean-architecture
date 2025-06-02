@@ -22,4 +22,9 @@ public class CustomerLeakingController {
       return customerRepo.findById(id).orElseThrow();
    }
 
+   @GetMapping("two/{id}")
+   public Customer findById3(@PathVariable long id) { // fails the test. +1 violation
+      return customerRepo.findById(id).orElseThrow();
+   }
+
 }
