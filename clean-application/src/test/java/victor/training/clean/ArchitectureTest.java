@@ -7,7 +7,7 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-import org.junit.jupiter.api.Disabled;
+import com.tngtech.archunit.library.freeze.FreezingArchRule;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
 import victor.training.clean.utils.ParameterizedReturnTypeCondition;
@@ -58,12 +58,12 @@ public class ArchitectureTest {
   }
 
   @Test
-  @Disabled
   public void domain_not_leaked_via_controller_methods() {
-    methods().that().areMetaAnnotatedWith(RequestMapping.class)
-        .and().arePublic()
-        .should().haveRawReturnType(not(resideInAPackage("..domain..")))
-        .andShould(new ParameterizedReturnTypeCondition(not(resideInAPackage("..domain.."))))
+    FreezingArchRule.freeze(methods().that().areMetaAnnotatedWith(RequestMapping.class)
+            .and().arePublic()
+            .should().haveRawReturnType(not(resideInAPackage("..domain..")))
+            .andShould(new ParameterizedReturnTypeCondition(not(resideInAPackage("..domain.."))))
+        )
         .check(allProjectClasses);
   }
 

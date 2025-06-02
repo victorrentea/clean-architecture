@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
-//@RestController
+@RestController
 @RequestMapping("customer-leaking")
 @RequiredArgsConstructor
 public class CustomerLeakingController {
@@ -14,6 +14,11 @@ public class CustomerLeakingController {
 
    @GetMapping("{id}")
    public Customer findById(@PathVariable long id) {
+      return customerRepo.findById(id).orElseThrow();
+   }
+
+   @GetMapping("two/{id}")
+   public Customer findById2(@PathVariable long id) {
       return customerRepo.findById(id).orElseThrow();
    }
 

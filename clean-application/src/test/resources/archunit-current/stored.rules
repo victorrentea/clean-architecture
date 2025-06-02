@@ -1,3 +1,4 @@
 #
-#Tue Dec 17 19:38:06 EET 2024
+#Mon Jun 02 11:43:42 EEST 2025
 no\ classes\ that\ reside\ in\ a\ package\ '..controller..'\ should\ depend\ on\ classes\ that\ reside\ in\ a\ package\ '..repo..'=8514c63b-2458-4ee4-907d-307092ee440d
+methods\ that\ are\ meta-annotated\ with\ @RequestMapping\ and\ are\ public\ should\ have\ raw\ return\ type\ not\ reside\ in\ a\ package\ '..domain..'\ and\ should\ Return\ types\ is\ not\ reside\ in\ a\ package\ '..domain..'=6163609d-3593-4521-8b5e-efe9cf4cd2de
