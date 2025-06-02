@@ -12,10 +12,10 @@ import victor.training.clean.domain.repo.CustomerRepo;
 public class CustomerLeakingController {
    private final CustomerRepo customerRepo;
 
-   @GetMapping("{id}")
-   public Customer findById(@PathVariable long id) {
-      return customerRepo.findById(id).orElseThrow();
-   }
+//   @GetMapping("{id}")
+//   public Customer findById(@PathVariable long id) {
+//      return customerRepo.findById(id).orElseThrow();
+//   }
 
 //   @GetMapping("two/{id}") // if one violation is removed
    // ArchUnit freeze should not complain about this method
