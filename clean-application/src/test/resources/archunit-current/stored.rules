@@ -1,0 +1,3 @@
+#
+#Fri Jun 13 13:35:28 EEST 2025
+no\ classes\ that\ reside\ in\ a\ package\ '..domain..'\ should\ depend\ on\ classes\ that\ reside\ in\ a\ package\ '..infra..'=772bdabd-fba9-4f54-992b-9fa6d2a254fa
