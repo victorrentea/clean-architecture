@@ -11,9 +11,10 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class LdapUserApiClient { // Adapter Design Pattern: convert between a baD api outside into a nice API inside.
+public class LdapUserApiClient implements victor.training.clean.domain.service.UserClient { // Adapter Design Pattern: convert between a baD api outside into a nice API inside.
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchUser(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
