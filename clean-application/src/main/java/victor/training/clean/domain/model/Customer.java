@@ -30,12 +30,22 @@ public class Customer {
   @Embedded // NO ALTER TABLE REQUIRED. Thank you ORM!
   private ShippingAddress shippingAddress;
 
+//  public boolean badMethod(boolean ) { acceptable -> split in 2 methods
+//  public boolean badMethod(String) { acceptable
+//  class CustomerUtil/Hellper {public static boolean badMethod(Customer ) { // Uncle Bob will come for you!
+
+//  public boolean badMethod(ApiClient) // coupling
+//  public boolean badMethod(EntityManager) // coupling
+//  public boolean badMethod(Order32Fields) // coupling
+
   public boolean isIndividual() { //explain data
     return legalEntityCode == null;
   }
 
   public boolean canReturnOrders() { // containing biz rules
-    return goldMember || isIndividual();
+//    fiscalAuthority.fetch()
+    return goldMember || isIndividual(); // simple logic with only MY FILEDS
+    // synthetic getters
   }
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
