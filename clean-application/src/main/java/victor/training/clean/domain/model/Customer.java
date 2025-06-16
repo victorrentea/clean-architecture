@@ -14,8 +14,11 @@ import java.util.Optional;
 //endregion
 
 @Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
-@Entity // ORM/JPA (2)
-// 👑 Domain Model Entity, the backbone of your core complexity.
+
+// (A) ORM/JPA Entity model
+@Entity
+
+// 👑 (B) Domain Model Entity: the backbone of your core complexity.
 public class Customer {
   @Id
   @GeneratedValue
@@ -26,6 +29,14 @@ public class Customer {
   //  @AttributeOverrides()
   @Embedded // NO ALTER TABLE REQUIRED. Thank you ORM!
   private ShippingAddress shippingAddress;
+
+  public boolean isIndividual() { //explain data
+    return legalEntityCode == null;
+  }
+
+  public boolean canReturnOrders() { // containing biz rules
+    return goldMember || isIndividual();
+  }
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
 //  private String shippingAddressCity;
