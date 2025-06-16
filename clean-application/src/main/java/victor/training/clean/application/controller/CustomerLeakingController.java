@@ -3,6 +3,7 @@ package victor.training.clean.application.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
 
@@ -13,8 +14,11 @@ public class CustomerLeakingController {
    private final CustomerRepo customerRepo;
 
    @GetMapping("{id}")
-   public Customer findById(@PathVariable long id) {
-      return customerRepo.findById(id).orElseThrow();
+//   @GET
+// @Path("{id}")
+   public CustomerDto findById(@PathVariable long id) {
+//      return customerRepo.findById(id).orElseThrow();
+      return null;
    }
 
 }
