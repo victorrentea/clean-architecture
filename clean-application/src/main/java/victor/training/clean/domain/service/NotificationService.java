@@ -35,7 +35,7 @@ public class NotificationService {
 
 
     // ⚠️ Unguarded nullable fields can cause NPE in other places TODO return Optional<> from getter
-    if (ldapUserDto.getWorkEmail() != null) {
+    if (ldapUserDto.getWorkEmail() != null) { // what if forgotten?
       // ⚠️ Logic repeated in other places TODO move logic to the new class
       String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
       email.getCc().add(contact);
@@ -65,28 +65,5 @@ public class NotificationService {
       ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
     }
   }
-
-  public void sendGoldBenefitsEmail(Customer customer, String usernamePart) {
-    LdapUserDto userLdapDto = fetchUserFromLdap(usernamePart);
-
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
-
-    String returnOrdersStr = canReturnOrders ? "You are allowed to return orders\n" : "";
-
-    Email email = Email.builder()
-        .from("noreply@cleanapp.com")
-        .to(customer.getEmail())
-        .subject("Welcome to our Gold membership!")
-        .body(returnOrdersStr +
-              "Yours sincerely, " + userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase())
-        .build();
-
-    String contact = userLdapDto.getFname() + " " + userLdapDto.getLname().toUpperCase()
-               + " <" + userLdapDto.getWorkEmail().toLowerCase() + ">";
-    email.getCc().add(contact);
-
-    emailSender.sendEmail(email);
-  }
-
 
 }

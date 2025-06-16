@@ -100,7 +100,7 @@ public class LargeIntegrationTest {
 
     @Test
     void nameTooShortThrows() throws Exception {
-        register(registerRequest().name("1")).andExpect(status().isInternalServerError());
+        register(registerRequest().name("1")).andExpect(status().isBadRequest());
     }
 
     @Test

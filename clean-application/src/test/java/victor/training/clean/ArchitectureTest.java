@@ -20,7 +20,7 @@ import static com.tngtech.archunit.core.importer.ImportOption.Predefined.DO_NOT_
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//@Disabled("Fix this after I return from vacation")
+@Disabled("Fix this after I return from vacation")
 // NOTE: In case you don't understand this test, contact me:
 // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
 public class ArchitectureTest {
