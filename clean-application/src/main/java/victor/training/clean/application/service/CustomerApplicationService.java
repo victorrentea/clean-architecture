@@ -121,7 +121,6 @@ public class CustomerApplicationService {
     if (!customer.isGoldMember() && dto.gold()) {
       // enable gold member status
       customer.setGoldMember(true);
-      notificationService.sendGoldBenefitsEmail(customer, "1"); // userId from JWT token via SecuritContext
     }
 
     if (customer.isGoldMember() && !dto.gold()) {

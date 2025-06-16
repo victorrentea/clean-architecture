@@ -13,6 +13,7 @@ public class ApiClientConfig {
   private ApiClient apiClient;
   @Value("${ldap.client.base.url}")
   private String baseUrl;
+
   @EventListener(ApplicationStartedEvent.class)
   public void configureLdapClient() {
     apiClient.setBasePath(baseUrl);

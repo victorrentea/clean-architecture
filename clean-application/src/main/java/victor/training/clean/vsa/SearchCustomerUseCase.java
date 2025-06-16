@@ -3,7 +3,6 @@ package victor.training.clean.vsa;
 import com.google.common.annotations.VisibleForTesting;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -14,10 +13,14 @@ import java.util.Map;
 
 import static java.lang.String.join;
 
-@RequiredArgsConstructor
 //@RestController
 public class SearchCustomerUseCase {
   private final EntityManager entityManager;
+
+  @java.beans.ConstructorProperties({"entityManager"})
+  public SearchCustomerUseCase(EntityManager entityManager) {
+    this.entityManager = entityManager;
+  }
 
   @VisibleForTesting // only @Tests are allowed to use this
   record CustomerSearchCriteria(

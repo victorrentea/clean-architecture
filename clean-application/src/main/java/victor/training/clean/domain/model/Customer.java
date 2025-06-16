@@ -1,10 +1,20 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.h2.schema.Domain;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -13,17 +23,23 @@ import java.util.Optional;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 
-@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
+// Avoid on Domain Model
+//@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
 
 // (A) ORM/JPA Entity model
 @Entity
+@Getter
+@Setter
 
 // 👑 (B) Domain Model Entity: the backbone of your core complexity.
 public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  //  @NotNull
+//  @Size(min = 4)
   private String name;
+  //  @Setter
   private String email;
 
   //  @AttributeOverrides()
@@ -72,24 +88,68 @@ public class Customer {
     return Optional.ofNullable(legalEntityCode);
   }
 
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
+
+  @Setter(AccessLevel.NONE)
+  private Status status = Status.DRAFT;
+  @Setter(AccessLevel.NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  void setStatus(Status status) {
+    this.status = status;
+  }
+
+  public void validate(@NotNull String validatedBy) {
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Cannot validate a customer that is not in DRAFT status");
+    }
+    this.status = Status.VALIDATED;
+    this.validatedBy = requireNonNull(validatedBy);
+  }
+
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Cannot activate a customer that is not VALIDATED");
+    }
+    this.status = Status.ACTIVE;
+  }
+
+  public void delete() {
+    if (status == Status.DELETED) {
+      throw new IllegalStateException("Cannot delete a customer that is already DELETED");
+    }
+    this.status = Status.DELETED;
+  }
+
+  // instead of a custom-validator use this:
+//  @AssertTrue(message = "validatedBy must be set if status is VALIDATED or later")
+//  public boolean isValidStatusProgression() {
+//    if (status == null) return true;
+//    return switch (status) {
+//      case DRAFT -> true;
+//      case VALIDATED, ACTIVE, DELETED -> validatedBy != null;
+//    };
+//  }
 }
 
 //region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+//@Service
+class SomeService {
+  public void correct(Customer draftCustomer) {
+    // what about business rules involving external systems? => never inside Domain Model.
+    // let them here, in a stateless service containing logic
+    draftCustomer.validate("currentUser"); // from token/session..
+  }
+
+  public void incorrect(Customer draftCustomer) {
+    draftCustomer.validate("null");
+  }
+
+  public void activate(Customer draftCustomer) {
+    draftCustomer.activate();
+  }
+}
 //endregion
