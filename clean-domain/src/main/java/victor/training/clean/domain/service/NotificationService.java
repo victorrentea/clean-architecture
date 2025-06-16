@@ -12,6 +12,7 @@ import victor.training.clean.domain.model.Email;
 public class NotificationService {
   private final IEmailSender emailSender;
   private final UserClient userClient;
+//  LdapApi
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {

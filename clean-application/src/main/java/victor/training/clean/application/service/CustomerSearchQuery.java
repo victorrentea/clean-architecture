@@ -1,4 +1,4 @@
-package victor.training.clean.domain.repo;
+package victor.training.clean.application.service;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
