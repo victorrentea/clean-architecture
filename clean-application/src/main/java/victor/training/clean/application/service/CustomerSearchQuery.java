@@ -1,6 +1,7 @@
 package victor.training.clean.application.service;
 
 import jakarta.persistence.EntityManager;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
@@ -26,7 +27,10 @@ public class CustomerSearchQuery {
   }
 
   public List<CustomerSearchResult> search(CustomerSearchCriteria criteria) {
+
+
     // Alternative: Spring Specifications https://docs.spring.io/spring-data/jpa/reference/jpa/specifications.html
+//    String jpql = "SELECT c" +
     String jpql = "SELECT new victor.training.clean.application.dto.CustomerSearchResult(c.id, c.name)" +
                   " FROM Customer c " +
                   " WHERE ";

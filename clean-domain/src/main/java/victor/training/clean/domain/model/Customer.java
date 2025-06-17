@@ -8,7 +8,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.h2.schema.Domain;
+
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -132,6 +132,27 @@ public class Customer {
 //      case DRAFT -> true;
 //      case VALIDATED, ACTIVE, DELETED -> validatedBy != null;
 //    };
+//  }
+
+
+//  public String asJsonForExport() {
+//    return """
+//{
+//  "id": %d,
+//  "name": "%s",
+//  "email": "%s",
+//  "shippingAddress": {
+//    "city": "%s",
+//    "street": "%s",
+//    "zip": "%s"
+//  },
+//        """.formatted(
+//            id,
+//            name,
+//            email,
+//            shippingAddress.city(),
+//            shippingAddress.street(),
+//            shippingAddress.zip();
 //  }
 }
 

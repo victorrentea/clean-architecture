@@ -103,6 +103,7 @@ public class CustomerApplicationService {
     log.info("More Business Logic (imagine)");
     customerRepo.save(customer);
     notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+//    entityManager.getTransaction().commit();
   }
 
   private String normalize(String s) {

@@ -21,9 +21,9 @@ import static org.springframework.http.ResponseEntity.status;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestControllerAdvice
+@RestControllerAdvice // in JAXRS: @Provider
 public class GlobalExceptionHandler {
-  @ResponseStatus(BAD_REQUEST)
+  @ResponseStatus(BAD_REQUEST) // in JAXRS: @ExceptionMapper
   @ExceptionHandler(MethodArgumentNotValidException.class) // @Validated
   public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
     List<String> validationErrors = e.getBindingResult().getFieldErrors().stream()
