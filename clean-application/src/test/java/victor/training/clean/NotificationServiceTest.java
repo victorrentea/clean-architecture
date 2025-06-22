@@ -57,7 +57,8 @@ class NotificationServiceTest {
     assertThat(email.getTo()).isEqualTo("jdoe@example.com");
     assertThat(email.getSubject()).isEqualTo("Welcome!");
     assertThat(email.getBody())
-        .contains("Dear Customer Name")
+        .contains("Welcome Customer Name")
+        .contains("you can return orders")
         .contains("John DOE");
     assertThat(email.getCc()).containsExactly("John DOE <jdoe@cleanapp.com>");
     assertThat(customer.getCreatedByUsername()).isEqualTo("jdoe");
