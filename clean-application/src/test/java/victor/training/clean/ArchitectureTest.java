@@ -10,6 +10,7 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import victor.training.clean.utils.ParameterizedReturnTypeCondition;
 
 import java.util.List;
@@ -57,11 +58,11 @@ public class ArchitectureTest {
     // - the 'common' package doesn't depend on any other package
   }
 
-  @Test
-  @Disabled
+  @Test // as per ARD-003
   public void domain_not_leaked_via_controller_methods() {
     methods().that().areMetaAnnotatedWith(RequestMapping.class)
         .and().arePublic()
+        .and().areDeclaredInClassesThat().areAnnotatedWith(RestController.class)
         .should().haveRawReturnType(not(resideInAPackage("..domain..")))
         .andShould(new ParameterizedReturnTypeCondition(not(resideInAPackage("..domain.."))))
         .check(allProjectClasses);
