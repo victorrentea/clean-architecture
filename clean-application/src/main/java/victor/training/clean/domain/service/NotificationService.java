@@ -1,6 +1,5 @@
 package victor.training.clean.domain.service;
 
-import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import java.util.List;
 public class NotificationService {
   private final EmailSender emailSender;
   private final LdapApi ldapApi;
-  private final MeterRegistry meterRegistry;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer c, String usernamePart) {
@@ -64,8 +62,7 @@ public class NotificationService {
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = meterRegistry.timer("their-api").record(
-        () -> ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null));
+    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
       throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);

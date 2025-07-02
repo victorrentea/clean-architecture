@@ -15,8 +15,8 @@ which adds unnecessary columns, JOINs
 and sometimes even additional SELECT queries.
 
 If only a few fields are needed, 
-it's more CPU/memory/network efficient
-to fetch only those fields from the DB,
+it's more CPU/memory/network efficient 
+to fetch only ose fields from the DB, 
 especially when the entity is large, 
 and we retrieve many of them, 
 such as in a search flow.
