@@ -19,27 +19,25 @@ public class NotificationService {
   private final LdapApi ldapApi;
 
   // Core application logic, my Zen garden 🧘☯☮️
-  public void sendWelcomeEmail(Customer c, String usernamePart) {
+  public void sendWelcomeEmail(Customer customer, String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
     // ⚠️ Data mapping mixed with core logic TODO pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
-
-    boolean canReturnOrders = c.isGoldMember() ||
-                              c.getLegalEntityCode().isEmpty();
+    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
-        .to(c.getEmail())
+        .to(customer.getEmail())
         .subject("Welcome!")
         .body("""
             Welcome %s!
             Remember: you %s return orders.
             Sincerely,
             %s""".formatted(
-            c.getName(),
+            customer.getName(),
             canReturnOrders ? "can" : "cannot",
             fullName))
         .build();
@@ -58,7 +56,7 @@ public class NotificationService {
     normalize(ldapUserDto);
 
     // ⚠️ 'un' = bad name TODO in my ubiquitous language 'un' means 'username'
-    c.setCreatedByUsername(ldapUserDto.getUn());
+    customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
