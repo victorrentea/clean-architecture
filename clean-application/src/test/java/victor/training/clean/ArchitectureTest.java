@@ -6,7 +6,9 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.EvaluationResult;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import com.tngtech.archunit.lang.syntax.elements.MethodsShouldConjunction;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.importer.ImportOption.Predefined.DO_NOT_INCLUDE_TESTS;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Disabled("Fix this after I return from vacation")
@@ -57,14 +60,17 @@ public class ArchitectureTest {
     // - the 'common' package doesn't depend on any other package
   }
 
-  @Test
-  @Disabled
+  @Test // as per ADR-008
   public void domain_not_leaked_via_controller_methods() {
-    methods().that().areMetaAnnotatedWith(RequestMapping.class)
+    var rule = methods().that().areMetaAnnotatedWith(RequestMapping.class)
         .and().arePublic()
         .should().haveRawReturnType(not(resideInAPackage("..domain..")))
-        .andShould(new ParameterizedReturnTypeCondition(not(resideInAPackage("..domain.."))))
-        .check(allProjectClasses);
+        .andShould(new ParameterizedReturnTypeCondition(not(resideInAPackage("..domain.."))));
+//    rule.check(allProjectClasses); // throws ex
+    var violationList = rule.evaluate(allProjectClasses)
+        .getFailureReport()
+        .getDetails();
+    assertThat(violationList).hasSize(0); // initial state
   }
 
   @Test

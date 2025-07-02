@@ -45,7 +45,7 @@ public class CustomerApplicationService {
 
     // Bit of domain logic on the state of one Entity?  What TODO?
     // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
+    boolean canReturnOrders = customer.isCanReturnOrders();
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()

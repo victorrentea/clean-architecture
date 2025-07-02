@@ -47,6 +47,10 @@ public class Customer {
     return Optional.ofNullable(legalEntityCode);
   }
 
+  public boolean isCanReturnOrders() {
+    return isGoldMember() || getLegalEntityCode().isEmpty();
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
