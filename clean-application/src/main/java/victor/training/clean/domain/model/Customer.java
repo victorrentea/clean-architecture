@@ -27,6 +27,14 @@ public class Customer {
   @Embedded // no ALTER TABLE is needed.
   private ShippingAddress shippingAddress;
 
+  public boolean canReturnOrders() { // biz rules
+    return goldMember || isPerson();
+  }
+
+  public boolean isPerson() {
+    return legalEntityCode == null;
+  }
+
   // Value Object = small immutable object, w/o PK
   @Embeddable
   public record ShippingAddress(
