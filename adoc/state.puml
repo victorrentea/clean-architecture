@@ -1,0 +1,44 @@
+@startuml
+[*] --> OrderPlaced : Place Order/Process Payment
+
+state OrderPlaced {
+}
+
+OrderPlaced --> Paid : PaymentOK()/\n  Reserve Dish
+
+OrderPlaced --> OrderCancelled : PaymentTimed Out
+OrderPlaced --> OrderCancelled : Payment KO
+
+state Paid {
+}
+
+Paid --> DishReserved : Reserved OK/\nFind Courier
+
+Paid --> OrderCancelled : Reserve KO/\n  Undo Payment
+
+state DishReserved {
+}
+
+DishReserved --> CourierAssigned : Courier OK/\n  Confirm Dish
+
+DishReserved --> OrderCancelled : NoCourier Found/\nCancel Reservation/\nUndo Payment
+
+state CourierAssigned {
+}
+
+CourierAssigned --> OrderConfirmed : DishConfirmed OK/\nConfirm To User
+
+CourierAssigned --> ErrorState : DishConfirmKO()
+
+state OrderConfirmed {
+}
+
+state OrderCancelled {
+}
+
+state ErrorState {
+}
+
+OrderConfirmed : <<Point of no return>>
+
+@enduml
