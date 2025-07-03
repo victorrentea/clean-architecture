@@ -28,7 +28,7 @@ public class CustomerMapStructImpl {
 
     CustomerDto.CustomerDtoBuilder customerDto = CustomerDto.builder();
 
-    if (customer.createdDate() != null) {
+      if (customer.getCreatedDate() != null) {
       customerDto.createdDate(dateTimeFormatter_yyyy_MM_dd_0159776256.format(customer.getCreatedDate()));
     }
     customerDto.countryId(customerCountryId(customer));

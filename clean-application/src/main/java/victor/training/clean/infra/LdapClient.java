@@ -1,11 +1,10 @@
-package victor.training.clean.domain.service;
+package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
+import victor.training.clean.domain.service.UserRetriever;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +12,10 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class LdapClient {// ACL = Anti-Corruption Layer
+public class LdapClient implements UserRetriever {// ACL = Anti-Corruption Layer
   private final LdapApi ldapApi;
 
+  @Override
   public User retrieveUser(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
