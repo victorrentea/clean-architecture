@@ -1,0 +1,20 @@
+@startuml
+hide empty description
+'High level flow:
+'Customer orders food from restaurant
+'Customer pays with card via external payment gateway
+'Tell restaurant to cook food
+'Courier delivers food from restaurant to customer
+[*]-->OrderPlaced: place valid order/\nprocess payment
+OrderPlaced-->OrderPaid: payment confirmed /\nprebook courier for 5 min
+OrderPaid-->CourierBooked: courier accepts pickup /\nplace restaurant order
+
+OrderPlaced-[#red]>OrderCancelled: payment failed
+CourierBooked-->CookingStarted: restaurant started cooking /\nfind courier
+CourierBooked-[#red]>OrderCancelled: restaurant declined order /\nrevert payment\nCancel Courier
+CookingStarted-->CourierAssigned: courier going to pickup
+OrderPaid-[#red]>OrderCancelled: courier NOT found /\nrevert payment
+CourierAssigned-->FoodCooked: food is read<- restaurant
+FoodCooked-->OrderPickedUp
+OrderPickedUp-->OrderDelivered
+@enduml
