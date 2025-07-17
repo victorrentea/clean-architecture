@@ -10,7 +10,7 @@ import victor.training.clean.domain.model.User;
 
 @RequiredArgsConstructor
 @Slf4j
-@Service
+//@Service
 public class NotificationService {
   private final EmailSender emailSender;
   private final UserFetcherService userFetcherService;

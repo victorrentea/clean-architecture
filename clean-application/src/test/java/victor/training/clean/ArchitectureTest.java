@@ -9,6 +9,7 @@ import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import io.micrometer.core.annotation.Timed;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,21 @@ public class ArchitectureTest {
     assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
 
     // TODO FreezingArchRule.freeze(rule.check(classes))
+  }
+
+  @Test
+  void clientsShouldNotDependOnOtherPackages() {
+    JavaClasses importedClasses = new ClassFileImporter()
+        .importPackages("victor.training.clean.domain");
+
+    ArchRuleDefinition.noClasses()
+        .that().resideInAPackage("victor.training.clean.domain..")
+        .should().dependOnClassesThat()
+        .resideOutsideOfPackages(
+            "victor.training.clean.domain",
+            "java.."
+        )
+        .check(importedClasses);
   }
 
   @Test
