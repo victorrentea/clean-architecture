@@ -6,12 +6,14 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import io.micrometer.core.annotation.Timed;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import victor.training.clean.utils.ParameterizedReturnTypeCondition;
 
@@ -94,6 +96,17 @@ public class ArchitectureTest {
     };
   }
 
+  @Test
+  void controllers_should_be_annotated_with_Timed() {
+    final JavaClasses importedClasses = new ClassFileImporter()
+        .importPackages("victor.training");
+
+    final ArchRule rule = classes()
+        .that().areAnnotatedWith(RestController.class)
+        .should().beAnnotatedWith(Timed.class);
+
+    rule.check(importedClasses);
+  }
   /**
    * As per ADR: Classes injecting RestTemplate should be annotated with @Timed
    * This ensures proper monitoring of external API calls using Micrometer.
@@ -105,10 +118,28 @@ public class ArchitectureTest {
         .check(allProjectClasses);
   }
 
+  /**
+   * Custom condition to check if classes using RestTemplate are annotated with @Timed.
+   * This is part of our architectural decision to ensure all external API calls are properly monitored.
+   *
+   * The condition excludes:
+   * - RestTemplate itself
+   * - Generated classes (like ApiClient)
+   */
   private ArchCondition<JavaClass> haveTimedAnnotationIfUsingRestTemplate() {
     return new ArchCondition<JavaClass>("have @Timed annotation if using RestTemplate") {
       @Override
       public void check(JavaClass javaClass, ConditionEvents events) {
+        // Skip RestTemplate itself
+        if (javaClass.getName().equals(RestTemplate.class.getName())) {
+          return;
+        }
+
+        // Skip generated classes
+        if (isGeneratedClass(javaClass)) {
+          return;
+        }
+        
         // Check if the class uses RestTemplate (has fields, constructor params, or method params of type RestTemplate)
         boolean usesRestTemplate = false;
 
@@ -125,22 +156,29 @@ public class ArchitectureTest {
           return;
         }
 
-        // If class is RestTemplate itself, we don't need to check for @Timed
-        if (javaClass.getName().equals(RestTemplate.class.getName())) {
-          return;
-        }
-
         // Check if the class has @Timed annotation
         boolean hasTimedAnnotation = javaClass.isAnnotatedWith(Timed.class);
 
         // Only report a violation if the class uses RestTemplate but doesn't have @Timed
         if (!hasTimedAnnotation) {
           events.add(new SimpleConditionEvent(javaClass, false,
-              String.format("Class %s uses RestTemplate but is not annotated with @Timed",
+              String.format("Class %s uses RestTemplate but is not annotated with @Timed", 
                   javaClass.getName())));
         }
       }
     };
+  }
+
+  /**
+   * Helper method to identify generated classes.
+   */
+  private boolean isGeneratedClass(JavaClass javaClass) {
+    // Exclude classes from the generated OpenAPI client
+    if (javaClass.getPackageName().equals("victor.training.clean") &&
+        javaClass.getSimpleName().equals("ApiClient")) {
+      return true;
+    }
+    return false;
   }
 
 }
