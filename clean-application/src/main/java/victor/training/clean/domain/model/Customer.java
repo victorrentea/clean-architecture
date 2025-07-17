@@ -116,8 +116,8 @@ public class Customer {
   }
 
   public void delete() {
-    if (status != Status.DELETED) {
-      throw new IllegalStateException("Cannot delete an active customer");
+    if (status == Status.DELETED) {
+      throw new IllegalStateException("Cannot delete a customer that is already deleted");
     }
     status = Status.DELETED;
   }
