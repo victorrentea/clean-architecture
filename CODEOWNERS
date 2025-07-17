@@ -1,4 +1,5 @@
-# Each line is a rule consisting of a pattern followed by one or more GitHub usernames or team names.
-# This file is located in the .github/ directory of your repository.
+# Any PR changing a file under these patterns
+# has to be reviewed by someone from a given team .
+# Works with GitHub, GitLab, BitBucket
 
 /src/test/java/victor/training/clean/ArchitectureTest.java @architects
