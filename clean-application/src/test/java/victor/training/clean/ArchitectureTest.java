@@ -3,24 +3,27 @@ package victor.training.clean;
 import com.tngtech.archunit.core.domain.JavaAccess;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import io.micrometer.core.annotation.Timed;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 import victor.training.clean.utils.ParameterizedReturnTypeCondition;
 
 import java.util.List;
 
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameMatching;
 import static com.tngtech.archunit.core.importer.ImportOption.Predefined.DO_NOT_INCLUDE_TESTS;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled("Fix this after I return from vacation")
 // NOTE: In case you don't understand this test, contact me:
 // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
 public class ArchitectureTest {
@@ -87,6 +90,55 @@ public class ArchitectureTest {
             .orElse(0);
         boolean satisfied = lastLineNumber < number;
         events.add(new SimpleConditionEvent(javaClass, satisfied, javaClass.getName() + " has more than " + lastLineNumber + " lines"));
+      }
+    };
+  }
+
+  /**
+   * As per ADR: Classes injecting RestTemplate should be annotated with @Timed
+   * This ensures proper monitoring of external API calls using Micrometer.
+   */
+  @Test
+  public void classesInjectingRestTemplateShouldBeAnnotatedWithTimed() {
+    classes()
+        .should(haveTimedAnnotationIfUsingRestTemplate())
+        .check(allProjectClasses);
+  }
+
+  private ArchCondition<JavaClass> haveTimedAnnotationIfUsingRestTemplate() {
+    return new ArchCondition<JavaClass>("have @Timed annotation if using RestTemplate") {
+      @Override
+      public void check(JavaClass javaClass, ConditionEvents events) {
+        // Check if the class uses RestTemplate (has fields, constructor params, or method params of type RestTemplate)
+        boolean usesRestTemplate = false;
+
+        // Check fields
+        for (JavaField field : javaClass.getAllFields()) {
+          if (field.getRawType().getName().equals(RestTemplate.class.getName())) {
+            usesRestTemplate = true;
+            break;
+          }
+        }
+
+        // If class doesn't use RestTemplate, we don't need to check for @Timed
+        if (!usesRestTemplate) {
+          return;
+        }
+
+        // If class is RestTemplate itself, we don't need to check for @Timed
+        if (javaClass.getName().equals(RestTemplate.class.getName())) {
+          return;
+        }
+
+        // Check if the class has @Timed annotation
+        boolean hasTimedAnnotation = javaClass.isAnnotatedWith(Timed.class);
+
+        // Only report a violation if the class uses RestTemplate but doesn't have @Timed
+        if (!hasTimedAnnotation) {
+          events.add(new SimpleConditionEvent(javaClass, false,
+              String.format("Class %s uses RestTemplate but is not annotated with @Timed",
+                  javaClass.getName())));
+        }
       }
     };
   }

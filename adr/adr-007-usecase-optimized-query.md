@@ -61,7 +61,7 @@ enforced by the Domain Model.
 
 ## Compliance
 
-Enforcing is done via Code Review,
+Enforcing is done via Code Review,😢
 since we couldn't find any automated way to enforce it😢
 
 ## Notes

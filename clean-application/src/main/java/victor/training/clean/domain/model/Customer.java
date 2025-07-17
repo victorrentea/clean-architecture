@@ -16,9 +16,14 @@ import java.util.Optional;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 
-@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
+@Data // = @Getter✅
+// @Setter🤨 - pune selectiv pe campurile editabile liber
+// @ToString❌ - periculos sa triggereze lazy load + waste constrund un string huge + GDPR
+// @EqualsAndHashCode❌ - include si @Id generat de hib -> acelasi @entity sa-si schibme hashCode pe parcursul vietii
 @Entity // ORM/JPA (2)
-// 👑 Domain Model Entity, the backbone of your core complexity.
+
+
+// 👑 Domain Model Entity = the backbone of your core complexity.
 public class Customer {
   @Id
   @GeneratedValue
@@ -27,9 +32,25 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+  private ShippingAddress shippingAddress;
+
+  //  record Address( // best because we can reuse the object in the future
+  // eg. for billing address
+  // Value Object (design pattern) = immutable [small] without PK (persistent id)
+  //  eg: Money(amm,cur)
+  //  eg: GPS(lat,lon)
+  public record ShippingAddress( //enrich the language of your domain
+                                 String city,
+                                 String street,
+                                 String zip) {}
+//  private Address billingAddress; // tomorrow, perhaps, maybe. wait for tih to come.
+
+  // don't design for reuse tomorrow, - overengineering
+  // extract for reuse today - opportunistic refactoring!
+  //    on-demand = brave
 
   @ManyToOne
   private Country country;
