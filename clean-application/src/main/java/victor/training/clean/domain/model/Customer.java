@@ -37,6 +37,12 @@ public class Customer {
 //  private String shippingAddressZip;
   private ShippingAddress shippingAddress;
 
+  private String vatCode;
+
+  public boolean isNaturalPerson() {
+    return vatCode == null;
+  }
+
   //  record Address( // best because we can reuse the object in the future
   // eg. for billing address
   // Value Object (design pattern) = immutable [small] without PK (persistent id)
@@ -61,11 +67,14 @@ public class Customer {
   private boolean goldMember;
   private String goldMemberRemovalReason;
 
-  private String legalEntityCode;
+  public boolean canReturnOrders() {
+    // better than in a customer Util/Hellper
+    return goldMember || isNaturalPerson();
+  }
   private boolean discountedVat;
 
-  public Optional<String> getLegalEntityCode() {
-    return Optional.ofNullable(legalEntityCode);
+  public Optional<String> getVatCode() {
+    return Optional.ofNullable(vatCode);
   }
 
   public enum Status {

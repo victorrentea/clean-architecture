@@ -14,7 +14,7 @@ public interface CustomerMapStruct {
   @Mapping(target = "countryId", source = "country.id")
 
   // Customer#getLegalEntity() returns Optional<>
-  @Mapping(target = "legalEntityCode", source = "legalEntityCode", qualifiedByName = "unwrapOpt")
+  @Mapping(target = "legalEntityCode", source = "vatCode", qualifiedByName = "unwrapOpt")
   CustomerDto toDto(Customer customer);
 
   @Named("unwrapOpt")

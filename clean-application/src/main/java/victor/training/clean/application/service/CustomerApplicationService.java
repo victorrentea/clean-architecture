@@ -43,10 +43,6 @@ public class CustomerApplicationService {
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
-    // Bit of domain logic on the state of one Entity?  What TODO?
-    // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
-
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
@@ -61,9 +57,9 @@ public class CustomerApplicationService {
         .shippingAddressCity(customer.getShippingAddress().city())
         .shippingAddressZip(customer.getShippingAddress().zip())
 
-        .canReturnOrders(canReturnOrders)
+        .canReturnOrders(customer.canReturnOrders())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
+        .legalEntityCode(customer.getVatCode().orElse(null))
         .discountedVat(customer.isDiscountedVat())
         .build();
   }
@@ -75,7 +71,7 @@ public class CustomerApplicationService {
     customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
+    customer.setVatCode(dto.legalEntityCode());
 
     // request payload validation
     if (customer.getName().length() < 5) { // TODO alternatives to implement this?
@@ -89,11 +85,11 @@ public class CustomerApplicationService {
     }
 
     // enrich data from external API
-    if (customer.getLegalEntityCode().isPresent()) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode().get())) {
+    if (customer.getVatCode().isPresent()) {
+      if (customerRepo.existsByLegalEntityCode(customer.getVatCode().get())) {
         throw new IllegalArgumentException("Company already registered");
       }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode().get());
+      AnafResult anafResult = anafClient.query(customer.getVatCode().get());
       if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
         throw new IllegalArgumentException("Legal Entity not found!");
       }
