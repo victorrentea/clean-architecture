@@ -8,18 +8,17 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.UserService;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final UserService userService;
+  private final UserFetcherService userFetcherService;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = userService.fetchUser(usernamePart); // fetch is more scary than get = network call
+    User user = userFetcherService.fetchUser(usernamePart); // fetch is more scary than get = network call
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")

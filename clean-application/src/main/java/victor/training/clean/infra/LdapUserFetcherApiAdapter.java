@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.UserFetcherService;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +12,10 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class LdapUserFetcherApiAdapter implements UserFetcherService {
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchUser(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
