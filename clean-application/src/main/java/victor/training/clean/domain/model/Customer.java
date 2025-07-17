@@ -4,9 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 
 //region Reasons to avoid @Data on Domain Model
@@ -39,10 +42,6 @@ public class Customer {
 
   private String vatCode;
 
-  public boolean isNaturalPerson() {
-    return vatCode == null;
-  }
-
   //  record Address( // best because we can reuse the object in the future
   // eg. for billing address
   // Value Object (design pattern) = immutable [small] without PK (persistent id)
@@ -52,25 +51,32 @@ public class Customer {
                                  String city,
                                  String street,
                                  String zip) {}
+
 //  private Address billingAddress; // tomorrow, perhaps, maybe. wait for tih to come.
 
   // don't design for reuse tomorrow, - overengineering
   // extract for reuse today - opportunistic refactoring!
   //    on-demand = brave
-
   @ManyToOne
   private Country country;
 
   private LocalDate createdDate;
-  private String createdByUsername;
 
+  private String createdByUsername;
   private boolean goldMember;
+
   private String goldMemberRemovalReason;
 
-  public boolean canReturnOrders() {
-    // better than in a customer Util/Hellper
-    return goldMember || isNaturalPerson();
-  }
+  @Setter(AccessLevel.NONE)
+  private Status status = Status.DRAFT;
+
+  // what can I add <HERE> to make you move this method into a @Service
+  // - Order{30 fields}; String/int/ShippingAddress is fine
+  // - Consumer<X> - FP maniac
+  // - CustomerRepo / anotherService (managed by DI)
+  // public boolean canReturnOrders(<HERE>) {
+  @Setter(AccessLevel.NONE)
+  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
   private boolean discountedVat;
 
   public Optional<String> getVatCode() {
@@ -80,21 +86,55 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  public boolean isNaturalPerson() { // ok = explaining the meaning
+    return vatCode == null;
+  }
+
+  public boolean canReturnOrders() { // ? = is this the respo of the customer; how big can this grow
+    // better than in a customer Util/Hellper
+    return goldMember || isNaturalPerson();
+  }
+
+  //  void setValidated(String username) { // Java specific getter setter mania
+  public void validate(String validatorUsername) {
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException();
+    }
+    if (validatorUsername == null || validatorUsername.isBlank()) { // who let the "" reaech this point!?
+      throw new IllegalArgumentException();
+    }
+    status = Status.VALIDATED;
+    validatedBy = validatorUsername;
+  }
+
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Cannot activate a customer that is not validated");
+    }
+    status = Status.ACTIVE;
+  }
+
+  public void delete() {
+    if (status != Status.DELETED) {
+      throw new IllegalStateException("Cannot delete an active customer");
+    }
+    status = Status.DELETED;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+class SomeCode {
+  public void correct(Customer draftCustomer) {
+    draftCustomer.validate("currentUser"); // from token/session..
+  }
+
+  public void incorrect(Customer draftCustomer) {
+    draftCustomer.validate("null");
+  }
+
+  public void activate(Customer draftCustomer) {
+    draftCustomer.activate();
+  }
+}
 //endregion
