@@ -23,18 +23,7 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-    normalize(ldapUserDto);
-    User user = new User(
-        ldapUserDto.getUn(),
-        fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail())
-    );
-    // ☮️
-    // ----------
-    // 💩
+    User user = fetchUser(usernamePart); // fetch is more scary than get = network call
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -55,6 +44,19 @@ public class NotificationService {
     emailSender.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
+  }
+
+  private User fetchUser(String usernamePart) {
+    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
+
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    normalize(ldapUserDto);
+    User user = new User(
+        ldapUserDto.getUn(),
+        fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail())
+    );
+    return user;
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
