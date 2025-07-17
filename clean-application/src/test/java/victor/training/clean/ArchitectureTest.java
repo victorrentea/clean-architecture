@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // NOTE: In case you don't understand this test, contact me:
 // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
-@Disabled("TODO fix when I return from sabbatical year:)")
+//@Disabled("TODO fix when I return from sabbatical year:)")
 public class ArchitectureTest {
 
   private final JavaClasses allProjectClasses = new ClassFileImporter()
@@ -43,9 +43,9 @@ public class ArchitectureTest {
         .resideInAPackage("..infra..");
     List<String> failures = rule.evaluate(allProjectClasses).getFailureReport().getDetails();
 
-//    int expectedFailureCount = 21; //  initial 😭
+    int expectedFailureCount = 6; //  initial 😭 - i'm far from my goal
 //    int expectedFailureCount = 10; //  3 months later
-    int expectedFailureCount = 0; // end 🍾
+//    int expectedFailureCount = 0; // end 🍾
 
     assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
 
