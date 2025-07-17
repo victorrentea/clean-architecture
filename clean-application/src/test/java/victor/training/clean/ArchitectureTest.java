@@ -44,8 +44,8 @@ public class ArchitectureTest {
     List<String> failures = rule.evaluate(allProjectClasses).getFailureReport().getDetails();
 
 //    int expectedFailureCount = 6; //  initial 😭 - i'm far from my goal
-    int expectedFailureCount = 3; //  3 months later
-//    int expectedFailureCount = 0; // end 🍾
+//    int expectedFailureCount = 3; //  3 months later
+    int expectedFailureCount = 0; // end 🍾🍾🍾🍾
 
     assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
 
