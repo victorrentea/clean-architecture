@@ -17,7 +17,20 @@ import java.time.format.DateTimeFormatter;
 public class GetCustomerByIdUseCase {
   private final CustomerRepo customerRepo;
 
-  @Builder
+  @GetMapping("customer/{id}/vsa")
+  public GetCustomerByIdResponse findById(@PathVariable long id) {
+      Customer customer = customerRepo.findById(id).orElseThrow();
+    // "Mapper"
+      return GetCustomerByIdResponse.builder()
+              .id(customer.getId())
+              .name(customer.getName())
+              .email(customer.getEmail())
+              .siteId(customer.getCountry().getId())
+              .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+              .build();
+  }
+
+  @Builder // "Dto"
   record GetCustomerByIdResponse(
       Long id,
       String name,
@@ -26,17 +39,5 @@ public class GetCustomerByIdUseCase {
       String creationDateStr,
       boolean gold,
       String goldMemberRemovalReason) {
-  }
-
-  @GetMapping("customer/{id}/vsa")
-  public GetCustomerByIdResponse findById(@PathVariable long id) {
-      Customer customer = customerRepo.findById(id).orElseThrow();
-      return GetCustomerByIdResponse.builder()
-              .id(customer.getId())
-              .name(customer.getName())
-              .email(customer.getEmail())
-              .siteId(customer.getCountry().getId())
-              .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-              .build();
   }
 }
