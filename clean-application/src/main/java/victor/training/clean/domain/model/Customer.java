@@ -1,6 +1,7 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -102,6 +103,7 @@ public class Customer {
   @Setter(NONE)
   private String validatedBy;
 
+
   public void validate(String user) {
     if (status != Status.DRAFT) {
       throw new IllegalStateException();
@@ -123,6 +125,19 @@ public class Customer {
     }
     status = Status.DELETED;
   }
+
+
+  // or: alternative to dedicated methods
+  @AssertTrue
+  protected boolean mustHaveValidatedByNotNullIfActive() {
+//    return status != Status.ACTIVE || validatedBy!=null;
+    if (status == Status.ACTIVE) {
+      return validatedBy != null;
+    }
+    return true;
+  }
+
+
 }
 
 //region Code in the project might [not] follow the rule
@@ -136,7 +151,7 @@ class SomeCode {
   }
 
   public void activate(Customer draftCustomer) {
-    draftCustomer.setStatus(Customer.Status.ACTIVE);
+    draftCustomer.activate();
   }
 }
 //endregion
