@@ -70,6 +70,12 @@ public class Customer {
   private String legalEntityCode;
   private boolean discountedVat;
 
+  // DON'T:
+  //- public boolean canReturnOrders() { SecurityContextHolder...hasRole
+  //- { 12 x if
+  //- f(3 params) or f(GodObject20FieldsUnrelated)
+  //- f(CustomerRepo) or f(AnApiClient)
+
   public boolean canReturnOrders() {
     return goldMember || isPerson();
   }
