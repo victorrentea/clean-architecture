@@ -1,0 +1,93 @@
+void noPackageShouldDependOnWiringPackage() { @leonel
+    JavaClasses importedClasses = new ClassFileImporter()
+            .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
+            .importPackages("com.flutter.sus");
+
+    ArchRule rule = noClasses()
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("com.flutter.sus.wiring");
+
+    rule.check(importedClasses);
+}
+
+
+
+@Test @hugo
+fun `domain should be isolated`() {
+    val importedClasses: JavaClasses = ClassFileImporter()
+        .importPackages("com.flutteruki..")
+
+    ArchRuleDefinition.noClasses()
+        .that()
+        .resideInAPackage("com.flutteruki.sportsbook.bota.domain..")
+        .should()
+        .dependOnClassesThat()
+        .resideInAnyPackage(
+            "com.flutteruki.sportsbook.bota.application..",
+            "com.flutteruki.sportsbook.bota.adapter.."
+        )
+        .check(importedClasses)
+}
+
+
+
+ArchRule rule = classes() @leonel
+        .that()
+        .resideInAPackage("com.flutter.sus.model..")
+        .should()
+        .onlyDependOnClassesThat()
+        .resideInAnyPackage(
+                "com.flutter.sus.model..",
+                "java..", // Java standard library
+                "javax.." // Optional: Javax standard library
+        );
+
+@Test @davide
+public void utilsPackageShouldNotDependOutsideItself() {
+    JavaClasses importedClasses = new ClassFileImporter()
+            .withImportOption(new ImportOption.DoNotIncludeTests()) // Exclude test classes
+            .importPackages("com.ppb.feeds.srtc.client.utils");
+
+    ArchRule rule = noClasses()
+            .that()
+            .resideInAPackage("com.ppb.feeds.srtc.client.utils..")
+            .should()
+            .dependOnClassesThat()
+            .resideOutsideOfPackages(
+                    "com.ppb.feeds.srtc.client.utils..",
+                    "java..",
+                    "javax..",
+                    "com.sportradar..",
+                    "org.slf4j.."
+            );
+
+    rule.check(importedClasses);
+}
+
+@ArchTest @samuel
+static final ArchRule HEXAGONAL_ARCHITECTURE = layeredArchitecture()
+        .consideringOnlyDependenciesInLayers()
+            .layer("Api").definedBy("..api..")
+            .layer("Application").definedBy("..application..")
+            .layer("Domain").definedBy("..domain..")
+            .layer("Infrastructure").definedBy("..infrastructure..")
+        .whereLayer("Domain").mayNotAccessAnyLayer() // agnostic
+        .whereLayer("Application").mayOnlyAccessLayers("Domain", "Api", "Infrastructure")
+        .whereLayer("Api").mayOnlyAccessLayers("Domain")
+        .whereLayer("Infrastructure").mayOnlyAccessLayers("Domain");
+
+ @andre
+@Test
+void controllersShouldNotDependOnRepositories() {
+    ArchRule rule = noClasses().that()
+       .resideInAPackage("..controller..")
+       .should()
+       .dependOnClassesThat()
+       .resideInAPackage("..repository..")
+       .because(
+             "Controllers should not directly depend on repositories - they should go through the service layer");
+
+    rule.check(importedClasses);
+}
+Couldn’t run because Gradle issues, but that’s the gist of it

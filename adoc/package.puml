@@ -1,0 +1,29 @@
+@startuml HexagonalArchitecture
+
+package "Api" {
+}
+
+package "Application" {
+}
+
+package "Domain" {
+}
+
+package "Infrastructure" {
+}
+
+' Dependencies
+Application --> Domain
+Application --> Api
+Application --> Infrastructure
+
+Api --> Domain
+
+Infrastructure --> Domain
+
+' Forbidden dependencies (shown in red if visual tool supports)
+Domain -[#red,dashed]-> Api : ❌ not allowed
+Domain -[#red,dashed]-> Application : ❌ not allowed
+Domain -[#red,dashed]-> Infrastructure : ❌ not allowed
+
+@enduml
