@@ -19,8 +19,6 @@ public class NotificationService {
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     User user = userFetcher.fetchUser(usernamePart);
 
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
-
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
@@ -31,7 +29,7 @@ public class NotificationService {
             Sincerely,
             %s""".formatted(
             customer.getName(),
-            canReturnOrders ? "can" : "cannot",
+            customer.canReturnOrders() ? "can" : "cannot",
             user.fullName()))
         .build();
 
