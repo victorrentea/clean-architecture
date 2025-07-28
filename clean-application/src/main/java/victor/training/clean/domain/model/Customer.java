@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,19 +14,29 @@ import java.util.Optional;
 //endregion
 
 @Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
-@Entity // ORM/JPA (2)
+//@Entity // ORM/JPA (2)
 // 👑 Domain Model Entity, the backbone of your core complexity.
 public class Customer {
   @Id
   @GeneratedValue
   private Long id;
   private String name;
-  private String email;
 
-  // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+  private String email; // yummy
+
+  @Embedded
+  private ShippingAddress shippingAddress;
+
+  // explicitated a domain concept into its own type
+  // Value Object (design pattern) = small, immutable, lacking PK
+  @Embeddable
+  public record ShippingAddress(
+      String city, String street, String zip) {}
+  // wait for the requirement for billing tomorrow to go from specific -> generic (KISS)
+
+  // it can be reused tomorrow for billing (for reuse tomorrow)
+  //  record Address
+  //  private Address billingAddress;
 
   @ManyToOne
   private Country country;
