@@ -6,20 +6,18 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.UserAdapter;
 
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final UserAdapter userAdapter;
+  private final EmailSenderInterface emailSenderInterface;
+  private final UserFetcher userFetcher;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = userAdapter.fetchUser(usernamePart);
+    User user = userFetcher.fetchUser(usernamePart);
 
     boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
 
@@ -43,7 +41,7 @@ public class NotificationService {
       email.getCc().add(contact);
     }
 
-    emailSender.sendEmail(email);
+    emailSenderInterface.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
   }
