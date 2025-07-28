@@ -19,11 +19,11 @@ import java.util.Optional;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final UserAdapter userAdapter;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = fetchUser(usernamePart);
+    User user = userAdapter.fetchUser(usernamePart);
 
     boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
 
@@ -51,34 +51,5 @@ public class NotificationService {
 
     customer.setCreatedByUsername(user.username());
   }
-
-  private User fetchUser(String usernamePart) {
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
-
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-
-    normalize(ldapUserDto);
-
-    User user = new User(fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail()),
-        ldapUserDto.getUn());
-    return user;
-  }
-
-  private LdapUserDto fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    return dtoList.get(0);
-  }
-
-  private void normalize(LdapUserDto ldapUserDto) {
-    if (ldapUserDto.getUn().startsWith("s")) {
-      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-  }
-
 }
+
