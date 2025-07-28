@@ -18,7 +18,7 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerDto.CustomerDtoBuilder;
 import victor.training.clean.domain.repo.CountryRepo;
-import victor.training.clean.domain.service.EmailSenderInterface;
+import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
 
 import java.time.format.DateTimeFormatter;
@@ -50,7 +50,7 @@ public class LargeIntegrationTest {
     @Autowired
     private CustomerRepo customerRepo;
     @MockBean
-    private EmailSenderInterface emailSenderInterface;
+    private EmailSender emailSender;
 
     private Country country;
 
@@ -77,7 +77,7 @@ public class LargeIntegrationTest {
         assertThat(customer.getName()).isEqualTo("::name::");
         assertThat(customer.getEmail()).isEqualTo(CUSTOMER_EMAIL);
         assertThat(customer.getCountry().getId()).isEqualTo(country.getId());
-        verify(emailSenderInterface).sendEmail(argThat(email -> email.getTo().equals(CUSTOMER_EMAIL)));
+        verify(emailSender).sendEmail(argThat(email -> email.getTo().equals(CUSTOMER_EMAIL)));
 
 
         CustomerDto responseDto = getCustomer(customer.getId());

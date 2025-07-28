@@ -11,11 +11,10 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class UserAdapter implements victor.training.clean.domain.service.UserFetcher {
+public class UserAdapter {
   private final LdapApi ldapApi;
 
   // externally corrupted
-  @Override
   public User fetchUser(String usernamePart) {
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
