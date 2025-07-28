@@ -3,7 +3,6 @@ package victor.training.clean.application.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
-import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Customer.Status;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
