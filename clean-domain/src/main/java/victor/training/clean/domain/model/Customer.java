@@ -21,7 +21,7 @@ import static lombok.AccessLevel.NONE;
 //endregion
 
 @Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
-//@Entity // ORM/JPA (2)
+@Entity // ORM/JPA (2)
 // 👑 Domain Model Entity, the backbone of your core complexity.
 public class Customer {
 //  public Customer(String legalEntityCode,String email) {
@@ -41,7 +41,7 @@ public class Customer {
 
   private Long id;
   private String name;
-  @Email
+  //  @Email
   private String email; // yummy
 
   @Embedded
@@ -68,7 +68,7 @@ public class Customer {
   private boolean goldMember;
   private String goldMemberRemovalReason;
 
-  @NotNull
+  //  @NotNull
   private String legalEntityCode;
   private boolean discountedVat;
 
