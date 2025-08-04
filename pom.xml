@@ -13,8 +13,8 @@
     </parent>
 
     <modules>
-        <module>clean-domain</module>
-        <module>clean-application</module>
+        <module>clean-core</module>
+        <module>clean-infra</module>
     </modules>
 
     <properties>
@@ -49,7 +49,7 @@
         <dependencies>
             <dependency>
                 <groupId>victor.training</groupId>
-                <artifactId>clean-domain</artifactId>
+                <artifactId>clean-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
