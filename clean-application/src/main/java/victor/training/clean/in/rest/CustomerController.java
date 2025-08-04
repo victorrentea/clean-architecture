@@ -1,8 +1,5 @@
 package victor.training.clean.in.rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -78,14 +75,15 @@ public class CustomerController {
 
   @PutMapping("customers/{id}")
   public void update(@PathVariable long id, @RequestBody CustomerDto dto) {
-    CustomerApplicationService.UpdateCommand command = new CustomerApplicationService.UpdateCommand(
+    CustomerApplicationService.UpdateCustomerCommand command = new CustomerApplicationService.UpdateCustomerCommand(
+        id,
         dto.name(),
         dto.email(),
         dto.countryId(),
         dto.gold(),
         dto.goldMemberRemovalReason(
         ));
-    customerApplicationService.update(id, command);
+    customerApplicationService.update(command);
   }
 
   //<editor-fold desc="PUT returning ResponseEntity for 404 👎">

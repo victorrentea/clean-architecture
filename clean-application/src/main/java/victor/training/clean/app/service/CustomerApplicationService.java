@@ -73,8 +73,8 @@ public class CustomerApplicationService {
   }
 
   @Transactional
-  public void update(long id, UpdateCommand command) {
-    Customer customer = customerRepo.findById(id).orElseThrow();
+  public void update(UpdateCustomerCommand command) {
+    Customer customer = customerRepo.findById(command.id()).orElseThrow();
     // CRUD part
     customer.setName(command.name());
     customer.setEmail(command.email());
@@ -97,7 +97,8 @@ public class CustomerApplicationService {
     insuranceService.customerDetailsChanged(customer);
   }
 
-  public record UpdateCommand(
+  public record UpdateCustomerCommand(
+      long id,
       String name,
       String email,
       Long countryId,
