@@ -6,13 +6,12 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.*;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
+  private final EmailSenderPort emailSenderPort;
   private final UserInventoryPort userInventoryPort;
 
   // Core application logic, my Zen garden 🧘☯☮️
@@ -38,7 +37,7 @@ public class NotificationService {
 
     user.asContact().ifPresent(email.getCc()::add);
 
-    emailSender.sendEmail(email);
+    emailSenderPort.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
   }
