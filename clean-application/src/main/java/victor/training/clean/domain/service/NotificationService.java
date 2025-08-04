@@ -21,7 +21,11 @@ public class NotificationService {
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
-    LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
+    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
+    if (dtoList.size() != 1) {
+      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
+    }
+    LdapUserDto ldapUserDto = dtoList.get(0);
 
     // ⚠️ Data mapping mixed with core logic TODO pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
@@ -55,16 +59,6 @@ public class NotificationService {
 
     // ⚠️ 'un' = bad name TODO in my ubiquitous language 'un' means 'username'
     customer.setCreatedByUsername(ldapUserDto.getUn());
-  }
-
-  private LdapUserDto fetchUserFromLdap(String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    return dtoList.get(0);
   }
 
   private void normalize(LdapUserDto ldapUserDto) {
