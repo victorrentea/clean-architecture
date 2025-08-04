@@ -1,0 +1,13 @@
+package victor.training.clean.app.model;
+
+import java.util.Optional;
+
+public record User(
+    String fullName,
+    Optional<String> email,
+    String username
+) {
+  public Optional<String> asContact() {
+    return email.map(e -> fullName + " <" + e.toLowerCase() + ">");
+  }
+}

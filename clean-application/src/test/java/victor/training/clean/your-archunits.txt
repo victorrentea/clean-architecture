@@ -1,0 +1,87 @@
+@AnalyzeClasses(packages = "com.worldpay.myapp", importOptions = DoNotIncludeTests.class)
+class NoDeprecatedDependencyTest {
+    @ArchTest
+    static final ArchRule noClassesShouldDependOnDeprecatedClasses = noClasses()
+        .should()
+        .dependOnClassesThat()
+        .areAnnotatedWith(Deprecated.class)
+        .because("Production code should not depend on deprecated classes");
+}
+
+
+@Test
+void pehAdapterShouldNotDependOnPehCore() {
+  final var importedClasses = new ClassFileImporter()
+      .withImportOption(new DoNotIncludeTests())
+      .importPackages("com.worldpay.servicing.peh");
+
+  ArchRuleDefinition.noClasses()
+      .that().resideInAPackage("..peh.core..")
+      .should().dependOnClassesThat().resideInAnyPackage("..peh.adapter..")
+      .check(importedClasses);
+}
+
+
+@Test
+void domainShouldBeAgnostic_ApiAnd   InfraMayOnlyAccessDomain() {
+  var importedClasses = new ClassFileImporter()
+      .withImportOption(new ImportOption.DoNotIncludeTests())
+      .importPackages("com.worldpay.servicing");
+
+  ArchRuleDefinition.noClasses()
+      .that()
+      .resideInAPackage("..domain..")
+      .should()
+      .dependOnClassesThat()
+      .resideInAnyPackage("..api..", "..infra..")
+      .check(importedClasses);
+
+  ArchRuleDefinition.noClasses()
+      .that()
+      .resideInAPackage("..api..")
+      .should()
+      .dependOnClassesThat()
+      .resideInAPackage("..infra..")
+      .check(importedClasses);
+
+  ArchRuleDefinition.noClasses()
+      .that()
+      .resideInAPackage("..infra..")
+      .should()
+      .dependOnClassesThat()
+      .resideInAPackage("..api..")
+      .check(importedClasses);
+}
+
+
+@Test
+void repoPackageShouldNotDependOnServicePackage() {
+  var importedClasses = new ClassFileImporter()
+      .withImportOption(new ImportOption.DoNotIncludeTests())
+      .importPackages("com.worldpay.servicing.mes");
+
+  ArchRule rule = noClasses()
+      .that()
+      .resideInAPackage("..repository..")
+      .should()
+      .dependOnClassesThat()
+      .resideInAPackage("..service..");
+
+  rule.check(importedClasses);
+}
+
+
+@Test
+void controllersShouldNotDependOnRepositories() {
+    var classes = new ClassFileImporter()
+        .withImportOption(new ImportOption.DoNotIncludeTests())
+        .importPackages("com.worldpay.servicing");
+
+    ArchRuleDefinition.noClasses()
+        .that()
+        .resideInAPackage("..controller..")
+        .should()
+        .dependOnClassesThat()
+        .resideInAPackage("..repository..")
+        .check(classes);
+}

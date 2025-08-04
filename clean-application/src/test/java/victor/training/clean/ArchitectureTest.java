@@ -46,6 +46,7 @@ public class ArchitectureTest {
     // TODO FreezingArchRule.freeze(rule.check(classes))
   }
 
+
   @Test
   public void yourRule() {
     // TODO check an architectural rule for your project (passing or failing)

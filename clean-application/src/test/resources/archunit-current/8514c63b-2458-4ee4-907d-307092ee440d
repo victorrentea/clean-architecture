@@ -1,3 +1,3 @@
-Constructor <victor.training.clean.application.controller.CustomerLeakingController.<init>(victor.training.clean.domain.repo.CustomerRepo)> has parameter of type <victor.training.clean.domain.repo.CustomerRepo> in (CustomerLeakingController.java:0)
-Field <victor.training.clean.application.controller.CustomerLeakingController.customerRepo> has type <victor.training.clean.domain.repo.CustomerRepo> in (CustomerLeakingController.java:0)
-Method <victor.training.clean.application.controller.CustomerLeakingController.findById(long)> calls method <victor.training.clean.domain.repo.CustomerRepo.findById(java.lang.Object)> in (CustomerLeakingController.java:17)
+Constructor <victor.training.clean.application.controller.CustomerLeakingController.<init>(victor.training.clean.app.repo.CustomerRepo)> has parameter of type <victor.training.clean.app.repo.CustomerRepo> in (CustomerLeakingController.java:0)
+Field <victor.training.clean.application.controller.CustomerLeakingController.customerRepo> has type <victor.training.clean.app.repo.CustomerRepo> in (CustomerLeakingController.java:0)
+Method <victor.training.clean.application.controller.CustomerLeakingController.findById(long)> calls method <victor.training.clean.app.repo.CustomerRepo.findById(java.lang.Object)> in (CustomerLeakingController.java:17)

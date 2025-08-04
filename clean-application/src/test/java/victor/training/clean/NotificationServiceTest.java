@@ -9,10 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.model.Email;
-import victor.training.clean.domain.service.EmailSenderPort;
-import victor.training.clean.domain.service.NotificationService;
+import victor.training.clean.app.model.Customer;
+import victor.training.clean.app.model.Email;
+import victor.training.clean.app.service.EmailSenderPort;
+import victor.training.clean.app.service.NotificationService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;

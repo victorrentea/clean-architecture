@@ -159,7 +159,7 @@
                             <outputDirectory>${project.basedir}</outputDirectory>
                             <scanPackages>
                                 <scanPackage>
-                                    victor.training.clean.domain.model
+                                    victor.training.clean.app.model
                                 </scanPackage>
                             </scanPackages>
                             <removeMethods>true</removeMethods>
@@ -184,8 +184,8 @@
                             <inputSpec>${project.basedir}/ldap-api-docs.yaml</inputSpec>
                             <generatorName>java</generatorName>
                             <library>resttemplate</library>
-                            <apiPackage>victor.training.clean.infra</apiPackage>
-                            <modelPackage>victor.training.clean.infra</modelPackage>
+                            <apiPackage>victor.training.clean.out</apiPackage>
+                            <modelPackage>victor.training.clean.out</modelPackage>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
                             <modelNameSuffix>Dto</modelNameSuffix>
