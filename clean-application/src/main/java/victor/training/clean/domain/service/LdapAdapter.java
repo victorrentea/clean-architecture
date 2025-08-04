@@ -16,7 +16,6 @@ import java.util.Optional;
 @Component
 public class LdapAdapter {
   // infra 💩 of outside world (out adapter) = External Corruption
-
   private final LdapApi ldapApi;
 
   public User fetchUser(String usernamePart) {
