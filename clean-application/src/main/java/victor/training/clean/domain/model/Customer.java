@@ -1,10 +1,14 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.platform.commons.function.Try;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -19,6 +23,7 @@ import static lombok.AccessLevel.NONE;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 
+//@Slf4j
 @Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
 @Entity // ORM/JPA (2)
 // 👑 Domain Model Entity, the backbone of your core complexity.
@@ -26,6 +31,7 @@ public class Customer { // Domain Model entity representing
   @Id
   @GeneratedValue
   private Long id;
+  //  @NotNull
   private String name;
   private String email;
 
@@ -44,7 +50,12 @@ public class Customer { // Domain Model entity representing
     // better than a CustomerUtil/Hellper
     // cannot add the method INSIDE if: part of shared .jar / generated code (eg from a swagger)
     // => that's why I want to create myself the central datastructure I use in most of my complexity
-    return goldMember || legalEntityCode == null;
+    return goldMember || isPhysicalPerson();
+  }
+
+  // explain data
+  public boolean isPhysicalPerson() {
+    return legalEntityCode == null;
   }
 
 
@@ -92,12 +103,24 @@ public class Customer { // Domain Model entity representing
   private Status status = Status.DRAFT;
   private String validatedBy;
 
+//  public boolean validate(String user) { // 1. BAD
+
+  // 2. Return a monad failed/ok
+  // Try (vavr) / Result/kotlin/scala
+  // Result permit Ok, Error(ErrorCode failure)
+  // Result permit Ok, Error(List<ErrorCode> failure)
+//  public Result permit Ok,Failure(message){} validate(String user) {
+  // Result<> result = customer.validate(..);
+  // if (result.isFailure) return result;
+
+  // 3. 💖💖💖throw an ex: typical java = default
   public void validate(String user) {
     if (status != Status.DRAFT) {
       throw new IllegalStateException();
     }
     validatedBy = Objects.requireNonNull(user);
     status = Status.VALIDATED;
+//    log.
   }
 
   public void activate() {
@@ -113,6 +136,21 @@ public class Customer { // Domain Model entity representing
     }
     status = Status.DELETED;
   }
+
+// jakarta.validation alternative to 'smart mutator methods'
+//  @AssertTrue(message = "Customer must have a non-null validatedBy when status is VALIDATED or ACTIVE")
+//  private boolean isValidValidationState() {
+//    return switch (status) {
+//      case DRAFT, DELETED -> true;
+//      case VALIDATED, ACTIVE -> validatedBy != null && !validatedBy.isBlank();
+//    };
+//  }
+
+
+  // in more states, use
+  // - State Design patter: class ActiveState implements CustometState
+  // - Spring State Machine (SSM)
+  // - BPM
 }
 //region Code in the project might [not] follow the rule
 class SomeCode {

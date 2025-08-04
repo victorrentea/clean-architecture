@@ -1,0 +1,12 @@
+@startuml
+[*] --> DRAFT
+
+DRAFT --> VALIDATED : validate(user)\n(user != null)
+VALIDATED --> ACTIVE : activate()
+DRAFT --> DELETED : delete()
+VALIDATED --> DELETED : delete()
+ACTIVE --> DELETED : delete()
+
+DELETED --> [*]
+
+@enduml
