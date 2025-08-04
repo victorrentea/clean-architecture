@@ -13,11 +13,11 @@ import victor.training.clean.infra.*;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapAdapter ldapAdapter;
+  private final UserInventoryPort userInventoryPort;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = ldapAdapter.fetchUser(usernamePart);
+    User user = userInventoryPort.fetchUser(usernamePart);
 
     // 🧘 my business logic
 

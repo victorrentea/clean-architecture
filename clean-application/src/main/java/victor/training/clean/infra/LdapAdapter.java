@@ -12,10 +12,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 //@Adapter
 @Component
-public class LdapAdapter {
+public class LdapAdapter implements victor.training.clean.domain.service.UserInventoryPort {
   // infra 💩 of outside world (out adapter) = External Corruption
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchUser(String usernamePart) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
     if (dtoList.size() != 1) {
