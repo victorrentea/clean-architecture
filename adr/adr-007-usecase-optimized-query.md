@@ -1,5 +1,6 @@
 ## Title
-Search using Usecase-Optimized Query (CQRS)
+
+Search using Usecase-Optimized Query (CQRS) without entering 'domain'
 
 ## Status
 Accepted
@@ -15,14 +16,15 @@ which adds unnecessary columns, JOINs
 and sometimes even additional SELECT queries.
 
 If only a few fields are needed, 
-it's more CPU/memory/network efficient 
-to fetch only ose fields from the DB, 
-especially when the entity is large, 
-and we retrieve many of them, 
+it's more CPU/memory/network efficient
+to fetch only those fields from the DB,
+especially when the entity is large,
+and we retrieve many entities,
 such as in a search flow.
 
 ## Decision
-Every search use-case will select directly DTOs instead of Entities.
+
+Every search use-case will select directly DTOs instead of Entities from DB.
 
 That is, instead of doing:
 ```java
@@ -50,7 +52,7 @@ matching the column aliases ('id', and 'fullName' above).
 ## Consequences
 Positive:
 - Better performance - by reading less from DB.
-- Less mapping needed - the ORM populates directly the DTO object of the REST API.
+- Simplicity: Less mapping needed - the ORM populates directly the DTO object of the REST API.
 
 Negative:
 - Coupling - such code depends on DTOs => can't be in `domain.repository` -
@@ -60,7 +62,6 @@ has to be placed next to controller.
 enforced by the Domain Model.
 
 ## Compliance
-
 Enforcing is done via Code Review,
 since we couldn't find any automated way to enforce it😢
 
