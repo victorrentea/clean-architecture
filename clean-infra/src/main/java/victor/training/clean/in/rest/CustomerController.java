@@ -41,7 +41,6 @@ public class CustomerController {
   @GetMapping("customers/{id}")
   public CustomerDto findById(@PathVariable long id) {
     Customer customer = customerApplicationService.findById(id);
-    // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())

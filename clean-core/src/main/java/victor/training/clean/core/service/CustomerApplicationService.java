@@ -17,14 +17,8 @@ import static java.util.Objects.requireNonNull;
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
   private final NotificationService notificationService;
-  //  private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
   private final AnafQueryPort anafQueryPort;
-
-//  // code smell = stupid method ("Middle Man")
-//  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
-//    return customerSearchQuery.search(searchCriteria);
-//  }
 
   public Customer findById(long id) {
     return customerRepo.findById(id).orElseThrow();

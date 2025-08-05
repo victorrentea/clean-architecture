@@ -33,7 +33,8 @@ public class ArchitectureTest {
   public void domain_independent_of_infrastructure() {
     var rule = noClasses().that()
         .resideInAPackage("..domain..")
-        .should().dependOnClassesThat()
+        .should()
+        .dependOnClassesThat()
         .resideInAPackage("..infra..");
     List<String> failures = rule.evaluate(allProjectClasses).getFailureReport().getDetails();
 
