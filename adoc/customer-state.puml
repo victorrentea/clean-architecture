@@ -1,0 +1,14 @@
+@startuml
+title Customer Status State Machine
+
+[*] --> DRAFT
+
+DRAFT --> VALIDATED : setValidated(validatedBy)
+VALIDATED --> ACTIVE : setActive()
+VALIDATED --> DELETED : method()
+ACTIVE --> DELETED : method()
+DRAFT --> DELETED : method()
+
+DELETED --> [*]
+
+@enduml
