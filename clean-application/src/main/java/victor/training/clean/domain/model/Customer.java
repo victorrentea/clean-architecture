@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -26,10 +23,21 @@ public class Customer {
   private String name;
   private String email;
 
-  // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+  @Embedded
+  private ShippingAddress shippingAddress;
+
+//  private Address billingAddress; {String vatCode/cnp, String address}
+//  public record Address( // + generic, tomorrow I could reuse it = premature abstraction.
+  // use "the rule of 3" = if you need to use the same type in 3 places, then extract it. see http://www.martinfowler.com/bliki/RuleOfThree.html
+
+  // VO = Value Object = small immutable obj lacking PK
+  // = explicitated a concept floating through my code
+  @Embeddable
+  public record ShippingAddress( // + more precise, more "humble". keep specific, generify ON DEMAND
+                                 String city,
+                                 String street,
+                                 String zip
+  ) {}
 
   @ManyToOne
   private Country country;
