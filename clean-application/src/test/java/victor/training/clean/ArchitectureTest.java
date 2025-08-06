@@ -20,7 +20,7 @@ import static com.tngtech.archunit.core.importer.ImportOption.Predefined.DO_NOT_
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled("Fix this after I return from vacation")
+//@Disabled("Fix this after I return from vacation")
 // NOTE: In case you don't understand this test, contact me:
 // call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
 public class ArchitectureTest {
@@ -37,9 +37,9 @@ public class ArchitectureTest {
         .resideInAPackage("..infra..");
     List<String> failures = rule.evaluate(allProjectClasses).getFailureReport().getDetails();
 
-//    int expectedFailureCount = 21; //  initial 😭
+    int expectedFailureCount = 13; //  initial 😭
 //    int expectedFailureCount = 10; //  3 months later
-    int expectedFailureCount = 0; // end 🍾
+//    int expectedFailureCount = 0; // end 🍾
 
     assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
 
