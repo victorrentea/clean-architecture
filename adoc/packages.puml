@@ -1,0 +1,43 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+
+Person(user, "User")
+
+System_Boundary(c1, "orch-entity-agent") {
+
+  Container(cmd, "CLI / Entry Point", "Go Command", "Starts the application")
+
+  Container(services, "Services", "Go Package", "Core business logic")
+  Container(clients, "Clients", "Go Package", "HTTP/gRPC clients to external systems")
+  Container(config, "Config", "Go Package", "Configuration structures")
+  Container(keys, "Keys", "Go Package", "Contains key structs")
+  Container(persister, "Persister", "Go Package", "Data persistence logic")
+  Container(statehandlers, "State Handlers", "Go Package", "State-based orchestration handlers")
+  Container(statemachines, "State Machines", "Go Package", "Drives transitions and workflows")
+
+  Container(mocks, "Mocks", "Go Package", "Interface mocks for testing")
+  Container(testutils, "Test Utilities", "Go Package", "Helper functions for testing")
+  Container(metrics, "Metrics", "Go Package", "Structs related to metrics")
+  Container(validation, "Validation", "Go Package", "Validation functions")
+  Container(logextractor, "Log Extractor", "Go Package", "Functions for log parsing")
+  Container(helpers, "Helpers", "Go Package", "Helper functions used by services")
+  Container(transitions, "Transitions", "Go Package", "State transition definitions")
+}
+
+Rel(user, cmd, "invokes")
+
+Rel(cmd, services, "uses")
+Rel(services, clients, "calls")
+Rel(services, config, "reads config")
+Rel(services, persister, "persists data")
+Rel(statehandlers, services, "delegates logic to")
+Rel(statehandlers, persister, "reads/writes state")
+Rel(statemachines, statehandlers, "orchestrates")
+Rel(statemachines, services, "delegates actions")
+
+Rel_U(services, helpers, "uses helpers")
+Rel_U(testutils, mocks, "uses")
+Rel_U(validation, logextractor, "may use logs")
+
+@enduml

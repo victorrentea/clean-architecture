@@ -1,4 +1,6 @@
 # If you update files under these patterns, your PR will get reviewed
 # by these GitHub/GitLab/BitBucket users or groups.
 
-/src/test/java/victor/training/clean/ArchitectureTest.java @elders
+/src/test/java/victor/training/clean/ArchitectureTest.java @architects
+
+# Victor, this is wrong. Don't your #trust your developers.

@@ -44,7 +44,7 @@ public class ArchUnitProTest {
 
         .whereLayer("Controller").mayNotBeAccessedByAnyLayer()
         .whereLayer("Service").mayOnlyBeAccessedByLayers("Controller")
-        .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service");
+        .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service"/*,"Controller"*/);
   }
 
 }
