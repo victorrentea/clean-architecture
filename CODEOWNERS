@@ -1,4 +1,4 @@
-# If you update files under these patterns, your PR will get reviewed
-# by these GitHub/GitLab/BitBucket users or groups.
+# Each line is a rule consisting of a pattern followed by one or more GitHub usernames or team names.
+# This file is located in the .github/ directory of your repository.
 
-/src/test/java/victor/training/clean/ArchitectureTest.java @elders
+/src/test/java/victor/training/clean/ArchitectureTest.java @architects
