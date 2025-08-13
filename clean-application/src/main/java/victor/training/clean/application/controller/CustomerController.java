@@ -23,7 +23,7 @@ import java.util.List;
 public class CustomerController {
   private final CustomerApplicationService customerApplicationService;
 
-  @PostMapping("customers")
+  @PostMapping("customer")
   public void register(@RequestBody @Validated CustomerDto dto) {
     customerApplicationService.register(dto);
   }

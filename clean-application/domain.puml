@@ -23,10 +23,7 @@ class Customer <<Entity>>  {
 	{field} +@Id id : Long
 	{field} +legalEntityCode : String
 	{field} +name : String
-	{field} +shippingAddressCity : String
-	{field} +shippingAddressStreet : String
-	{field} +shippingAddressZip : String
-	{field} +validatedBy : String
+	{field} -validatedBy : String
 }
 
 
@@ -61,6 +58,13 @@ class PolicyNotification <<Entity>>  {
 }
 
 
+class ShippingAddress {
+	{field} -city : String
+	{field} -street : String
+	{field} -zip : String
+}
+
+
 enum Status {
 	{field} +ACTIVE
 	{field} +DELETED
@@ -69,9 +73,12 @@ enum Status {
 }
 
 
+annotation ValidValidatedBy
+
 
 
 Customer -->  Country :  @ManyToOne\ncountry
+Customer -->  ShippingAddress : shippingAddress
 Customer -->  Status : status
 InsurancePolicy -->  Customer :  @ManyToOne\ncustomer
 PolicyNotification -->  InsurancePolicy :  @ManyToOne\npolicy

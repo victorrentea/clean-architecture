@@ -33,6 +33,7 @@ public class MyOpenAPIDidNotChangeTest {
 
   @Test
   void my_contract_did_not_change() throws Exception {
+    // extract contract from current java code
     String currentOpenAPI = mockMvc.perform(get("/v3/api-docs"))
         .andReturn().getResponse().getContentAsString();
 
