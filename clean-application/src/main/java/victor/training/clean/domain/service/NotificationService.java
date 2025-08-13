@@ -26,6 +26,8 @@ public class NotificationService {
     // ⚠️ Data mapping mixed with core logic TODO pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
+    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
+
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
@@ -36,7 +38,7 @@ public class NotificationService {
             Sincerely,
             %s""".formatted(
             customer.getName(),
-            customer.canReturnOrders() ? "can" : "cannot",
+            canReturnOrders ? "can" : "cannot",
             fullName))
         .build();
 
