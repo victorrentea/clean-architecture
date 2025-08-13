@@ -26,6 +26,14 @@ public class Customer {
   @Embedded
   private ShippingAddress shippingAddress;
 
+  public boolean isIndividual() { // explain data
+    return legalEntityCode == null;
+  }
+
+  public boolean canReturnOrders() { // bits of business rules
+    return goldMember || isIndividual();
+  }
+
 //  private Address billingAddress; {String vatCode/cnp, String address}
 //  public record Address( // + generic, tomorrow I could reuse it = premature abstraction.
   // use "the rule of 3" = if you need to use the same type in 3 places, then extract it. see http://www.martinfowler.com/bliki/RuleOfThree.html
@@ -47,21 +55,8 @@ public class Customer {
 
   private boolean goldMember;
   private String goldMemberRemovalReason;
+
   private String legalEntityCode;
-
-  public boolean canReturnOrders() { // bits of business rules
-    return goldMember || isIndividual();
-  }
-
-  public boolean isIndividual() { // explain data
-    return legalEntityCode == null;
-  }
-
-//  public void dontDoThis(OrderLarge10FieldsObj) {
-//  public void dontDoThis(CustomerRepo) { DB access
-//  public void dontDoThis(ExtApiClient) { REST calls
-//  public void dontDoThis(ApiDto external) {
-
   private boolean discountedVat;
 
   public Optional<String> getLegalEntityCode() {
