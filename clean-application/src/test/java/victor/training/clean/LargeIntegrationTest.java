@@ -100,11 +100,12 @@ public class LargeIntegrationTest {
 
     @Test
     void nameTooShortThrows() throws Exception {
-        register(registerRequest().name("1")).andExpect(status().isBadRequest());
+        register(registerRequest().name("1"))
+            .andExpect(status().isBadRequest());
     }
 
     @Test
-    void twoCustomerWithSameEmail() throws Exception {
+    void twoCustomersWithSameEmail() throws Exception {
         register(registerRequest().email(CUSTOMER_EMAIL))
             .andExpect(status().isOk());
 

@@ -16,9 +16,9 @@ import java.util.Optional;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 
-@Data // = @Getter @Setter @ToString @EqualsAndHashCode (1)
-@Entity // ORM/JPA (2)
-// 👑 Domain Model Entity, the backbone of your core complexity.
+@Entity // ORM (2)
+@Data // = @Getter + @Setter + @ToString + @EqualsAndHashCode (1)
+// 💙 Domain Model Entity - backbone of your core complexity
 public class Customer {
   @Id
   @GeneratedValue
