@@ -1,6 +1,7 @@
 package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
@@ -9,6 +10,24 @@ import victor.training.clean.domain.model.Customer.Status;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 @Builder
+@Schema(example = """
+    {
+        "id": 123,
+        "name": "John Doe",
+        "email": "john@example.com",
+        "countryId": 1,
+        "shippingAddressCity": "New York",
+        "shippingAddressStreet": "123 Main St",
+        "shippingAddressZip": "10001",
+        "createdDate": "2025-08-14T12:00:00Z",
+        "gold": true,
+        "goldMemberRemovalReason": null,
+        "canReturnOrders": true,
+        "status": "ACTIVE",
+        "legalEntityCode": "ABC123",
+        "discountedVat": false
+      }
+    """)
 public record CustomerDto(
     Long id, // only used on GET response (assigned by backend)
 
@@ -35,8 +54,8 @@ public record CustomerDto(
     Boolean discountedVat // GET only (fetched by backend)
 ) {
 
-  @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
   @JsonIgnore
+  @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
   public boolean isShippingAddressValid() { // multi-field validation annotations
     boolean allAreSet = shippingAddressCity != null && shippingAddressStreet != null && shippingAddressZip != null;
     boolean allAreNull = shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;

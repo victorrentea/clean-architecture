@@ -2,6 +2,7 @@ package victor.training.clean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -40,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureWireMock(port = 0)
 @Transactional
-public class LargeIntegrationTest {
+public class FullIntegrationTest {
     private static final ObjectMapper jackson = new ObjectMapper();
     public static final String CUSTOMER_EMAIL = "a@b.com";
     @Autowired
@@ -98,24 +99,32 @@ public class LargeIntegrationTest {
         ).andExpect(status().isNotFound());
     }
 
+  @Nested
+  class CannotCreateWith {
+
     @Test
-    void nameTooShortThrows() throws Exception {
-        register(registerRequest().name("1"))
-            .andExpect(status().isBadRequest());
+    void nameTooShort() throws Exception {
+      register(registerRequest().name("1"))
+          .andExpect(status().isBadRequest());
     }
 
     @Test
-    void twoCustomersWithSameEmail() throws Exception {
-        register(registerRequest().email(CUSTOMER_EMAIL))
-            .andExpect(status().isOk());
-
-        register(registerRequest().email(CUSTOMER_EMAIL))
-            .andExpect(status().isInternalServerError())
-        //          .andExpect(status().is4xxClientError())
-        //          .andExpect(content().string("Customer email is already registered"))
-        ;
+    void invalidEmail() throws Exception {
+      register(registerRequest().email("aaa"))
+          .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void duplicatedEmail() throws Exception {
+      register(registerRequest().email(CUSTOMER_EMAIL))
+          .andExpect(status().isOk());
+
+      register(registerRequest().email(CUSTOMER_EMAIL))
+          .andExpect(status().isInternalServerError())
+      //          .andExpect(content().string("Customer email is already registered"))
+      ;
+    }
+  }
     private ResultActions register(CustomerDtoBuilder requestDto) throws Exception {
         return mockMvc.perform(post("/customers")
                 .contentType(APPLICATION_JSON)

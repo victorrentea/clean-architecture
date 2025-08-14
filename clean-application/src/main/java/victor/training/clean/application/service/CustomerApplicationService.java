@@ -73,9 +73,12 @@ public class CustomerApplicationService {
     Customer customer = new Customer();
     customer.setEmail(dto.email());
     customer.setName(dto.name());
-    customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());
+    customer.setShippingAddressCity(dto.shippingAddressCity());
+    customer.setShippingAddressStreet(dto.shippingAddressStreet());
+    customer.setShippingAddressZip(dto.shippingAddressZip());
+    customer.setCreatedDate(LocalDate.now());
 
     // request payload validation
     if (customer.getName().length() < 5) { // TODO alternatives to implement this?

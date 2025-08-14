@@ -44,7 +44,23 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerDto"
+                  "$ref": "#/components/schemas/CustomerDto",
+                  "example": {
+                    "id": 123,
+                    "name": "John Doe",
+                    "email": "john@example.com",
+                    "countryId": 1,
+                    "shippingAddressCity": "New York",
+                    "shippingAddressStreet": "123 Main St",
+                    "shippingAddressZip": "10001",
+                    "createdDate": "2025-08-14T12:00:00Z",
+                    "gold": true,
+                    "goldMemberRemovalReason": null,
+                    "canReturnOrders": true,
+                    "status": "ACTIVE",
+                    "legalEntityCode": "ABC123",
+                    "discountedVat": false
+                  }
                 }
               }
             }
@@ -89,7 +105,14 @@
             }
           },
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Customer updated successfully"
+                }
+              }
+            }
           }
         }
       },
@@ -131,7 +154,14 @@
             }
           },
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Customer patched successfully"
+                }
+              }
+            }
           }
         }
       }
@@ -164,7 +194,14 @@
             }
           },
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Customer registered successfully"
+                }
+              }
+            }
           }
         }
       }
@@ -205,7 +242,17 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/CustomerSearchResult"
-                  }
+                  },
+                  "example": [
+                    {
+                      "id": 123,
+                      "name": "John Doe"
+                    },
+                    {
+                      "id": 456,
+                      "name": "Jane Smith"
+                    }
+                  ]
                 }
               }
             }

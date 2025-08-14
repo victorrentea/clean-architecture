@@ -4,8 +4,10 @@ import com.google.common.annotations.VisibleForTesting;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,9 +17,10 @@ import java.util.Map;
 import static java.lang.String.join;
 
 @RequiredArgsConstructor
-//@RestController
+@RestController
 public class SearchCustomerUseCase {
   private final EntityManager entityManager;
+  private final JdbcTemplate jdbcTemplate;
 
   @VisibleForTesting // only @Tests are allowed to use this
   record CustomerSearchCriteria(
@@ -45,6 +48,17 @@ public class SearchCustomerUseCase {
     jpqlParts.add("1=1"); // alternatives: Criteria API ± Spring Specifications or Query DSL
     Map<String, Object> params = new HashMap<>();
 
+    setCriteria(criteria, jpqlParts, params);
+
+    String whereCriteria = join(" AND ", jpqlParts);
+    var query = entityManager.createQuery(jpql + whereCriteria, CustomerSearchResult.class);
+    for (String paramName : params.keySet()) {
+      query.setParameter(paramName, params.get(paramName));
+    }
+    return query.getResultList();
+  }
+
+  private void setCriteria(CustomerSearchCriteria criteria, List<String> jpqlParts, Map<String, Object> params) {
     if (criteria.name != null) {
       jpqlParts.add("UPPER(c.name) LIKE UPPER('%' || :name || '%')");
       params.put("name", criteria.name);
@@ -59,12 +73,5 @@ public class SearchCustomerUseCase {
       jpqlParts.add("c.country.id = :countryId");
       params.put("countryId", criteria.countryId);
     }
-
-    String whereCriteria = join(" AND ", jpqlParts);
-    var query = entityManager.createQuery(jpql + whereCriteria, CustomerSearchResult.class);
-    for (String paramName : params.keySet()) {
-      query.setParameter(paramName, params.get(paramName));
-    }
-    return query.getResultList();
   }
 }

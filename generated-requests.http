@@ -1,0 +1,9 @@
+###
+PUT http://localhost:8080/customers/{{id}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "",
+  "countryId": 0
+}
