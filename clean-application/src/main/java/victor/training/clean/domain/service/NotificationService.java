@@ -22,20 +22,9 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
-    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-
-    // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
-    normalize(ldapUserDto);
-
-    User user = new User(
-        ldapUserDto.getUn(),
-        fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail()
-        ));
+    User user = map(ldapUserDto);
 
     // 💩
     // --- linie ---
@@ -66,6 +55,19 @@ public class NotificationService {
     emailSender.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
+  }
+
+  private User map(LdapUserDto ldapUserDto) {
+    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+
+    normalize(ldapUserDto);
+
+    User user = new User(
+        ldapUserDto.getUn(),
+        fullName,
+        Optional.ofNullable(ldapUserDto.getWorkEmail()
+        ));
+    return user;
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
