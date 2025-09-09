@@ -1,4 +1,7 @@
-# Each line is a rule consisting of a pattern followed by one or more GitHub usernames or team names.
+# Each line is a rule consisting of a pattern followed
+# by one or more GitHub usernames or team names.
 # This file is located in the .github/ directory of your repository.
+
+# acest fisier zice ca n-ai incredere in echipa ta
 
 /src/test/java/victor/training/clean/ArchitectureTest.java @architects

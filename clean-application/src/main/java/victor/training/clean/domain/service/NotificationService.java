@@ -7,6 +7,7 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.*;
+import victor.training.clean.infra.LdapUserDto;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -18,6 +19,7 @@ public class NotificationService {
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     User user = userFetcher.fetchUser(usernamePart);
+    LdapUserDto dtoRau;
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
