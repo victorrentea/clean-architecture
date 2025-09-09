@@ -6,13 +6,7 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.Adapter;
-import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
-import java.util.Optional;
+import victor.training.clean.infra.*;
 
 @RequiredArgsConstructor
 @Slf4j
