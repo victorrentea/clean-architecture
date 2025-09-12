@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
@@ -20,11 +21,13 @@ public class NotificationService {
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 
-    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    normalize(ldapUserDto);
+
+    // AL MEU!
+    User user = new User(fullName, ldapUserDto.getWorkEmail(), ldapUserDto.getUn());
 
     boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
 
@@ -39,24 +42,18 @@ public class NotificationService {
             %s""".formatted(
             customer.getName(),
             canReturnOrders ? "can" : "cannot",
-            fullName))
+            user.fullName()))
         .build();
 
 
-    // ⚠️ Unguarded nullable fields can cause NPE in other places TODO return Optional<> from getter
-    if (ldapUserDto.getWorkEmail() != null) { // what if forgotten?
-      // ⚠️ Logic repeated in other places TODO move logic to the new class
-      String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
+    if (user.email() != null) { // what if forgotten?
+      String contact = user.fullName() + " <" + user.email().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
 
-    // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
-    normalize(ldapUserDto);
-
-    // ⚠️ 'un' = bad name TODO in my ubiquitous language 'un' means 'username'
-    customer.setCreatedByUsername(ldapUserDto.getUn());
+    customer.setCreatedByUsername(user.username());
   }
 
   private LdapUserDto fetchUserFromLdap(String usernamePart) {
