@@ -18,9 +18,15 @@ import victor.training.clean.domain.repo.CustomerRepo;
 
 import java.util.List;
 
+interface CustomerControllerApi {
+  @Operation(description = "Search Customer adashd asbdjka sdaskjhg ashjdgashjd gagasjd",
+  )
+  @PostMapping("customers/search")
+  List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria);
+}
 @RestController
 @RequiredArgsConstructor
-public class CustomerController {
+public class CustomerController implements CustomerControllerApi {
   private final CustomerApplicationService customerApplicationService;
 
   @PostMapping("customers")
@@ -28,9 +34,8 @@ public class CustomerController {
     customerApplicationService.register(dto);
   }
 
-  @Operation(description = "Search Customer")
-  @PostMapping("customers/search")
-  public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
+
+  public List<CustomerSearchResult> search(CustomerSearchCriteria searchCriteria) {
     return customerApplicationService.search(searchCriteria);
   }
 

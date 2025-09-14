@@ -12,9 +12,10 @@ import java.util.Optional;
 //class LdapUserApiAdapter {
 @Service
 @RequiredArgsConstructor
-public class UserFetcher {
+public class UserFetcherImpl implements victor.training.clean.domain.service.UserFetcher {
   private final victor.training.clean.infra.LdapApi ldapApi;
 
+  @Override
   public User fetchUser(String usernamePart) {
     victor.training.clean.infra.LdapUserDto ldapUserDto = fetchUserFromLdap(usernamePart);
 

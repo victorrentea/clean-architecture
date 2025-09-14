@@ -14,7 +14,7 @@ public record CustomerDto(
 
     @NotNull
     @NotBlank
-    @Size(min = 4)
+    @Size(min = 5)
     String name,
     @Email
     String email,

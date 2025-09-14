@@ -70,41 +70,50 @@ public class CustomerApplicationService {
 
   @Transactional
   public void register(CustomerDto dto) {
+    Customer customer = toEntity(dto);
+
+    if (customer.getLegalEntityCode().isPresent()) {
+      checkLegalEntity(customer);
+    }
+
+    doRegister(customer);
+
+    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+  }
+
+  private void doRegister(Customer customer) {
+    if (customerRepo.existsByEmail(customer.getEmail())) {
+      throw new IllegalArgumentException("A customer with this email is already registered!");
+      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
+    }
+    // enrich data from external API
+
+    log.info("More Business Logic (imagine)");
+    log.info("More Business Logic (imagine)");
+    customerRepo.save(customer);
+  }
+
+  private void checkLegalEntity(Customer customer) {
+    if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode().get())) {
+      throw new IllegalArgumentException("Company already registered");
+    }
+    AnafResult anafResult = anafClient.query(customer.getLegalEntityCode().get());
+    if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
+      throw new IllegalArgumentException("Legal Entity not found!");
+    }
+    if (anafResult.isVatPayer()) {
+      customer.setDiscountedVat(true);
+    }
+  }
+
+  private Customer toEntity(CustomerDto dto) {
     Customer customer = new Customer();
     customer.setEmail(dto.email());
     customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
     customer.setLegalEntityCode(dto.legalEntityCode());
-
-    // request payload validation
-    if (customer.getName().length() < 5) { // TODO alternatives to implement this?
-      throw new IllegalArgumentException("The customer name is too short");
-    }
-
-    // business rule/validation
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
-      // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
-    }
-
-    // enrich data from external API
-    if (customer.getLegalEntityCode().isPresent()) {
-      if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode().get())) {
-        throw new IllegalArgumentException("Company already registered");
-      }
-      AnafResult anafResult = anafClient.query(customer.getLegalEntityCode().get());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
-        throw new IllegalArgumentException("Legal Entity not found!");
-      }
-      if (anafResult.isVatPayer()) {
-        customer.setDiscountedVat(true);
-      }
-    }
-    log.info("More Business Logic (imagine)");
-    log.info("More Business Logic (imagine)");
-    customerRepo.save(customer);
-    notificationService.sendWelcomeEmail(customer, "FULL"); // userId from JWT token via SecuritContext
+    return customer;
   }
 
   private String normalize(String s) {
