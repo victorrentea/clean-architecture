@@ -24,7 +24,7 @@ such as in a search flow.
 ## Decision
 Every search use-case will select directly DTOs instead of Entities.
 
-That is, instead of doing:
+That is, instead of doing (BAD):
 ```java
 @Query("SELECT u FROM User u WHERE ...")
 List<User> search(criteria); // BAD
@@ -53,18 +53,18 @@ Positive:
 - Less mapping needed - the ORM populates directly the DTO object of the REST API.
 
 Negative:
-- Coupling - such code depends on DTOs => can't be in `domain.repository` -
-has to be placed next to controller.
+
+- Coupling - Repository depends on DTOs, coupling repos to controllers => move the repo next to controller
 - Risk - domain logic might leak in DTO, if applying logic after SELECT.
 - Risk - update DB using DTOs, bypassing any integrity protection
 enforced by the Domain Model.
 
 ## Compliance
-
 Enforcing is done via Code Review,
 since we couldn't find any automated way to enforce it😢
 
 ## Notes
-- Author: Developer A 
+
+- Author: Developer A, B, C
 - Changelog: 
   - 0.1 initial proposed version on 2023-11-01
