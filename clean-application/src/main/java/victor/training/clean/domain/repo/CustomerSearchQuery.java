@@ -14,9 +14,7 @@ import java.util.Map;
 import static java.lang.String.join;
 
 // "Use-Case Optimized Query" pattern: SELECTing directly into DTOs sent out as JSONs.
-// ⚠️ DON'T change data in DB!
-// ⚠️ DON'T write heavy logic on the SELECTed DTOs!
-// For both points above, load and use the full Domain Model @Entity.
+// ⭐️ as per ADR-007
 @Repository
 @RequiredArgsConstructor
 public class CustomerSearchQuery {
