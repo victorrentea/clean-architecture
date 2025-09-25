@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.UserFetcher;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,11 +14,11 @@ import java.util.Optional;
 //@Adapter
 @Slf4j
 @RequiredArgsConstructor
-public class LdapClientImpl implements victor.training.clean.domain.service.LdapClient {
+public class LdapClientImpl implements UserFetcher {
   private final LdapApi ldapApi;
 
   @Override
-  public User fetchUser(String usernamePart) {
+  public User fetch(String usernamePart) {
     // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
 

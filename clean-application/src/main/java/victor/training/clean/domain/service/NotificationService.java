@@ -12,15 +12,12 @@ import victor.training.clean.domain.model.User;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapClient ldapClient;
+  private final UserFetcher userFetcher;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = ldapClient.fetchUser(usernamePart);
+    User user = userFetcher.fetch(usernamePart);
     // TODO map external DTO to a Value Object 'User' of mine => in domain.model
-    // 💩 infrastructure (external complexity)
-    // ----------- architecture is the art of drawing lines
-    // ✌️ domain core logic kept clean
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
