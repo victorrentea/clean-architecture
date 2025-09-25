@@ -14,6 +14,7 @@ public class NotificationService {
   private final EmailSender emailSender;
   private final UserFetcher userFetcher;
 
+  //  @Secured("ROLE_ADMIN")
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     User user = userFetcher.fetch(usernamePart);
