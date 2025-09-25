@@ -78,7 +78,7 @@ public class Customer {
   @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
-  public void validate(String username) {
+  public void validate(String username) { // true #encapsulation of complexity
     if (status != Status.DRAFT) {
       throw new IllegalStateException("Only DRAFT customers can be validated");
     }
