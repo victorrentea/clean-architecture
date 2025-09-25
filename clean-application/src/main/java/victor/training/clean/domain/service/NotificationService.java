@@ -5,35 +5,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final LdapClient ldapClient;
 
   // Core application logic, my Zen garden 🧘☯☮️
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO TODO extract needed parts into a new dedicated Value Object
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    LdapUserDto ldapUserDto = dtoList.get(0);
-    normalize(ldapUserDto);
-
-    // ⚠️ Data mapping mixed with core logic TODO pull it earlier
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
-
-    // TODO map external DTO to a Value Object of mine
+    User user = ldapClient.fetchUser(usernamePart);
+    // TODO map external DTO to a Value Object 'User' of mine => in domain.model
     // 💩 infrastructure (external complexity)
     // ----------- architecture is the art of drawing lines
     // ✌️ domain core logic kept clean
@@ -49,23 +39,18 @@ public class NotificationService {
             %s""".formatted(
             customer.getName(),
             customer.canReturnOrders() ? "can" : "cannot",
-            fullName))
+            user.fullName()))
         .build();
 
-    if (ldapUserDto.getWorkEmail() != null) { // what if forgotten?
-      String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
+    if (user.email().isPresent()) { // what if forgotten?
+      String contact = user.fullName() + " <" + user.email().get().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
 
-    customer.setCreatedByUsername(ldapUserDto.getUn());
+    customer.setCreatedByUsername(user.username());
   }
 
-  private void normalize(LdapUserDto ldapUserDto) {
-    if (ldapUserDto.getUn().startsWith("s")) {
-      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-  }
 
 }
