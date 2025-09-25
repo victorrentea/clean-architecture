@@ -27,6 +27,14 @@ public class Customer {
   @Embedded
   private ShippingAddress shippingAddress;
 
+  public boolean canReturnOrders() { // small business rule
+    return goldMember || isIndividual();
+  }
+
+  public boolean isIndividual() { // explaining data semantics; RICH domain model
+    return legalEntityCode == null;
+  }
+
   @Embeddable
   // Value Object design pattern = small immutable object without PK
   //   explicitating a domain concept floatin through my code
