@@ -9,7 +9,7 @@ import victor.training.clean.domain.model.Customer.Status;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 @Builder
-public record CustomerDto(
+public record CustomerDto( // REST API contract!!!!❄️
     Long id, // only used on GET response (assigned by backend)
 
     @NotNull

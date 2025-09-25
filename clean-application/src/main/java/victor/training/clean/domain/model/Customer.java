@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -27,9 +24,20 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+  @Embedded
+  private ShippingAddress shippingAddress;
+
+  @Embeddable
+  // Value Object design pattern = small immutable object without PK
+  //   explicitating a domain concept floatin through my code
+  //   deeper domain model
+//  public record Address( // "higher" abstraction, more generic
+  public record ShippingAddress( // more specific // YAGNI! KISS, don't speculate
+                                 String city,
+                                 String street,
+                                 String zip
+//      ,String vatCode
+  ) {}
 
   @ManyToOne
   private Country country;
