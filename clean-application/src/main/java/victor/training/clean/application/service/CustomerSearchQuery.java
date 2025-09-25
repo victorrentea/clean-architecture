@@ -1,4 +1,4 @@
-package victor.training.clean.domain.repo;
+package victor.training.clean.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,6 +14,7 @@ import java.util.Map;
 import static java.lang.String.join;
 
 // "Use-Case Optimized Query" pattern: SELECTing directly into DTOs sent out as JSONs.
+// as per ADR-007
 // ⚠️ DON'T change data in DB!
 // ⚠️ DON'T write heavy logic on the SELECTed DTOs!
 // For both points above, load and use the full Domain Model @Entity.
