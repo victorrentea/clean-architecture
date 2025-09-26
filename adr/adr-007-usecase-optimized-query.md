@@ -3,13 +3,13 @@ Search using Usecase-Optimized Query (CQRS)
 
 ## Status
 Accepted
-(Training Note: never deleted, but can be `Superseded` by a later ADR)
+(Training Note: never delete and ADR; but can be `Supersed` it with a later ADR)
 
 ## Context
 We are using an ORM (Hibernate/JPA). 
 
-Fetching a full @Entity from DB can be expensive, 
-as by default, JPA eager loads all its fields and
+Fetching a full @Entity from DB can be expensive. 
+By default JPA eager loads all its fields and
 all @ManyToOne/@OneToOne links, 
 which adds unnecessary columns, JOINs 
 and sometimes even additional SELECT queries.
@@ -21,17 +21,21 @@ especially when the entity is large,
 and we retrieve many of them, 
 such as in a search flow.
 
+Also, search flows usually involve very little logic in Java.
+Creating an additional domain object to map the query results
+doesn't provide any value, but requires more mapping and duplicated code. 
+
 ## Decision
 Every search use-case will select directly DTOs instead of Entities.
 
-That is, instead of doing:
+That is, ❌DON'T DO:
 ```java
 @Query("SELECT u FROM User u WHERE ...")
-List<User> search(criteria); // BAD
+List<User> search(criteria); // ❌BAD
 ```
 
 Use one of the following two options:
-1) Instantiate the DTO from the JQPL query:
+1) ✅ Instantiate the DTO from the JQPL query:
 ```java
 @Query("SELECT new com.example.dto.UserDto(u.id, u.name) FROM User u WHERE ...")
 List<UserDto> search(criteria);
@@ -39,7 +43,7 @@ List<UserDto> search(criteria);
 The DTO must then have a constructor that accepts all fields:
 a record, Lombok's @Value, or handwritten.
 
-2) Using [Spring Projections](https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html) for larger DTOs:
+2) ✅ Use [Spring Projections](https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html) for larger DTOs:
 ```java
 @Query("SELECT u.id as id, u.name as fullName FROM User u WHERE ...")
 List<UserDto> search(...);
@@ -50,19 +54,17 @@ matching the column aliases ('id', and 'fullName' above).
 ## Consequences
 Positive:
 - Better performance - by reading less from DB.
-- Less mapping needed - the ORM populates directly the DTO object of the REST API.
+- Less boilerplate (mapping, DTO) - the ORM directly populates the DTO object of the REST API.
 
 Negative:
-- Coupling - such code depends on DTOs => can't be in `domain.repository` -
-has to be placed next to controller.
-- Risk - domain logic might leak in DTO, if applying logic after SELECT.
-- Risk - update DB using DTOs, bypassing any integrity protection
-enforced by the Domain Model.
+- Coupling - repository will depend on DTOs (REST API) => -> move it next to the controller.
+- Risk - domain logic might grow in DTO, if applying logic after SELECT.
+- Risk - update DB using DTOs, bypassing the integrity protection
+enforced by the Domain Model/Services.
 
 ## Compliance
-
 Enforcing is done via Code Review,
-since we couldn't find any automated way to enforce it😢
+since we couldn't find yet any automated way to enforce it😢. (despite 2 hours research)
 
 ## Notes
 - Author: Developer A 
