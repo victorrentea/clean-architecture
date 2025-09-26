@@ -36,7 +36,7 @@ public class SearchCustomerUseCase {
   }
 
   @Operation(description = "Customer Search Poem")
-  @PostMapping("customer/search-vsa")
+  @PostMapping("customer/search-vsa") // Q in CQRS as per your ADR
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria criteria) {
     String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name)" +
                   " FROM Customer c " +
@@ -65,6 +65,7 @@ public class SearchCustomerUseCase {
     for (String paramName : params.keySet()) {
       query.setParameter(paramName, params.get(paramName));
     }
+//    kafkaTemplate.send(new AvroStuff())
     return query.getResultList();
   }
 }

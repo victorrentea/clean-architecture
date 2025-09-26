@@ -6,6 +6,8 @@ import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Customer.Status;
 
+import java.time.format.DateTimeFormatter;
+
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 @Builder
@@ -34,6 +36,27 @@ public record CustomerDto( // REST API contract!!!!❄️
     String legalEntityCode,
     Boolean discountedVat // GET only (fetched by backend)
 ) {
+
+  public static CustomerDto fromEntity(Customer customer) {
+    return builder()
+        .id(customer.getId())
+        .name(customer.getName())
+        .email(customer.getEmail())
+        .countryId(customer.getCountry().getId())
+        .status(customer.getStatus())
+        .createdDate(customer.getCreatedDate().format(ofPattern("yyyy-MM-dd")))
+        .gold(customer.isGoldMember())
+
+        .shippingAddressZip(customer.getShippingAddress().zip())
+        .shippingAddressCity(customer.getShippingAddress().city())
+        .shippingAddressStreet(customer.getShippingAddress().street())
+
+        .canReturnOrders(customer.canReturnOrders())
+        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
+        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
+        .discountedVat(customer.isDiscountedVat())
+        .build();
+  }
 
   @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
   @JsonIgnore
