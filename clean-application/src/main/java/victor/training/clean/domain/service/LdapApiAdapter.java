@@ -13,7 +13,7 @@ import java.util.List;
 //public class UserFetcher {
 @Component
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j // ...Factory, ...Facade, ...Service, ...Repository
 public class LdapApiAdapter {
   private final LdapApi ldapApi;
 
