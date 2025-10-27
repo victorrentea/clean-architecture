@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -27,9 +24,21 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+  @Embedded // no ALTER TABLE required
+  private ShippingAddress shippingAddress;
+
+  // "Value Object" Design Pattern= small immutable type
+  @Embeddable
+  public record ShippingAddress( // A: go humbly from specific -> generic
+                                 // !=
+//  record Address(
+                                 // B: you can can reuse it tomorrow for eg> (YAGNI,KIS,Stupid violation)
+                                 // can be a "premature abstraction" = (wrong) speculation
+                                 // BillingAddress(String name, String address, String vatCode)
+                                 String city,
+                                 String street,
+                                 String zip
+  ) {}
 
   @ManyToOne
   private Country country;
