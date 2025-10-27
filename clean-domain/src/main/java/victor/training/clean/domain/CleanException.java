@@ -1,23 +1,8 @@
 package victor.training.clean.domain;
 
 public class CleanException extends RuntimeException {
-  public enum ErrorCode {
-    GENERAL,
-    CUSTOMER_NAME_TOO_SHORT(400),
-    DUPLICATED_CUSTOMER_EMAIL(400);
-
-    public final int statusCode;
-    ErrorCode() {
-      this(500);
-    }
-    ErrorCode(int statusCode) {
-      this.statusCode = statusCode;
-    }
-  }
-
   private final ErrorCode errorCode;
   private final String[] parameters;
-
   public CleanException(String message) {
     this(message, ErrorCode.GENERAL);
   }
@@ -49,12 +34,27 @@ public class CleanException extends RuntimeException {
     this.parameters = parameters;
   }
 
-
   public ErrorCode getErrorCode() {
     return errorCode;
   }
 
   public String[] getParameters() {
     return parameters;
+  }
+
+  public enum ErrorCode {
+    GENERAL,
+    CUSTOMER_NAME_TOO_SHORT(400),
+    DUPLICATED_CUSTOMER_EMAIL(400);
+
+    public final int statusCode;
+
+    ErrorCode() {
+      this(500);
+    }
+
+    ErrorCode(int statusCode) {
+      this.statusCode = statusCode;
+    }
   }
 }

@@ -32,6 +32,18 @@ public class Customer {
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
   @Embedded // no ALTER TABLE required
   private ShippingAddress shippingAddress;
+  @ManyToOne
+  private Country country;
+  private LocalDate createdDate;
+  private String createdByUsername;
+  private boolean goldMember;
+  private String goldMemberRemovalReason;
+  private String legalEntityCode;
+  private boolean discountedVat;
+  @Setter(NONE)
+  private Status status = Status.DRAFT;
+  @Setter(NONE)
+  private String validatedBy; // WARNING: Always not-null when status = VALIDATED or later
 
   public boolean canReturnOrders() { // reuse
     return goldMember || isPrivatePerson();
@@ -41,48 +53,9 @@ public class Customer {
     return getLegalEntityCode().isEmpty();
   }
 
-  // "Value Object" Design Pattern= small immutable type
-  @Embeddable
-  public record ShippingAddress( // A: go humbly from specific -> generic
-                                 // !=
-//  record Address(
-                                 // B: you can can reuse it tomorrow for eg> (YAGNI,KIS,Stupid violation)
-                                 // can be a "premature abstraction" = (wrong) speculation
-                                 // BillingAddress(String name, String address, String vatCode)
-                                 String city,
-                                 String street,
-                                 String zip
-  ) {}
-
-  @ManyToOne
-  private Country country;
-
-  private LocalDate createdDate;
-  private String createdByUsername;
-
-  private boolean goldMember;
-  private String goldMemberRemovalReason;
-
-  private String legalEntityCode;
-  private boolean discountedVat;
-
   public Optional<String> getLegalEntityCode() {
     return Optional.ofNullable(legalEntityCode);
   }
-
-  public enum Status {
-    DRAFT, VALIDATED, ACTIVE, DELETED
-  }
-
-  @Setter(NONE)
-  private Status status = Status.DRAFT;
-  @Setter(NONE)
-  private String validatedBy; // WARNING: Always not-null when status = VALIDATED or later
-
-//  public void bad(CustomerRepo) {
-//  public void bad(AnafApiClient) {
-//  public void bad(Order{32 field}) {
-
 
   public void validate(String user) {
     if (status != Status.DRAFT) {
@@ -99,6 +72,10 @@ public class Customer {
     status = Status.ACTIVE;
   }
 
+//  public void bad(CustomerRepo) {
+//  public void bad(AnafApiClient) {
+//  public void bad(Order{32 field}) {
+
   public void delete() {
     if (status == Status.DELETED) {
       throw new IllegalStateException();
@@ -106,7 +83,25 @@ public class Customer {
     status = Status.DELETED;
   }
 
+  public enum Status {
+    DRAFT, VALIDATED, ACTIVE, DELETED
+  }
+
+  // "Value Object" Design Pattern= small immutable type
+  @Embeddable
+  public record ShippingAddress( // A: go humbly from specific -> generic
+                                 // !=
+//  record Address(
+                                 // B: you can can reuse it tomorrow for eg> (YAGNI,KIS,Stupid violation)
+                                 // can be a "premature abstraction" = (wrong) speculation
+                                 // BillingAddress(String name, String address, String vatCode)
+                                 String city,
+                                 String street,
+                                 String zip
+  ) {}
+
 }
+
 //region Code in the project might [not] follow the rule
 class SomeCode {
   public void correct(Customer draftCustomer) {
