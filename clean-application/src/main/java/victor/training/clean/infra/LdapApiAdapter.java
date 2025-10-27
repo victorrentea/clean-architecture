@@ -12,9 +12,10 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j // ...Factory, ...Facade, ...Service, ...Repository
-public class LdapApiAdapter {
+public class LdapApiAdapter implements victor.training.clean.domain.service.UserService {
   private final LdapApi ldapApi;
 
+  @Override
   public User fetchUserByName(String usernamePart) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
 
