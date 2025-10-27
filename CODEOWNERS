@@ -1,4 +1,4 @@
 # A PR touching this path must be approved by a member of this group.
 # Works in GitHub, GitLab, BitBucket ...
 
-/src/test/java/victor/training/clean/ArchitectureTest.java @architects
+/src/test/java/victor/training/clean/ArchitectureTest.java @elders
