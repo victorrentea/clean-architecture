@@ -27,6 +27,14 @@ public class Customer {
   @Embedded // no ALTER TABLE required
   private ShippingAddress shippingAddress;
 
+  public boolean canReturnOrders() { // reuse
+    return goldMember || isPrivatePerson();
+  }
+
+  private boolean isPrivatePerson() { // explaining the meaning of data in my domain model
+    return getLegalEntityCode().isEmpty();
+  }
+
   // "Value Object" Design Pattern= small immutable type
   @Embeddable
   public record ShippingAddress( // A: go humbly from specific -> generic
