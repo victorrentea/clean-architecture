@@ -32,7 +32,9 @@ public class Customer {
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
   @Embedded // no ALTER TABLE required
   private ShippingAddress shippingAddress;
+  private String shippingAddressZip;
   @ManyToOne
+
   private Country country;
   private LocalDate createdDate;
   private String createdByUsername;

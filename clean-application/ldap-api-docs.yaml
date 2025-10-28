@@ -59,6 +59,8 @@ definitions:
   LdapUser:
     type: "object"
     properties:
+      id:
+        type: "integer"
       uid:
         type: "integer"
         format: int64

@@ -27,18 +27,10 @@ public class SearchCustomerUseCase {
   ) {
   }
 
-  @VisibleForTesting
-  record CustomerSearchResult(
-      long id,
-      String name
-      // TODO also return 'email' => only this file is impacted
-  ) {
-  }
-
   @Operation(description = "Customer Search Poem")
   @PostMapping("customer/search-vsa")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria criteria) {
-    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name)" +
+    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name, c.email)" +
                   " FROM Customer c " +
                   " WHERE ";
     List<String> jpqlParts = new ArrayList<>();
@@ -66,5 +58,14 @@ public class SearchCustomerUseCase {
       query.setParameter(paramName, params.get(paramName));
     }
     return query.getResultList();
+  }
+
+  @VisibleForTesting
+  record CustomerSearchResult(
+      long id,
+      String name,
+      String email
+      // TODO also return 'email' => only this file is impacted
+  ) {
   }
 }
