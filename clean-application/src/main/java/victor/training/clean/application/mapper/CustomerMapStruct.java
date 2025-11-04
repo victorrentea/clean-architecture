@@ -3,17 +3,24 @@ package victor.training.clean.application.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.domain.model.Customer;
 
 import java.util.Optional;
 
-@Mapper(componentModel = "spring")
+import static org.mapstruct.ReportingPolicy.ERROR;
+
+@Mapper(componentModel = "spring",
+    unmappedTargetPolicy = ERROR // see ignore = true below
+)
 public interface CustomerMapStruct {
   @Mapping(target = "createdDate", source = "createdDate", dateFormat = "yyyy-MM-dd")
   @Mapping(target = "countryId", source = "country.id")
   @Mapping(target = "legalEntityCode", source = "legalEntityCode", qualifiedByName = "optionalToNull")
   @Mapping(target = "shippingAddressCity", source = "shippingAddressCity")
+  @Mapping(target = "gold", ignore = true)
+  @Mapping(target = "canReturnOrders", ignore = true)
   CustomerDto toDto(Customer customer);
 
   @Named("optionalToNull")
