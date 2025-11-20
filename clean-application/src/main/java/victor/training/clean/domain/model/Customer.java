@@ -1,5 +1,6 @@
 package victor.training.clean.domain.model;
 
+import feign.Contract;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -48,6 +49,28 @@ public class Customer {
   public boolean canReturnOrders() { // a small business rule operating strictly on MY fields
     return goldMember || isNaturalPerson();
   }
+  // public ? badish(XXSValueObject2field) {..}
+
+  // public ? bad(Dto) {..} = external corruption
+  // public ? bad(boolean) {..} = SRP violation
+  // public ? BAD(XXLEntity{20+Fields}) {..}
+  // public ? bad(XService,Repo,ApiClient) {.2-200lines.}
+
+//  public ? BAD(Contract)
+//  @ManyToOne
+//  Contract{20+2lines} contract;// BAD
+//  Long contractId;// ❤️OK "Aggregates should only keep IDs of other Aggregates"
+// aggregate = cluster of objects changed atomically, having a root "owning the other objects"
+// - Order{List<OrderLine>, ShippingAddressVO} aggregate
+// ± performance:
+//    + faster: hibernate doesn't JOIN/SELECT Contract = more control
+//    - slower: I will have to contractRepo.fbi(customer.contractId) = +1 SELECT = 2..5ms
+// + decoupling: easier to split in modules tomorrow
+
+
+
+
+
 
 
   @ManyToOne
@@ -59,9 +82,10 @@ public class Customer {
   private boolean goldMember;
   private String goldMemberRemovalReason;
 
-  private boolean isNaturalPerson() { // explaining meaning of fields in ubiquitous language
+  public boolean isNaturalPerson() { // explaining meaning of fields in ubiquitous language
     return getLegalEntityCode().isEmpty();
   }
+
 
   // extract a "Value Object"
   // > mapped to a business term
