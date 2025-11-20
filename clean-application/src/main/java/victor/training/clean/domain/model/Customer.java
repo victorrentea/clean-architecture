@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -27,9 +24,32 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+
+  //  private Address shippingAddress;
+  // 1) too generic?, in case I will have tomorrow🤞 (premature abstraction)
+  // 2) a billing address too; {CNP||VATCode}; more work later to "make abstract -> concrete"
+  @Embedded
+  private ShippingAddress shippingAddress; // prefer to go from specific to generic
+  // "The rule of 3" (XP) => copy -paste that Util in 2 projects,
+  // but for the third extract it in my-commons-v1.jar
+
+  // extract a "Value Object"
+  // > mapped to a business term
+  // ± constrained (@NotNUll, requireNotNull)
+  // > defined by its fields (hash/eq) = no id (no persistent life)
+  // > immutable!
+  @Embeddable
+  public record ShippingAddress( // deeper Domain Model (not flat)
+                                 String street,
+                                 String city,
+                                 String zip
+  ) {
+    // bits of logic; constraint
+  }
+
 
   @ManyToOne
   private Country country;
