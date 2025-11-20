@@ -66,15 +66,19 @@ public class Customer {
   // public ? bad(XService,Repo,ApiClient) {.2-200lines.}
 
 //  public ? BAD(Contract)
-//  @ManyToOne
+//  @ManyToOne(fetchType=EAGER) //default
+//  @ManyToOne(fetchType=LAZY) //magic
 //  Contract{20+2lines} contract;// BAD
-//  Long contractId;// ❤️OK "Aggregates should only keep IDs of other Aggregates"
+
+//  Long contractId;// (keep FK) ❤️OK "Aggregates should only keep IDs of other Aggregates"
 // aggregate = cluster of objects changed atomically, having a root "owning the other objects"
 // - Order{List<OrderLine>, ShippingAddressVO} aggregate
+
 // ± performance:
 //    + faster: hibernate doesn't JOIN/SELECT Contract = more control
 //    - slower: I will have to contractRepo.fbi(customer.contractId) = +1 SELECT = 2..5ms
-// + decoupling: easier to split in modules tomorrow
+// + decoupling: reason in isolation from Contract
+// + easier to split in modules tomorrow
 
 
 

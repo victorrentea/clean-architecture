@@ -18,9 +18,8 @@ public class NotificationService {
   private final EmailSender emailSender;
   private final LdapApi ldapApi;
 
-  // ☮️ Core application logic - should be super clean 😇
+  // ☮️ Core application logic - should be super-clean 😇
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO FIXME only using a small set of properties
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
@@ -29,7 +28,6 @@ public class NotificationService {
 
     LdapUserDto ldapUserDto = dtoList.get(0);
 
-    // ⚠️ Data mapping mixed with core logic FIXME pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
     Email email = Email.builder()
@@ -47,19 +45,15 @@ public class NotificationService {
         .build();
 
 
-    // ⚠️ Unguarded nullable fields can cause NPE in other places FIXME return Optional<> from getter
-    if (ldapUserDto.getWorkEmail() != null) { // what if forgotten?
-      // ⚠️ Logic only on User in other places FIXME move logic to the new class
+    if (ldapUserDto.getWorkEmail() != null) {
       String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
 
-    // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
     normalize(ldapUserDto);
 
-    // ⚠️ 'un' = bad name FIXME in my Ubiquitous Language 'un' maps to 'username'
     customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 

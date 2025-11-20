@@ -1,6 +1,7 @@
 package victor.training.clean.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import victor.training.clean.domain.model.Customer;
@@ -9,6 +10,11 @@ import victor.training.clean.domain.model.Customer.Status;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 @Builder
+@Schema(example = """
+      {
+        "a": 1
+      }
+    """)
 public record CustomerDto(
     Long id, // only used on GET response (assigned by backend)
 

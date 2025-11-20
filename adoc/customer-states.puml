@@ -1,0 +1,14 @@
+@startuml
+title Customer Status Lifecycle
+
+[*] --> DRAFT
+
+DRAFT --> VALIDATED : validate(validatedBy)
+VALIDATED --> ACTIVE : activate()
+
+DRAFT --> DELETED : delete()
+VALIDATED --> DELETED : delete()
+ACTIVE --> DELETED : delete()
+
+DELETED : final state
+@enduml
