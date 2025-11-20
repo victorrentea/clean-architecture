@@ -20,6 +20,13 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+
+//  private String id; //"ROU-2023-01-01-asdsa6d" Semantic ID
+
+  //  @EmbeddedId
+//  private CustomerId id;
+//  public record CustomerId(Long value) {
+//  }
   private String name;
   private String email;
 
@@ -33,21 +40,13 @@ public class Customer {
   // 2) a billing address too; {CNP||VATCode}; more work later to "make abstract -> concrete"
   @Embedded
   private ShippingAddress shippingAddress; // prefer to go from specific to generic
+
+
   // "The rule of 3" (XP) => copy -paste that Util in 2 projects,
   // but for the third extract it in my-commons-v1.jar
 
-  // extract a "Value Object"
-  // > mapped to a business term
-  // ± constrained (@NotNUll, requireNotNull)
-  // > defined by its fields (hash/eq) = no id (no persistent life)
-  // > immutable!
-  @Embeddable
-  public record ShippingAddress( // deeper Domain Model (not flat)
-                                 String street,
-                                 String city,
-                                 String zip
-  ) {
-    // bits of logic; constraint
+  public boolean canReturnOrders() { // a small business rule operating strictly on MY fields
+    return goldMember || isNaturalPerson();
   }
 
 
@@ -59,6 +58,25 @@ public class Customer {
 
   private boolean goldMember;
   private String goldMemberRemovalReason;
+
+  private boolean isNaturalPerson() { // explaining meaning of fields in ubiquitous language
+    return getLegalEntityCode().isEmpty();
+  }
+
+  // extract a "Value Object"
+  // > mapped to a business term
+  // ± constrained (@NotNUll, requireNotNull)
+  // > defined by its fields (hash/eq) = no id (no persistent life)
+  // > immutable!
+  @Embeddable
+  // deeper Domain Model (not flat)
+  public record ShippingAddress(
+      String street,
+      String city,
+      String zip
+  ) {
+    // bits of logic; constraint
+  }
 
   private String legalEntityCode;
   private boolean discountedVat;
