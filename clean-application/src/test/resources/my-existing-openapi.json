@@ -212,6 +212,88 @@
           }
         }
       }
+    },
+    "/customer/{id}/vsa": {
+      "get": {
+        "tags": [
+          "get-customer-by-id-use-case"
+        ],
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCustomerByIdResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer-leaking/{id}": {
+      "get": {
+        "tags": [
+          "customer-leaking-controller"
+        ],
+        "operationId": "findById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -274,6 +356,9 @@
           "discountedVat": {
             "type": "boolean"
           }
+        },
+        "example": {
+          "a": 1
         }
       },
       "CustomerSearchCriteria": {
@@ -306,6 +391,115 @@
       },
       "JsonPatch": {
         "type": "object"
+      },
+      "GetCustomerByIdResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "siteId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "creationDateStr": {
+            "type": "string"
+          },
+          "gold": {
+            "type": "boolean"
+          },
+          "goldMemberRemovalReason": {
+            "type": "string"
+          }
+        }
+      },
+      "Country": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iso": {
+            "type": "string"
+          }
+        }
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "shippingAddress": {
+            "$ref": "#/components/schemas/ShippingAddress"
+          },
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "createdByUsername": {
+            "type": "string"
+          },
+          "goldMember": {
+            "type": "boolean"
+          },
+          "goldMemberRemovalReason": {
+            "type": "string"
+          },
+          "legalEntityCode": {
+            "type": "string"
+          },
+          "discountedVat": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "VALIDATED",
+              "ACTIVE",
+              "DELETED"
+            ]
+          },
+          "validatedBy": {
+            "type": "string"
+          },
+          "naturalPerson": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ShippingAddress": {
+        "type": "object",
+        "properties": {
+          "street": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "zip": {
+            "type": "string"
+          }
+        }
       }
     }
   }

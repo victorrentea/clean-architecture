@@ -21,6 +21,13 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class CustomerController {
+  private final CustomerRepo repo;//DON'T: skipping the @Service = "open layer" (skippable)
+  // - ❌ inconsistent
+  //    - jrs will have a hard time to know when to do what
+  // - ✅ if there's no logic on that flow
+  // - dangerous: can leak @Entity out as JSON,
+  //      (because in my arch I map in @Service)
+  //      (@wim- don't do that, DTO belongs to Controller)
   private final CustomerApplicationService customerApplicationService;
 
   @PostMapping("customers")

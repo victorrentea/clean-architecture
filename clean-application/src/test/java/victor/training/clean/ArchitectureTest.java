@@ -57,8 +57,8 @@ public class ArchitectureTest {
   }
 
   @Test
-  @Disabled
   public void domain_not_leaked_via_controller_methods() {
+    // as per ADR-q4q34 /adr/007-a9t74t or http://confluence.internal/....
     methods().that().areMetaAnnotatedWith(RequestMapping.class)
         .and().arePublic()
         .should().haveRawReturnType(not(resideInAPackage("..domain..")))

@@ -31,6 +31,7 @@ public class Customer {
   private Long id;
 
 //  private String id; //"ROU-2023-01-01-asdsa6d" Semantic ID
+//  private String id=randomUUID();
 
   //  @EmbeddedId
 //  private CustomerId id;

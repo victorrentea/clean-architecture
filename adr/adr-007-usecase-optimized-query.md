@@ -2,7 +2,8 @@
 Search using Usecase-Optimized Query (CQRS)
 
 ## Status
-Accepted
+
+Superseded by ADR-060.md
 (Training Note: never delete and ADR; but can be `Supersed` it with a later ADR)
 
 ## Context

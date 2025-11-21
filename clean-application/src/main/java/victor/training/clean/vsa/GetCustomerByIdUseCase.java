@@ -13,20 +13,9 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
-//@RestController
+@RestController
 public class GetCustomerByIdUseCase {
   private final CustomerRepo customerRepo;
-
-  @Builder
-  record GetCustomerByIdResponse(
-      Long id,
-      String name,
-      String email,
-      Long siteId,
-      String creationDateStr,
-      boolean gold,
-      String goldMemberRemovalReason) {
-  }
 
   @GetMapping("customer/{id}/vsa")
   public GetCustomerByIdResponse findById(@PathVariable long id) {
@@ -34,9 +23,20 @@ public class GetCustomerByIdUseCase {
       return GetCustomerByIdResponse.builder()
               .id(customer.getId())
               .name(customer.getName())
-              .email(customer.getEmail())
+//              .email(customer.getEmail())
               .siteId(customer.getCountry().getId())
               .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
               .build();
+  }
+
+  @Builder
+  record GetCustomerByIdResponse(
+      Long id,
+      String name,
+//      String email,
+      Long siteId,
+      String creationDateStr,
+      boolean gold,
+      String goldMemberRemovalReason) {
   }
 }
