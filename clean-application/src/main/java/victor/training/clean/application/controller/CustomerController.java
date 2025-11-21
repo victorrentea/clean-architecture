@@ -27,11 +27,11 @@ public class CustomerController {
   // - ✅ if there's no logic on that flow
   // - dangerous: can leak @Entity out as JSON,
   //      (because in my arch I map in @Service)
-  //      (@wim- don't do that, DTO belongs to Controller)
+  //      (@wim- don't do that, DTO belongs to Controller)b
   private final CustomerApplicationService customerApplicationService;
 
   @PostMapping("customers")
-  public void register(@RequestBody @Validated CustomerDto dto) {
+  public void register(@RequestBody @Validated CustomerDto dto) { // RegisterCustomerRequestDto
     customerApplicationService.register(dto);
   }
 
@@ -42,6 +42,7 @@ public class CustomerController {
   }
 
   @GetMapping("customers/{id}")
+  // GetCustomerResponseDto
   public CustomerDto findById(@PathVariable long id) {
     return customerApplicationService.findById(id);
   }

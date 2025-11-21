@@ -37,6 +37,7 @@ public record CustomerDto(
     boolean canReturnOrders, // GET only (computed by backend)
 
     Status status,
+
     String legalEntityCode,
     Boolean discountedVat // GET only (fetched by backend)
 ) {
@@ -47,5 +48,10 @@ public record CustomerDto(
     boolean allAreSet = shippingAddressCity != null && shippingAddressStreet != null && shippingAddressZip != null;
     boolean allAreNull = shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;
     return allAreSet || allAreNull;
+  }
+
+  @Schema(description = "in fact, this string is not a string. but takes values from {ACTIVE, INACTIVE, SUSPENDED}")
+  public String getStatusStr() {
+    return status.name();
   }
 }

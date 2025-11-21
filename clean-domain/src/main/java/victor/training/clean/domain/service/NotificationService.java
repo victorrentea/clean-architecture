@@ -18,7 +18,7 @@ public class NotificationService {
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     var user = userDirectory.findSingleByUsernamePart(usernamePart);
     String fullName = user.fullName();
-
+//new Customer().setEmail("a").setCountry("a");
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
         .to(customer.getEmail())
