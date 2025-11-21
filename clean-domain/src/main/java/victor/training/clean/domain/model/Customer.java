@@ -123,7 +123,7 @@ public class Customer {
   }
 
   public enum Status {
-    DRAFT, VALIDATED, ACTIVE, DELETED
+    DRAFT, VALIDATED, ACTIVE, DELETED, ARCHIVED
   }
 
   @Setter(NONE)
