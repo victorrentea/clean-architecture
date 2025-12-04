@@ -19,8 +19,6 @@ import victor.training.clean.domain.repo.CustomerSearchQuery;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -48,34 +46,12 @@ public class CustomerApplicationService {
     boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
 
     // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-        .email(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .status(customer.getStatus())
-        .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-        .shippingAddressStreet(customer.getShippingAddress().street())
-        .shippingAddressCity(customer.getShippingAddress().city())
-        .shippingAddressZip(customer.getShippingAddress().zip())
-
-        .canReturnOrders(canReturnOrders)
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+    return CustomerDto.fromEntity(customer, canReturnOrders);
   }
 
   @Transactional
   public void register(CustomerDto dto) {
-    Customer customer = new Customer();
-    customer.setEmail(dto.email());
-    customer.setName(dto.name());
-    customer.setCreatedDate(LocalDate.now());
-    customer.setCountry(new Country().setId(dto.countryId()));
-    customer.setLegalEntityCode(dto.legalEntityCode());
+    Customer customer = dto.toEntity();
 
     // request payload validation
     if (customer.getName().length() < 5) { // TODO alternatives to implement this?
