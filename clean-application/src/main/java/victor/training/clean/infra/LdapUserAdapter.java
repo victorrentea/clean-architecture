@@ -5,6 +5,7 @@ import victor.training.clean.domain.model.User;
 import victor.training.clean.domain.repo.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class LdapUserAdapter implements UserRepository {
@@ -41,6 +42,6 @@ public class LdapUserAdapter implements UserRepository {
     String fullName = buildFullName(dto);
     String workEmail = dto.getWorkEmail();
 
-    return new User(username, fullName, workEmail);
+    return new User(username, fullName, Optional.ofNullable(workEmail));
   }
 }

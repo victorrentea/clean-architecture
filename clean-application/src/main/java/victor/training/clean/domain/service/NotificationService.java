@@ -9,8 +9,6 @@ import victor.training.clean.domain.repo.UserRepository;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.infra.EmailSender;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Slf4j
 @Service
@@ -21,7 +19,7 @@ public class NotificationService {
   // ☮️ Core application logic - should be super clean 😇
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     User user = userRepository.findSingleUserByUsernamePart(usernamePart);
-    String fullName = user.getFullName();
+    String fullName = user.fullName();
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -37,14 +35,14 @@ public class NotificationService {
             fullName))
         .build();
 
-    if (user.getWorkEmail() != null) { // Opt
-      String contact = fullName + " <" + user.getWorkEmail().toLowerCase() + ">";
+    if (user.workEmail().isPresent()) { // Opt
+      String contact = fullName + " <" + user.workEmail().get().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
 
-    customer.setCreatedByUsername(user.getUsername());
+    customer.setCreatedByUsername(user.username());
   }
 
 }
