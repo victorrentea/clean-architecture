@@ -13,10 +13,13 @@ import java.time.format.DateTimeFormatter;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 @Builder
-public record CustomerDto(
+public record CustomerDto( // ~ External Event
     Long id, // only used on GET response (assigned by backend)
 
     @NotNull
+                           // (1) do payload validation ASAP⭐️ with @ in Dto
+                           //    Unfortunately you will repeat these in Domain Model= accepted DRY violation
+                           // (2) do business rules validation (eg hitting the DB) later in the service layer
     @NotBlank
     @Size(min = 4)
     String name,

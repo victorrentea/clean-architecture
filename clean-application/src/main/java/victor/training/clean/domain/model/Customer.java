@@ -1,7 +1,9 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -12,7 +14,7 @@ import java.util.Optional;
 // 2) toString might trigger lazy-loading⚠️
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
-
+//@Configurable// ☠️ @Autowired in Domain Model; also lockin to a DARK feat of 🔒spring too much
 @Entity // ORM (2)
 @Data // = @Getter + @Setter + @ToString + @EqualsAndHashCode (1)
 // 💙 Domain Model Entity - backbone of your core complexity
@@ -20,6 +22,7 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 4)
   private String name;
   private String email;
 
@@ -33,6 +36,37 @@ public class Customer {
   // DRY leads to coupling
   @ManyToOne
   private Country country;
+
+  public boolean canReturnOrders() { // reusable small business logic
+    return goldMember || isNaturalPerson();
+  }
+
+  /**
+   * A natural person, not a company. -- out of sync as people don't update them
+   */
+  // isNotCompany()
+  // hasNoLegalEntityCode() - ask business WHY?!
+  // ⚠️ - might force me (the tech expert) to TEACH the business what the
+  //  didn't know (embarrasing) ~> don't you want to become a business expert/PO?
+  // ⚠️ - it does require developers to work on their comm skills: "play dumb" first.
+  // play more event storming/glossary of terms/.feature file biz-signed-off
+  private boolean isNaturalPerson() { // explain a concept;
+    return getLegalEntityCode().isEmpty(); // ❤️✅
+  }
+//  public void bad(isChina:Bool=true) {🤔SRP violation = !clean code
+//  public void bad(timeout:Int=1000) {🤔mysterious❌✅
+
+// bad in a Domain Model data structure
+//  public void bad(CustomerDto) {❌
+
+//  public void bad(CustomerRepo) {❌ allows SQL from inside
+//  public void bad(LdapApiClient) {❌ allows network from inside
+
+//  public void bad(Contract{entity with 20 fields}) {❌ too many reasons to change, too much coupling
+
+
+
+
 
   // what if I will have another address type in future? eg. billingAddress
 //  @Embedded
@@ -63,8 +97,9 @@ public class Customer {
   private boolean discountedVat;
 
   public Optional<String> getLegalEntityCode() {
-    return Optional.ofNullable(legalEntityCode);
+    return Optional.ofNullable(legalEntityCode); //
   }
+
 
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
