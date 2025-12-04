@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.repo.UserRepository;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
 
@@ -16,21 +16,12 @@ import java.util.List;
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final UserRepository userRepository;
 
   // ☮️ Core application logic - should be super clean 😇
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // ⚠️ Scary, large external DTO FIXME only using a small set of properties
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    LdapUserDto ldapUserDto = dtoList.get(0);
-
-    // ⚠️ Data mapping mixed with core logic FIXME pull it earlier
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    User user = userRepository.findSingleUserByUsernamePart(usernamePart);
+    String fullName = user.getFullName();
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -46,27 +37,14 @@ public class NotificationService {
             fullName))
         .build();
 
-
-    // ⚠️ Unguarded nullable fields can cause NPE in other places FIXME return Optional<> from getter
-    if (ldapUserDto.getWorkEmail() != null) { // what if forgotten?
-      // ⚠️ Logic only on User in other places FIXME move logic to the new class
-      String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
+    if (user.getWorkEmail() != null) { // Opt
+      String contact = fullName + " <" + user.getWorkEmail().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
 
-    // ⚠️ Swap this line with next one to cause a bug (=TEMPORAL COUPLING) TODO make immutable💚
-    normalize(ldapUserDto);
-
-    // ⚠️ 'un' = bad name FIXME in my Ubiquitous Language 'un' maps to 'username'
-    customer.setCreatedByUsername(ldapUserDto.getUn());
-  }
-
-  private void normalize(LdapUserDto ldapUserDto) {
-    if (ldapUserDto.getUn().startsWith("s")) {
-      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
+    customer.setCreatedByUsername(user.getUsername());
   }
 
 }
