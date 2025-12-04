@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @ActiveProfiles("db-mem")
 @AutoConfigureMockMvc
+// a text-based approval test
 public class MyOpenAPIDidNotChangeTest {
   @Autowired
   MockMvc mockMvc;
@@ -33,18 +34,18 @@ public class MyOpenAPIDidNotChangeTest {
 
   @Test
   void my_contract_did_not_change() throws Exception {
-    String currentOpenAPI = mockMvc.perform(get("/v3/api-docs"))
+    String currentOpenAPIExtractedFromCode = mockMvc.perform(get("/v3/api-docs"))
         .andReturn().getResponse().getContentAsString();
 
-    String expectedOpenAPI = myExpectedOpenAPI.getContentAsString(defaultCharset())
+    String expectedOpenAPISaveOnGitYesterday = myExpectedOpenAPI.getContentAsString(defaultCharset())
         .replace(":8080", ""); // ignore the port
 
-//    if (!OpenApiCompare.fromContents(expectedOpenAPI, currentOpenAPI).isCompatible()) {
+//    if (!OpenApiCompare.fromContents(expectedOpenAPISaveOnGitYesterday, currentOpenAPIExtractedFromCode).isCompatible()) {
 //      System.err.println(new MarkdownRender().render(diff));
 
-    assertThat(prettify(currentOpenAPI))
+    assertThat(prettify(currentOpenAPIExtractedFromCode))
         .describedAs("Exposed OpenAPI should not have changed")
-        .isEqualTo(prettify(expectedOpenAPI));
+        .isEqualTo(prettify(expectedOpenAPISaveOnGitYesterday));
 //    }
   }
 

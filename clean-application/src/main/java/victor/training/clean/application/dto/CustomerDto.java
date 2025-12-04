@@ -38,6 +38,7 @@ public record CustomerDto(
   @AssertTrue(message = "Shipping address can either be fully present (city, street, zip) or fully absent")
   @JsonIgnore
   public boolean isShippingAddressValid() { // multi-field validation annotations
+//    if (primucamp==true) { aia tre fie true }
     boolean allAreSet = shippingAddressCity != null && shippingAddressStreet != null && shippingAddressZip != null;
     boolean allAreNull = shippingAddressCity == null && shippingAddressStreet == null && shippingAddressZip == null;
     return allAreSet || allAreNull;

@@ -259,7 +259,16 @@
           "canReturnOrders": {
             "type": "boolean"
           },
+          "age": {
+            "required": true,
+            "type": "string"
+          },
+          "statusString": {
+            "description": "eg 'Draft' - Some human readable reprez; ONLY comes if case223 ",
+            "type": "string"
+          },
           "status": {
+            "description": "can take one of the value: DRAFT, VALIDATED, ACTIVE, DELETED",
             "type": "string",
             "enum": [
               "DRAFT",

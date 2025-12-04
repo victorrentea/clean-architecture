@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -27,12 +24,34 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
-
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+  @Embedded
+  private ShippingAddress shippingAddress;
+  // shared data structure: 😊more reuse; 🙁coupling
+  // DRY leads to coupling
   @ManyToOne
   private Country country;
+
+  // what if I will have another address type in future? eg. billingAddress
+//  @Embedded
+//  private Address billingAddress; // WRONG❌ in RO it must have + VAT CODE
+  // ⚠️ speculative early abstraction failed
+  // 🤔 should I go from:
+  // A> generic (Address) -> specific
+  // B> specific (ShippingAddress) -> generic = extract common Address later
+
+  // the moment you know least about a problem is in the beginning
+  // Uncle Bob: "Architecture is the art of deffering decisions"
+
+  // XP: the rule of 3 = 3 similar things -> extract common abstraction
+  // = 'don't be clever too early'
+
+  // Value Object design pattern = small immutable object lacking PK
+  @Embeddable
+  /*record Address = A*/
+  public record ShippingAddress(String street, String city, String zip/*, String vatCode*/) {} //B
 
   private LocalDate createdDate;
   private String createdByUsername;
