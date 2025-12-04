@@ -1,12 +1,18 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -104,21 +110,72 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
+
+  @Setter(AccessLevel.NONE)
   private Status status;
+  @Setter(AccessLevel.NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+  // how to enforce this?
+  // 1) in a @Service (easy to forget)
+  // 2) constructor of this Aggregate (DDD) + factory method << ARE YOU USING IT? = Extreme OOP in BE
+  // in DDD: Aggregate = consistency boundary of related entities = transaction boundary
+  // example: Order{total, List<OrderLineItem>}, root=Order, OrderLineItem cannot exist without Order
+  // Aggregate root ensures consistency of the whole graph of objects inside the Aggregate
+  // rules of aggregate design
+  // a) only root has global identity (PK)
+  // b) only root is referenced from outside
+  // c) root enforces all invariants/rules for the whole aggregate
+  // 3) @nnotations w/o custom validaators but with
+//  @AssertTrue // auto-cjecled at repo.save
+//  private boolean isValidatedBySetWhenStatusIsValidatedOrLater() {
+//    if (status == Status.VALIDATED || status == Status.ACTIVE || status == Status.DELETED) {
+//      return validatedBy != null;
+//    }
+//    return true;
+//  }
+  //
+
+  // Guarded state mutations to enforce business invariants (rules)
+  public void validate(String currentUsername) {
+    if (this.status != Status.DRAFT) {
+      throw new IllegalStateException("Only DRAFT customers can be validated");
+    }
+    this.status = Status.VALIDATED;
+    this.validatedBy = requireNonNull(currentUsername);
+  }
+
+  public void activate() {
+    if (this.status != Status.VALIDATED) {
+      throw new IllegalStateException("Only VALIDATED customers can be activated");
+    }
+    this.status = Status.ACTIVE;
+  }
+
+  public void delete() {
+    if (this.status == Status.DELETED) {
+      throw new IllegalStateException("Customer is already DELETED");
+    }
+    this.status = Status.DELETED;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
+class SomeCode {
+  public void correct(Customer draftCustomer) {
 //    draftCustomer.setStatus(Customer.Status.VALIDATED);
 //    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
+    draftCustomer.validate("currentUser");
+  }
+
+  public void incorrect(Customer draftCustomer) {
 //    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
+    // forgot to set validatedBy // PREVENT THIS!
+    draftCustomer.validate("null");
+  }
+
+  public void activate(Customer draftCustomer) {
 //    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+    draftCustomer.activate();
+  }
+}
 //endregion
