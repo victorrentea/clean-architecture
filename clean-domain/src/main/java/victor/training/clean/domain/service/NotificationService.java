@@ -12,11 +12,12 @@ import victor.training.clean.domain.model.Email;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class NotificationService {
+public class NotificationService implements NotificationServiceInterface {
   private final EmailSender emailSender;
   private final UserRepository userRepository;
 
   // ☮️ Core application logic - should be super clean 😇
+  @Override
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     User user = userRepository.findSingleUserByUsernamePart(usernamePart);
     String fullName = user.fullName();

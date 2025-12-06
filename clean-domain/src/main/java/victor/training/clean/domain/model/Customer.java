@@ -21,8 +21,8 @@ import static java.util.Objects.requireNonNull;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 //@Configurable// ☠️ @Autowired in Domain Model; also lockin to a DARK feat of 🔒spring too much
-@Entity // ORM (2)
 @Data // = @Getter + @Setter + @ToString + @EqualsAndHashCode (1)
+@Entity // ORM (2)
 // 💙 Domain Model Entity - backbone of your core complexity
 public class Customer {
   @Id

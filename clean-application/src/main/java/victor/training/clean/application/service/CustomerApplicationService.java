@@ -15,7 +15,7 @@ import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.service.NotificationService;
+import victor.training.clean.domain.service.NotificationServiceInterface;
 import victor.training.clean.infra.AnafClient;
 
 import java.util.List;
@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
 @ApplicationService // custom annotation refining the classic @Service
 public class CustomerApplicationService {
   private final CustomerRepo customerRepo;
-  private final NotificationService notificationService;
+  private final NotificationServiceInterface notificationService;
   private final CustomerSearchQuery customerSearchQuery;
   private final InsuranceService insuranceService;
   private final AnafClient anafClient;
