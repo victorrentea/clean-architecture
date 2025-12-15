@@ -32,6 +32,25 @@ public class Customer {
   @Embedded // no ALTER TABLE
   private ShippingAddress shippingAddress;
 
+  // Rich Domain Model contains bits of logic
+  // ~>CustomerUtil🚽❌❌❌❌❌ DON'T; lost = "OOP paradigm!
+  public boolean isNaturalPerson() {
+    // ✅ more discoverable than a Util = reuse
+    // ✅ speaking the ubiquituous language - explain terms
+    return getLegalEntityCode().isEmpty();
+  }
+
+  public boolean canReturnOrders() {
+    return goldMember || isNaturalPerson();
+  }
+
+
+
+
+
+
+
+
   //  record ShippingAddressDetails( -Details/-Info/-Data = dull words
   // Value Object design pattern = small immutable object lacking PK(id)
   // ⭐️capturing a domain (business) concept
