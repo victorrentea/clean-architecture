@@ -18,7 +18,7 @@ public class NotificationService {
 
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     User user = ldapClient.search(usernamePart);
-    String fullName = user.getFullName();
+    String fullName = user.fullName();
 
     Email email = Email.builder()
             .from("noreply@cleanapp.com")
@@ -36,14 +36,14 @@ public class NotificationService {
 
     // Q1: is it VALID be null? => here: YES
     // Q2: return an Optional
-    if (user.getWorkEmail().isPresent()) {
-      String contact = fullName + " <" + user.getWorkEmail().get().toLowerCase() + ">";
+    if (user.workEmail().isPresent()) {
+      String contact = fullName + " <" + user.workEmail().get().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
 
-    customer.setCreatedByUsername(user.getUsername());
+    customer.setCreatedByUsername(user.username());
   }
 
 

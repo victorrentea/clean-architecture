@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import victor.training.clean.domain.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class LdapClientImpl {
     String username = normalizeUsername(dto.getUn());
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();
     String workEmail = dto.getWorkEmail(); // may be null
-    return new User(username, fullName, workEmail);
+    return new User(username, fullName, Optional.ofNullable(workEmail));
   }
 
   private String normalizeUsername(String username) {
