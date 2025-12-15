@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class LdapClientImpl {
+public class UserRepository {
   private final LdapApi ldapApi;
 
   public User search(String usernamePart) {

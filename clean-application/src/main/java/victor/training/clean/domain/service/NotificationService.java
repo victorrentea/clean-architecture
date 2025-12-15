@@ -7,17 +7,17 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.LdapClientImpl;
+import victor.training.clean.infra.UserRepository;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapClientImpl ldapClient;
+  private final UserRepository userRepository;
 
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = ldapClient.search(usernamePart);
+    User user = userRepository.search(usernamePart);
 
     Email email = Email.builder()
             .from("noreply@cleanapp.com")
