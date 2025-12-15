@@ -10,7 +10,8 @@ import victor.training.clean.domain.model.User;
 
 @RequiredArgsConstructor
 @Slf4j
-@Service
+//@Service
+// @DomainService -your own annot + kung-fu to make Spring scan these
 public class NotificationService {
   private final EmailSender emailSender;
   private final UserRepo userRepo;

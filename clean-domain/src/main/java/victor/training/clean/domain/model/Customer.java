@@ -21,11 +21,11 @@ import static lombok.AccessLevel.NONE;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 
-@Entity // ORM (2)
 @Data // = @Getter + @Setter + @ToString + @EqualsAndHashCode (1)
 // 💙 Domain Model Entity - backbone of your core complexity
 
 
+@Entity // ORM (2)
 public class Customer {
   @Id
   @GeneratedValue
@@ -34,6 +34,7 @@ public class Customer {
   @Size(min = 3)
   private String name;
   @Email
+//  @Column(columnDefinition = "CLOB")
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?

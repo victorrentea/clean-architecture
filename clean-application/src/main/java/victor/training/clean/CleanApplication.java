@@ -1,21 +1,26 @@
 package victor.training.clean;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.event.EventListener;
+import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.repo.UserRepo;
+import victor.training.clean.domain.service.EmailSender;
+import victor.training.clean.domain.service.NotificationService;
 
 @EnableAsync
 @SpringBootApplication
 @RequiredArgsConstructor
+@Import(NotificationService.class)
 public class CleanApplication {
+
+//  @Bean
+//  NotificationService notificationService(UserRepo userRepo, EmailSender emailSender) {
+//    return new NotificationService(emailSender, userRepo);
+//  }
 
   @Bean
   public RestTemplate rest() {
