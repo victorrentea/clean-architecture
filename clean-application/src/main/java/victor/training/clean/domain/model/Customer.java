@@ -2,9 +2,13 @@ package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
+
+import static lombok.AccessLevel.NONE;
 
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
@@ -45,12 +49,6 @@ public class Customer {
   }
 
 
-
-
-
-
-
-
   //  record ShippingAddressDetails( -Details/-Info/-Data = dull words
   // Value Object design pattern = small immutable object lacking PK(id)
   // ⭐️capturing a domain (business) concept
@@ -78,24 +76,49 @@ public class Customer {
     return Optional.ofNullable(legalEntityCode);
   }
 
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
+
+  @Setter(NONE)
+  private Status status = Status.DRAFT;
+  @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  public void validate(String user) {
+    if (status != Status.DRAFT) throw new IllegalStateException();
+    validatedBy = Objects.requireNonNull(user);
+    status = Status.VALIDATED;
+  }
+
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException();
+    }
+    status = Status.ACTIVE;
+  }
+
+  public void delete() {
+    if (status == Status.DELETED) {
+      throw new IllegalStateException();
+    }
+    status = Status.DELETED;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+class SomeCode {
+  public void correct(Customer draftCustomer) {
+    draftCustomer.validate("currentUser"); // from token/session..
+  }
+
+  public void incorrect(Customer draftCustomer) {
+    draftCustomer.validate("null");
+  }
+
+  public void activate(Customer draftCustomer) {
+    draftCustomer.activate();
+  }
+}
 //endregion
