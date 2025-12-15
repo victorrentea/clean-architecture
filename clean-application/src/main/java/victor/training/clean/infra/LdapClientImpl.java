@@ -17,6 +17,10 @@ public class LdapClientImpl {
     if (dtoList.size() != 1) {
       throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
     }
+    // fetchin an AccesToken/apikey
+    // retry
+    // setting timeouts
+    // calling 2+ APIs to collect all data needed
     LdapUserDto dto = dtoList.get(0);
     String username = normalizeUsername(dto.getUn());
     String fullName = dto.getFname() + " " + dto.getLname().toUpperCase();

@@ -18,7 +18,6 @@ public class NotificationService {
 
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
     User user = ldapClient.search(usernamePart);
-    String fullName = user.fullName();
 
     Email email = Email.builder()
             .from("noreply@cleanapp.com")
@@ -31,13 +30,13 @@ public class NotificationService {
                     %s""".formatted(
                     customer.getName(),
                     customer.canReturnOrders() ? "can" : "cannot",
-                    fullName))
+                    user.fullName()))
             .build();
 
     // Q1: is it VALID be null? => here: YES
     // Q2: return an Optional
     if (user.workEmail().isPresent()) {
-      String contact = fullName + " <" + user.workEmail().get().toLowerCase() + ">";
+      String contact = user.fullName() + " <" + user.workEmail().get().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
