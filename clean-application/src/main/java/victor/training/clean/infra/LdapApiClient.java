@@ -3,15 +3,17 @@ package victor.training.clean.infra;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.repo.UserRepo;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class UserRepository {
+public class LdapApiClient implements UserRepo {
   private final LdapApi ldapApi;
 
+  @Override
   public User search(String usernamePart) {
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
     if (dtoList.size() != 1) {

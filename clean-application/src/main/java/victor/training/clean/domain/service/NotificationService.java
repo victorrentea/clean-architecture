@@ -5,19 +5,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.repo.UserRepo;
 import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.UserRepository;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final UserRepository userRepository;
+  private final UserRepo userRepo;
 
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = userRepository.search(usernamePart);
+    User user = userRepo.search(usernamePart);
 
     Email email = Email.builder()
             .from("noreply@cleanapp.com")
