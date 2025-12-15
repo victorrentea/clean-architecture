@@ -1,6 +1,10 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Setter;
 
@@ -26,7 +30,10 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @NotBlank
+  @Size(min = 3)
   private String name;
+  @Email
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
@@ -80,9 +87,16 @@ public class Customer {
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-
-  @Setter(NONE)
+  @Setter(NONE) // 1)
   private Status status = Status.DRAFT;
+  // 3) for immutable domain model (no setters) => validate in (mastodon) constructor
+
+  // 2) alternative, leaving the setters in place:
+  @AssertTrue // auto checked at repo.save
+  public boolean isValidatedHasValidatedBy() {
+    if (status != Status.VALIDATED) return true;
+    return validatedBy != null;
+  }
   @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
