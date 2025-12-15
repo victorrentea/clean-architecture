@@ -84,6 +84,20 @@ public class Customer {
   }
 
 
+  // DON'T put in Domain Model classes (Core datastructures)
+  //void f(Contract{entity 40 fields}) {❌}
+  //void f(Object surprise) {}
+
+  //DI injected:
+  //void f(Service{Spring-injected object}) {}
+  //void f(CustomerRepository{DB}) {}
+  //void f(LdapApiClient{REST}) {}
+
+  //void fromDto(CustomerDto) {🗑️ stupid mapper logic}
+
+
+
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
@@ -94,6 +108,7 @@ public class Customer {
   // 2) alternative, leaving the setters in place:
   @AssertTrue // auto checked at repo.save
   public boolean isValidatedHasValidatedBy() {
+    // 1..5 lines of 🙏reusable domain logic working on my fields
     if (status != Status.VALIDATED) return true;
     return validatedBy != null;
   }
