@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import victor.training.clean.application.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
@@ -19,7 +19,6 @@ import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -43,24 +42,7 @@ public class CustomerApplicationService {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
     // boilerplate mapping code TODO move somewhere else
-    return CustomerDto.builder()
-        .id(customer.getId())
-        .name(customer.getName())
-            .emailAddress(customer.getEmail())
-        .countryId(customer.getCountry().getId())
-        .status(customer.getStatus())
-        .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        .gold(customer.isGoldMember())
-
-            .shippingAddressStreet(customer.getShippingAddress().street())
-            .shippingAddressCity(customer.getShippingAddress().city())
-            .shippingAddressZip(customer.getShippingAddress().zip())
-
-            .canReturnOrders(customer.canReturnOrders())
-        .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
-        .legalEntityCode(customer.getLegalEntityCode().orElse(null))
-        .discountedVat(customer.isDiscountedVat())
-        .build();
+    return CustomerDto.fromEntity(customer);
   }
 
   @Transactional
