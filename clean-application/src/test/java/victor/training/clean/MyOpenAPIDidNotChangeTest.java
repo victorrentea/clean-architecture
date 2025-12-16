@@ -38,10 +38,8 @@ public class MyOpenAPIDidNotChangeTest {
 
     String expectedOpenAPI = myExpectedOpenAPI.getContentAsString(defaultCharset())
         .replace(":8080", ""); // ignore the port
-
 //    if (!OpenApiCompare.fromContents(expectedOpenAPI, currentOpenAPI).isCompatible()) {
 //      System.err.println(new MarkdownRender().render(diff));
-
     assertThat(prettify(currentOpenAPI))
         .describedAs("Exposed OpenAPI should not have changed")
         .isEqualTo(prettify(expectedOpenAPI));

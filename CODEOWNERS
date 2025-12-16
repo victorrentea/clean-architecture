@@ -2,3 +2,4 @@
 # Works in GitHub, GitLab, BitBucket ...
 
 /src/test/java/victor/training/clean/ArchitectureTest.java @elders
+clean-application/src/test/resources/my-existing-openapi.json @elders

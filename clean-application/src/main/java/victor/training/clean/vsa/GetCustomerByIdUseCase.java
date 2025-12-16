@@ -13,11 +13,25 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
-//@RestController
-public class GetCustomerByIdUseCase {
-  private final CustomerRepo customerRepo;
+@RestController
+class GetCustomerByIdUseCase {
+  private final CustomerRepo customerRepo; // frameworked backed
 
-  @Builder
+  //@KafkaListener or
+  @GetMapping("customer/{id}/vsa")
+  // 1-2 endpoint/class
+  GetCustomerByIdResponse findById(@PathVariable long id) {
+      Customer customer = customerRepo.findById(id).orElseThrow();
+    return GetCustomerByIdResponse.builder() // mapper logic
+              .id(customer.getId())
+              .name(customer.getName())
+              .email(customer.getEmail())
+              .siteId(customer.getCountry().getId())
+              .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+              .build();
+  }
+
+  @Builder // for testing
   record GetCustomerByIdResponse(
       Long id,
       String name,
@@ -26,17 +40,5 @@ public class GetCustomerByIdUseCase {
       String creationDateStr,
       boolean gold,
       String goldMemberRemovalReason) {
-  }
-
-  @GetMapping("customer/{id}/vsa")
-  public GetCustomerByIdResponse findById(@PathVariable long id) {
-      Customer customer = customerRepo.findById(id).orElseThrow();
-      return GetCustomerByIdResponse.builder()
-              .id(customer.getId())
-              .name(customer.getName())
-              .email(customer.getEmail())
-              .siteId(customer.getCountry().getId())
-              .creationDateStr(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-              .build();
   }
 }

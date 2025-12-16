@@ -18,6 +18,7 @@ import static java.lang.String.join;
 //@RestController
 public class SearchCustomerUseCase {
   private final EntityManager entityManager;
+  // DSLContext, JdbcTemplate...
 
   @VisibleForTesting // only @Tests are allowed to use this
   record CustomerSearchCriteria(
@@ -27,15 +28,7 @@ public class SearchCustomerUseCase {
   ) {
   }
 
-  @VisibleForTesting
-  record CustomerSearchResult(
-      long id,
-      String name
-      // TODO also return 'email' => only this file is impacted
-  ) {
-  }
-
-  @Operation(description = "Customer Search Poem")
+  @Operation(description = "Customer Search Poem") // swagger doc
   @PostMapping("customer/search-vsa")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria criteria) {
     String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name)" +
@@ -51,7 +44,7 @@ public class SearchCustomerUseCase {
     }
 
     if (criteria.email != null) {
-      jpqlParts.add("UPPER(c.email) = UPPER(:email)");
+      jpqlParts.add("UPPER(c.emailAddress) = UPPER(:emailAddress)");
       params.put("email", criteria.email);
     }
 
@@ -66,5 +59,13 @@ public class SearchCustomerUseCase {
       query.setParameter(paramName, params.get(paramName));
     }
     return query.getResultList();
+  }
+
+  @VisibleForTesting
+  record CustomerSearchResult(
+      long id,
+      String name
+      // TODO also return 'emailAddress' => only this file is impacted
+  ) {
   }
 }

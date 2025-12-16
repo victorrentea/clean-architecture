@@ -3,7 +3,6 @@ package victor.training.clean.application.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
-import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Customer.Status;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -17,7 +16,7 @@ public record CustomerDto(
     @Size(min = 4)
     String name,
     @Email
-    String email,
+    String emailAddress,
     Long countryId,
 
     String shippingAddressCity, // GET only (updated via dedicated endpoint)

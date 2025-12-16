@@ -46,7 +46,7 @@ public class CustomerApplicationService {
     return CustomerDto.builder()
         .id(customer.getId())
         .name(customer.getName())
-        .email(customer.getEmail())
+            .emailAddress(customer.getEmail())
         .countryId(customer.getCountry().getId())
         .status(customer.getStatus())
         .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
@@ -66,7 +66,7 @@ public class CustomerApplicationService {
   @Transactional
   public void register(CustomerDto dto) {
     Customer customer = new Customer();
-    customer.setEmail(dto.email());
+    customer.setEmail(dto.emailAddress());
     customer.setName(dto.name());
     customer.setCreatedDate(LocalDate.now());
     customer.setCountry(new Country().setId(dto.countryId()));
@@ -79,7 +79,7 @@ public class CustomerApplicationService {
 
     // business rule/validation
     if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new IllegalArgumentException("A customer with this email is already registered!");
+      throw new IllegalArgumentException("A customer with this emailAddress is already registered!");
       // throw new CleanException(CleanException.ErrorCode.DUPLICATED_CUSTOMER_EMAIL);
     }
 
@@ -111,7 +111,7 @@ public class CustomerApplicationService {
     Customer customer = customerRepo.findById(id).orElseThrow();
     // CRUD part
     customer.setName(dto.name());
-    customer.setEmail(dto.email());
+    customer.setEmail(dto.emailAddress());
     customer.setCountry(new Country().setId(dto.countryId()));
 
     if (!customer.isGoldMember() && dto.gold()) {
