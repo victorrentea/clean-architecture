@@ -16,6 +16,9 @@ import static java.util.Optional.ofNullable;
 public class LdapApiAdapter {
   private final LdapApi ldapApi;
 
+  //  public LdapUserDto method() { // leak out of the infra back into domain // ILLEGAL
+//
+//  }
   public @NonNull User retrieveUser(String usernamePart) {
     // ⚠️ Scary, large external DTO FIXME only using a small set of properties
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
