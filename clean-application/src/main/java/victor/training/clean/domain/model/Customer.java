@@ -38,6 +38,30 @@ public class Customer { // part of the Domain Model (wtf is that?>?!)
   @Embedded
   private ShippingAddress shippingAddress;
 
+
+  // Domain Logic methods 🧠🧠 inside my 👑Rich Domain Model (data structure)
+  // ✅ if it uses my fields
+  public boolean isPerson() {
+    return getLegalEntityCode().isEmpty();
+  }
+
+  public boolean canReturnOrders() {
+    return goldMember || isPerson();
+  }
+
+  // 🤔void m(int age) {}
+  // 🤔void m(..) {MUTATE my fields}
+  // ❌boolean isEuCountry(String iso) {10 lines}
+  // ❌void m(Order35field param) {🧠🧠🧠🧠}
+  // ❌void m(CustomerRepo toCallDB) {😱😱😱😱OMG}
+  // ❌void m(IRSClient irsFriend) {external api calls}
+
+
+
+
+
+
+
   @Embeddable
       // "Value Object" design pattern for reading clarity> explicitate a Domain Concept in code
       // =
