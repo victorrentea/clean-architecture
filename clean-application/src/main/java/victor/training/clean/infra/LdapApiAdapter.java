@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.UserApi;
 
 import java.util.List;
 
@@ -13,12 +14,13 @@ import static java.util.Optional.ofNullable;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class LdapApiAdapter {
+public class LdapApiAdapter implements UserApi {
   private final LdapApi ldapApi;
 
   //  public LdapUserDto method() { // leak out of the infra back into domain // ILLEGAL
 //
 //  }
+  @Override
   public @NonNull User retrieveUser(String usernamePart) {
     // ⚠️ Scary, large external DTO FIXME only using a small set of properties
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);

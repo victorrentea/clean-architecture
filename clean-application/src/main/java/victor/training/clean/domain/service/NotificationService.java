@@ -7,18 +7,17 @@ import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApiAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApiAdapter ldapApiAdapter;
+  private final UserApi userApi;
 
   // ☮️ Core application logic - should be super-clean 😇
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = ldapApiAdapter.retrieveUser(usernamePart); // "retrieve" suggeste effort of a network call
+    User user = userApi.retrieveUser(usernamePart); // "retrieve" suggeste effort of a network call
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
