@@ -99,6 +99,13 @@ public class Customer { // part of the Domain Model (wtf is that?>?!)
   @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
+//  public void setStatus(Status status) { // requires a prior call to setBalidatedBy=TEMPORAL COUPLING🤮
+//    if (status == null) {
+//      throw new IllegalArgumentException("status cannot be null");
+//    }
+//    this.status = status;
+//  }
+
   // ✅
   @AssertTrue // inDTO with @JsonIgnore
   public boolean hasValidatedByAfterVALIDATON() {
@@ -107,7 +114,7 @@ public class Customer { // part of the Domain Model (wtf is that?>?!)
     }
     return validatedBy != null && !validatedBy.isBlank();
   }
-  // ✅for immutable - in constructor
+  // ✅for immutable - in constructor --
 
   // ✅ for mutable via encapsulation
   // State transition methods with validation
