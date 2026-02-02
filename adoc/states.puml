@@ -1,0 +1,40 @@
+@startuml
+title Customer state machine (extracted from Customer.java)
+
+state DRAFT
+state VALIDATED
+state ACTIVE
+state DELETED
+
+[*] --> DRAFT
+
+DRAFT --> VALIDATED : validate(username)
+note right
+  guard: username != null && !blank
+  action: validatedBy := username
+  action: add ValidationEvent(from=DRAFT,to=VALIDATED,who=username,when=now)
+  throws IllegalArgumentException if username blank
+  throws IllegalStateException if status != DRAFT
+end note
+
+VALIDATED --> ACTIVE : activate()
+note right
+  guard: validatedBy != null
+  action: add ValidationEvent(from=VALIDATED,to=ACTIVE,who=validatedBy,when=now)
+  throws IllegalStateException if status != VALIDATED
+end note
+
+DRAFT --> DELETED : delete()
+VALIDATED --> DELETED : delete()
+ACTIVE --> DELETED : delete()
+DELETED --> DELETED : delete()
+note left
+  guard for delete: if already DELETED -> IllegalStateException("Customer already deleted")
+end note
+
+' Optional invalid-transition hints
+DRAFT --> DRAFT : validate(blank) \nthrows IllegalArgumentException
+VALIDATED --> VALIDATED : validate() \nthrows IllegalStateException
+ACTIVE --> ACTIVE : validate() \nthrows IllegalStateException
+
+@enduml

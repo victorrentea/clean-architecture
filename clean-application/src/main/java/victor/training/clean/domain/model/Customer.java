@@ -1,6 +1,7 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.Data;
 import lombok.Setter;
 
@@ -98,6 +99,17 @@ public class Customer { // part of the Domain Model (wtf is that?>?!)
   @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
+  // ✅
+  @AssertTrue // inDTO with @JsonIgnore
+  public boolean hasValidatedByAfterVALIDATON() {
+    if (status == Status.DRAFT) {
+      return true; // don't care
+    }
+    return validatedBy != null && !validatedBy.isBlank();
+  }
+  // ✅for immutable - in constructor
+
+  // ✅ for mutable via encapsulation
   // State transition methods with validation
   public void validate(String username) {
     if (status != Status.DRAFT) {

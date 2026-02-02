@@ -1,0 +1,23 @@
+@startuml Customer State Machine
+
+[*] --> DRAFT : new Customer()
+
+DRAFT --> VALIDATED : validate(username)
+note right of DRAFT
+  guard: username != null && !blank
+  action: validatedBy = username
+end note
+
+VALIDATED --> ACTIVE : activate()
+
+DRAFT --> DELETED : delete()
+VALIDATED --> DELETED : delete()
+ACTIVE --> DELETED : delete()
+
+DELETED : terminal state
+note bottom of DELETED
+  delete() throws IllegalStateException
+  if already DELETED
+end note
+
+@enduml
