@@ -41,7 +41,7 @@ public class Customer { // part of the Domain Model (wtf is that?>?!)
   @Embeddable
       // "Value Object" design pattern for reading clarity> explicitate a Domain Concept in code
       // =
-  record ShippingAddress(String street, String city, String zip) {
+  public record ShippingAddress(String street, String city, String zip) {
   }
 
 //  private Address invoicingAddress;
