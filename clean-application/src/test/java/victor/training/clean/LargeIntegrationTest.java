@@ -12,27 +12,25 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+import victor.training.clean.application.dto.CustomerDto;
+import victor.training.clean.application.dto.CustomerDto.CustomerDtoBuilder;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
-import victor.training.clean.application.dto.CustomerDto;
-import victor.training.clean.application.dto.CustomerDto.CustomerDtoBuilder;
 import victor.training.clean.domain.repo.CountryRepo;
-import victor.training.clean.infra.EmailSender;
 import victor.training.clean.domain.repo.CustomerRepo;
+import victor.training.clean.domain.service.EmailSender;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
