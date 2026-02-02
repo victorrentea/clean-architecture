@@ -11,7 +11,8 @@ import victor.training.clean.infra.LdapApi;
 import victor.training.clean.infra.LdapUserDto;
 
 import java.util.List;
-import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -41,7 +42,8 @@ public class NotificationService {
     User user = new User(
         ldapUserDto.getUn(),
         fullName,
-        Optional.ofNullable(ldapUserDto.getWorkEmail())
+        ofNullable(ldapUserDto.getWorkEmail())
+            .map(String::trim)
             .map(String::toLowerCase)
             .filter(String::isBlank)
     );
