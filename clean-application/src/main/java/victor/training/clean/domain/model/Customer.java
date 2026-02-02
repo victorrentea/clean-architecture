@@ -1,9 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -19,7 +16,9 @@ import java.util.Optional;
 @Entity // ORM (2)
 @Data // = @Getter + @Setter + @ToString + @EqualsAndHashCode (1)
 // 💙 Domain Model Entity - backbone of your core complexity
-public class Customer {
+public class Customer { // part of the Domain Model (wtf is that?>?!)
+  // 🙁 not all projects have a Domain Model
+  //
   @Id
   @GeneratedValue
   private Long id;
@@ -27,9 +26,25 @@ public class Customer {
   private String email;
 
   // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+
+//  record Address(String street, String city, String zip, String vatCode) {}
+  // ❤️ more generic, as it's future-ready @tiago
+
+  // KISS: the moment you know the least is at the start.go humble, specific,
+  // and move to more generic "Address" tomorrow after BillingAddress appears
+  @Embedded
+  private ShippingAddress shippingAddress;
+
+  @Embeddable
+      // "Value Object" design pattern for reading clarity> explicitate a Domain Concept in code
+      // =
+  record ShippingAddress(String street, String city, String zip) {
+  }
+
+//  private Address invoicingAddress;
 
   @ManyToOne
   private Country country;
