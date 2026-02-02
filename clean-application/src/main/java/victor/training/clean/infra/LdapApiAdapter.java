@@ -18,7 +18,6 @@ public class LdapApiAdapter implements UserApi {
   private final LdapApi ldapApi;
 
   //  public LdapUserDto method() { // leak out of the infra back into domain // ILLEGAL
-//
 //  }
   @Override
   public @NonNull User retrieveUser(String usernamePart) {

@@ -37,6 +37,7 @@ public class ArchitectureTest {
         .resideInAPackage("..infra..");
     List<String> failures = rule.evaluate(allProjectClasses).getFailureReport().getDetails();
 
+    //arch fitness function
     int expectedFailureCount = 0; // life is hard // TODO
 
     assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
