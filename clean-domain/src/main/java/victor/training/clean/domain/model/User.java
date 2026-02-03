@@ -6,6 +6,10 @@ public record User(
     String username,
     String fullName,
     Optional<String> email) {
+//  public User {
+//    if (username != null || username.isBlank()) {
+//      throw new IllegalArgumentException();
+//  }
 }
 //
 //@Value // = @Getter + @AllArgsConstructor +

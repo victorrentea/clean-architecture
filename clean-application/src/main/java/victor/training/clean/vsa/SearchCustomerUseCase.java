@@ -2,8 +2,10 @@ package victor.training.clean.vsa;
 
 import com.google.common.annotations.VisibleForTesting;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -27,20 +29,15 @@ public class SearchCustomerUseCase {
   ) {
   }
 
-  @VisibleForTesting
-  record CustomerSearchResult(
-      long id,
-      String name
-      // TODO also return 'email' => only this file is impacted
-  ) {
-  }
-
-  @Operation(description = "Customer Search Poem")
-  @PostMapping("customer/search-vsa")
-  public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria criteria) {
-    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name)" +
+  @Operation(description = "Customer Search Poem") // swagger
+  @PostMapping("customer/search-vsa") // HTTP
+//  @Secured("ROLE_ADMIN") // Spring Security
+//  @Timed() // Metrics
+  public List<CustomerSearchResult> search(@RequestBody @Validated CustomerSearchCriteria criteria) {
+    String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name, c.email)" +
                   " FROM Customer c " +
-                  " WHERE ";
+        " WHERE "; // JPA
+//    kafkaTemplate,.send() // Kafka
     List<String> jpqlParts = new ArrayList<>();
     jpqlParts.add("1=1"); // alternatives: Criteria API ± Spring Specifications or Query DSL
     Map<String, Object> params = new HashMap<>();
@@ -66,5 +63,15 @@ public class SearchCustomerUseCase {
       query.setParameter(paramName, params.get(paramName));
     }
     return query.getResultList();
+  }
+
+  @VisibleForTesting
+  record CustomerSearchResult(
+      long id,
+      @Schema(example = "John Doe")
+      String name,
+      String email
+      // TODO also return 'email' => only this file is impacted
+  ) {
   }
 }

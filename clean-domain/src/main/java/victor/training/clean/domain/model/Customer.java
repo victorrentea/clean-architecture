@@ -142,6 +142,13 @@ public class Customer { // part of the Domain Model (wtf is that?>?!)
     }
     this.status = Status.DELETED;
   }
+
+
+  public String toIrsMonthlyA47ReportCsvLine() {
+    //... too specific to 1 single use-case
+    return "<customer>40 lines of code in here";
+    // only keep in domain entities potentially reusable and small logic
+  }
 }
 
 //region Code in the project might [not] follow the rule

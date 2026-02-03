@@ -212,6 +212,47 @@
           }
         }
       }
+    },
+    "/customer/{id}/vsa": {
+      "get": {
+        "tags": [
+          "get-customer-by-id-use-case"
+        ],
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCustomerByIdResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -306,6 +347,34 @@
       },
       "JsonPatch": {
         "type": "object"
+      },
+      "GetCustomerByIdResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "siteId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "creationDateStr": {
+            "type": "string"
+          },
+          "gold": {
+            "type": "boolean"
+          },
+          "goldMemberRemovalReason": {
+            "type": "string"
+          }
+        }
       }
     }
   }
