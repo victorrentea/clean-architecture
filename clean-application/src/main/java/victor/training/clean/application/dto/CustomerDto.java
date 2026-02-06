@@ -6,7 +6,13 @@ import lombok.Builder;
 import victor.training.clean.domain.model.Customer.Status;
 
 @Builder
-public record CustomerDto(
+public record CustomerDto( // REST API 😈
+// TODO victorrentea 2026-02-03: split into
+//  RegisterCustomerRequestDto (POST),
+//  UpdateCustomerRequestDto (PUT),
+//  ...
+
+
     Long id, // only used on GET response (assigned by backend)
 
     @NotNull
