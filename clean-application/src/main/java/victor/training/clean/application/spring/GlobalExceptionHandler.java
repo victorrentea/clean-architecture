@@ -1,19 +1,25 @@
 package victor.training.clean.application.spring;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import victor.training.clean.domain.CleanException;
 import victor.training.clean.domain.CleanException.ErrorCode;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -23,14 +29,45 @@ import static org.springframework.http.ResponseEntity.status;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+  private static final URI VALIDATION_TYPE = URI.create("https://example.net/validation-error");
+
   @ResponseStatus(BAD_REQUEST)
-  @ExceptionHandler(MethodArgumentNotValidException.class) // @Validated
-  public List<String> onJavaxValidationException(MethodArgumentNotValidException e) {
-    List<String> validationErrors = e.getBindingResult().getFieldErrors().stream()
-        .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+  @ExceptionHandler(BindException.class)
+  public ProblemDetail onValidationException(BindException e) {
+    List<ValidationError> errors = e.getBindingResult().getFieldErrors().stream()
+        .map(this::toValidationError)
         .toList();
-    log.error("Invalid request: {}", validationErrors, e);
-    return validationErrors;
+
+    List<ValidationError> globalErrors = e.getBindingResult().getGlobalErrors().stream()
+        .map(this::toValidationError)
+        .toList();
+
+    List<ValidationError> allErrors = List.copyOf(
+        Stream.concat(errors.stream(), globalErrors.stream()).toList());
+
+    log.error("Invalid request: {}", allErrors, e);
+
+    ProblemDetail problemDetail = ProblemDetail.forStatus(BAD_REQUEST);
+    problemDetail.setType(VALIDATION_TYPE);
+    problemDetail.setTitle("Your request is not valid.");
+    problemDetail.setProperty("errors", allErrors);
+    return problemDetail;
+  }
+
+  @ResponseStatus(BAD_REQUEST)
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ProblemDetail onConstraintViolation(ConstraintViolationException e) {
+    List<ValidationError> errors = e.getConstraintViolations().stream()
+        .map(violation -> new ValidationError(violation.getMessage(), toPointer(violation.getPropertyPath().toString())))
+        .toList();
+
+    log.error("Invalid request: {}", errors, e);
+
+    ProblemDetail problemDetail = ProblemDetail.forStatus(BAD_REQUEST);
+    problemDetail.setType(VALIDATION_TYPE);
+    problemDetail.setTitle("Your request is not valid.");
+    problemDetail.setProperty("errors", errors);
+    return problemDetail;
   }
 
   @ResponseStatus(NOT_FOUND)
@@ -61,4 +98,24 @@ public class GlobalExceptionHandler {
     return handleException(ErrorCode.GENERAL, null, exception);
   }
 
+  private ValidationError toValidationError(FieldError fieldError) {
+    return new ValidationError(fieldError.getDefaultMessage(), toPointer(fieldError.getField()));
+  }
+
+  private ValidationError toValidationError(ObjectError objectError) {
+    return new ValidationError(objectError.getDefaultMessage(), "#");
+  }
+
+  private String toPointer(String fieldPath) {
+    if (fieldPath == null || fieldPath.isBlank()) {
+      return "#";
+    }
+    String pointer = fieldPath
+        .replaceAll("\\[(\\d+)]", "/$1")
+        .replace('.', '/');
+    return "#/" + pointer;
+  }
+
+  private record ValidationError(String detail, String pointer) {
+  }
 }
