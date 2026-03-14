@@ -1,11 +1,12 @@
 package victor.training.clean.application.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,6 @@ import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
 import victor.training.clean.application.service.CustomerApplicationService;
-import victor.training.clean.domain.model.Customer;
-import victor.training.clean.domain.repo.CustomerRepo;
 
 import java.util.List;
 
@@ -28,7 +27,19 @@ public class CustomerController {
     customerApplicationService.register(dto);
   }
 
-  @Operation(description = "Search Customer")
+  @Operation(description = "Search Customer",
+      responses = @ApiResponse(content = @Content(
+          mediaType = "application/json",
+          examples = @ExampleObject("""
+              [
+                {
+                  "id": 1,
+                  "name": "John DOE"
+                  }
+                ]
+              """)
+          // WireMock can create a stub response based
+      )))
   @PostMapping("customers/search")
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria searchCriteria) {
     return customerApplicationService.search(searchCriteria);
