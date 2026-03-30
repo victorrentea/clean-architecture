@@ -1,10 +1,15 @@
 package victor.training.clean.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static lombok.AccessLevel.NONE;
@@ -38,6 +43,7 @@ public class Customer {
   @Id
   @GeneratedValue
   private Long id;
+  @Size(min = 2, max = 100)
   private String name;
   private String email;
 
@@ -61,29 +67,35 @@ public class Customer {
   @Embedded // no ALTER TABLE NEEDED
   private ShippingAddress shippingAddress;
 
+  private Double balance;
+//  private CustomerBalance{double} balance;
+
+
   public boolean isGoldMember() {
     return goldMember /*|| smth new*/;
   }
-
-  public boolean canReturnOrders() { // DRY
-//    return isGoldMember() || isCompany();
-    return goldMember || isCompany();
-  }
-
-  private boolean isCompany() {// explain the business concept
-    return getLegalEntityCode().isEmpty();
-  }
+  @ManyToOne
+  @NotNull
+  private Country country;
+  private List<String> tags = new ArrayList<>(); // must have
 
   //   tomorrow you'll add a billing address, in RO: {pnr/vat, string address}
   @Embeddable
   public record ShippingAddress(String city, String street, String zip) {
   }
 
-  @ManyToOne
-  private Country country;
+  public boolean canReturnOrders() { // DRY
+//    return isGoldMember() || isCompany();
+    return goldMember || isIndividual();
+  }
 
   private LocalDate createdDate;
   private String createdByUsername;
+
+  private boolean isIndividual() {// explain the business concept
+
+    return getLegalEntityCode().isEmpty();
+  }
 
   private boolean goldMember;
   private String goldMemberRemovalReason;
@@ -128,6 +140,11 @@ public class Customer {
       throw new IllegalStateException("Customer is already deleted");
     }
     status = Status.DELETED;
+  }
+
+  @AssertTrue
+  public boolean isHasValidatedByAfterValidation() {
+    return status == Status.DRAFT || (validatedBy != null && !validatedBy.isBlank());
   }
 }
 
