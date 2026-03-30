@@ -7,6 +7,8 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static lombok.AccessLevel.NONE;
+
 //region Reasons to avoid @Data on Domain Model
 // Avoid @Data on Domain Model because:
 // 1) hashCode uses @Id⚠️
@@ -93,24 +95,54 @@ public class Customer {
     return Optional.ofNullable(legalEntityCode);
   }
 
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
-  private Status status;
+
+  @Setter(NONE)
+  private Status status = Status.DRAFT;
+  @Setter(NONE)
   private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+
+  public void validate(String validatedBy) {
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException("Only customers in DRAFT status can be validated");
+    }
+    if (validatedBy == null || validatedBy.isBlank()) {
+      throw new IllegalArgumentException("validatedBy must be provided when validating a customer");
+    }
+    this.validatedBy = validatedBy;
+    status = Status.VALIDATED;
+  }
+
+  public void activate() {
+    if (status != Status.VALIDATED) {
+      throw new IllegalStateException("Only customers in VALIDATED status can be activated");
+    }
+    status = Status.ACTIVE;
+  }
+
+  public void delete() {
+    if (status == Status.DELETED) {
+      throw new IllegalStateException("Customer is already deleted");
+    }
+    status = Status.DELETED;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+class SomeCode {
+  public void correct(Customer draftCustomer) {
+    draftCustomer.validate("currentUser"); // from token/session..
+  }
+
+  public void incorrect(Customer draftCustomer) {
+    draftCustomer.validate("NULL"); // for your SQL dev❤️
+  }
+
+  public void activate(Customer draftCustomer) {
+    draftCustomer.activate();
+  }
+}
 //endregion
