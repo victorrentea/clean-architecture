@@ -6,14 +6,13 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.service.UserLookupService.User;
-import victor.training.clean.infra.EmailSender;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
-  private final UserLookupService userLookupService; // IoC : go and instantiate and retrieve yourself, but the framework gives you back. Technically, that is equal to dependency injection. 
+  private final EmailService emailService;
+  private final UserLookupService userLookupService; // IoC : go and instantiate and retrieve yourself, but the framework gives you back. Technically, that is equal to dependency injection.
 
   // ☮️ Core application logic - should be super clean 😇
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
@@ -38,7 +37,7 @@ public class NotificationService {
       email.getCc().add(cc);
     }
 
-    emailSender.sendEmail(email);
+    emailService.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
   }
