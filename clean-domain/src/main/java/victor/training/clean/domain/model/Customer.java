@@ -69,19 +69,23 @@ public class Customer {
 
   private Double balance;
 //  private CustomerBalance{double} balance;
-
-
-  public boolean isGoldMember() {
-    return goldMember /*|| smth new*/;
-  }
   @ManyToOne
   @NotNull
   private Country country;
   private List<String> tags = new ArrayList<>(); // must have
+  private LocalDate createdDate;
+  private String createdByUsername;
+  private boolean goldMember;
+  private String goldMemberRemovalReason;
+  private String legalEntityCode;
+  private boolean discountedVat;
+  @Setter(NONE)
+  private Status status = Status.DRAFT;
+  @Setter(NONE)
+  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
-  //   tomorrow you'll add a billing address, in RO: {pnr/vat, string address}
-  @Embeddable
-  public record ShippingAddress(String city, String street, String zip) {
+  public boolean isGoldMember() {
+    return goldMember /*|| smth new*/;
   }
 
   public boolean canReturnOrders() { // DRY
@@ -89,33 +93,14 @@ public class Customer {
     return goldMember || isIndividual();
   }
 
-  private LocalDate createdDate;
-  private String createdByUsername;
-
   private boolean isIndividual() {// explain the business concept
 
     return getLegalEntityCode().isEmpty();
   }
 
-  private boolean goldMember;
-  private String goldMemberRemovalReason;
-
-  private String legalEntityCode;
-  private boolean discountedVat;
-
   public Optional<String> getLegalEntityCode() {
     return Optional.ofNullable(legalEntityCode);
   }
-
-
-  public enum Status {
-    DRAFT, VALIDATED, ACTIVE, DELETED
-  }
-
-  @Setter(NONE)
-  private Status status = Status.DRAFT;
-  @Setter(NONE)
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
   public void validate(String validatedBy) {
     if (status != Status.DRAFT) {
@@ -145,6 +130,15 @@ public class Customer {
   @AssertTrue
   public boolean isHasValidatedByAfterValidation() {
     return status == Status.DRAFT || (validatedBy != null && !validatedBy.isBlank());
+  }
+
+  public enum Status {
+    DRAFT, VALIDATED, ACTIVE, DELETED
+  }
+
+  //   tomorrow you'll add a billing address, in RO: {pnr/vat, string address}
+  @Embeddable
+  public record ShippingAddress(String city, String street, String zip) {
   }
 }
 

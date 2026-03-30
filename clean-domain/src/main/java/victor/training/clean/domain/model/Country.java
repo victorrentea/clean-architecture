@@ -1,10 +1,9 @@
 package victor.training.clean.domain.model;
 
-import lombok.Data;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.Data;
 
 @Entity
 @Data
