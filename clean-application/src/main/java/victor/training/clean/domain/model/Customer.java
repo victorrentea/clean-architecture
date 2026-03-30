@@ -1,10 +1,8 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -16,8 +14,17 @@ import java.util.Optional;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 
-@Entity // ORM (2)
-@Data // = @Getter + @Setter + @ToString + @EqualsAndHashCode (1)
+@Entity // 1) ⚔️ ORM (2) - should I map ORM enttiy directly on my core domain model?
+
+//@Data // 2) ⚔️ Lombok❤️ = @Getter + @Setter + @ToString + @EqualsAndHashCode (1)
+// 🙁 @Setter = not all props are mutable
+// 🙁 @EqualsAndHashCode = is strange if applied to ID (assigned on repo.save) and fields:
+//    the same obj is not equal to itself after it's saved in DB
+//    👍 use for hash/eq the natural key: eg: pnr for person
+// 🙁 @ToString + @Entity => LAZY LOADING on toString
+
+@Getter
+@Setter
 // 💙 Domain Model Entity - backbone of your core complexity
 public class Customer {
   @Id
@@ -26,10 +33,30 @@ public class Customer {
   private String name;
   private String email;
 
-  // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+  // 🤔 Hmm... 3 fields with the same prefix. What TODO
+  //  > extract a separate
+  //  Value Object = small immutable object w/o persistent identity
+  // 👑: we have captured in our syntax a core domain concept that wasn't yet explicitly modeled.
+  // ✅ benefit: methods and code all over the place are going to suddenly have to take fewer parameters and have fewer variables,
+  // because we can use this value object all over the place.
+  // => try to "push it in existing code"😱
+//  private String shippingAddressCity;
+//  private String shippingAddressStreet;
+//  private String shippingAddressZip;
+
+  // since it feels general-purpose, i guess🤔
+  // NOW at the start of the proj, when I know the least
+//  record Address
+
+  // KISS: go from specific -> general when you have more points to triangulate your desing
+  // "The rule of 3": it's ok to copy once, not twice
+  @Embedded // no ALTER TABLE NEEDED
+  private ShippingAddress shippingAddress;
+
+  //   tomorrow you'll add a billing address, in RO: {pnr/vat, string address}
+  @Embeddable
+  public record ShippingAddress(String city, String street, String zip) {
+  }
 
   @ManyToOne
   private Country country;
