@@ -5,31 +5,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.service.UserLookupService.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final UserLookupService userLookupService; // IoC : go and instantiate and retrieve yourself, but the framework gives you back. Technically, that is equal to dependency injection. 
 
   // ☮️ Core application logic - should be super clean 😇
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    // ⚠️ If you ever see a collection object in a variable returned value or field, it should never be null, but it can be empty
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    LdapUserDto ldapUserDto = dtoList.get(0);
-
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    User user = userLookupService.lookupUser(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -42,26 +30,16 @@ public class NotificationService {
             %s""".formatted(
             customer.getName(),
             customer.canReturnOrders() ? "can" : "cannot",
-            fullName))
+            user.fullName()))
         .build();
 
-
-    if (ldapUserDto.getWorkEmail() != null) { // what if forgotten?
-      String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
-      email.getCc().add(contact);
+    if (user.workEmail() != null) {
+      String cc = user.fullName() + " <" + user.workEmail() + ">";
+      email.getCc().add(cc);
     }
 
     emailSender.sendEmail(email);
 
-    normalize(ldapUserDto);
-    customer.setCreatedByUsername(ldapUserDto.getUn());
+    customer.setCreatedByUsername(user.username());
   }
-
-
-  private void normalize(LdapUserDto ldapUserDto) {
-    if (ldapUserDto.getUn().startsWith("s")) {
-      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-  }
-
 }
