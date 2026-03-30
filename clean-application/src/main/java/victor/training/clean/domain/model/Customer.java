@@ -53,6 +53,14 @@ public class Customer {
   @Embedded // no ALTER TABLE NEEDED
   private ShippingAddress shippingAddress;
 
+  public boolean canReturnOrders() { // DRY
+    return goldMember || isCompany();
+  }
+
+  private boolean isCompany() {// explain the business concept
+    return getLegalEntityCode().isEmpty();
+  }
+
   //   tomorrow you'll add a billing address, in RO: {pnr/vat, string address}
   @Embeddable
   public record ShippingAddress(String city, String street, String zip) {
