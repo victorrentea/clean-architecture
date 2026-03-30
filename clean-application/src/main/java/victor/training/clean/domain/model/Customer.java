@@ -23,6 +23,12 @@ import java.util.Optional;
 //    👍 use for hash/eq the natural key: eg: pnr for person
 // 🙁 @ToString + @Entity => LAZY LOADING on toString
 
+//class OCJP extends Customer {
+//  public void method() {
+//    System.out.println(" " + id);
+//  }
+//}
+
 @Getter
 @Setter
 // 💙 Domain Model Entity - backbone of your core complexity
@@ -53,7 +59,12 @@ public class Customer {
   @Embedded // no ALTER TABLE NEEDED
   private ShippingAddress shippingAddress;
 
+  public boolean isGoldMember() {
+    return goldMember /*|| smth new*/;
+  }
+
   public boolean canReturnOrders() { // DRY
+//    return isGoldMember() || isCompany();
     return goldMember || isCompany();
   }
 
