@@ -2,6 +2,7 @@ package victor.training.clean.vsa;
 
 import com.google.common.annotations.VisibleForTesting;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,9 @@ public class SearchCustomerUseCase {
 
   @Operation(description = "Customer Search Poem")
   @PostMapping("customer/search-vsa")
+  @RolesAllowed("ROLE_ADMIN") // common see to here
+//  @Transactional // ☢️ placing so high in a flow can lead to JDBC connection pool starvation
+  // esp when there's an API call outside
   public List<CustomerSearchResult> search(@RequestBody CustomerSearchCriteria criteria) {
     String jpql = "SELECT new victor.training.clean.vsa.SearchCustomerUseCase$CustomerSearchResult(c.id, c.name)" +
                   " FROM Customer c " +
