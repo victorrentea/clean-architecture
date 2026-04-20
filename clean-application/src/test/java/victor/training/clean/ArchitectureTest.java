@@ -36,7 +36,7 @@ public class ArchitectureTest {
         .resideInAPackage("..infra..");
     List<String> failures = rule.evaluate(allProjectClasses).getFailureReport().getDetails();
 
-    int expectedFailureCount = 3; // initial state (how I found it)
+    int expectedFailureCount = 0; // initial state (how I found it)
 
     assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
 
