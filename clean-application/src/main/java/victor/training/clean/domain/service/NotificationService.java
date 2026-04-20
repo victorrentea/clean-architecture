@@ -6,19 +6,19 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.repo.UserDirectory;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapAdapter ldapAdapter;
+  private final UserDirectory userDirectory;
 
   // ☮️ Core application logic - should be super clean 😇
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    User user = ldapAdapter.findByUsernamePart(usernamePart);
+    User user = userDirectory.findByUsernamePart(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
