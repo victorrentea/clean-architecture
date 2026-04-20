@@ -1,6 +1,6 @@
 # A PR touching this path must be approved by a member of this group.
 # Works in GitHub, GitLab, BitBucket ...
 
-/src/test/resources/my-existing-openapi.json @elders
 /src/test/java/victor/training/clean/ArchitectureTest.java @elders
 clean-application/src/test/java/victor/training/clean/MyOpenAPIDidNotChangeTest.java @elders
+/src/test/resources/my-existing-openapi.json @elders
