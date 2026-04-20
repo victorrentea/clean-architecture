@@ -118,6 +118,15 @@ public class Customer {
     if (status == Status.DELETED) throw new IllegalStateException("Customer is already DELETED");
     this.status = Status.DELETED;
   }
+
+
+  // God Class Risk☢️:
+  // - adding more than 50? attributes
+  // - large methods 20 too much? > keep bits of logic only working on its fields ± a small param
+  // we started adding logic to methods of our DOmain Model. Abuse:
+  // - shipToCustomer(RestClient, CustomerRepom) { DI-dependencies APIs, Repos  nasty libs}
+
+  // Anemic Domain Model = only properties (+get+set)
 }
 
 //region Code in the project might [not] follow the rule
