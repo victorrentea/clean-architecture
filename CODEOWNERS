@@ -3,3 +3,4 @@
 
 /src/test/resources/my-existing-openapi.json @elders
 /src/test/java/victor/training/clean/ArchitectureTest.java @elders
+clean-application/src/test/java/victor/training/clean/MyOpenAPIDidNotChangeTest.java @elders

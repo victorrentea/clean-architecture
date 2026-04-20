@@ -3,7 +3,7 @@ Search using Usecase-Optimized Query (CQRS)
 
 ## Status
 Accepted
-(Training Note: never delete and ADR; but can be `Supersed` it with a later ADR)
+(Training Note: never delete and ADR; but can be `Superseded` it with a later ADR)
 
 ## Context
 We are using an ORM (Hibernate/JPA). 
@@ -63,8 +63,9 @@ Negative:
 enforced by the Domain Model/Services.
 
 ## Compliance
-Enforcing is done via Code Review,
-since we couldn't find yet any automated way to enforce it😢. (despite 2 hours research)
+
+Automated via ArchUnit: `search_methods_must_not_return_domain_entities` in `ArchUnitProTest`
+checks that any method named `search*` does not return a type from `..domain.model..`.
 
 ## Notes
 - Author: Developer A 
