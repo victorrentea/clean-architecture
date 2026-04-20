@@ -1,25 +1,13 @@
-@startuml
-set separator none
-title Clean Application - clean-application - Components
+@startuml packages
+left to right direction
 
-top to bottom direction
+[domain]
+[application]
+[infra]
+[vsa]
 
-!include <C4/C4>
-!include <C4/C4_Context>
-!include <C4/C4_Component>
-
-Container_Boundary("CleanApplication.cleanapplication_boundary", "clean-application", $tags="") {
-  Component(CleanApplication.cleanapplication.domain, "domain", $techn="", $descr="victor.training.clean.domain", $tags="", $link="")
-  Component(CleanApplication.cleanapplication.application, "application", $techn="", $descr="victor.training.clean.application", $tags="", $link="")
-  Component(CleanApplication.cleanapplication.infra, "infra", $techn="", $descr="victor.training.clean.infra", $tags="", $link="")
-  Component(CleanApplication.cleanapplication.vsa, "vsa", $techn="", $descr="victor.training.clean.vsa", $tags="", $link="")
-}
-
-Rel(CleanApplication.cleanapplication.infra, CleanApplication.cleanapplication.domain, "", $techn="", $tags="", $link="")
-Rel(CleanApplication.cleanapplication.vsa, CleanApplication.cleanapplication.domain, "", $techn="", $tags="", $link="")
-Rel(CleanApplication.cleanapplication.domain, CleanApplication.cleanapplication.application, "", $techn="", $tags="", $link="")
-Rel(CleanApplication.cleanapplication.application, CleanApplication.cleanapplication.domain, "", $techn="", $tags="", $link="")
-Rel(CleanApplication.cleanapplication.application, CleanApplication.cleanapplication.infra, "", $techn="", $tags="", $link="")
-
-SHOW_LEGEND(true)
+[application] --> [domain]
+[application] --> [infra]
+[infra] --> [domain]
+[vsa] --> [domain]
 @enduml

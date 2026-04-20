@@ -32,6 +32,15 @@ public class PackageDiagramTest {
 
     private static final String BASE = "victor.training.clean";
 
+    private static String buildPlantUml(Map<String, Component> components, List<String[]> edges) {
+        var sb = new StringBuilder("@startuml packages\nleft to right direction\n\n");
+        components.keySet().forEach(name -> sb.append("[").append(name).append("]\n"));
+        sb.append("\n");
+        edges.forEach(e -> sb.append("[").append(e[0]).append("] --> [").append(e[1]).append("]\n"));
+        sb.append("@enduml\n");
+        return sb.toString();
+    }
+
     @Test
     void generatePackageDiagram() throws Exception {
         JavaClasses classes = new ClassFileImporter()
@@ -90,16 +99,17 @@ public class PackageDiagramTest {
         // 1) Structurizr DSL — open at structurizr.com or render with the CLI
         write("../adoc/architecture.dsl", buildDsl(components, edges));
 
-        // 2) C4 PlantUML — generated from the same model, matches the DSL view
-        String puml = new C4PlantUMLExporter().export(workspace).stream()
-                .filter(d -> d.getKey().equals("packages"))
+        // 2) Simple PlantUML — no C4 library includes, renders instantly in IntelliJ
+        String simplePuml = buildPlantUml(components, edges);
+        write("../adoc/views/packages.puml", simplePuml);
+
+        // 3) SVG — pre-rendered from C4 so it looks good on GitHub/Structurizr
+        String c4Puml = new C4PlantUMLExporter().export(workspace).stream()
+                .filter(d -> "packages".equals(d.getKey()))
                 .findFirst().orElseThrow()
                 .getDefinition();
-        write("../adoc/views/packages.puml", puml);
-
-        // 3) SVG — pre-rendered so it's viewable on GitHub without tooling
         ByteArrayOutputStream svgBytes = new ByteArrayOutputStream();
-        new SourceStringReader(puml).outputImage(svgBytes, new FileFormatOption(FileFormat.SVG));
+        new SourceStringReader(c4Puml).outputImage(svgBytes, new FileFormatOption(FileFormat.SVG));
         write("../adoc/views/packages.svg", svgBytes.toString(StandardCharsets.UTF_8));
     }
 

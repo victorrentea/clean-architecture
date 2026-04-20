@@ -11,7 +11,6 @@ workspace "Clean Architecture" "Auto-extracted from bytecode — do not edit man
                 infra = component "infra" "victor.training.clean.infra"
                 vsa = component "vsa" "victor.training.clean.vsa"
 
-                domain -> application ""
                 application -> domain ""
                 application -> infra ""
                 infra -> domain ""
