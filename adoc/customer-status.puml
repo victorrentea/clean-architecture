@@ -1,0 +1,13 @@
+@startuml Customer Status
+
+[*] --> DRAFT
+
+DRAFT --> VALIDATED : validate(by)
+VALIDATED --> ACTIVE : activate()
+DRAFT --> DELETED : delete()
+VALIDATED --> DELETED : delete()
+ACTIVE --> DELETED : delete()
+
+DELETED --> [*]
+
+@enduml
