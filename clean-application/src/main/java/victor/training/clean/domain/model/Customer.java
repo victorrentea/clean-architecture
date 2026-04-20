@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -34,6 +36,11 @@ public class Customer {
   @Valid
   @Embedded //no  ALTER TABLE needed
   private ShippingAddress shippingAddress;
+
+  @Setter(AccessLevel.NONE)
+  private Status status = Status.DRAFT;
+  @Setter(AccessLevel.NONE)
+  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
   //
 //  record Address(...) { 😊reusABLE, 🙁overgeneric?
@@ -87,21 +94,44 @@ public class Customer {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
 
-  private Status status;
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
+  public boolean canReturnOrders() { // instead of CustomerUtil🚽, CustomerHellper😈
+    return goldMember || isNaturalPerson();
+  }
+
+  private boolean isNaturalPerson() { // ubiquitous language with biz.
+    return getLegalEntityCode().isEmpty();
+  }
+
+  public void validate(String by) {
+    if (status != Status.DRAFT) throw new IllegalStateException("Can only validate a DRAFT customer");
+    if (by == null || by.isBlank()) throw new IllegalArgumentException("Validator username is required");
+    this.status = Status.VALIDATED;
+    this.validatedBy = by;
+  }
+
+  public void activate() {
+    if (status != Status.VALIDATED) throw new IllegalStateException("Can only activate a VALIDATED customer");
+    this.status = Status.ACTIVE;
+  }
+
+  public void delete() {
+    if (status == Status.DELETED) throw new IllegalStateException("Customer is already DELETED");
+    this.status = Status.DELETED;
+  }
 }
 
 //region Code in the project might [not] follow the rule
-//class SomeCode {
-//  public void correct(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//    draftCustomer.setValidatedBy("currentUser"); // from token/session..
-//  }
-//  public void incorrect(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.VALIDATED);
-//  }
-//  public void activate(Customer draftCustomer) {
-//    draftCustomer.setStatus(Customer.Status.ACTIVE);
-//  }
-//}
+class SomeCode {
+  public void correct(Customer draftCustomer) {
+    draftCustomer.validate("currentUser");
+  }
+
+  public void activate(Customer draftCustomer) {
+    draftCustomer.activate();
+  }
+
+  public void delete(Customer draftCustomer) {
+    draftCustomer.delete();
+  }
+}
 //endregion
