@@ -2,6 +2,7 @@ package victor.training.clean;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,8 @@ public class MyOpenAPIDidNotChangeTest {
 
   private String prettifyJson(String rawJson) throws JsonProcessingException {
     if (StringUtils.isBlank(rawJson)) return rawJson;
-    ObjectMapper jackson = new ObjectMapper();
+    ObjectMapper jackson = new ObjectMapper()
+        .enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
     return jackson.writerWithDefaultPrettyPrinter().writeValueAsString(
             jackson.readValue(rawJson, Map.class));
   }
