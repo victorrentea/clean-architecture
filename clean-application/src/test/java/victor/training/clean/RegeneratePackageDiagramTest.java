@@ -28,7 +28,7 @@ import static com.tngtech.archunit.core.importer.ImportOption.Predefined.DO_NOT_
 // Regenerates adoc/architecture.dsl, adoc/views/packages.puml, adoc/views/packages.svg on every run.
 // Commit all three to git — they stay in sync with the code automatically.
 // Runs from clean-application/ module dir (standard Maven / IntelliJ Maven runner behavior).
-public class PackageDiagramTest {
+public class RegeneratePackageDiagramTest {
 
     private static final String BASE = "victor.training.clean";
 
