@@ -6,13 +6,12 @@ import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
 import victor.training.clean.domain.model.User;
-import victor.training.clean.infra.EmailSender;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
-  private final EmailSender emailSender;
+  private final EmailSender emailSenderImpl;
   private final UserFetcherPort userFetcherPort;
 
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
@@ -35,7 +34,7 @@ public class NotificationService {
     user.workEmail().ifPresent(workEmail ->
         email.getCc().add(user.fullName() + " <" + workEmail.toLowerCase() + ">"));
 
-    emailSender.sendEmail(email);
+    emailSenderImpl.sendEmail(email);
 
     customer.setCreatedByUsername(user.username());
   }

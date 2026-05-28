@@ -37,9 +37,9 @@ public class ArchitectureTest {
         .resideInAPackage("..infra..");
     List<String> failures = rule.evaluate(allProjectClasses).getFailureReport().getDetails();
 
-    assertEquals(3, failures.size(), String.join("\n", failures));
+    assertEquals(0, failures.size(), String.join("\n", failures));
 
-    // TODO FreezingArchRule.freeze(rule.check(classes))
+    // TODO FreezingArchRule.freeze(rule.check(classes)) //❤️
   }
 
   @Test
