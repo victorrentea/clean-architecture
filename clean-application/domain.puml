@@ -130,9 +130,10 @@ class Transition {
 
 
 class User {
-	{field} -email : Optional
-	{field} -fullName : String
+	{field} -firstName : String
+	{field} -lastName : String
 	{field} -username : String
+	{field} -workEmail : Optional
 }
 
 

@@ -5,32 +5,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.Email;
+import victor.training.clean.domain.model.User;
 import victor.training.clean.infra.EmailSender;
-import victor.training.clean.infra.LdapApi;
-import victor.training.clean.infra.LdapUserDto;
-
-import java.util.List;
+import victor.training.clean.infra.LdapUserAdapter;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class NotificationService {
   private final EmailSender emailSender;
-  private final LdapApi ldapApi;
+  private final LdapUserAdapter ldapUserAdapter;
 
-  // ☮️ Core application logic - should be super clean 😇
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
-    // 🤮
-    List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
-
-    if (dtoList.size() != 1) {
-      throw new IllegalArgumentException("Search for username='" + usernamePart + "' did not return a single result: " + dtoList);
-    }
-
-    LdapUserDto ldapUserDto = dtoList.get(0);
-
-    // 🤢
-    String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
+    User user = ldapUserAdapter.findUserByUsernamePart(usernamePart);
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
@@ -43,26 +30,14 @@ public class NotificationService {
             %s""".formatted(
             customer.getName(),
             customer.canReturnOrders() ? "can" : "cannot",
-            fullName))
+            user.fullName()))
         .build();
 
-
-    if (ldapUserDto.getWorkEmail() != null) { // Optional🦄 what if forgotten?
-      String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
-      email.getCc().add(contact);
-    }
+    user.workEmail().ifPresent(workEmail ->
+        email.getCc().add(user.fullName() + " <" + workEmail.toLowerCase() + ">"));
 
     emailSender.sendEmail(email);
 
-    // TEMPORAL COUPLING 😱☠️⭐️
-    normalize(ldapUserDto); // 🐛BUG if I 🔽 swap
-    customer.setCreatedByUsername(ldapUserDto.getUn());
+    customer.setCreatedByUsername(user.username());
   }
-
-  private void normalize(LdapUserDto ldapUserDto) {
-    if (ldapUserDto.getUn().startsWith("s")) { // s123848
-      ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
-    }
-  }
-
 }
