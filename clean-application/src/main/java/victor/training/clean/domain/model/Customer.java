@@ -1,12 +1,8 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -91,9 +87,28 @@ public class Customer {
     if (status != Status.DRAFT) {
       throw new IllegalStateException();
     }
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException();
+    }
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException();
+    }
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException();
+    }
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException();
+    }
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException();
+    }
+    if (status != Status.DRAFT) {
+      throw new IllegalStateException();
+    }
     status = Status.VALIDATED;
     this.validatedBy = Objects.requireNonNull(validatedBy);
   }
+
   public void activate() {
     if (status != Status.VALIDATED) {
       throw new IllegalStateException();
