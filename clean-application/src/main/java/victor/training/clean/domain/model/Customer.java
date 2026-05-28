@@ -1,10 +1,12 @@
 package victor.training.clean.domain.model;
 
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -16,8 +18,11 @@ import java.util.Optional;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 
-@Entity // ORM (2)
-@Data // = @Getter + @Setter + @ToString + @EqualsAndHashCode (1)
+//@Data // = NEVER!!!!!
+@Getter
+@Setter
+
+@Entity // ORM (2) ok iff <=> friendly private DB
 // 💙 Domain Model Entity - backbone of your core complexity
 public class Customer {
   @Id
@@ -26,10 +31,25 @@ public class Customer {
   private String name;
   private String email;
 
-  // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+  @Embedded
+  private ShippingAddress shippingAddress;
+
+  @Embeddable
+  public record ShippingAddress(String city, String street, String zip) {}
+
+//  public record Address(String city, String street, String zip) {}
+  // high change you need it for billing address tomorrow = RISK☢️
+  //   InvoiceAddress(String address, String vat)
+  // shorter
+
+  // Aim humble. Go specific first. Generalize JIT
+  //It is good to think in advance, not to do in advance. = Guessing
+  // The moment in which you are supposed to take design decisions (when we typically take design decisions) is the exact moment when we know the least about the problem we are solving at the beginning.
+  // Architecture is the art of deferrign decisions.
+
+
+  // Value Object = immutable small object w/o ID
+  // We just have to burn in the type system a concept that was already lurking in the code.
 
   @ManyToOne
   private Country country;

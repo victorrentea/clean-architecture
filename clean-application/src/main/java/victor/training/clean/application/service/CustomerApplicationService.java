@@ -47,6 +47,8 @@ public class CustomerApplicationService {
     // PS: it's also repeating somewhere else
     boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
 
+    Customer.ShippingAddress shipping = customer.getShippingAddress();
+
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
@@ -57,9 +59,9 @@ public class CustomerApplicationService {
         .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressStreet(shipping == null ? null : shipping.street())
+        .shippingAddressCity(shipping == null ? null : shipping.city())
+        .shippingAddressZip(shipping == null ? null : shipping.zip())
 
         .canReturnOrders(canReturnOrders)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
