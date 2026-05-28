@@ -1,0 +1,15 @@
+@startuml
+title Customer lifecycle (Customer.Status)
+hide empty description
+
+[*] --> DRAFT : new Customer()
+
+DRAFT --> VALIDATED : validate(validatedBy)
+VALIDATED --> ACTIVE : activate()
+
+DRAFT     --> DELETED : delete()
+VALIDATED --> DELETED : delete()
+ACTIVE    --> DELETED : delete()
+
+DELETED --> [*]
+@enduml
