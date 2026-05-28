@@ -20,6 +20,7 @@ public class NotificationService {
 
   // ☮️ Core application logic - should be super clean 😇
   public void sendWelcomeEmail(Customer customer, String usernamePart) {
+    // 🤮
     List<LdapUserDto> dtoList = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
 
     if (dtoList.size() != 1) {
@@ -28,6 +29,7 @@ public class NotificationService {
 
     LdapUserDto ldapUserDto = dtoList.get(0);
 
+    // 🤢
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
     Email email = Email.builder()
@@ -45,20 +47,20 @@ public class NotificationService {
         .build();
 
 
-    if (ldapUserDto.getWorkEmail() != null) { // what if forgotten?
+    if (ldapUserDto.getWorkEmail() != null) { // Optional🦄 what if forgotten?
       String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
       email.getCc().add(contact);
     }
 
     emailSender.sendEmail(email);
 
-    normalize(ldapUserDto);
-
+    // TEMPORAL COUPLING 😱☠️⭐️
+    normalize(ldapUserDto); // 🐛BUG if I 🔽 swap
     customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 
   private void normalize(LdapUserDto ldapUserDto) {
-    if (ldapUserDto.getUn().startsWith("s")) {
+    if (ldapUserDto.getUn().startsWith("s")) { // s123848
       ldapUserDto.setUn("system"); // ⚠️ dirty hack: replace any system user with 'system'
     }
   }
