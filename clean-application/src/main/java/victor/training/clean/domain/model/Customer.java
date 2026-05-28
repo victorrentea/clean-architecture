@@ -67,6 +67,15 @@ public class Customer {
     return Optional.ofNullable(legalEntityCode);
   }
 
+  public boolean isNaturalPerson() { //ubiquitous language
+    // A language that the entire team speaks in peace. Business, developers, testers, managers, UX, everyone is on the same language
+    return getLegalEntityCode().isEmpty();
+  }
+
+  public boolean canReturnOrders() {
+    return goldMember || isNaturalPerson();
+  }
+
   public enum Status {
     DRAFT, VALIDATED, ACTIVE, DELETED
   }
