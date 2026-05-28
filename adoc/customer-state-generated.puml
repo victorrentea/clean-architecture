@@ -1,0 +1,14 @@
+@startuml
+title Customer lifecycle (generated from CustomerStateMachineExample)
+hide empty description
+
+[*] --> DRAFT
+
+VALIDATED --> ACTIVE
+VALIDATED --> DELETED
+ACTIVE --> DELETED
+DRAFT --> VALIDATED : validatedBy != null
+DRAFT --> DELETED
+
+DELETED --> [*]
+@enduml

@@ -1,5 +1,10 @@
 @startuml
 
+class ActiveState {
+	{field} -validatedBy : String
+}
+
+
 class AnafResult {
 	{field} -isVatPayer : boolean
 	{field} -name : String
@@ -23,7 +28,44 @@ class Customer <<Entity>>  {
 	{field} +@Id id : Long
 	{field} +legalEntityCode : String
 	{field} +name : String
-	{field} +validatedBy : String
+	{field} -validatedBy : String
+}
+
+
+class CustomerContext {
+	{field} -validatedBy : String
+}
+
+
+interface CustomerState {
+}
+
+
+class CustomerStateGofExample {
+}
+
+
+class CustomerStateMachine {
+}
+
+
+class CustomerStateMachineExample {
+}
+
+
+enum CustomerStatus {
+	{field} +ACTIVE
+	{field} +DELETED
+	{field} +DRAFT
+	{field} +VALIDATED
+}
+
+
+class DeletedState {
+}
+
+
+class DraftState {
 }
 
 
@@ -41,6 +83,10 @@ class EmailBuilder {
 	{field} -from : String
 	{field} -subject : String
 	{field} -to : String
+}
+
+
+class Holder {
 }
 
 
@@ -65,11 +111,21 @@ class ShippingAddress {
 }
 
 
+class StateMachineToPlantUml {
+}
+
+
 enum Status {
 	{field} +ACTIVE
 	{field} +DELETED
 	{field} +DRAFT
 	{field} +VALIDATED
+}
+
+
+class Transition {
+	{field} -guard : Predicate
+	{field} -label : String
 }
 
 
@@ -80,13 +136,26 @@ class User {
 }
 
 
+class ValidatedState {
+	{field} -validatedBy : String
+}
 
 
+
+
+ActiveState ..|>  CustomerState
 Customer -->  Country :  @ManyToOne\ncountry
 Customer -->  ShippingAddress : shippingAddress
 Customer -->  Status : status
+CustomerStateMachine "1" o-- "0..*"  CustomerStatus : graph
+CustomerStateMachineExample *--  CustomerStateMachine : INSTANCE
+DeletedState ..|>  CustomerState
+DraftState ..|>  CustomerState
+Holder -->  CustomerState : state
 InsurancePolicy -->  Customer :  @ManyToOne\ncustomer
 PolicyNotification -->  InsurancePolicy :  @ManyToOne\npolicy
+Transition *--  CustomerStatus : target
+ValidatedState ..|>  CustomerState
 
 
 @enduml
