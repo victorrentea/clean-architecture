@@ -2,16 +2,18 @@ package victor.training.clean.infra;
 
 import lombok.RequiredArgsConstructor;
 import victor.training.clean.domain.model.User;
+import victor.training.clean.domain.service.UserFetcherPort;
 
 import java.util.List;
 import java.util.Optional;
 
 @Adapter
 @RequiredArgsConstructor
-public class LdapUserAdapter {
+public class LdapUserAdapter implements UserFetcherPort {
   private final LdapApi ldapApi;
 
-  public User findUserByUsernamePart(String usernamePart) {
+  @Override
+  public User fetchUser(String usernamePart) {
     List<LdapUserDto> results = ldapApi.searchUsingGET(usernamePart.toUpperCase(), null, null);
     if (results.size() != 1) {
       throw new IllegalArgumentException(
@@ -19,8 +21,7 @@ public class LdapUserAdapter {
     }
     LdapUserDto dto = results.get(0);
     return new User(
-        dto.getFname(),
-        dto.getLname(),
+        dto.getFname() + " " + dto.getLname().toUpperCase(),
         normalizeUsername(dto.getUn()),
         Optional.ofNullable(dto.getWorkEmail())
     );

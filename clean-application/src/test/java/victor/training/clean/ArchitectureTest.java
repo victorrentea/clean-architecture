@@ -20,9 +20,9 @@ import static com.tngtech.archunit.core.importer.ImportOption.Predefined.DO_NOT_
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled("Fix this after I return from vacation")
+//@Disabled("Fix this after I return from vacation")
 // NOTE: In case you don't understand this test, contact me:
-// call:0800ARCHITECT or victorrentea@gmail.com (the anarchitect)
+// call:0800ARCHITECT or victorrentea@gmail.com (anarchitect)
 public class ArchitectureTest {
 
   private final JavaClasses allProjectClasses = new ClassFileImporter()
@@ -30,18 +30,14 @@ public class ArchitectureTest {
       .importPackages("victor.training"); // TODO adjust
 
   @Test // as per ADR-005
-  public void domain_independent_of_infrastructure() {
+  public void domain_agnostic_of_infrastructure() {
     var rule = noClasses().that()
         .resideInAPackage("..domain..")
         .should().dependOnClassesThat()
         .resideInAPackage("..infra..");
     List<String> failures = rule.evaluate(allProjectClasses).getFailureReport().getDetails();
 
-//    int expectedFailureCount = 21; //  initial 😭
-//    int expectedFailureCount = 10; //  3 months later
-    int expectedFailureCount = 0; // end 🍾
-
-    assertEquals(expectedFailureCount, failures.size(), String.join("\n", failures));
+    assertEquals(3, failures.size(), String.join("\n", failures));
 
     // TODO FreezingArchRule.freeze(rule.check(classes))
   }
