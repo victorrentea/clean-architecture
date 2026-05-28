@@ -21,7 +21,26 @@ package victor.training.clean.domain.model.state.gof;
  */
 public class CustomerStateGofExample {
 
-  /** Tiny aggregate-of-one wrapping a state reference. */
+  public static void main(String[] args) {
+    Holder holder = new Holder();
+    System.out.println(holder.state());           // DraftState[]
+    holder.validate("alice");
+    System.out.println(holder.state());           // ValidatedState[validatedBy=alice]
+    holder.activate();
+    System.out.println(holder.state());           // ActiveState[validatedBy=alice]
+    holder.delete();
+    System.out.println(holder.state());           // DeletedState[]
+
+    try {
+      holder.delete();                            // already deleted -> blows up
+    } catch (IllegalStateException ex) {
+      System.out.println("Refused second delete: " + ex.getMessage());
+    }
+  }
+
+  /**
+   * Tiny aggregate-of-one wrapping a state reference.
+   */
   public static class Holder {
     private CustomerState state = new DraftState();
 
@@ -39,23 +58,6 @@ public class CustomerStateGofExample {
 
     public void delete() {
       state = state.delete();
-    }
-  }
-
-  public static void main(String[] args) {
-    Holder holder = new Holder();
-    System.out.println(holder.state());           // DraftState[]
-    holder.validate("alice");
-    System.out.println(holder.state());           // ValidatedState[validatedBy=alice]
-    holder.activate();
-    System.out.println(holder.state());           // ActiveState[validatedBy=alice]
-    holder.delete();
-    System.out.println(holder.state());           // DeletedState[]
-
-    try {
-      holder.delete();                            // already deleted -> blows up
-    } catch (IllegalStateException ex) {
-      System.out.println("Refused second delete: " + ex.getMessage());
     }
   }
 }

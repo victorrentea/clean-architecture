@@ -32,9 +32,8 @@ public class Customer {
 
   @Embedded
   private ShippingAddress shippingAddress;
-
-  @Embeddable
-  public record ShippingAddress(String city, String street, String zip) {}
+  @ManyToOne
+  private Country country;
 
 //  public record Address(String city, String street, String zip) {}
   // high change you need it for billing address tomorrow = RISK☢️
@@ -49,18 +48,16 @@ public class Customer {
 
   // Value Object = immutable small object w/o ID
   // We just have to burn in the type system a concept that was already lurking in the code.
-
-  @ManyToOne
-  private Country country;
-
   private LocalDate createdDate;
   private String createdByUsername;
-
   private boolean goldMember;
   private String goldMemberRemovalReason;
-
   private String legalEntityCode;
   private boolean discountedVat;
+  @Setter(NONE)
+  private Status status = Status.DRAFT;
+  @Setter(NONE)
+  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
   public Optional<String> getLegalEntityCode() {
     return Optional.ofNullable(legalEntityCode);
@@ -74,14 +71,6 @@ public class Customer {
   public boolean canReturnOrders() {
     return goldMember || isNaturalPerson();
   }
-
-  public enum Status {
-    DRAFT, VALIDATED, ACTIVE, DELETED
-  }
-  @Setter(NONE)
-  private Status status = Status.DRAFT;
-  @Setter(NONE)
-  private String validatedBy; // ⚠ Always not-null when status = VALIDATED or later
 
   public void validate(String validatedBy) {
     if (status != Status.DRAFT) {
@@ -115,11 +104,20 @@ public class Customer {
     }
     status = Status.ACTIVE;
   }
+
   public void delete() {
     if (status == Status.DELETED) {
       throw new IllegalStateException();
     }
     status = Status.DELETED;
+  }
+
+  public enum Status {
+    DRAFT, VALIDATED, ACTIVE, DELETED
+  }
+
+  @Embeddable
+  public record ShippingAddress(String city, String street, String zip) {
   }
 }
 
@@ -127,10 +125,12 @@ class SomeCode {
   public void correct(Customer draftCustomer) {
     draftCustomer.validate("currentUser");
   }
+
   public void incorrect(Customer draftCustomer) {
 //    draftCustomer.validate(null);
     draftCustomer.activate();
   }
+
   public void activate(Customer draftCustomer) {
     draftCustomer.activate();
   }

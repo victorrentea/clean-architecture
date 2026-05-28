@@ -11,7 +11,7 @@
  *   <li>{@code gof/} &mdash; Gang-of-Four State pattern: a sealed interface
  *       plus one record per state; transitions are methods on each state.</li>
  * </ul>
- *
+ * <p>
  * Pick map/ when the graph itself is the interesting artifact (audit,
  * visualization, configuration). Pick GoF when each state carries its own
  * data or behavior (e.g. {@code ValidatedState} holds {@code validatedBy}).
