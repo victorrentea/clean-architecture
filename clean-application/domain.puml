@@ -73,6 +73,13 @@ enum Status {
 }
 
 
+class User {
+	{field} -fullName : String
+	{field} -username : String
+	{field} -workEmail : Optional
+}
+
+
 
 
 Customer -->  Country :  @ManyToOne\ncountry
