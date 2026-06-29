@@ -1,0 +1,20 @@
+@startuml
+title Customer lifecycle (Customer.Status)
+caption Generated from the guarded transition methods in domain.model.Customer (validate / activate / delete). (⚠️ may drift / slop)
+
+' A new Customer is born in DRAFT (field default: status = Status.DRAFT).
+' Each arrow is a transition method whose guard rejects illegal source states
+' with IllegalStateException. delete() is reachable from ANY non-deleted state.
+
+[*] --> DRAFT
+
+DRAFT     --> VALIDATED : validate(user) / validatedBy = user
+VALIDATED --> ACTIVE    : activate()
+
+DRAFT     --> DELETED : delete()
+VALIDATED --> DELETED : delete()
+ACTIVE    --> DELETED : delete()
+
+DELETED --> [*]
+
+@enduml
