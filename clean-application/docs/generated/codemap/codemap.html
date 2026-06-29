@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Clean Architecture Codemap</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 12px 20px; background: #fafafa; color: #222; }
+  h1 { margin: 0 0 4px; font-size: 20px; }
+  .sub { color: #666; font-size: 13px; margin-bottom: 16px; }
+  .chart { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 8px; margin-bottom: 24px; }
+  .legend { color: #888; font-size: 12px; padding: 4px 0 12px; }
+</style>
+</head>
+<body>
+<h1>Clean Architecture Codemap</h1>
+<div class="sub">37 source Java files · 329 commits walked · 0 bug-fix commits (Conventional Commits 'fix:').</div>
+
+<div class="chart">
+  <div style="padding: 6px 4px 10px; font-size: 13px;">
+    Color =
+    <select id="num" style="margin: 0 4px;">
+      <option value="bugs">bugs</option>
+      <option value="commits">commits</option>
+      <option value="complexity" selected>complexity</option>
+      <option value="fan_in">fan_in</option>
+      <option value="fan_out">fan_out</option>
+    </select>
+    per
+    <select id="den" style="margin: 0 4px;">
+      <option value="lines" selected>lines</option>
+      <option value="commits">commits</option>
+      <option value="bugs">bugs</option>
+      <option value="complexity">complexity</option>
+      <option value="fan_in">fan_in</option>
+      <option value="fan_out">fan_out</option>
+    </select>
+    <span id="ratio-label" style="color: #888; margin-left: 8px;"></span>
+    <span style="margin-left: 16px; color: #444;">⌘/Ctrl-click a file → open in <select id="editor" style="margin: 0 4px;"><option value="vscode" selected>VS Code</option><option value="intellij">IntelliJ</option></select></span>
+  </div>
+  <div id="treemap" style="height: 720px;"></div>
+  <div class="legend">Treemap: rectangle area = file bytes. Color = ratio chosen above (clamped at p95 to keep tails from washing the scale). Click a module to zoom; hover a file for stats.</div>
+</div>
+
+<div class="chart">
+  <div id="scatter" style="height: 640px;"></div>
+  <div class="legend">Scatter: log–log of lines vs bug_commits+1. Marker size = sqrt(bytes), color = bugs/KLOC (clamped). Labels appear on outliers.</div>
+</div>
+
+<script>
+const TREE = {"ids": ["clean-application", "clean-application/src/main/java/victor/training/clean/domain/service/NotificationService.java", "clean-application/src/main/java/victor/training/clean/domain/model/Customer.java", "clean-application/src/main/java/victor/training/clean/application/service/CustomerApplicationService.java", "clean-application/src/main/java/victor/training/clean/application/dto/CustomerDto.java", "clean-application/src/main/java/victor/training/clean/application/controller/CustomerController.java", "clean-application/src/main/java/victor/training/clean/application/mapper/CustomerMapStruct.java", "clean-application/src/main/java/victor/training/clean/CleanApplication.java", "clean-application/src/main/java/victor/training/clean/infra/EmailSender.java", "clean-application/src/main/java/victor/training/clean/application/dto/CustomerSearchCriteria.java", "clean-application/src/main/java/victor/training/clean/application/service/InsuranceService.java", "clean-application/src/main/java/victor/training/clean/application/spring/GlobalExceptionHandler.java", "clean-application/src/main/java/victor/training/clean/domain/model/PolicyNotification.java", "clean-application/src/main/java/victor/training/clean/infra/AnafClient.java", "clean-application/src/main/java/victor/training/clean/application/dto/CustomerSearchResult.java", "clean-application/src/main/java/victor/training/clean/domain/model/InsurancePolicy.java", "clean-application/src/main/java/victor/training/clean/domain/model/Email.java", "clean-application/src/main/java/victor/training/clean/domain/repo/CustomerSearchQuery.java", "clean-application/src/main/java/victor/training/clean/vsa/SearchCustomerUseCase.java", "clean-application/src/main/java/victor/training/clean/domain/repo/CustomerRepo.java", "clean-application/src/main/java/victor/training/clean/infra/Adapter.java", "clean-application/src/main/java/victor/training/clean/vsa/CountryRestRepo.java", "clean-application/src/main/java/victor/training/clean/vsa/GetCustomerByIdUseCase.java", "clean-application/src/main/java/victor/training/clean/application/controller/CustomerLeakingController.java", "clean-application/src/main/java/victor/training/clean/application/spring/InitialData.java", "clean-application/src/main/java/victor/training/clean/domain/CleanException.java", "clean-application/src/main/java/victor/training/clean/domain/model/Country.java", "clean-application/src/main/java/victor/training/clean/domain/repo/InsurancePolicyRepo.java", "clean-application/src/main/java/victor/training/clean/application/spring/LoggingAspect.java", "clean-application/src/main/java/victor/training/clean/domain/model/AnafResult.java", "clean-application/src/main/java/victor/training/clean/domain/repo/PolicyNotificationRepo.java", "clean-application/src/main/java/victor/training/clean/domain/repo/CountryRepo.java", "clean-application/src/main/java/victor/training/clean/domain/repo/package-info.java", "clean-application/UserFromDto.java", "clean-application/src/main/java/victor/training/clean/infra/ApiClientConfig.java", "clean-application/src/main/java/victor/training/clean/application/ApplicationService.java", "clean-application/src/main/java/victor/training/clean/application/consumer/MessageListener.java", "clean-application/src/main/java/victor/training/clean/application/service/DomainService.java"], "labels": ["clean-application", "NotificationService.java", "Customer.java", "CustomerApplicationService.java", "CustomerDto.java", "CustomerController.java", "CustomerMapStruct.java", "CleanApplication.java", "EmailSender.java", "CustomerSearchCriteria.java", "InsuranceService.java", "GlobalExceptionHandler.java", "PolicyNotification.java", "AnafClient.java", "CustomerSearchResult.java", "InsurancePolicy.java", "Email.java", "CustomerSearchQuery.java", "SearchCustomerUseCase.java", "CustomerRepo.java", "Adapter.java", "CountryRestRepo.java", "GetCustomerByIdUseCase.java", "CustomerLeakingController.java", "InitialData.java", "CleanException.java", "Country.java", "InsurancePolicyRepo.java", "LoggingAspect.java", "AnafResult.java", "PolicyNotificationRepo.java", "CountryRepo.java", "package-info.java", "UserFromDto.java", "ApiClientConfig.java", "ApplicationService.java", "MessageListener.java", "DomainService.java"], "parents": ["", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application", "clean-application"], "values": [0, 2684, 1980, 6378, 1607, 3315, 1087, 931, 529, 350, 2039, 4628, 465, 447, 174, 479, 296, 3663, 2223, 439, 251, 1973, 1351, 603, 1348, 1421, 420, 357, 3843, 364, 320, 228, 323, 822, 669, 432, 159, 435], "customdata": [["", "", "", "", "", "", "", "", "", ""], ["clean-application/src/main/java/victor/training/clean/domain/service/NotificationService.java", "74", "57", "0", "0.00", "770.27", "5", "67.6", "1", "3"], ["clean-application/src/main/java/victor/training/clean/domain/model/Customer.java", "70", "54", "0", "0.00", "771.43", "0", "0.0", "12", "1"], ["clean-application/src/main/java/victor/training/clean/application/service/CustomerApplicationService.java", "151", "43", "0", "0.00", "284.77", "17", "112.6", "1", "12"], ["clean-application/src/main/java/victor/training/clean/application/dto/CustomerDto.java", "45", "38", "0", "0.00", "844.44", "3", "66.7", "3", "1"], ["clean-application/src/main/java/victor/training/clean/application/controller/CustomerController.java", "88", "13", "0", "0.00", "147.73", "4", "45.5", "0", "4"], ["clean-application/src/main/java/victor/training/clean/application/mapper/CustomerMapStruct.java", "30", "12", "0", "0.00", "400.00", "0", "0.0", "0", "2"], ["clean-application/src/main/java/victor/training/clean/CleanApplication.java", "29", "11", "0", "0.00", "379.31", "0", "0.0", "0", "2"], ["clean-application/src/main/java/victor/training/clean/infra/EmailSender.java", "18", "11", "0", "0.00", "611.11", "0", "0.0", "2", "1"], ["clean-application/src/main/java/victor/training/clean/application/dto/CustomerSearchCriteria.java", "14", "7", "0", "0.00", "500.00", "0", "0.0", "3", "0"], ["clean-application/src/main/java/victor/training/clean/application/service/InsuranceService.java", "49", "7", "0", "0.00", "142.86", "1", "20.4", "1", "7"], ["clean-application/src/main/java/victor/training/clean/application/spring/GlobalExceptionHandler.java", "121", "7", "0", "0.00", "57.85", "2", "16.5", "0", "1"], ["clean-application/src/main/java/victor/training/clean/domain/model/PolicyNotification.java", "24", "7", "0", "0.00", "291.67", "0", "0.0", "2", "1"], ["clean-application/src/main/java/victor/training/clean/infra/AnafClient.java", "14", "6", "0", "0.00", "428.57", "0", "0.0", "1", "2"], ["clean-application/src/main/java/victor/training/clean/application/dto/CustomerSearchResult.java", "5", "6", "0", "0.00", "1200.00", "0", "0.0", "3", "0"], ["clean-application/src/main/java/victor/training/clean/domain/model/InsurancePolicy.java", "27", "6", "0", "0.00", "222.22", "0", "0.0", "4", "1"], ["clean-application/src/main/java/victor/training/clean/domain/model/Email.java", "18", "6", "0", "0.00", "333.33", "0", "0.0", "3", "0"], ["clean-application/src/main/java/victor/training/clean/domain/repo/CustomerSearchQuery.java", "87", "6", "0", "0.00", "68.97", "4", "46.0", "1", "2"], ["clean-application/src/main/java/victor/training/clean/vsa/SearchCustomerUseCase.java", "70", "5", "0", "0.00", "71.43", "4", "57.1", "0", "0"], ["clean-application/src/main/java/victor/training/clean/domain/repo/CustomerRepo.java", "11", "5", "0", "0.00", "454.55", "0", "0.0", "5", "1"], ["clean-application/src/main/java/victor/training/clean/infra/Adapter.java", "13", "3", "0", "0.00", "230.77", "0", "0.0", "1", "0"], ["clean-application/src/main/java/victor/training/clean/vsa/CountryRestRepo.java", "46", "3", "0", "0.00", "65.22", "0", "0.0", "0", "1"], ["clean-application/src/main/java/victor/training/clean/vsa/GetCustomerByIdUseCase.java", "42", "3", "0", "0.00", "71.43", "1", "23.8", "0", "2"], ["clean-application/src/main/java/victor/training/clean/application/controller/CustomerLeakingController.java", "20", "3", "0", "0.00", "150.00", "1", "50.0", "0", "2"], ["clean-application/src/main/java/victor/training/clean/application/spring/InitialData.java", "40", "3", "0", "0.00", "75.00", "0", "0.0", "0", "4"], ["clean-application/src/main/java/victor/training/clean/domain/CleanException.java", "60", "3", "0", "0.00", "50.00", "0", "0.0", "1", "0"], ["clean-application/src/main/java/victor/training/clean/domain/model/Country.java", "25", "3", "0", "0.00", "120.00", "0", "0.0", "5", "0"], ["clean-application/src/main/java/victor/training/clean/domain/repo/InsurancePolicyRepo.java", "9", "3", "0", "0.00", "333.33", "0", "0.0", "1", "2"], ["clean-application/src/main/java/victor/training/clean/application/spring/LoggingAspect.java", "123", "2", "0", "0.00", "16.26", "15", "122.0", "0", "0"], ["clean-application/src/main/java/victor/training/clean/domain/model/AnafResult.java", "19", "2", "0", "0.00", "105.26", "0", "0.0", "2", "0"], ["clean-application/src/main/java/victor/training/clean/domain/repo/PolicyNotificationRepo.java", "8", "2", "0", "0.00", "250.00", "0", "0.0", "1", "2"], ["clean-application/src/main/java/victor/training/clean/domain/repo/CountryRepo.java", "7", "2", "0", "0.00", "285.71", "0", "0.0", "1", "1"], ["clean-application/src/main/java/victor/training/clean/domain/repo/package-info.java", "7", "2", "0", "0.00", "285.71", "0", "0.0", "0", "0"], ["clean-application/UserFromDto.java", "38", "1", "0", "0.00", "26.32", "0", "0.0", "0", "0"], ["clean-application/src/main/java/victor/training/clean/infra/ApiClientConfig.java", "20", "1", "0", "0.00", "50.00", "0", "0.0", "0", "0"], ["clean-application/src/main/java/victor/training/clean/application/ApplicationService.java", "17", "1", "0", "0.00", "58.82", "0", "0.0", "1", "0"], ["clean-application/src/main/java/victor/training/clean/application/consumer/MessageListener.java", "7", "1", "0", "0.00", "142.86", "0", "0.0", "0", "0"], ["clean-application/src/main/java/victor/training/clean/application/service/DomainService.java", "17", "1", "0", "0.00", "58.82", "0", "0.0", "0", "0"]], "metrics": {"lines": [0, 74, 70, 151, 45, 88, 30, 29, 18, 14, 49, 121, 24, 14, 5, 27, 18, 87, 70, 11, 13, 46, 42, 20, 40, 60, 25, 9, 123, 19, 8, 7, 7, 38, 20, 17, 7, 17], "commits": [0, 57, 54, 43, 38, 13, 12, 11, 11, 7, 7, 7, 7, 6, 6, 6, 6, 6, 5, 5, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1], "bugs": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "complexity": [0, 5, 0, 17, 3, 4, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 1, 1, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0], "fan_in": [0, 1, 12, 1, 3, 0, 0, 0, 2, 3, 1, 0, 2, 1, 3, 4, 3, 1, 0, 5, 1, 0, 0, 0, 0, 1, 5, 1, 0, 2, 1, 1, 0, 0, 0, 1, 0, 0], "fan_out": [0, 3, 1, 12, 1, 4, 2, 2, 1, 0, 7, 1, 1, 2, 0, 1, 0, 2, 0, 1, 0, 1, 2, 2, 4, 0, 0, 2, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0]}, "hovertemplates": [" <extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>", "<b>%{customdata[0]}</b><br>lines: %{customdata[1]}<br>commits: %{customdata[2]} (%{customdata[5]}/KLOC)<br>bugs: %{customdata[3]} (%{customdata[4]}/KLOC)<br>complexity: %{customdata[6]} (%{customdata[7]}/KLOC)<br>fan_in: %{customdata[8]} | fan_out: %{customdata[9]}<extra></extra>"]};
+const SCAT = {"x": [74, 70, 151, 88, 121, 87, 70, 60, 123], "y": [1, 1, 1, 1, 1, 1, 1, 1, 1], "color": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "size": [4, 4, 4, 4, 4, 4, 4, 4, 4], "text": ["clean-application/src/main/java/victor/training/clean/domain/service/NotificationService.java<br>lines: 74 | commits: 57 | bug_commits: 0<br>bugs/KLOC: 0.00", "clean-application/src/main/java/victor/training/clean/domain/model/Customer.java<br>lines: 70 | commits: 54 | bug_commits: 0<br>bugs/KLOC: 0.00", "clean-application/src/main/java/victor/training/clean/application/service/CustomerApplicationService.java<br>lines: 151 | commits: 43 | bug_commits: 0<br>bugs/KLOC: 0.00", "clean-application/src/main/java/victor/training/clean/application/controller/CustomerController.java<br>lines: 88 | commits: 13 | bug_commits: 0<br>bugs/KLOC: 0.00", "clean-application/src/main/java/victor/training/clean/application/spring/GlobalExceptionHandler.java<br>lines: 121 | commits: 7 | bug_commits: 0<br>bugs/KLOC: 0.00", "clean-application/src/main/java/victor/training/clean/domain/repo/CustomerSearchQuery.java<br>lines: 87 | commits: 6 | bug_commits: 0<br>bugs/KLOC: 0.00", "clean-application/src/main/java/victor/training/clean/vsa/SearchCustomerUseCase.java<br>lines: 70 | commits: 5 | bug_commits: 0<br>bugs/KLOC: 0.00", "clean-application/src/main/java/victor/training/clean/domain/CleanException.java<br>lines: 60 | commits: 3 | bug_commits: 0<br>bugs/KLOC: 0.00", "clean-application/src/main/java/victor/training/clean/application/spring/LoggingAspect.java<br>lines: 123 | commits: 2 | bug_commits: 0<br>bugs/KLOC: 0.00"], "labels": ["", "", "", "", "", "", "", "", ""]};
+
+function percentile(arr, p) {
+  const sorted = arr.filter(v => v > 0).slice().sort((a, b) => a - b);
+  if (sorted.length === 0) return 1;
+  const idx = Math.floor(sorted.length * p);
+  return sorted[Math.min(idx, sorted.length - 1)];
+}
+
+function computeRatio(numKey, denKey) {
+  const num = TREE.metrics[numKey];
+  const den = TREE.metrics[denKey];
+  const out = new Array(num.length);
+  for (let i = 0; i < num.length; i++) {
+    out[i] = (den[i] > 0) ? (num[i] / den[i]) : 0;
+  }
+  return out;
+}
+
+function applyMetric() {
+  const numKey = document.getElementById('num').value;
+  const denKey = document.getElementById('den').value;
+  // disable same-on-same in denominator
+  for (const opt of document.getElementById('den').options) {
+    opt.disabled = (opt.value === numKey);
+  }
+  if (denKey === numKey) {
+    // force den to first non-conflicting option
+    const den = document.getElementById('den');
+    for (const opt of den.options) { if (!opt.disabled) { den.value = opt.value; break; } }
+  }
+  const den2 = document.getElementById('den').value;
+  const ratio = computeRatio(numKey, den2);
+  const cmax = percentile(ratio, 0.95) || 1;
+  const title = `${numKey} / ${den2}`;
+  document.getElementById('ratio-label').textContent = `(p95 = ${cmax.toExponential(2)})`;
+  Plotly.restyle('treemap', {
+    'marker.colors': [ratio],
+    'marker.cmax': cmax,
+    'marker.colorbar.title': title
+  });
+}
+
+Plotly.newPlot('treemap', [{
+  type: 'treemap',
+  ids: TREE.ids,
+  labels: TREE.labels,
+  parents: TREE.parents,
+  values: TREE.values,
+  customdata: TREE.customdata,
+  marker: {
+    colors: computeRatio('complexity', 'lines'),
+    colorscale: 'Reds',
+    cmin: 0,
+    cmax: percentile(computeRatio('complexity', 'lines'), 0.95) || 1,
+    showscale: true,
+    colorbar: { title: 'complexity / lines', thickness: 14 },
+    line: { width: 0.5, color: '#fff' }
+  },
+  hovertemplate: TREE.hovertemplates,
+  textposition: 'middle center',
+  textfont: { size: 11 }
+}], {
+  margin: { t: 8, l: 8, r: 8, b: 8 }
+}, { displaylogo: false });
+
+document.getElementById('num').addEventListener('change', applyMetric);
+document.getElementById('den').addEventListener('change', applyMetric);
+applyMetric();
+
+Plotly.newPlot('scatter', [{
+  type: 'scatter',
+  mode: 'markers+text',
+  x: SCAT.x,
+  y: SCAT.y,
+  text: SCAT.labels,
+  textposition: 'top center',
+  textfont: { size: 9, color: '#444' },
+  hovertext: SCAT.text,
+  hovertemplate: '%{hovertext}<extra></extra>',
+  marker: {
+    size: SCAT.size,
+    color: SCAT.color,
+    colorscale: 'Reds',
+    cmin: 0,
+    cmax: 30.0,
+    showscale: true,
+    colorbar: { title: 'bugs/KLOC', thickness: 14 },
+    line: { width: 0.3, color: '#333' },
+    opacity: 0.75
+  }
+}], {
+  xaxis: { type: 'log', title: 'lines (log)', gridcolor: '#eee' },
+  yaxis: { type: 'log', title: 'bug_commits + 1 (log)', gridcolor: '#eee' },
+  margin: { t: 24, l: 60, r: 20, b: 50 },
+  plot_bgcolor: '#fff',
+  hovermode: 'closest'
+}, { displaylogo: false });
+
+const REPO_ABS = "/Users/victorrentea/workspace/clean-architecture";
+function openInEditor(rel) {
+  const abs = REPO_ABS + '/' + rel;
+  const editorEl = document.getElementById('editor');
+  const mode = editorEl ? editorEl.value : 'vscode';
+  if (mode === 'intellij') {
+    // IntelliJ built-in web server. Requires the IDE running with
+    // Settings > Build, Execution, Deployment > Debugger > "Allow unsigned requests".
+    fetch('http://localhost:63342/api/file' + encodeURI(abs), { mode: 'no-cors' }).catch(function () {});
+  } else {
+    window.location.href = 'vscode://file' + encodeURI(abs);
+  }
+}
+document.getElementById('treemap').on('plotly_treemapclick', function (d) {
+  const ev = d && d.event;
+  if (ev && (ev.ctrlKey || ev.metaKey)) {
+    const pt = d.points && d.points[0];
+    const id = pt && pt.id;
+    if (id && id.indexOf('/') !== -1) openInEditor(id);
+    return false; // suppress the default zoom on a modified click
+  }
+});
+</script>
+</body>
+</html>
