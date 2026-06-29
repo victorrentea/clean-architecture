@@ -1,5 +1,12 @@
 # clean-architecture — agent guidance
 
+## No comments — make the code explicit instead
+
+Do not add comments to code. Prefer making the code self-explanatory: extract well-named
+methods, variables, and types that say what a comment would have said. Do not add redundant
+comments that merely restate what the code already shows. Only keep a comment when it
+documents *why* something non-obvious is done — never *what* the code does.
+
 ## Architecture guardrail: keep `packages.puml` in sync with the code
 
 [`clean-application/docs/packages.puml`](clean-application/docs/packages.puml) is the **single source of
