@@ -32,7 +32,7 @@ public class NotificationService {
     // ⚠️ Data mapping mixed with core logic FIXME pull it earlier
     String fullName = ldapUserDto.getFname() + " " + ldapUserDto.getLname().toUpperCase();
 
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
+    boolean canReturnOrders = customer.canReturnOrders();
 
     Email email = Email.builder()
         .from("noreply@cleanapp.com")
