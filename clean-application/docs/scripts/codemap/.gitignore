@@ -1,0 +1,4 @@
+# Vendored tree-sitter (platform-specific compiled wheels) — reinstall with:
+#   pip install -r requirements.txt --target .pylibs
+.pylibs/
+__pycache__/
