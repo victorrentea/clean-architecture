@@ -47,7 +47,8 @@ public class NotificationService {
         .build();
 
     //"Adapt® the get"
-    if (ldapUserDto.getWorkEmail() != null || !ldapUserDto.getWorkEmail().isEmpty()) { // CR: what if forgotten?
+    //|| !ldapUserDto.getWorkEmail().isEmpty() <- https://claude.ai/share/a5185a45-455a-4ccd-a4f8-1d892335b0fd
+    if (ldapUserDto.getWorkEmail() != null) { // CR: what if forgotten?
       String contact = fullName + " <" + ldapUserDto.getWorkEmail().toLowerCase() + ">";
       email.getCc().add(contact);
     }
@@ -55,7 +56,6 @@ public class NotificationService {
     emailSender.sendEmail(email);
 
     normalize(ldapUserDto);
-
     customer.setCreatedByUsername(ldapUserDto.getUn());
   }
 
