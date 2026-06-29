@@ -18,7 +18,9 @@ public interface CustomerMapStruct {
   @Mapping(target = "createdDate", source = "createdDate", dateFormat = "yyyy-MM-dd")
   @Mapping(target = "countryId", source = "country.id")
   @Mapping(target = "legalEntityCode", source = "legalEntityCode", qualifiedByName = "optionalToNull")
-  @Mapping(target = "shippingAddressCity", source = "shippingAddressCity")
+  @Mapping(target = "shippingAddressCity", source = "shippingAddress.city")
+  @Mapping(target = "shippingAddressStreet", source = "shippingAddress.street")
+  @Mapping(target = "shippingAddressZip", source = "shippingAddress.zip")
   @Mapping(target = "gold", ignore = true)
   @Mapping(target = "canReturnOrders", ignore = true)
   CustomerDto toDto(Customer customer);

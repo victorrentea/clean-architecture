@@ -14,6 +14,7 @@ import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.ShippingAddress;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.repo.CustomerSearchQuery;
 import victor.training.clean.domain.service.NotificationService;
@@ -47,6 +48,8 @@ public class CustomerApplicationService {
     // PS: it's also repeating somewhere else
     boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
 
+    ShippingAddress address = customer.getShippingAddress();
+
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
@@ -57,9 +60,9 @@ public class CustomerApplicationService {
         .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+        .shippingAddressStreet(address == null ? null : address.street())
+        .shippingAddressCity(address == null ? null : address.city())
+        .shippingAddressZip(address == null ? null : address.zip())
 
         .canReturnOrders(canReturnOrders)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
