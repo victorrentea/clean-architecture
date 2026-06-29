@@ -47,7 +47,6 @@ caption All arrows are ArchUnit-tested to reflect real package dependencies (see
 [Repository] --> [Model]
 
 [Domain Service] --> [Model]
-[Domain Service] --> [Infra]
 
 [Infra] --> [Model]
 [Infra] --> [Domain Service]
