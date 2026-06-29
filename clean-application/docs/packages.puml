@@ -50,6 +50,7 @@ caption All arrows are ArchUnit-tested to reflect real package dependencies (see
 [Domain Service] --> [Infra]
 
 [Infra] --> [Model]
+[Infra] --> [Domain Service]
 
 [VSA] --> [Model]
 [VSA] --> [Repository]
