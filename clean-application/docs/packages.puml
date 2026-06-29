@@ -1,0 +1,57 @@
+@startuml
+title Logical Architecture (clean-application)
+caption All arrows are ArchUnit-tested to reflect real package dependencies (see PackagesArchTest).
+
+' Each component is bound to a source sub-package of victor.training.clean via its stereotype.
+' PackagesArchTest enforces two things:
+'   1. every arrow below corresponds to a real cross-package dependency, and no undrawn dependency exists;
+'   2. the set of stereotypes below equals the set of code sub-packages exactly.
+' If either drifts, the test fails -> update THIS file to match reality.
+
+[Application]    <<..application>>
+[Consumer]       <<..application.consumer>>
+[Controller]     <<..application.controller>>
+[DTO]            <<..application.dto>>
+[Mapper]         <<..application.mapper>>
+[App Service]    <<..application.service>>
+[Spring Config]  <<..application.spring>>
+[Domain]         <<..domain>>
+[Model]          <<..domain.model>>
+[Repository]     <<..domain.repo>>
+[Domain Service] <<..domain.service>>
+[Infra]          <<..infra>>
+[VSA]            <<..vsa>>
+
+[Controller] --> [DTO]
+[Controller] --> [App Service]
+[Controller] --> [Model]
+[Controller] --> [Repository]
+
+[DTO] --> [Model]
+
+[Mapper] --> [DTO]
+[Mapper] --> [Model]
+
+[App Service] --> [Application]
+[App Service] --> [DTO]
+[App Service] --> [Model]
+[App Service] --> [Repository]
+[App Service] --> [Domain Service]
+[App Service] --> [Infra]
+
+[Spring Config] --> [Domain]
+[Spring Config] --> [Model]
+[Spring Config] --> [Repository]
+
+[Repository] --> [DTO]
+[Repository] --> [Model]
+
+[Domain Service] --> [Model]
+[Domain Service] --> [Infra]
+
+[Infra] --> [Model]
+
+[VSA] --> [Model]
+[VSA] --> [Repository]
+
+@enduml
