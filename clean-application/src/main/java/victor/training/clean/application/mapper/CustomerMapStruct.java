@@ -3,7 +3,6 @@ package victor.training.clean.application.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.mapstruct.ReportingPolicy;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.domain.model.Customer;
 

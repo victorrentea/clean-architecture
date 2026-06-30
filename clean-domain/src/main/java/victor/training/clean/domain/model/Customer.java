@@ -1,10 +1,6 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Setter;
 
@@ -20,7 +16,7 @@ import static lombok.AccessLevel.NONE;
 // 3) all setters/getters = no encapsulation⚠️
 //endregion
 
-@Entity // ORM (2)
+@Entity // ORM (2) ✅
 @Data // = @Getter + @Setter + @ToString + @EqualsAndHashCode (1)
 // 💙 Domain Model Entity - backbone of your core complexity
 public class Customer {
@@ -55,7 +51,7 @@ public class Customer {
   }
 
   public boolean canReturnOrders() {
-    return isGoldMember() || isNaturalPerson();
+    return goldMember || isNaturalPerson();
   }
 
 

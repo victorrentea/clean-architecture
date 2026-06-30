@@ -7,16 +7,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import victor.training.clean.application.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
 import victor.training.clean.domain.model.ShippingAddress;
 import victor.training.clean.domain.repo.CustomerRepo;
-import victor.training.clean.domain.repo.CustomerSearchQuery;
 import victor.training.clean.domain.service.NotificationService;
 import victor.training.clean.infra.AnafClient;
 
@@ -95,7 +94,7 @@ public class CustomerApplicationService {
         throw new IllegalArgumentException("Company already registered");
       }
       AnafResult anafResult = anafClient.query(customer.getLegalEntityCode().get());
-      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.getName()))) {
+      if (anafResult == null || !normalize(customer.getName()).equals(normalize(anafResult.name()))) {
         throw new IllegalArgumentException("Legal Entity not found!");
       }
       if (anafResult.isVatPayer()) {
