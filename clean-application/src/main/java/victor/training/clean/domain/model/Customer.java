@@ -1,10 +1,8 @@
 package victor.training.clean.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -17,7 +15,12 @@ import java.util.Optional;
 //endregion
 
 @Entity // ORM (2)
-@Data // = @Getter + @Setter + @ToString + @EqualsAndHashCode (1)
+@Getter
+@Setter
+//+@Data = 😈 // = @Getter + @Setter + @ToString +
+// a) @EqualsAndHashCode ia si idul in calcul, ca se modifica la repo.save() (1)
+// b) @ToString triggeruieste eager load pe toate colectiile, QUERYURI MULTE
+// c) @Setter = uneori ne-necesar
 // 💙 Domain Model Entity - backbone of your core complexity
 public class Customer {
   @Id
@@ -26,10 +29,10 @@ public class Customer {
   private String name;
   private String email;
 
-  // 🤔 Hmm... 3 fields with the same prefix. What TODO ?
-  private String shippingAddressCity;
-  private String shippingAddressStreet;
-  private String shippingAddressZip;
+  // ✅ The 3 fields with the same prefix became a Value Object
+  @Embedded // null when the customer has no shipping address yet
+  // nu-i nevoie de ALTER TABLE
+  private ShippingAddress shippingAddress;
 
   @ManyToOne
   private Country country;

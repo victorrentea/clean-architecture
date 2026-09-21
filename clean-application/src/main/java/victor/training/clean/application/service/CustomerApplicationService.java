@@ -7,13 +7,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import victor.training.clean.application.ApplicationService;
 import victor.training.clean.application.dto.CustomerDto;
 import victor.training.clean.application.dto.CustomerSearchCriteria;
 import victor.training.clean.application.dto.CustomerSearchResult;
-import victor.training.clean.application.ApplicationService;
 import victor.training.clean.domain.model.AnafResult;
 import victor.training.clean.domain.model.Country;
 import victor.training.clean.domain.model.Customer;
+import victor.training.clean.domain.model.ShippingAddress;
 import victor.training.clean.domain.repo.CustomerRepo;
 import victor.training.clean.domain.repo.CustomerSearchQuery;
 import victor.training.clean.domain.service.NotificationService;
@@ -22,6 +23,7 @@ import victor.training.clean.infra.AnafClient;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -47,6 +49,10 @@ public class CustomerApplicationService {
     // PS: it's also repeating somewhere else
     boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
 
+    // the DTO (API contract) keeps its 3 flat fields; only the domain model got the Value Object
+    ShippingAddress shippingAddress = Optional.ofNullable(customer.getShippingAddress())
+            .orElseGet(() -> new ShippingAddress(null, null, null));
+
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
         .id(customer.getId())
@@ -57,9 +63,9 @@ public class CustomerApplicationService {
         .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-        .shippingAddressStreet(customer.getShippingAddressStreet())
-        .shippingAddressCity(customer.getShippingAddressCity())
-        .shippingAddressZip(customer.getShippingAddressZip())
+            .shippingAddressStreet(shippingAddress.street())
+            .shippingAddressCity(shippingAddress.city())
+            .shippingAddressZip(shippingAddress.zip())
 
         .canReturnOrders(canReturnOrders)
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
