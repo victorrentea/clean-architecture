@@ -23,7 +23,7 @@ class Customer <<Entity>>  {
 	{field} +@Id id : Long
 	{field} +legalEntityCode : String
 	{field} +name : String
-	{field} +validatedBy : String
+	{field} -validatedBy : String
 }
 
 
@@ -70,6 +70,13 @@ enum Status {
 	{field} +DELETED
 	{field} +DRAFT
 	{field} +VALIDATED
+}
+
+
+class User {
+	{field} -fullName : String
+	{field} -username : String
+	{field} -workEmail : Optional
 }
 
 

@@ -1,0 +1,16 @@
+@startuml
+hide empty description
+
+[*] --> DRAFT
+
+DRAFT --> VALIDATED : validatedBy required
+DRAFT --> DELETED
+VALIDATED --> ACTIVE
+VALIDATED --> DELETED
+ACTIVE --> DELETED
+
+DELETED --> [*]
+
+VALIDATED : validatedBy != null
+ACTIVE : validatedBy != null
+@enduml

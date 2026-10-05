@@ -1,0 +1,84 @@
+@startuml
+
+title Clean Application - Logical Architecture (java packages)
+caption Diagram ArchUnit-tested vs code (PlantUmlArchTest)
+footer clean-application/docs/packages.puml
+
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam nodesep 20
+skinparam linetype ortho
+skinparam ranksep 30
+<style>
+component {
+  BackGroundColor #ECEFF1
+  LineColor #546E7A
+  FontStyle bold
+  ' only the component name is bold; the package pattern above it stays plain
+  ' (never write a stereotype in a comment - PlantUmlArchTest greps the raw file)
+  stereotype {
+    FontStyle plain
+  }
+}
+arrow {
+  LineColor #78909C
+}
+</style>
+
+package "application (use cases, wiring, REST)" #FAFAFA {
+  [Controller] <<..application.controller>>
+  [Consumer] <<..application.consumer>>
+  [App Service] <<..application.service>>
+  [Mapper] <<..application.mapper>>
+  [DTO] <<..application.dto>>
+  [Spring Config] <<..application.spring>>
+  [App Marker] <<..clean.application>>
+}
+
+package "domain (business logic, agnostic)" #F1F8E9 {
+  [Domain Service] <<..domain.service>>
+  [Domain Model] <<..domain.model>>
+  [Repository] <<..domain.repo>>
+  [Domain Error] <<..clean.domain>>
+}
+
+package "infra (adapters to the outside world)" #FFF8E1 {
+  [Infra] <<..infra>>
+}
+
+[VSA] <<..vsa>>
+
+[Controller] --> [App Service]
+[Controller] --> [DTO]
+[Controller] --> [Domain Model]
+[Controller] --> [Repository]
+
+[App Service] --> [App Marker]
+[App Service] --> [DTO]
+[App Service] --> [Domain Service]
+[App Service] --> [Domain Model]
+[App Service] --> [Repository]
+[App Service] --> [Infra]
+
+[Spring Config] --> [Domain Error]
+[Spring Config] --> [Domain Model]
+[Spring Config] --> [Repository]
+
+[Mapper] --> [DTO]
+[Mapper] --> [Domain Model]
+
+[DTO] --> [Domain Model]
+
+[VSA] --> [Domain Model]
+[VSA] --> [Repository]
+
+[Repository] --> [DTO]
+[Repository] --> [Domain Model]
+
+[Domain Service] --> [Domain Model]
+
+[Infra] --> [Domain Service]
+[Infra] --> [Domain Model]
+
+
+@enduml

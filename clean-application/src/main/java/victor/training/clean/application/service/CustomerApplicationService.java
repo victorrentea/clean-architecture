@@ -45,13 +45,9 @@ public class CustomerApplicationService {
   public CustomerDto findById(long id) {
     Customer customer = customerRepo.findById(id).orElseThrow();
 
-    // Bit of domain logic on the state of one Entity?  What TODO?
-    // PS: it's also repeating somewhere else
-    boolean canReturnOrders = customer.isGoldMember() || customer.getLegalEntityCode().isEmpty();
-
     // the DTO (API contract) keeps its 3 flat fields; only the domain model got the Value Object
     ShippingAddress shippingAddress = Optional.ofNullable(customer.getShippingAddress())
-            .orElseGet(() -> new ShippingAddress(null, null, null));
+        .orElseGet(() -> new ShippingAddress(null, null, null));
 
     // boilerplate mapping code TODO move somewhere else
     return CustomerDto.builder()
@@ -63,11 +59,11 @@ public class CustomerApplicationService {
         .createdDate(customer.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         .gold(customer.isGoldMember())
 
-            .shippingAddressStreet(shippingAddress.street())
-            .shippingAddressCity(shippingAddress.city())
-            .shippingAddressZip(shippingAddress.zip())
+        .shippingAddressStreet(shippingAddress.street())
+        .shippingAddressCity(shippingAddress.city())
+        .shippingAddressZip(shippingAddress.zip())
 
-        .canReturnOrders(canReturnOrders)
+        .canReturnOrders(customer.canReturnOrders())
         .goldMemberRemovalReason(customer.getGoldMemberRemovalReason())
         .legalEntityCode(customer.getLegalEntityCode().orElse(null))
         .discountedVat(customer.isDiscountedVat())
@@ -95,7 +91,7 @@ public class CustomerApplicationService {
     }
 
     // enrich data from external API
-    if (customer.getLegalEntityCode().isPresent()) {
+    if (customer.isCompany()) {
       if (customerRepo.existsByLegalEntityCode(customer.getLegalEntityCode().get())) {
         throw new IllegalArgumentException("Company already registered");
       }

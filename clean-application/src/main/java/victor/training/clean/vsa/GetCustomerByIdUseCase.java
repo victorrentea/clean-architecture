@@ -13,7 +13,7 @@ import victor.training.clean.domain.repo.CustomerRepo;
 import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
-//@RestController
+@RestController
 public class GetCustomerByIdUseCase {
   private final CustomerRepo customerRepo;
 

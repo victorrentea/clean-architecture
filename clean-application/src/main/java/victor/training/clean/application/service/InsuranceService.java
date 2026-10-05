@@ -9,7 +9,7 @@ import victor.training.clean.domain.model.InsurancePolicy;
 import victor.training.clean.domain.model.PolicyNotification;
 import victor.training.clean.domain.repo.InsurancePolicyRepo;
 import victor.training.clean.domain.repo.PolicyNotificationRepo;
-import victor.training.clean.infra.EmailSender;
+import victor.training.clean.domain.service.EmailSender;
 
 @Slf4j
 @Service
